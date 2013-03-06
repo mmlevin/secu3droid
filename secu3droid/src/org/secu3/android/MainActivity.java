@@ -1,11 +1,12 @@
 package org.secu3.android;
 
+import java.util.Locale;
+
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ADCRawDat;
 import org.secu3.android.api.io.Secu3Dat.SensorDat;
 import org.secu3.android.api.io.Secu3Service;
 
-import android.R.bool;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -122,7 +123,7 @@ public class MainActivity extends Activity {
 		if (!checkBox.isChecked() && intent.getAction().equalsIgnoreCase(Secu3Dat.RECEIVE_SENSOR_DAT)) {
 			SensorDat sd = (SensorDat)intent.getParcelableExtra(SensorDat.class.getCanonicalName());
 			if (sd != null) {
-				s = String.format("RPM: %d min-1\r\nPressure: %f kPa\r\n"
+				s = String.format(Locale.getDefault(),"RPM: %d min-1\r\nPressure: %f kPa\r\n"
 						+ "Voltage: %f V\r\nTemperature: %f °C\r\n"
 						+ "Angle: %f °\r\nKnock level: %f V\r\n"
 						+ "Knock retard: %f °\r\nAir flow: %d\r\n"
@@ -138,7 +139,7 @@ public class MainActivity extends Activity {
 		else if (checkBox.isChecked() && intent.getAction().equalsIgnoreCase(Secu3Dat.RECEIVE_ADCRAW_DAT)) {
 			ADCRawDat ad = (ADCRawDat)intent.getParcelableExtra(ADCRawDat.class.getCanonicalName());
 			if (ad != null) {
-				s = String.format("MAP Sensor data: %fV\r\nVoltage Sensor data: %fV\r\nTemperature Sensor data: %fV\r\nKnock Sensor data: %fV",ad.map_value,ad.ubat_value,ad.temp_value,ad.knock_value);
+				s = String.format(Locale.getDefault(),"MAP Sensor data: %fV\r\nVoltage Sensor data: %fV\r\nTemperature Sensor data: %fV\r\nKnock Sensor data: %fV",ad.map_value,ad.ubat_value,ad.temp_value,ad.knock_value);
 				textViewData.setText(s);
 			}
 		}
