@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		textViewData = (TextView)findViewById(R.id.textViewData);
 		textViewStatus = (TextView)findViewById(R.id.textViewStatus);
-		checkBox = (CheckBox)findViewById(R.id.checkBox1);
+		checkBox = (CheckBox)findViewById(R.id.anglesZeroAngleCheckBox);
 		Log.d(getString(R.string.app_name), "onCreate");
 		startService();		
 	}

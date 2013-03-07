@@ -84,8 +84,6 @@ public class ParamActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);								
 		
-		cxt = this;
-		
 		pages.add(starterParPage = new StarterFragment());
 		pages.add(anglesParPage = new AnglesFragment());
 		pages.add(idlRegParPage = new IdlRegFragment());
@@ -169,16 +167,10 @@ public class ParamActivity extends FragmentActivity {
 		v = textView;
 		if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_STARTER_PAR)) {
 			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());
-			if (packet != null && starterParPage.isAdded()) {
-				s = String.format(Locale.getDefault(),"Starter off RPM: %d min-1\r\nMap abandon RPM: %d min-1", packet.starter_off,packet.smap_abandon);
-				v = (TextView)starterParPage.getView().findViewById(R.id.textViewData);
-			}
+			starterParPage.setData(packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_ANGLES_PAR)) {
 			AnglesPar packet = intent.getParcelableExtra(AnglesPar.class.getCanonicalName());
-			if (packet != null && anglesParPage.isAdded()) {
-				s = String.format(Locale.getDefault(),"Minimal angle: %f°\r\nMaximal angle: %f°\r\nAngle decrement step: %f°\r\nAngle increment step: %f°\r\nZero angle: %d\r\nCurrent angle: %f°", packet.min_angle,packet.max_angle,packet.dec_spead,packet.inc_spead,packet.zero_adv_ang,packet.angle_corr);
-				v = (TextView)anglesParPage.getView().findViewById(R.id.textViewData);
-			}
+			anglesParPage.setData(packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_IDLREG_PAR)) {
 			IdlRegPar packet = intent.getParcelableExtra(IdlRegPar.class.getCanonicalName());
 			if (packet != null && idlRegParPage.isAdded()) {

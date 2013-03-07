@@ -6,10 +6,44 @@
     android:orientation="vertical" >
 
 <TextView
-    android:id="@+id/textViewData"
+    android:id="@+id/textView1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true" />
+    android:layout_centerHorizontal="true"
+    android:text="Starter off RPM:"
+    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<EditText
+    android:id="@+id/starterOffEditText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/textView1"
+    android:layout_centerHorizontal="true"
+    android:ems="10"
+    android:inputType="number"
+    android:text="0" >
+
+    <requestFocus />
+</EditText>
+
+<TextView
+    android:id="@+id/textView2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/starterOffEditText"
+    android:layout_centerHorizontal="true"
+    android:text="Starter map abandon:"
+    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<EditText
+    android:id="@+id/starterMapAbandonEditText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/textView2"
+    android:layout_centerHorizontal="true"
+    android:ems="10"
+    android:inputType="number"
+    android:text="0" />
 
 </RelativeLayout>

@@ -32,7 +32,7 @@
         android:textSize="@dimen/textSize" />
 
     <CheckBox
-        android:id="@+id/checkBox1"
+        android:id="@+id/anglesZeroAngleCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textViewStatus"
