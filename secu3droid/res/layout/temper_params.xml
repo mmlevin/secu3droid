@@ -58,7 +58,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/temperFanOffEditText"
-	        android:text="Use temperature sensor" />
+	        android:text="Use temperature sensor"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <CheckBox
 	        android:id="@+id/temperUsePWMCheckBox"
@@ -66,7 +67,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/temperUseTempSensorCheckBox"
-	        android:text="Use PWM fan control" />
+	        android:text="Use PWM fan control"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <CheckBox
 	        android:id="@+id/temperUseTableCheckBox"
@@ -74,7 +76,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/temperUsePWMCheckBox"
-	        android:text="Use temperature sensor table" />
+	        android:text="Use temperature sensor table"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>
 

@@ -21,13 +21,15 @@
 	            android:id="@+id/ckpsCKPSRisingEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Rising edge" />
+	            android:text="Rising edge"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	        <RadioButton
 	            android:id="@+id/ckpsCKPSFallingEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Falling edge" />
+	            android:text="Falling edge"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    </RadioGroup>
 	
@@ -41,13 +43,15 @@
 	            android:id="@+id/ckpsRefSRisingEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Rising edge" />
+	            android:text="Rising edge"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	        <RadioButton
 	            android:id="@+id/ckpsRefSFallingEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Falling edge" />
+	            android:text="Falling edge"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    </RadioGroup>
 
@@ -75,7 +79,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/radioGroup2"
-	        android:text="Merge outputs" />
+	        android:text="Merge outputs"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
 	        android:id="@+id/textView3"

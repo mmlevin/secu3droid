@@ -106,7 +106,8 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_below="@+id/anglesIncrementStepEditText"
-		    android:text="Zero angle" />
+		    android:text="Zero angle"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
 		    android:id="@+id/textView5"

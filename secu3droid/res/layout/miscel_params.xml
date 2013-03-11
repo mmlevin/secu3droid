@@ -52,7 +52,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/miscelPeriodEditText"
-	        android:text="Enable ignition cutoff" />
+	        android:text="Enable ignition cutoff"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
 	        android:id="@+id/miscelIgnitionCutoffRPMEditText"
