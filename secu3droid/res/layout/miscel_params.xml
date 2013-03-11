@@ -1,15 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout1"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:fadeScrollbars="false">
+    
+	<RelativeLayout
+	    android:id="@+id/layout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
 
-<TextView
-    android:id="@+id/textViewData"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true" />
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:text="Baudrate"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-</RelativeLayout>
+	    <Spinner
+	        android:id="@+id/miscelBaudrateSpinner"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView1" />
+
+	    <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/miscelBaudrateSpinner"
+	        android:text="Packets transmit period"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/miscelPeriodEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView2"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
+
+	    <CheckBox
+	        android:id="@+id/miscelEnableIgnitionCutoffCheckBox"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/miscelPeriodEditText"
+	        android:text="Enable ignition cutoff" />
+
+	    <EditText
+	        android:id="@+id/miscelIgnitionCutoffRPMEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView3"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" >
+
+	        <requestFocus />
+	    </EditText>
+
+	    <TextView
+	        android:id="@+id/textView3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/miscelEnableIgnitionCutoffCheckBox"
+	        android:text="Ignition cutoff RPM"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/miscelIgnitionCutoffRPMEditText"
+	        android:text="Hall output start (cogs after TDC)"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/miscelHallOutputStartEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView4"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
+
+	    <TextView
+	        android:id="@+id/textView5"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/miscelHallOutputStartEditText"
+	        android:text="Hall output delay (in cogs)"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/miscelHallOutputDelayEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView5"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
+	
+	</RelativeLayout>
+	
+</ScrollView>

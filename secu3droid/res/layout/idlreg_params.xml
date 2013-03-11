@@ -1,134 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout1"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:fadeScrollbars="false">
+    
+	<RelativeLayout
+	    android:id="@+id/layout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Coefficient 1"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:text="Coefficient 1"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/ifac1EditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0.0" >
+	    <EditText
+	        android:id="@+id/textview2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView1"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="0.0" />
 
-        <requestFocus />
-    </EditText>
+	    <TextView
+	        android:id="@+id/TextView01"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textview2"
+	        android:text="Coefficient 2"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/TextView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ifac1EditText"
-        android:layout_centerHorizontal="true"
-        android:text="Coefficient 2"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <EditText
+	        android:id="@+id/idlRegIfac2EditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/TextView01"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="0.0" >
 
-    <EditText
-        android:id="@+id/ifac2EditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/TextView01"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="14dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0.0" />
+	        <requestFocus />
+	    </EditText>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ifac2EditText"
-        android:layout_centerHorizontal="true"
-        android:text="Minimal angle"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/idlRegIfac2EditText"
+	        android:text="Minimal angle"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/idlRegMinimalAngleEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0.0" />
+	    <EditText
+	        android:id="@+id/idlRegMinimalAngleEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView2"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="0.0" />
 
-    <TextView
-        android:id="@+id/TextView02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/idlRegMinimalAngleEditText"
-        android:layout_centerHorizontal="true"
-        android:text="Maximal angle"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <TextView
+	        android:id="@+id/TextView02"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/idlRegMinimalAngleEditText"
+	        android:layout_marginTop="18dp"
+	        android:text="Maximal angle"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/idlRegMaximalAngleEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/TextView02"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0.0" />
+	    <EditText
+	        android:id="@+id/idlRegMaximalAngleEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/TextView02"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="0.0" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/TextView01"
-        android:layout_below="@+id/idlRegMaximalAngleEditText"
-        android:text="Target RPM"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <TextView
+	        android:id="@+id/textView3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/idlRegMaximalAngleEditText"
+	        android:text="Target RPM"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/idlRegTargetRPMEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="number"
-        android:text="0" />
+	    <EditText
+	        android:id="@+id/idlRegTargetRPMEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView3"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/idlRegTargetRPMEditText"
-        android:layout_centerHorizontal="true"
-        android:text="RPM Sensitivity"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <TextView
+	        android:id="@+id/textView4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/idlRegTargetRPMEditText"
+	        android:text="RPM Sensitivity"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/idlRegRPMSensitivityEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="number"
-        android:text="0" />
+	    <EditText
+	        android:id="@+id/idlRegRPMSensitivityEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView4"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
 
-    <CheckBox
-        android:id="@+id/idlRegUseIdleRegulatorCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/idlRegRPMSensitivityEditText"
-        android:layout_centerHorizontal="true"
-        android:text="Use idle regulator" />
-
-</RelativeLayout>
+	    <CheckBox
+	        android:id="@+id/idlRegUseIdleRegulatorCheckBox"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/idlRegRPMSensitivityEditText"
+	        android:text="Use idle regulator" />
+	
+	</RelativeLayout>
+	
+</ScrollView>	

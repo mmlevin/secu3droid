@@ -1,15 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout1"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:fadeScrollbars="false">
+        
+	<RelativeLayout
+	    android:id="@+id/layout1"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+	
+	    <RadioGroup
+	        android:id="@+id/radioGroup1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/textView1" >
+	
+	        <RadioButton
+	            android:id="@+id/ckpsCKPSRisingEdgeRadioButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Rising edge" />
 
-<TextView
-    android:id="@+id/textViewData"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true" />
+	        <RadioButton
+	            android:id="@+id/ckpsCKPSFallingEdgeRadioButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Falling edge" />
 
-</RelativeLayout>
+	    </RadioGroup>
+	
+	    <RadioGroup
+	        android:id="@+id/radioGroup2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/textView2" >
+	
+	        <RadioButton
+	            android:id="@+id/ckpsRefSRisingEdgeRadioButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Rising edge" />
+
+	        <RadioButton
+	            android:id="@+id/ckpsRefSFallingEdgeRadioButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Falling edge" />
+
+	    </RadioGroup>
+
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:text="CKPS Edge"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/radioGroup1"
+	        android:text="New turn sensor edge"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <CheckBox
+	        android:id="@+id/ckpsMergeOutputsCheckBox"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/radioGroup2"
+	        android:text="Merge outputs" />
+
+	    <TextView
+	        android:id="@+id/textView3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/ckpsMergeOutputsCheckBox"
+	        android:text="Cogs number"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/ckpsCogsNumberEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView3"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
+
+	    <TextView
+	        android:id="@+id/textView4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/ckpsCogsNumberEditText"
+	        android:text="Missing cogs number"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/ckpsMissingCogsNumberEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView4"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" >
+
+	        <requestFocus />
+	    </EditText>
+
+	    <TextView
+	        android:id="@+id/textView5"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/ckpsMissingCogsNumberEditText"
+	        android:text="Cogs number before TDC"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/ckpsCogsBeforeTDCEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView5"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
+
+	    <TextView
+	        android:id="@+id/textView6"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/ckpsCogsBeforeTDCEditText"
+	        android:text="Engine cylynders"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/ckpsEngineCylyndersEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView6"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
+
+	    <TextView
+	        android:id="@+id/textView7"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/ckpsEngineCylyndersEditText"
+	        android:text="Ignition pulse delay (in cogs)"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/ckpsIgnitionPulseDelayEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView7"
+	        android:ems="10"
+	        android:inputType="number"
+	        android:text="0" />
+	
+	</RelativeLayout>
+	
+</ScrollView>

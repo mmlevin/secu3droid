@@ -2,14 +2,24 @@ package org.secu3.android.fragments;
 
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
+import org.secu3.android.api.io.Secu3Dat.FunSetPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 public class FunsetFragment extends Fragment implements ISecu3Fragment{
+	EditText lowerPressure;
+	EditText upperPressure;
+	EditText sensorOffset;
+	EditText sensorGradient;
+	Spinner gasolineTable;
+	Spinner gasTable;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container == null) return null;
@@ -19,7 +29,18 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public void setData(Secu3Dat packet) {
-		// TODO Auto-generated method stub
-		
+		if (packet != null && isAdded()) {
+			lowerPressure = (EditText)getView().findViewById(R.id.funsetLowerPressureEditText);
+			upperPressure = (EditText)getView().findViewById(R.id.funsetUpperPressureEditText);
+			sensorOffset = (EditText)getView().findViewById(R.id.funsetMAPSensorOffsetEditText);
+			sensorGradient = (EditText)getView().findViewById(R.id.funsetMAPSensorGradientEditText);
+			gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
+			gasTable  = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
+			
+			lowerPressure.setText (String.valueOf(((FunSetPar)packet).map_lower_pressure));
+			upperPressure.setText (String.valueOf(((FunSetPar)packet).map_upper_pressure));
+			sensorOffset.setText (String.valueOf(((FunSetPar)packet).map_curve_offset));
+			sensorGradient.setText (String.valueOf(((FunSetPar)packet).map_curve_gradient));
+		}		
 	}
 }

@@ -1,115 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout1"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:fadeScrollbars="false">
+    
+	<RelativeLayout
+	    android:id="@+id/layout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+		
+		<EditText
+		    android:id="@+id/anglesCurrentAngleEditText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/textView5"
+		    android:ems="10"
+		    android:inputType="numberDecimal"
+		    android:text="0.0" />
 
-<TextView
-    android:id="@+id/textView1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:text="Minimal Angle"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+		<TextView
+		    android:id="@+id/textView1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_alignParentTop="true"
+		    android:text="Minimal Angle"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<EditText
-    android:id="@+id/anglesMinimalAngleEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView1"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" >
+		<EditText
+		    android:id="@+id/anglesMinimalAngleEditText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/textView1"
+		    android:ems="10"
+		    android:inputType="numberDecimal"
+		    android:text="0.0" />
 
-    <requestFocus />
-</EditText>
+		<TextView
+		    android:id="@+id/textView2"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/anglesMinimalAngleEditText"
+		    android:text="Maximal Angle"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<TextView
-    android:id="@+id/ifac1EditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/anglesMinimalAngleEditText"
-    android:layout_centerHorizontal="true"
-    android:text="Maximal Angle"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+		<EditText
+		    android:id="@+id/anglesMaximalAngleEditText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/textView2"
+		    android:ems="10"
+		    android:inputType="numberDecimal"
+		    android:text="0.0" >
 
-<EditText
-    android:id="@+id/anglesMaximalAngleEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/ifac1EditText"
-    android:layout_centerHorizontal="true"
-    android:layout_marginLeft="20dp"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" />
+		    <requestFocus />
+		</EditText>
 
-<TextView
-    android:id="@+id/textView2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/anglesMaximalAngleEditText"
-    android:layout_centerHorizontal="true"
-    android:text="Angle decrement step"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+		<TextView
+		    android:id="@+id/textView3"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/anglesMaximalAngleEditText"
+		    android:text="Angle decrement step"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<EditText
-    android:id="@+id/anglesDecrementStepEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView2"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" />
+		<EditText
+		    android:id="@+id/anglesDecrementStepEditText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/textView3"
+		    android:ems="10"
+		    android:inputType="numberDecimal"
+		    android:text="0.0" />
 
-<TextView
-    android:id="@+id/textView3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/anglesDecrementStepEditText"
-    android:layout_centerHorizontal="true"
-    android:text="Angle increment step"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+		<TextView
+		    android:id="@+id/textView4"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/anglesDecrementStepEditText"
+		    android:text="Angle increment step"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<EditText
-    android:id="@+id/anglesIncrementStepEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView3"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" />
+		<EditText
+		    android:id="@+id/anglesIncrementStepEditText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/textView4"
+		    android:ems="10"
+		    android:inputType="numberDecimal"
+		    android:text="0.0" />
 
-<CheckBox
-    android:id="@+id/anglesZeroAngleCheckBox"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/anglesIncrementStepEditText"
-    android:layout_centerHorizontal="true"
-    android:text="Zero angle" />
+		<CheckBox
+		    android:id="@+id/anglesZeroAngleCheckBox"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/anglesIncrementStepEditText"
+		    android:text="Zero angle" />
 
-<TextView
-    android:id="@+id/textView4"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/anglesZeroAngleCheckBox"
-    android:layout_centerHorizontal="true"
-    android:text="Current angle"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-<EditText
-    android:id="@+id/anglesCurrentAngleEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView4"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" />
-
-</RelativeLayout>
+		<TextView
+		    android:id="@+id/textView5"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/anglesZeroAngleCheckBox"
+		    android:text="Current angle"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	</RelativeLayout>
+	
+</ScrollView>	

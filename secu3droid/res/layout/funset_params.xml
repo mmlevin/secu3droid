@@ -1,119 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout1"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:fadeScrollbars="false">
+    
+	<RelativeLayout
+	    android:id="@+id/layout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
 
-<TextView
-    android:id="@+id/textView1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:text="Lower pressure"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+	<TextView
+	    android:id="@+id/textView1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:text="Lower pressure"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<EditText
-    android:id="@+id/funsetLowerPressureEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView1"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" >
+	<TextView
+	    android:id="@+id/textView2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetLowerPressureEditText"
+	    android:text="UpperPressure"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <requestFocus />
-</EditText>
+	<EditText
+	    android:id="@+id/funsetLowerPressureEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/textView1"
+	    android:ems="10"
+	    android:inputType="numberDecimal"
+	    android:text="0.0" >
 
-<TextView
-    android:id="@+id/textView2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/funsetLowerPressureEditText"
-    android:layout_centerHorizontal="true"
-    android:text="UpperPressure"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+	    <requestFocus />
+	</EditText>
 
-<EditText
-    android:id="@+id/funsetUpperPressureEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView2"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" />
+	<EditText
+	    android:id="@+id/funsetUpperPressureEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/textView2"
+	    android:ems="10"
+	    android:inputType="numberDecimal"
+	    android:text="0.0" />
 
-<TextView
-    android:id="@+id/textView3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/funsetUpperPressureEditText"
-    android:layout_centerHorizontal="true"
-    android:text="MAP Sensor Offset"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+	<TextView
+	    android:id="@+id/textView3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetUpperPressureEditText"
+	    android:text="MAP Sensor Offset"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<EditText
-    android:id="@+id/funsetMAPSensorOffsetEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView3"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" />
+	<EditText
+	    android:id="@+id/funsetMAPSensorOffsetEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/textView3"
+	    android:ems="10"
+	    android:inputType="numberDecimal"
+	    android:text="0.0" />
 
-<TextView
-    android:id="@+id/textView4"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/funsetMAPSensorOffsetEditText"
-    android:layout_centerHorizontal="true"
-    android:text="MAP Sensor Gradient"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+	<TextView
+	    android:id="@+id/textView4"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetMAPSensorOffsetEditText"
+	    android:text="MAP Sensor Gradient"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<EditText
-    android:id="@+id/funsetMAPSensorGradientEditText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView4"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:inputType="numberDecimal"
-    android:text="0.0" />
+	<EditText
+	    android:id="@+id/funsetMAPSensorGradientEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/textView4"
+	    android:ems="10"
+	    android:inputType="numberDecimal"
+	    android:text="0.0" />
 
-<TextView
-    android:id="@+id/textView5"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/funsetMAPSensorGradientEditText"
-    android:layout_centerHorizontal="true"
-    android:text="Gasoline table"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+	<TextView
+	    android:id="@+id/textView5"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetMAPSensorGradientEditText"
+	    android:text="Gasoline table"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<Spinner
-    android:id="@+id/funsetGasolineTableSpinner"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView5"
-    android:layout_centerHorizontal="true" />
+	<TextView
+	    android:id="@+id/textView6"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetGasolineTableSpinner"
+	    android:text="Gas table"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-<TextView
-    android:id="@+id/textView6"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/funsetGasolineTableSpinner"
-    android:layout_centerHorizontal="true"
-    android:text="Gas table"
-    android:textAppearance="?android:attr/textAppearanceLarge" />
+	<Spinner
+	    android:id="@+id/funsetGasolineTableSpinner"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/textView5" />
 
-<Spinner
-    android:id="@+id/funsetGasTableSpinner"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/textView6"
-    android:layout_centerHorizontal="true" />
-
-</RelativeLayout>
+	<Spinner
+	    android:id="@+id/funsetGasTableSpinner"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/textView6" />
+	
+	</RelativeLayout>
+	
+</ScrollView>	

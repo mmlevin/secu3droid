@@ -3,7 +3,6 @@ package org.secu3.android.fragments;
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.AnglesPar;
-import org.secu3.android.api.io.Secu3Dat.StartrPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,7 +39,7 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 			
 			minimalAngle.setText(String.valueOf(((AnglesPar)packet).min_angle));
 			maximalAngle.setText(String.valueOf(((AnglesPar)packet).max_angle));
-			angleDecrementStep.setText(String.valueOf(((AnglesPar)packet).angle_corr));
+			angleDecrementStep.setText(String.valueOf(((AnglesPar)packet).dec_spead));
 			angleIncrementStep.setText(String.valueOf(((AnglesPar)packet).inc_spead));
 			zeroAngle.setChecked(((AnglesPar)packet).zero_adv_ang != 0);
 			currentAngle.setText(String.valueOf(((AnglesPar)packet).angle_corr));
