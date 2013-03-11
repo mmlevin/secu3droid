@@ -46,7 +46,7 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 			carburEPHHHighThreshholdGas.setText(String.valueOf(((CarburPar)packet).ephh_hit_g));
 			carburOverrunDelay.setText(String.valueOf(((CarburPar)packet).shutoff_delay));
 			carburEPMValveOnPressure.setText(String.valueOf(((CarburPar)packet).epm_ont));
-			carburSensorInverse.setChecked(((CarburPar)packet).epm_ont != 0);
+			carburSensorInverse.setChecked(((CarburPar)packet).carb_invers != 0);
 		}
 	}
 }
