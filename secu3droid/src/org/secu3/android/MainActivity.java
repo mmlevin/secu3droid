@@ -1,5 +1,6 @@
 package org.secu3.android;
 
+import java.net.URI;
 import java.util.Locale;
 
 import org.secu3.android.api.io.Secu3Dat;
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
 		case R.id.menu_settings:
 			return true;
 		case R.id.menu_params:
-			startService(new Intent (this,Secu3Service.class).putExtra("MESSAGE", 0));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_READ_PARAMS,Uri.EMPTY,this,Secu3Service.class));
 			startActivity(new Intent(this,ParamActivity.class));
 			return true;
 		default:
@@ -77,7 +78,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void startService() {		
-		startService(new Intent (Secu3Service.ACTION_START_SECU3_SERVICE,Uri.EMPTY,this,Secu3Service.class));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
 		Log.d(getString(R.string.app_name),"startService");
 	}
 	

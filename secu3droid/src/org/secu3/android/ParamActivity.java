@@ -22,7 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class ParamActivity extends FragmentActivity {
+public class ParamActivity extends FragmentActivity{
 	
 	StarterFragment starterParPage;
 	AnglesFragment anglesParPage;
@@ -101,6 +101,26 @@ public class ParamActivity extends FragmentActivity {
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		pager = (ViewPager)findViewById(R.id.pager);
 		pager.setAdapter(awesomeAdapter);
+		  pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		        private int prevPage = -1;
+		        @Override
+		        public void onPageSelected(int position) {
+		            // after page is selected do something with your prevPage 
+		            // eg: compare to "position" to check if it's from the left or right
+		        }
+
+		        @Override
+		        public void onPageScrolled(int arg0, float arg1, int arg2) {
+		        }
+
+		        @Override
+		        public void onPageScrollStateChanged(int arg0) {
+		            if (arg0 == ViewPager.SCROLL_STATE_DRAGGING) {
+		            		updateUI();		            	
+		            }
+		        }
+		    });
+		  updateUI();
 	}
 
 	@Override
@@ -158,6 +178,20 @@ public class ParamActivity extends FragmentActivity {
 		} catch (Exception e) {
 		}
 		super.onResume();
+	}
+	
+	void updateUI () {
+		if (Secu3Service.Secu3Params.getValid()) {
+			starterParPage.setData(Secu3Service.Secu3Params.getStartrPar());
+			anglesParPage.setData(Secu3Service.Secu3Params.getAnglesPar());
+			idlRegParPage.setData(Secu3Service.Secu3Params.getIdlRegPar());
+			funsetParPage.setData(Secu3Service.Secu3Params.getFunSetPar());
+			temperParPage.setData(Secu3Service.Secu3Params.getTemperPar());
+			carburParPage.setData(Secu3Service.Secu3Params.getCarburPar());
+			adcCorParPage.setData(Secu3Service.Secu3Params.getADCCorPar());
+			ckpsParPage.setData(Secu3Service.Secu3Params.getCKPSPar());
+			miscelParPage.setData(Secu3Service.Secu3Params.getMiscelPar());
+		}
 	}
 	
 	void updateUI (Intent intent) {

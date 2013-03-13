@@ -50,6 +50,10 @@ public class Secu3Parser extends Secu3Dat {
 		return lastPackedId;
 	}
 	
+	public Secu3Dat getLastPacket() {
+		return lastParser;
+	}
+	
 	public String getLogString ()
 	{
 		if (lastParser != null) return lastParser.getLogString(); else return "Incorrect or null packet";

@@ -16,7 +16,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.secu3.android.R;
-import org.secu3.android.api.io.Secu3Dat.ChangeMode;
+import org.secu3.android.api.io.Secu3Dat.ADCCorPar;
+import org.secu3.android.api.io.Secu3Dat.CKPSPar;
+import org.secu3.android.api.io.Secu3Dat.CarburPar;
+import org.secu3.android.api.io.Secu3Dat.FunSetPar;
+import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
+import org.secu3.android.api.io.Secu3Dat.MiscelPar;
+import org.secu3.android.api.io.Secu3Dat.TemperPar;
+import org.secu3.android.api.io.Secu3Dat.*;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -33,8 +40,9 @@ public class Secu3Manager {
 	
 	private static final String LOG_TAG = "Secu3Manager";		
 	
-	enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
-	enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
+	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
+	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
+	public enum SECU3_TASK {SECU3_NONE,SECU3_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS};
 	
 	private Service callingService;
 	private BluetoothSocket secu3Socket;
@@ -51,6 +59,8 @@ public class Secu3Manager {
 	private int maxConnectionRetries;
 	private int nbRetriesRemaining;
 	private boolean connected = false;
+	private SECU3_TASK secu3Task = SECU3_TASK.SECU3_SENSORS;
+	private SECU3_TASK prevSecu3Task = SECU3_TASK.SECU3_NONE;
 	
 	private class ConnectedSecu3 extends Thread {
 		
@@ -101,93 +111,92 @@ public class Secu3Manager {
 			return ready;
 		}
 		
-		void parsePacket(String packet, BufferedReader reader, BufferedWriter writer) {
+		void parsePacket(String packet, BufferedReader reader, BufferedWriter writer) throws Exception {			
 			switch (secu3State) {
 			case SECU3_NORMAL:
-				try {
 					parser.parse(packet);
 					appContext.sendBroadcast(parser.getLastPacketIntent());
 					
-					switch (parser.getLastPackedId()) {
-					case Secu3Dat.SENSOR_DAT:						
-						writer.write(ChangeMode.pack(Secu3Dat.ADCRAW_DAT));
-						writer.flush();
-						break;					
-					case Secu3Dat.ADCRAW_DAT:
-						writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
-						writer.flush();
-						break;						
-					case Secu3Dat.STARTR_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.ANGLES_PAR));
-						writer.flush();
-						break;
-					case Secu3Dat.ANGLES_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.IDLREG_PAR));
-						writer.flush();
-						break;					
-					case Secu3Dat.IDLREG_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
-						writer.flush();
-						break;
-					case Secu3Dat.FUNSET_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.TEMPER_PAR));
-						writer.flush();
-						break;
-					case Secu3Dat.TEMPER_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.CARBUR_PAR));
-						writer.flush();
-						break;
-					case Secu3Dat.CARBUR_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.ADCCOR_PAR));
-						writer.flush();
-						break;
-					case Secu3Dat.ADCCOR_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.CKPS_PAR));
-						writer.flush();
-						break;
-					case Secu3Dat.CKPS_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.MISCEL_PAR));
-						writer.flush();
-						break;
-					case Secu3Dat.MISCEL_PAR:
-						writer.write(ChangeMode.pack(Secu3Dat.SENSOR_DAT));
-						writer.flush();
-						break;
-						
-					case Secu3Dat.CHANGEMODE:
-						break;
-					case Secu3Dat.BOOTLOADER:
-						break;
-					case Secu3Dat.FNNAME_DAT:
-						break;
-					case Secu3Dat.OP_COMP_NC:
-						break;
-					case Secu3Dat.CE_ERR_CODES:
-						break;
-					case Secu3Dat.KNOCK_PAR:
-						break;
-					case Secu3Dat.CE_SAVED_ERR:
-						break;
-					case Secu3Dat.FWINFO_DAT:
-						break;
-					case Secu3Dat.EDITAB_PAR:
-						break;
-					case Secu3Dat.ATTTAB_PAR:
-						break;
-					case Secu3Dat.DBGVAR_DAT:
-						break;
-					case Secu3Dat.DIAGINP_DAT:
-						break;
-					case Secu3Dat.DIAGOUT_DAT:
-						break;
-					}								
+					if (secu3Task != prevSecu3Task) { // If task changed
+						switch (secu3Task) {
+							// No task received
+							case SECU3_NONE:
+								break;
+							// Task to read sensors
+							case SECU3_SENSORS:					
+								writer.write(ChangeMode.pack(Secu3Dat.SENSOR_DAT));
+								writer.flush();					
+								prevSecu3Task = secu3Task;
+								break;
+							case SECU3_RAW_SENSORS:
+								writer.write(ChangeMode.pack(Secu3Dat.ADCRAW_DAT));
+								writer.flush();					
+								prevSecu3Task = secu3Task;
+								break;							
+							// Task to read params
+							case SECU3_READ_PARAMS:
+								Secu3Service.Secu3Params.valid = false;
+								writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
+								writer.flush();					
+								prevSecu3Task = secu3Task;
+						}
+					}
+					
+					if (secu3Task == SECU3_TASK.SECU3_READ_PARAMS) {
+						switch (parser.getLastPackedId()) {
+							case Secu3Dat.STARTR_PAR:
+								Secu3Service.Secu3Params.startrPar = (StartrPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.ANGLES_PAR));
+								writer.flush();
+								break;
+							case Secu3Dat.ANGLES_PAR:
+								Secu3Service.Secu3Params.anglesPar = (AnglesPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.IDLREG_PAR));
+								writer.flush();
+								break;					
+							case Secu3Dat.IDLREG_PAR:
+								Secu3Service.Secu3Params.idlRegPar = (IdlRegPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
+								writer.flush();
+								break;
+							case Secu3Dat.FUNSET_PAR:
+								Secu3Service.Secu3Params.funSetPar = (FunSetPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.TEMPER_PAR));
+								writer.flush();
+								break;
+							case Secu3Dat.TEMPER_PAR:
+								Secu3Service.Secu3Params.temperPar = (TemperPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.CARBUR_PAR));
+								writer.flush();
+								break;
+							case Secu3Dat.CARBUR_PAR:
+								Secu3Service.Secu3Params.carburPar = (CarburPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.ADCCOR_PAR));
+								writer.flush();
+								break;
+							case Secu3Dat.ADCCOR_PAR:
+								Secu3Service.Secu3Params.adcCorPar = (ADCCorPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.CKPS_PAR));
+								writer.flush();
+								break;
+							case Secu3Dat.CKPS_PAR:
+								Secu3Service.Secu3Params.ckpsPar = (CKPSPar)parser.getLastPacket();
+								writer.write(ChangeMode.pack(Secu3Dat.MISCEL_PAR));
+								writer.flush();
+								break;
+							case Secu3Dat.MISCEL_PAR:
+								Secu3Service.Secu3Params.miscelPar = (MiscelPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.valid = true;
+								writer.write(ChangeMode.pack(Secu3Dat.SENSOR_DAT));
+								writer.flush();
+								secu3Task = prevSecu3Task;
+								prevSecu3Task = SECU3_TASK.SECU3_READ_PARAMS;
+								break;																		
+						}
+					}				
 					Log.d(LOG_TAG,parser.getLogString());							
-				} catch (Exception e) {
-					Log.d(LOG_TAG,e.getMessage());
-				}
 				break;
-				
-			case SECU3_BOOTLOADER:
+			default:
 				break;
 			}											
 		}		
@@ -220,7 +229,11 @@ public class Secu3Manager {
 								secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
 								line = String.valueOf(packetBuffer,0,idx-1);
 								Log.d(LOG_TAG, "Recieved: " + line);
-								parsePacket(line,reader,writer);
+								try {
+									parsePacket(line,reader,writer);
+								} catch (Exception e) {
+									Log.d(LOG_TAG, e.getMessage());
+								}
 								if (offline > 0) offline=0;					
 								appContext.sendBroadcast(new Intent(Secu3Service.STATUS_ONLINE).putExtra(Secu3Service.STATUS, true));
 							}
@@ -344,18 +357,10 @@ public class Secu3Manager {
 											Log.e(LOG_TAG, "Error while establishing connection: no socket");
 								        	disable(R.string.msg_bluetooth_secu3_unavaible);
 										} else {
-											// Cancel discovery because it will slow down the connection
-											// bluetoothAdapter.cancelDiscovery();
-											// we increment the number of connection tries
-											// Connect the device through the socket. This will block
-											// until it succeeds or throws an exception
 											Log.v(LOG_TAG, "connecting to socket");
 											secu3Socket.connect();
 						        			Log.d(LOG_TAG, "connected to socket");
 											connected = true;
-											// reset eventual disabling cause
-//											setDisableReason(0);
-											// connection obtained so reset the number of connection try
 											nbRetriesRemaining = 1+maxConnectionRetries ;
 											notificationManager.cancel(R.string.connection_problem_notification_title);
 						        			Log.v(LOG_TAG, "starting socket reading task");
@@ -363,13 +368,12 @@ public class Secu3Manager {
 											connectionAndReadingPool.execute(connectedSecu3);
 								        	Log.v(LOG_TAG, "socket reading thread started");
 										}
-//									} else if (! bluetoothAdapter.isEnabled()) {
-//										setDisableReason(R.string.msg_bluetooth_disabled);
+									} else if (! bluetoothAdapter.isEnabled()) {
+										setDisableReason(R.string.msg_bluetooth_disabled);
 									}
 								} catch (IOException connectException) {
-									// Unable to connect
 									Log.e(LOG_TAG, "error while connecting to socket", connectException);									
-									// disable(R.string.msg_bluetooth_gps_unavaible);
+									disable(R.string.msg_bluetooth_secu3_unavaible);
 								} finally {
 									nbRetriesRemaining--;
 									if (! connected) {
@@ -417,6 +421,10 @@ public class Secu3Manager {
 		setDisableReason(reasonId);
     	//disable();
 	}	
+	
+	public synchronized void setTask (SECU3_TASK task) {
+		secu3Task = task;
+	}
 	
 	@SuppressWarnings("deprecation")
 	public synchronized void disable() {
