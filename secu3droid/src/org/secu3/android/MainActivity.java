@@ -7,6 +7,7 @@ import org.secu3.android.api.io.Secu3Dat.ADCRawDat;
 import org.secu3.android.api.io.Secu3Dat.SensorDat;
 import org.secu3.android.api.io.Secu3Service;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -67,6 +68,7 @@ public class MainActivity extends Activity {
 		case R.id.menu_settings:
 			return true;
 		case R.id.menu_params:
+			startService(new Intent (this,Secu3Service.class).putExtra("MESSAGE", 0));
 			startActivity(new Intent(this,ParamActivity.class));
 			return true;
 		default:
@@ -75,7 +77,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void startService() {		
-		startService(new Intent (this,Secu3Service.class));
+		startService(new Intent (Secu3Service.ACTION_START_SECU3_SERVICE,Uri.EMPTY,this,Secu3Service.class));
 		Log.d(getString(R.string.app_name),"startService");
 	}
 	

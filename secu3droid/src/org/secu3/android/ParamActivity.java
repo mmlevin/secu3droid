@@ -2,7 +2,6 @@ package org.secu3.android;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.secu3.android.api.io.*;
 import org.secu3.android.api.io.Secu3Dat.*;
