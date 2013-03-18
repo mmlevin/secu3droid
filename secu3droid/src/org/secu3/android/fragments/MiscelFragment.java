@@ -1,7 +1,5 @@
 package org.secu3.android.fragments;
 
-import java.util.Arrays;
-
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.MiscelPar;

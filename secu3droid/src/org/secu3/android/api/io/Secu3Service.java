@@ -36,6 +36,8 @@ public class Secu3Service extends Service {
 	public static final String ACTION_SECU3_SERVICE_START = "org.secu3.android.intent.action.SECU3_SERVICE_START";
 	public static final String ACTION_SECU3_SERVICE_STOP = "org.secu3.android.intent.action.SECU3_SERVICE_STOP";
 	public static final String ACTION_SECU3_SERVICE_READ_PARAMS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_PARAMS";
+	public static final String ACTION_SECU3_SERVICE_READ_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_ERRORS";
+	public static final String ACTION_SECU3_SERVICE_READ_SAVED_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SAVED_ERRORS";
 	public static final String STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
 	public static final String STATUS = "status";
 	
@@ -167,8 +169,18 @@ public class Secu3Service extends Service {
 				secu3Manager.setTask(SECU3_TASK.SECU3_READ_PARAMS);
 				sendBroadcast(intent);
 			}
+		} else if (ACTION_SECU3_SERVICE_READ_ERRORS.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				secu3Manager.setTask(SECU3_TASK.SECU3_READ_ERRORS);
+				sendBroadcast(intent);
+			}
+		} else if (ACTION_SECU3_SERVICE_READ_SAVED_ERRORS.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SAVED_ERRORS);
+				sendBroadcast(intent);
+			}
 		}
-		
+				
 		return super.onStartCommand(intent, flags, startId);	
 	}
 	

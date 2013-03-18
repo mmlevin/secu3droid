@@ -7,13 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -50,7 +43,7 @@ public class Secu3Manager {
 	
 	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
 	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
-	public enum SECU3_TASK {SECU3_NONE,SECU3_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS};
+	public enum SECU3_TASK {SECU3_NONE,SECU3_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS};
 	
 	private Service callingService;
 	private BluetoothSocket secu3Socket;
@@ -148,6 +141,17 @@ public class Secu3Manager {
 								writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
 								writer.flush();					
 								prevSecu3Task = secu3Task;
+								break;
+							case SECU3_READ_ERRORS:
+								writer.write(ChangeMode.pack(Secu3Dat.CE_ERR_CODES));
+								writer.flush();
+								prevSecu3Task = secu3Task;
+								break;
+							case SECU3_READ_SAVED_ERRORS:
+								writer.write(ChangeMode.pack(Secu3Dat.CE_SAVED_ERR));
+								writer.flush();
+								prevSecu3Task = secu3Task;
+								break;
 						}
 					}
 					
@@ -212,7 +216,17 @@ public class Secu3Manager {
 								prevSecu3Task = SECU3_TASK.SECU3_READ_PARAMS;
 								break;																		
 						}
-					}				
+					} else if (secu3Task == SECU3_TASK.SECU3_READ_ERRORS) {
+						switch (parser.getLastPackedId()) {
+						case Secu3Dat.CE_ERR_CODES:							
+							break;						
+						}
+					} else if (secu3Task == SECU3_TASK.SECU3_READ_SAVED_ERRORS) {
+						switch (parser.getLastPackedId()) {
+						case Secu3Dat.CE_ERR_CODES:							
+							break;						
+						}
+					}
 					Log.d(LOG_TAG,parser.getLogString());							
 				break;
 			default:

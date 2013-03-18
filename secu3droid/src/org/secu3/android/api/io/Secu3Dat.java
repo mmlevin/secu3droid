@@ -49,6 +49,18 @@ public class Secu3Dat implements Parcelable {
 	 public final static int OPCODE_DIAGNOST_ENTER       = 6;  //enter diagnostic mode
 	 public final static int OPCODE_DIAGNOST_LEAVE       = 7;  //leave diagnostic mode
 	 
+	 public final static int ECUERROR_CKPS_MALFUNCTION    = 0;
+	 public final static int ECUERROR_EEPROM_PARAM_BROKEN = 1;
+	 public final static int ECUERROR_PROGRAM_CODE_BROKEN = 2;
+	 public final static int ECUERROR_KSP_CHIP_FAILED     = 3;
+	 public final static int ECUERROR_KNOCK_DETECTED      = 4;
+	 public final static int ECUERROR_MAP_SENSOR_FAIL     = 5;
+	 public final static int ECUERROR_TEMP_SENSOR_FAIL    = 6;
+	 public final static int ECUERROR_VOLT_SENSOR_FAIL    = 7;
+	 public final static int ECUERROR_DWELL_CONTROL       = 8;
+	 public final static int ECUERROR_CAMS_MALFUNCTION    = 9;
+
+	 
 	 public final static int FW_SIGNATURE_INFO_SIZE	  = 48;
 	 
 	 public final static int ETTS_GASOLINE_SET = 0;       //tables's set: petrol

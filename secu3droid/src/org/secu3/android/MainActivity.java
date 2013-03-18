@@ -1,6 +1,5 @@
 package org.secu3.android;
 
-import java.net.URI;
 import java.util.Locale;
 
 import org.secu3.android.api.io.Secu3Dat;
@@ -50,7 +49,7 @@ public class MainActivity extends Activity {
 		receiver = new ReceiveMessages();
 		setContentView(R.layout.activity_main);
 		textViewData = (TextView)findViewById(R.id.textViewData);
-		textViewStatus = (TextView)findViewById(R.id.textViewStatus);
+		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		checkBox = (CheckBox)findViewById(R.id.anglesZeroAngleCheckBox);
 		Log.d(getString(R.string.app_name), "onCreate");
 		startService();		
@@ -71,6 +70,9 @@ public class MainActivity extends Activity {
 		case R.id.menu_params:
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_READ_PARAMS,Uri.EMPTY,this,Secu3Service.class));
 			startActivity(new Intent(this,ParamActivity.class));
+			return true;
+		case R.id.menu_errors:
+			startActivity(new Intent(this,ErrorsActivity.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

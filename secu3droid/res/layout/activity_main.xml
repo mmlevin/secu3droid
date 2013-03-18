@@ -5,7 +5,7 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/textViewStatus"
+        android:id="@+id/mainTextViewStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -35,7 +35,7 @@
         android:id="@+id/anglesZeroAngleCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textViewStatus"
+        android:layout_above="@+id/mainTextViewStatus"
         android:layout_alignParentLeft="true"
         android:text="Show raw data" />
 

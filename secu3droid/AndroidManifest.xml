@@ -32,8 +32,11 @@
             android:name="org.secu3.android.ParamActivity"
             android:label="@string/title_activity_param" >
         </activity>
+        <activity android:name="org.secu3.android.Preferences" >
+        </activity>
         <activity
-            android:name="org.secu3.android.Preferences">          
+            android:name="org.secu3.android.ErrorsActivity"
+            android:label="@string/title_activity_errors" >
         </activity>
     </application>
 

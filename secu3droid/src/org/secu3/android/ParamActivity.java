@@ -51,7 +51,7 @@ public class ParamActivity extends FragmentActivity{
 	       if(action.equalsIgnoreCase(Secu3Service.STATUS_ONLINE)) {
 	    	   updateStatus(intent);
 	       } else {
-	    	   updateUI(intent);	   
+	    	   updateData(intent);	   
 	       }	    
 	   }
 	}
@@ -98,27 +98,28 @@ public class ParamActivity extends FragmentActivity{
 		cxt = this;
 				
 		receiver = new ReceiveMessages();
-		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
 		pager = (ViewPager)findViewById(R.id.pager);
 		pager.setAdapter(awesomeAdapter);
 		  pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-		        private int prevPage = -1;
-		        @Override
-		        public void onPageSelected(int position) {
-		            // after page is selected do something with your prevPage 
-		            // eg: compare to "position" to check if it's from the left or right
-		        }
-
-		        @Override
-		        public void onPageScrolled(int arg0, float arg1, int arg2) {
-		        }
-
 		        @Override
 		        public void onPageScrollStateChanged(int arg0) {
 		            if (arg0 == ViewPager.SCROLL_STATE_SETTLING) {
 		            		updateUI();		            	
 		            }
 		        }
+
+				@Override
+				public void onPageScrolled(int arg0, float arg1, int arg2) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onPageSelected(int arg0) {
+					// TODO Auto-generated method stub
+					
+				}
 		    });
 		  updateUI();
 	}
@@ -147,18 +148,11 @@ public class ParamActivity extends FragmentActivity{
 		} catch (Exception e) {
 			
 		}
-		super.onPause();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		try {
-			unregisterReceiver(receiver);
-		} catch (Exception e) {
+		finally {
+			super.onPause();
 		}
-		super.onDestroy();
 	}
-	
+		
 	@Override
 	protected void onResume() {
 		try {
@@ -177,7 +171,9 @@ public class ParamActivity extends FragmentActivity{
 			
 		} catch (Exception e) {
 		}
-		super.onResume();
+		finally {
+			super.onResume();
+		}		
 	}
 	
 	void updateUI () {
@@ -195,7 +191,7 @@ public class ParamActivity extends FragmentActivity{
 		}
 	}
 	
-	void updateUI (Intent intent) {
+	void updateData (Intent intent) {
 		String action = intent.getAction();
 		if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_STARTER_PAR)) {
 			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());
