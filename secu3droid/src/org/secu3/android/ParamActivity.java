@@ -115,7 +115,7 @@ public class ParamActivity extends FragmentActivity{
 
 		        @Override
 		        public void onPageScrollStateChanged(int arg0) {
-		            if (arg0 == ViewPager.SCROLL_STATE_DRAGGING) {
+		            if (arg0 == ViewPager.SCROLL_STATE_SETTLING) {
 		            		updateUI();		            	
 		            }
 		        }
