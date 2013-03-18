@@ -7,6 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -24,6 +31,7 @@ import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
 import org.secu3.android.api.io.Secu3Dat.MiscelPar;
 import org.secu3.android.api.io.Secu3Dat.TemperPar;
 import org.secu3.android.api.io.Secu3Dat.*;
+import org.secu3.android.api.utils.EncodingCP866;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -78,14 +86,14 @@ public class Secu3Manager {
 	
 		private boolean ready = false;
 		
-		char packetBuffer[] = new char [Secu3Dat.MAX_PACKET_SIZE];
+		int packetBuffer[] = new int [Secu3Dat.MAX_PACKET_SIZE];
 		Secu3Parser parser = new Secu3Parser();		
 		
 		public ConnectedSecu3 (BluetoothSocket socket) {
 			this.socket = socket;
 			
 			InputStream tmpIn = null;
-			OutputStream tmpOut = null;
+			OutputStream tmpOut = null;					
 			
 			try {
 				tmpIn = socket.getInputStream();
@@ -135,7 +143,8 @@ public class Secu3Manager {
 								break;							
 							// Task to read params
 							case SECU3_READ_PARAMS:
-								Secu3Service.Secu3Params.valid = false;
+								Secu3Service.Secu3Params.setValid(false);
+								if (Secu3Service.Secu3Params.getFnNameDat() != null) Secu3Service.Secu3Params.getFnNameDat().clear();
 								writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
 								writer.flush();					
 								prevSecu3Task = secu3Task;
@@ -145,48 +154,58 @@ public class Secu3Manager {
 					if (secu3Task == SECU3_TASK.SECU3_READ_PARAMS) {
 						switch (parser.getLastPackedId()) {
 							case Secu3Dat.STARTR_PAR:
-								Secu3Service.Secu3Params.startrPar = (StartrPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.setStartrPar((StartrPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.ANGLES_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.ANGLES_PAR:
-								Secu3Service.Secu3Params.anglesPar = (AnglesPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.setAnglesPar((AnglesPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.IDLREG_PAR));
 								writer.flush();
 								break;					
 							case Secu3Dat.IDLREG_PAR:
-								Secu3Service.Secu3Params.idlRegPar = (IdlRegPar)parser.getLastPacket();
-								writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
+								Secu3Service.Secu3Params.setIdlRegPar((IdlRegPar)parser.getLastPacket());
+								writer.write(ChangeMode.pack(Secu3Dat.FNNAME_DAT));
 								writer.flush();
 								break;
+							case Secu3Dat.FNNAME_DAT:
+								if (Secu3Service.Secu3Params.getFnNameDat() == null) {
+									Secu3Service.Secu3Params.setFnNameDat(new FnNameDat());
+								}
+								Secu3Service.Secu3Params.getFnNameDat().parse(packet);
+								if (Secu3Service.Secu3Params.getFnNameDat().names_available()) {									
+									writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
+									writer.flush();
+								}
+								break;								
 							case Secu3Dat.FUNSET_PAR:
-								Secu3Service.Secu3Params.funSetPar = (FunSetPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.setFunSetPar((FunSetPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.TEMPER_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.TEMPER_PAR:
-								Secu3Service.Secu3Params.temperPar = (TemperPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.setTemperPar((TemperPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.CARBUR_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.CARBUR_PAR:
-								Secu3Service.Secu3Params.carburPar = (CarburPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.setCarburPar((CarburPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.ADCCOR_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.ADCCOR_PAR:
-								Secu3Service.Secu3Params.adcCorPar = (ADCCorPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.setAdcCorPar((ADCCorPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.CKPS_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.CKPS_PAR:
-								Secu3Service.Secu3Params.ckpsPar = (CKPSPar)parser.getLastPacket();
+								Secu3Service.Secu3Params.setCkpsPar((CKPSPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.MISCEL_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.MISCEL_PAR:
-								Secu3Service.Secu3Params.miscelPar = (MiscelPar)parser.getLastPacket();
-								Secu3Service.Secu3Params.valid = true;
+								Secu3Service.Secu3Params.setMiscelPar((MiscelPar)parser.getLastPacket());
+								Secu3Service.Secu3Params.setValid(true);
 								writer.write(ChangeMode.pack(Secu3Dat.SENSOR_DAT));
 								writer.flush();
 								secu3Task = prevSecu3Task;
@@ -200,20 +219,20 @@ public class Secu3Manager {
 				break;
 			}											
 		}		
-		
+			
 		public void run() {
 			timer.scheduleAtFixedRate(onlineTask, 0, 100);	
 			int idx = 0;
-			char ch;	
+			int ch;	
 			String line;
 			
 			try {
-				BufferedReader reader = new BufferedReader(new InputStreamReader (in,"cp1251"));
-				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out,"cp1251"));
+				BufferedReader reader = new BufferedReader(new InputStreamReader (in,"ISO-8859-1"));
+				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out,"ISO-8859-1"));				
 				while (enabled) {
 					if (reader.ready()) {
 						ready = true;												
-						if ((ch = (char)reader.read()) != -1) {
+						if ((ch = (char)reader.read()) != -1) {							
 							if (secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_START) {							
 								if (ch == Secu3Dat.INPUT_PACKET) {
 									secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_END;								
@@ -225,9 +244,10 @@ public class Secu3Manager {
 								secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
 								idx = 0;
 							}												
-							if ((secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_END) && (ch == '\r')) {
+							if ((secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_END) && ((char)ch == '\r')) {
 								secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
-								line = String.valueOf(packetBuffer,0,idx-1);
+								EncodingCP866.Cp866ToUtf16(packetBuffer);
+								line = new String(packetBuffer,0,idx-1);
 								Log.d(LOG_TAG, "Recieved: " + line);
 								try {
 									parsePacket(line,reader,writer);
@@ -244,7 +264,7 @@ public class Secu3Manager {
 					}
 				}
 			} catch (IOException e) {
-				Log.d(LOG_TAG, "Error while getting data");				
+				Log.d(LOG_TAG, "Error while getting data "+e.toString());				
 			} finally {
 				this.close();
 			}

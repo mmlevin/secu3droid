@@ -181,15 +181,16 @@ public class ParamActivity extends FragmentActivity{
 	}
 	
 	void updateUI () {
-		if (Secu3Service.Secu3Params.getValid()) {
+		if (Secu3Service.Secu3Params.isValid()) {
 			starterParPage.setData(Secu3Service.Secu3Params.getStartrPar());
 			anglesParPage.setData(Secu3Service.Secu3Params.getAnglesPar());
 			idlRegParPage.setData(Secu3Service.Secu3Params.getIdlRegPar());
 			funsetParPage.setData(Secu3Service.Secu3Params.getFunSetPar());
+			funsetParPage.setData(Secu3Service.Secu3Params.getFnNameDat());
 			temperParPage.setData(Secu3Service.Secu3Params.getTemperPar());
 			carburParPage.setData(Secu3Service.Secu3Params.getCarburPar());
-			adcCorParPage.setData(Secu3Service.Secu3Params.getADCCorPar());
-			ckpsParPage.setData(Secu3Service.Secu3Params.getCKPSPar());
+			adcCorParPage.setData(Secu3Service.Secu3Params.getAdcCorPar());
+			ckpsParPage.setData(Secu3Service.Secu3Params.getCkpsPar());
 			miscelParPage.setData(Secu3Service.Secu3Params.getMiscelPar());
 		}
 	}

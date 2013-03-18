@@ -827,6 +827,11 @@ public class Secu3Dat implements Parcelable {
 		public int index;
 		/** Имя соответствующей таблицы (16 символов) (name) **/
 		public String name;
+		
+		public String[] names = null;
+		public boolean collected[] = null;
+		
+		private boolean all_collected = false;
 
 		public static final Parcelable.Creator<FnNameDat> CREATOR = new Parcelable.Creator<FnNameDat>() {
 			 public FnNameDat createFromParcel(Parcel in) {
@@ -843,6 +848,9 @@ public class Secu3Dat implements Parcelable {
 			packet_id = FNNAME_DAT;
 			packet_size = PACKET_SIZE;
 			intent_action = RECEIVE_FNNAME_DAT;
+			names = null;
+			collected = null;
+			all_collected = false;
 		}
 		
 		public FnNameDat (Parcel in) {
@@ -850,6 +858,9 @@ public class Secu3Dat implements Parcelable {
 			tables_num = in.readInt();
 			index = in.readInt();
 			name = in.readString();
+			names = (String[]) in.readArray(String.class.getClassLoader());			
+			in.readBooleanArray(collected);
+			all_collected = (Boolean) in.readValue(boolean.class.getClassLoader());
 		}
 		
 		@Override
@@ -858,6 +869,9 @@ public class Secu3Dat implements Parcelable {
 			dest.writeInt(tables_num);
 			dest.writeInt(index);
 			dest.writeString(name);
+			dest.writeArray(names);
+			dest.writeBooleanArray(collected);
+			dest.writeValue(all_collected);
 		}
 		
 		@Override
@@ -868,6 +882,9 @@ public class Secu3Dat implements Parcelable {
 				result &= this.tables_num == ((FnNameDat)o).tables_num;
 				result &= this.index == ((FnNameDat)o).index;
 				result &= this.name.equals(((FnNameDat)o).name);
+				result &= this.names.equals(((FnNameDat)o).names);
+				result &= this.collected.equals(((FnNameDat)o).collected);
+				result &= this.all_collected == ((FnNameDat)o).all_collected;
 			}
 			return result;
 		}		
@@ -880,11 +897,39 @@ public class Secu3Dat implements Parcelable {
 				tables_num = Integer.parseInt(data.substring(2, 4), 16); // AA
 				index = Integer.parseInt(data.substring(4, 6), 16); // BB
 				name = data.substring(6).trim();
+				
+				if (collected == null) {
+					collected = new boolean [tables_num];
+					names = new String [tables_num];					
+					for (int i = 0; i < tables_num; i++) {
+						collected[i] = false;
+					}
+				}
+				if (collected != null) {
+					collected [index] = true;
+					names[index] = name;
+					boolean _all_collected = true;
+					for (int i = 0; i < tables_num; i++) {
+						if (!collected[i]) _all_collected = false;
+					} 
+					all_collected = _all_collected;							
+				}
+				
 			} catch (Exception e) {
 				throw e;
 			}
 		}
+		
+		public synchronized void clear() {
+			all_collected = false;	
+			collected = null;
+			names = null;
+		}
 
+		public synchronized boolean names_available() {
+			return all_collected;
+		}
+		
 		@Override
 		public String getLogString() {
 			return (String.format("%s: ", getClass().getCanonicalName()));

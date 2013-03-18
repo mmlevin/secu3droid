@@ -6,6 +6,7 @@ import org.secu3.android.api.io.Secu3Dat.ADCCorPar;
 import org.secu3.android.api.io.Secu3Dat.AnglesPar;
 import org.secu3.android.api.io.Secu3Dat.CKPSPar;
 import org.secu3.android.api.io.Secu3Dat.CarburPar;
+import org.secu3.android.api.io.Secu3Dat.FnNameDat;
 import org.secu3.android.api.io.Secu3Dat.FunSetPar;
 import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
 import org.secu3.android.api.io.Secu3Dat.MiscelPar;
@@ -42,27 +43,85 @@ public class Secu3Service extends Service {
 	private Secu3Manager secu3Manager = null;
 	
 	public static class Secu3Params {
-		public static boolean valid = false;
-		public static StartrPar startrPar;
-		public static AnglesPar anglesPar;
-		public static IdlRegPar idlRegPar;
-		public static FunSetPar funSetPar;
-		public static TemperPar temperPar;
-		public static CarburPar carburPar;
-		public static ADCCorPar adcCorPar;
-		public static CKPSPar ckpsPar;
-		public static MiscelPar miscelPar;
+		private static boolean valid = false;
+		private static StartrPar startrPar;
+		private static AnglesPar anglesPar;
+		private static IdlRegPar idlRegPar;
+		private static FnNameDat fnNameDat;
+		private static FunSetPar funSetPar;
+		private static TemperPar temperPar;
+		private static CarburPar carburPar;
+		private static ADCCorPar adcCorPar;
+		private static CKPSPar ckpsPar;
+		private static MiscelPar miscelPar;
 		
-		public static synchronized boolean getValid() {return valid;};
-		public static synchronized StartrPar getStartrPar () {return startrPar;};
-		public static synchronized AnglesPar getAnglesPar () {return anglesPar;};
-		public static synchronized IdlRegPar getIdlRegPar () {return idlRegPar;};
-		public static synchronized FunSetPar getFunSetPar () {return funSetPar;};
-		public static synchronized TemperPar getTemperPar () {return temperPar;};
-		public static synchronized CarburPar getCarburPar () {return carburPar;};
-		public static synchronized ADCCorPar getADCCorPar () {return adcCorPar;};
-		public static synchronized CKPSPar	  getCKPSPar   () {return ckpsPar;  };
-		public static synchronized MiscelPar getMiscelPar () {return miscelPar;};
+		public synchronized static boolean isValid() {
+			return valid;
+		}
+		public synchronized static void setValid(boolean valid) {
+			Secu3Params.valid = valid;
+		}
+		public synchronized static StartrPar getStartrPar() {
+			return startrPar;
+		}
+		public synchronized static void setStartrPar(StartrPar startrPar) {
+			Secu3Params.startrPar = startrPar;
+		}
+		public synchronized static AnglesPar getAnglesPar() {
+			return anglesPar;
+		}
+		public synchronized static void setAnglesPar(AnglesPar anglesPar) {
+			Secu3Params.anglesPar = anglesPar;
+		}
+		public synchronized static IdlRegPar getIdlRegPar() {
+			return idlRegPar;
+		}
+		public synchronized static void setIdlRegPar(IdlRegPar idlRegPar) {
+			Secu3Params.idlRegPar = idlRegPar;
+		}
+		public synchronized static FnNameDat getFnNameDat() {
+			return fnNameDat;
+		}
+		public synchronized static void setFnNameDat(FnNameDat fnNameDat) {
+			Secu3Params.fnNameDat = fnNameDat;
+		}
+		public synchronized static FunSetPar getFunSetPar() {
+			return funSetPar;
+		}
+		public synchronized static void setFunSetPar(FunSetPar funSetPar) {
+			Secu3Params.funSetPar = funSetPar;
+		}
+		public synchronized static TemperPar getTemperPar() {
+			return temperPar;
+		}
+		public synchronized static void setTemperPar(TemperPar temperPar) {
+			Secu3Params.temperPar = temperPar;
+		}
+		public synchronized static CarburPar getCarburPar() {
+			return carburPar;
+		}
+		public synchronized static void setCarburPar(CarburPar carburPar) {
+			Secu3Params.carburPar = carburPar;
+		}
+		public synchronized static ADCCorPar getAdcCorPar() {
+			return adcCorPar;
+		}
+		public synchronized static void setAdcCorPar(ADCCorPar adcCorPar) {
+			Secu3Params.adcCorPar = adcCorPar;
+		}
+		public synchronized static CKPSPar getCkpsPar() {
+			return ckpsPar;
+		}
+		public synchronized static void setCkpsPar(CKPSPar ckpsPar) {
+			Secu3Params.ckpsPar = ckpsPar;
+		}
+		public synchronized static MiscelPar getMiscelPar() {
+			return miscelPar;
+		}
+		public synchronized static void setMiscelPar(MiscelPar miscelPar) {
+			Secu3Params.miscelPar = miscelPar;
+		}
+		
 	}
 
 	@Override
