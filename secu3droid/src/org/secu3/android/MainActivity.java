@@ -66,8 +66,7 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
 			return true;
-		case R.id.menu_params:
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_READ_PARAMS,Uri.EMPTY,this,Secu3Service.class));
+		case R.id.menu_params:			
 			startActivity(new Intent(this,ParamActivity.class));
 			return true;
 		case R.id.menu_errors:

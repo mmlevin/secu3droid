@@ -24,5 +24,8 @@
     <string name="foreground_service_started_notification">Secu3 service started</string>
     <string name="title_activity_errors">Errors</string>
     <string name="menu_errors">Errors</string>
+    <string name="menu_preferences">Preferences</string>
+    <string name="menu_download">Download</string>
+    <string name="menu_upload">Upload</string>
 
 </resources>

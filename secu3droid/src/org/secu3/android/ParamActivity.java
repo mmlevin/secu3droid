@@ -7,6 +7,7 @@ import org.secu3.android.api.io.*;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.fragments.*;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -43,6 +44,11 @@ public class ParamActivity extends FragmentActivity{
 	ViewPager pager;
     ParamPagerAdapter awesomeAdapter;
 	
+    private void readParams() {
+    	progressBar.setVisibility(ProgressBar.VISIBLE);
+    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_READ_PARAMS,Uri.EMPTY,this,Secu3Service.class));
+    }
+    
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
 	@Override
@@ -99,7 +105,7 @@ public class ParamActivity extends FragmentActivity{
 		setContentView(R.layout.activity_param);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
 		progressBar.setIndeterminate(true);
-		
+		readParams();
 				
 		receiver = new ReceiveMessages();
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
@@ -134,12 +140,16 @@ public class ParamActivity extends FragmentActivity{
 	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_preferences) {
-            startActivity(new Intent(getBaseContext(), Preferences.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    	switch (item.getItemId()) {
+		case R.id.menu_preferences:
+			startActivity(new Intent(getBaseContext(), Preferences.class));			
+			return true;
+		case R.id.menu_download:
+			readParams();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}        
     }
 
 	@Override
