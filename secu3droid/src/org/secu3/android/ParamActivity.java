@@ -20,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ParamActivity extends FragmentActivity{
@@ -33,12 +34,13 @@ public class ParamActivity extends FragmentActivity{
 	ADCCorFragment adcCorParPage;
 	CKPSFragment ckpsParPage;
 	MiscelFragment miscelParPage;
+	
+	ProgressBar progressBar;
 		
 	List<Fragment> pages = new ArrayList<Fragment>();
 	TextView textViewStatus;
 	TextView textView;
 	ViewPager pager;
-    Context cxt;
     ParamPagerAdapter awesomeAdapter;
 	
 	public class ReceiveMessages extends BroadcastReceiver 
@@ -48,7 +50,7 @@ public class ParamActivity extends FragmentActivity{
 	   {    
 	       String action = intent.getAction();
 	       Log.d(getString(R.string.app_name), action);
-	       if(action.equalsIgnoreCase(Secu3Service.STATUS_ONLINE)) {
+	       if(action.equalsIgnoreCase(Secu3Service.SECU3_SERVICE_STATUS_ONLINE)) {
 	    	   updateStatus(intent);
 	       } else {
 	    	   updateData(intent);	   
@@ -93,9 +95,11 @@ public class ParamActivity extends FragmentActivity{
 		pages.add(ckpsParPage = new CKPSFragment());
 		pages.add(miscelParPage = new MiscelFragment());
 			
-		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);		
+		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
 		setContentView(R.layout.activity_param);
-		cxt = this;
+		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
+		progressBar.setIndeterminate(true);
+		
 				
 		receiver = new ReceiveMessages();
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
@@ -111,14 +115,11 @@ public class ParamActivity extends FragmentActivity{
 
 				@Override
 				public void onPageScrolled(int arg0, float arg1, int arg2) {
-					// TODO Auto-generated method stub
 					
 				}
 
 				@Override
-				public void onPageSelected(int arg0) {
-					// TODO Auto-generated method stub
-					
+				public void onPageSelected(int arg0) {					
 				}
 		    });
 		  updateUI();
@@ -166,7 +167,8 @@ public class ParamActivity extends FragmentActivity{
 			infil.addAction(Secu3Dat.RECEIVE_ADCCOR_PAR);
 			infil.addAction(Secu3Dat.RECEIVE_CKPS_PAR);
 			infil.addAction(Secu3Dat.RECEIVE_MISCEL_PAR);
-			infil.addAction(Secu3Service.STATUS_ONLINE);
+			infil.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
+			infil.addAction(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS);
 			registerReceiver(receiver, infil);
 			
 		} catch (Exception e) {
@@ -220,11 +222,18 @@ public class ParamActivity extends FragmentActivity{
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_MISCEL_PAR)) {
 			MiscelPar packet = intent.getParcelableExtra(MiscelPar.class.getCanonicalName());
 			miscelParPage.setData(packet);
-		}		
+		} else if (action.equalsIgnoreCase(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS)) {
+			int current = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_CURRENT,0);
+			int total = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_TOTAL,0);
+			if (current == total) progressBar.setVisibility(ProgressBar.GONE);
+			progressBar.setIndeterminate(current==0);
+			progressBar.setMax(total);
+			progressBar.setProgress(current);
+		}
 	}
 	
 	void updateStatus (Intent intent) {
-		String s = intent.getBooleanExtra(Secu3Service.STATUS,false)?"Online":"Offline";
+		String s = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false)?"Online":"Offline";
 		textViewStatus.setText(s);
 	}
 }

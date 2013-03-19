@@ -36,10 +36,13 @@ public class Secu3Service extends Service {
 	public static final String ACTION_SECU3_SERVICE_START = "org.secu3.android.intent.action.SECU3_SERVICE_START";
 	public static final String ACTION_SECU3_SERVICE_STOP = "org.secu3.android.intent.action.SECU3_SERVICE_STOP";
 	public static final String ACTION_SECU3_SERVICE_READ_PARAMS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_PARAMS";
+	public static final String RECEIVE_SECU3_SERVICE_PROGRESS = "org.secu3.android.intent.action.SECU3_SERVICE_PROGRESS";
+	public static final String SECU3_SERVICE_PROGRESS_CURRENT = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_CURRENT";
+	public static final String SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";
 	public static final String ACTION_SECU3_SERVICE_READ_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_ERRORS";
 	public static final String ACTION_SECU3_SERVICE_READ_SAVED_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SAVED_ERRORS";
-	public static final String STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
-	public static final String STATUS = "status";
+	public static final String SECU3_SERVICE_STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
+	public static final String SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
 	
 	NotificationManager notificationManager;
 	private Secu3Manager secu3Manager = null;
@@ -137,9 +140,7 @@ public class Secu3Service extends Service {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String deviceAddress = sharedPreferences.getString(PREF_BLUETOOTH_DEVICE, "00:11:11:24:04:80");
 		int maxConRetries = Integer.parseInt(sharedPreferences.getString(PREF_CONNECTION_RETRIES, this.getString(R.string.defaultConnectionRetries)));
-		if (Config.LOGD){
-			Log.d(LOG_TAG, "prefs device addr: "+deviceAddress);
-		}
+		Log.d(LOG_TAG, "prefs device addr: "+deviceAddress);
 		if (ACTION_SECU3_SERVICE_START.equals(intent.getAction())){
 			if (secu3Manager == null){
 				if (BluetoothAdapter.checkBluetoothAddress(deviceAddress)){
@@ -161,6 +162,9 @@ public class Secu3Service extends Service {
 				} else {
 					stopSelf();
 				}
+			} else {
+				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SENSORS);
+				sendBroadcast(intent);
 			}
 		} else if (ACTION_SECU3_SERVICE_STOP.equals(intent.getAction())){
 			stopSelf();

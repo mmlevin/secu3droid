@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 	   {    
 	       String action = intent.getAction();
 	       Log.d(getString(R.string.app_name), action);
-	       if(action.equalsIgnoreCase(Secu3Service.STATUS_ONLINE)) {
+	       if(action.equalsIgnoreCase(Secu3Service.SECU3_SERVICE_STATUS_ONLINE)) {
 	    	   updateStatus(intent);
 	       } else {
 	    	   updateData(intent);
@@ -52,7 +52,6 @@ public class MainActivity extends Activity {
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		checkBox = (CheckBox)findViewById(R.id.anglesZeroAngleCheckBox);
 		Log.d(getString(R.string.app_name), "onCreate");
-		startService();		
 	}
 
 	@Override
@@ -95,8 +94,9 @@ public class MainActivity extends Activity {
 			IntentFilter infil = new IntentFilter();
 			infil.addAction(Secu3Dat.RECEIVE_SENSOR_DAT);
 			infil.addAction(Secu3Dat.RECEIVE_ADCRAW_DAT);
-			infil.addAction(Secu3Service.STATUS_ONLINE);
+			infil.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
 			registerReceiver(receiver, infil);
+			startService();					
 			
 		} catch (Exception e) {
 		}
@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
 	}
 	
 	void updateStatus(Intent intent) {
-		String s = intent.getBooleanExtra(Secu3Service.STATUS,false)?"Online":"Offline";
+		String s = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false)?"Online":"Offline";
 		textViewStatus.setText(s);
 	}
 }

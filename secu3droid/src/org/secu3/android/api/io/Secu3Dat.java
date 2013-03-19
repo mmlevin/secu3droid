@@ -655,7 +655,7 @@ public class Secu3Dat implements Parcelable {
 			
 		@Override
 		public String getLogString() {
-			return (String.format("%s: ", getClass().getCanonicalName()));
+			return (String.format("%s: %d", getClass().getCanonicalName(), flags));
 		}
 
 	}
@@ -718,7 +718,7 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String getLogString() {
-			return (String.format("%s: ", getClass().getCanonicalName()));
+			return (String.format("%s: %d", getClass().getCanonicalName(), flags));
 		}
 
 	}
@@ -844,6 +844,7 @@ public class Secu3Dat implements Parcelable {
 		public boolean collected[] = null;
 		
 		private boolean all_collected = false;
+		private int collected_count = 0;
 
 		public static final Parcelable.Creator<FnNameDat> CREATOR = new Parcelable.Creator<FnNameDat>() {
 			 public FnNameDat createFromParcel(Parcel in) {
@@ -863,6 +864,7 @@ public class Secu3Dat implements Parcelable {
 			names = null;
 			collected = null;
 			all_collected = false;
+			collected_count = 0;
 		}
 		
 		public FnNameDat (Parcel in) {
@@ -873,6 +875,7 @@ public class Secu3Dat implements Parcelable {
 			names = (String[]) in.readArray(String.class.getClassLoader());			
 			in.readBooleanArray(collected);
 			all_collected = (Boolean) in.readValue(boolean.class.getClassLoader());
+			collected_count = in.readInt();
 		}
 		
 		@Override
@@ -884,6 +887,7 @@ public class Secu3Dat implements Parcelable {
 			dest.writeArray(names);
 			dest.writeBooleanArray(collected);
 			dest.writeValue(all_collected);
+			dest.writeInt(collected_count);
 		}
 		
 		@Override
@@ -897,6 +901,7 @@ public class Secu3Dat implements Parcelable {
 				result &= this.names.equals(((FnNameDat)o).names);
 				result &= this.collected.equals(((FnNameDat)o).collected);
 				result &= this.all_collected == ((FnNameDat)o).all_collected;
+				result &= this.collected_count == ((FnNameDat)o).collected_count;
 			}
 			return result;
 		}		
@@ -912,6 +917,7 @@ public class Secu3Dat implements Parcelable {
 				
 				if (collected == null) {
 					collected = new boolean [tables_num];
+					collected_count = 0;
 					names = new String [tables_num];					
 					for (int i = 0; i < tables_num; i++) {
 						collected[i] = false;
@@ -920,9 +926,10 @@ public class Secu3Dat implements Parcelable {
 				if (collected != null) {
 					collected [index] = true;
 					names[index] = name;
+					collected_count = 0;
 					boolean _all_collected = true;
 					for (int i = 0; i < tables_num; i++) {
-						if (!collected[i]) _all_collected = false;
+						if (!collected[i]) _all_collected = false; else collected_count++;
 					} 
 					all_collected = _all_collected;							
 				}
@@ -935,11 +942,16 @@ public class Secu3Dat implements Parcelable {
 		public synchronized void clear() {
 			all_collected = false;	
 			collected = null;
+			collected_count = 0;
 			names = null;
 		}
 
 		public synchronized boolean names_available() {
 			return all_collected;
+		}
+		
+		public synchronized int names_count() {
+			return collected_count;
 		}
 		
 		@Override
