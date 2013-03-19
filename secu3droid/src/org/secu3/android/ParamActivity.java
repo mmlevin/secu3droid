@@ -45,6 +45,7 @@ public class ParamActivity extends FragmentActivity{
     ParamPagerAdapter awesomeAdapter;
 	
     private void readParams() {
+    	progressBar.setIndeterminate(true);
     	progressBar.setVisibility(ProgressBar.VISIBLE);
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_READ_PARAMS,Uri.EMPTY,this,Secu3Service.class));
     }
@@ -104,7 +105,6 @@ public class ParamActivity extends FragmentActivity{
 		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
 		setContentView(R.layout.activity_param);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
-		progressBar.setIndeterminate(true);
 		readParams();
 				
 		receiver = new ReceiveMessages();
