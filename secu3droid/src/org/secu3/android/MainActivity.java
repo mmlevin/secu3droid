@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
 	TextView textViewData = null;
 	TextView textViewStatus = null;
 	CheckBox checkBox = null;
+	final static String LOG_TAG = "Main activity";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
+			startActivity(new Intent(this,SettingsActivity.class));
 			return true;
 		case R.id.menu_params:			
 			startActivity(new Intent(this,ParamActivity.class));

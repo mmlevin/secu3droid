@@ -339,12 +339,12 @@ public class Secu3Manager {
 		notificationManager = (NotificationManager)callingService.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		connectionProblemNotification = new NotificationCompat.Builder(appContext)
-											.setSmallIcon(android.R.drawable.stat_notify_error)
+											.setSmallIcon(R.drawable.ic_launcher)
 											.setContentIntent(PendingIntent.getService(appContext, 0, new Intent (Secu3Service.ACTION_SECU3_SERVICE_STOP), PendingIntent.FLAG_CANCEL_CURRENT))
 											.build();		
 
 		serviceStoppedNotification = new NotificationCompat.Builder(appContext)
-										 .setSmallIcon(android.R.drawable.stat_sys_warning)
+										 .setSmallIcon(R.drawable.ic_launcher)
 										 .setContentIntent(PendingIntent.getService(appContext, 0, new Intent (Secu3Service.ACTION_SECU3_SERVICE_START), PendingIntent.FLAG_CANCEL_CURRENT))
 										 .build();
 	}

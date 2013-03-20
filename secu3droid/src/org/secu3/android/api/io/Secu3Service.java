@@ -32,6 +32,8 @@ public class Secu3Service extends Service {
 	
 	public static final String PREF_BLUETOOTH_DEVICE = "bluetoothDevice";
 	public static final String PREF_CONNECTION_RETRIES = "connectionRetries";
+	public static final String PREF_ABOUT = "about";
+	
 	public static final String ACTION_SECU3_SERVICE_START = "org.secu3.android.intent.action.SECU3_SERVICE_START";
 	public static final String ACTION_SECU3_SERVICE_STOP = "org.secu3.android.intent.action.SECU3_SERVICE_STOP";
 	public static final String ACTION_SECU3_SERVICE_READ_PARAMS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_PARAMS";
@@ -140,7 +142,7 @@ public class Secu3Service extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String deviceAddress = sharedPreferences.getString(PREF_BLUETOOTH_DEVICE, "00:11:11:24:04:80");
+		String deviceAddress = sharedPreferences.getString(PREF_BLUETOOTH_DEVICE, null);
 		int maxConRetries = Integer.parseInt(sharedPreferences.getString(PREF_CONNECTION_RETRIES, this.getString(R.string.defaultConnectionRetries)));
 		Log.d(LOG_TAG, "prefs device addr: "+deviceAddress);
 		if (ACTION_SECU3_SERVICE_START.equals(intent.getAction())){

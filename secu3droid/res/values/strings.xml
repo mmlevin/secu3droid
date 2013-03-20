@@ -7,6 +7,13 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_param">Parameters</string>
         
+    <string name="pref_bluetooth_device_title">Choose Bluetooth Device</string>
+    <string name="pref_bluetooth_device_summary">"Current device: %s"</string> 
+    <string name="pref_connection_retries_title">Connection retry number</string>    
+    <string name="pref_connection_retries_summary">Number of attempts before exiting: %s</string>       
+    <string name="pref_about_title">About</string>
+    <string name="pref_about_summary"></string>    
+    
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
     <string name="service_closed_because_connection_problem_notification">"Reason: %s"</string>
 	<string name="connection_problem_notification_title">Secu3: connection problem</string>    
@@ -32,5 +39,20 @@
     <string name="menu_preferences">Preferences</string>
     <string name="menu_download">Download</string>
     <string name="menu_upload">Upload</string>
+    
+    <string name="about_title">About</string>
+    <string name="about_version">Secu3Droid version</string>
+    <string name="about_copyright_1">Copyright © 2013 Maksim Levin</string>
+    <string name="about_copyright_2">Copyright © 2013 Secu3Droid Project</string>
+    <string name="about_app_desc">Secu3Droid is an application 
+    	for managing Secu-3 ugnition system.
+    </string>
+    <string name="about_license">It is open source software 
+    	distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.
+    </string>
+    <string name="about_sources">The source code is available from Git repository on the project website: 
+		https://github.com/mmlevin/secu3droid
+    </string>
+    
 
 </resources>

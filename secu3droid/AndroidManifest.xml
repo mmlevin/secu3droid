@@ -38,6 +38,10 @@
             android:name="org.secu3.android.ErrorsActivity"
             android:label="@string/title_activity_errors" >
         </activity>
+        <activity
+            android:name="org.secu3.android.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

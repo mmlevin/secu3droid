@@ -141,9 +141,6 @@ public class ParamActivity extends FragmentActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
-		case R.id.menu_preferences:
-			startActivity(new Intent(getBaseContext(), Preferences.class));			
-			return true;
 		case R.id.menu_download:
 			readParams();
 			return true;

@@ -29,7 +29,7 @@
         android:layout_below="@+id/stopButton"
         android:maxLines="20"
         android:text="@string/hello_world"
-        android:textSize="@dimen/textSize" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <CheckBox
         android:id="@+id/anglesZeroAngleCheckBox"
