@@ -15,7 +15,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.secu3.android.MainActivity;
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.EncodingCP866;
@@ -71,7 +70,6 @@ public class Secu3Manager {
 		private final InputStream in;
 		private final OutputStream out;
 		Timer timer = new Timer();
-		int offline = 0;
 		public static final int STATUS_TIMEOUT = 10;
 
 		SECU3_STATE secu3State = SECU3_STATE.SECU3_NORMAL;
@@ -103,10 +101,21 @@ public class Secu3Manager {
 		}
 		
 		class OnlineTask extends TimerTask {
+			private int offline = 0;
+			
+			public OnlineTask() {
+				offline = 0;
+			}
+			
 			public void run () {
 				if (offline++ >= STATUS_TIMEOUT) { 
+					offline = STATUS_TIMEOUT;
 					appContext.sendBroadcast(new Intent(Secu3Service.SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.SECU3_SERVICE_STATUS, false));
 				}
+			}
+
+			public synchronized void reset() {
+				offline = 0;
 			}
 		}		
 		
@@ -286,7 +295,7 @@ public class Secu3Manager {
 								} catch (Exception e) {
 									Log.d(LOG_TAG, e.getMessage());
 								}
-								if (offline > 0) offline=0;					
+								onlineTask.reset();					
 								appContext.sendBroadcast(new Intent(Secu3Service.SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.SECU3_SERVICE_STATUS, true));
 							}
 						}											
@@ -321,7 +330,6 @@ public class Secu3Manager {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public Secu3Manager(Service callingService, String deviceAddress, int maxRetries) {
 		this.callingService = callingService;
 		this.deviceAddress = deviceAddress;

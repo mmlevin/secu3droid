@@ -1,6 +1,5 @@
 package org.secu3.android;
 
-import org.secu3.android.MainActivity.ReceiveMessages;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.CEErrCodes;
 import org.secu3.android.api.io.Secu3Service;
