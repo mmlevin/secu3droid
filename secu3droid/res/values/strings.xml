@@ -6,22 +6,27 @@
     <string name="hello_world">Hello World</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_param">Parameters</string>
-    <string name="connection_problem_notification_title">Secu3: connection problem</string>
-    <string name="service_closed_because_connection_problem_notification_title">Bluetooth stopped</string>
+        
+    <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
     <string name="service_closed_because_connection_problem_notification">"Reason: %s"</string>
-    <string name="msg_too_many_connection_problems">Too many connection problems</string>
-
+	<string name="connection_problem_notification_title">Secu3: connection problem</string>    
     <plurals name="connection_problem_notification">
         <item quantity="one">Will retry one more time before closing</item>
         <item quantity="other">Will retry %d more times before closing</item>
     </plurals>
 
-    <string name="msg_bluetooth_unsupported">Bluetooth is not supported</string>
-    <string name="msg_bluetooth_disabled">Bluetooth is disabled</string>
-    <string name="msg_bluetooth_secu3_unavaible">Cannot connect to Secu-3</string>
     <string name="defaultConnectionRetries">5</string>
-    <string name="foreground_service_started_notification_title">Secu3</string>
-    <string name="foreground_service_started_notification">Secu3 service started</string>
+    <string name="foreground_service_started_notification_title">Secu3Droid</string>
+    <string name="foreground_service_started_notification">Secu3Droid service started</string>
+	<string name="msg_bluetooth_unsupported">Bluetooth is not supported</string>
+    <string name="msg_bluetooth_disabled">Bluetooth is disabled</string>
+    <string name="msg_bluetooth_secu3_unavaible">Cannot connect to Secu-3 device</string>
+    <string name="msg_service_started">Secu3Droid… started</string>
+    <string name="msg_service_stopped">Secu3Droid service… stopped</string>
+    <string name="msg_service_stopped_by_problem">"Cannot start: %s"</string>
+    <string name="msg_service_already_started">Secu3Droid… is already on</string>
+    <string name="msg_too_many_connection_problems">Too many connection problems</string>        
+        
     <string name="title_activity_errors">Errors</string>
     <string name="menu_errors">Errors</string>
     <string name="menu_preferences">Preferences</string>

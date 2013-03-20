@@ -24,10 +24,9 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Config;
 import android.util.Log;
+import android.widget.Toast;
 
-@SuppressWarnings("deprecation")
 public class Secu3Service extends Service {	
 	private static final String LOG_TAG = "Secu3Service";
 	
@@ -43,6 +42,8 @@ public class Secu3Service extends Service {
 	public static final String ACTION_SECU3_SERVICE_READ_SAVED_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SAVED_ERRORS";
 	public static final String SECU3_SERVICE_STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
 	public static final String SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
+	
+	private Toast toast;
 	
 	NotificationManager notificationManager;
 	private Secu3Manager secu3Manager = null;
@@ -133,6 +134,7 @@ public class Secu3Service extends Service {
 	public void onCreate() {
 		super.onCreate();
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);		
 	}
 	
 	@Override
@@ -147,15 +149,16 @@ public class Secu3Service extends Service {
 					secu3Manager = new Secu3Manager(this, deviceAddress, maxConRetries);
 					boolean enabled = secu3Manager.enable();
 					if (enabled) {
-						Intent myIntent = new Intent(this, MainActivity.class);
 						Notification notification = new NotificationCompat.Builder(this)
 						.setContentTitle(this.getString(R.string.foreground_service_started_notification))
 						.setSmallIcon(R.drawable.ic_launcher)											
 						.setWhen(System.currentTimeMillis())
 						.setOngoing(true)
-						.setContentIntent(PendingIntent.getActivity(this, 0, myIntent, 0))
-						.build();						
+						.setContentIntent(PendingIntent.getActivity(this, 0, new Intent (this,MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT))
+						.build();																
 						startForeground(R.string.foreground_service_started_notification, notification);
+						toast.setText(this.getString(R.string.msg_service_started));
+						toast.show();	
 					} else {
 						stopSelf();
 					}
@@ -163,6 +166,8 @@ public class Secu3Service extends Service {
 					stopSelf();
 				}
 			} else {
+				toast.setText(this.getString(R.string.msg_service_already_started));
+				toast.show();				
 				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SENSORS);
 				sendBroadcast(intent);
 			}
@@ -202,7 +207,11 @@ public class Secu3Service extends Service {
 		secu3Manager  = null;
 		if (manager != null){
 			if (manager.getDisableReason() != 0){
+				toast.setText(getString(R.string.msg_service_stopped_by_problem, getString(manager.getDisableReason())));
+				toast.show();				
 			} else {
+				toast.setText(R.string.msg_service_stopped);
+				toast.show();				
 			}
 			manager.disable();
 		}
