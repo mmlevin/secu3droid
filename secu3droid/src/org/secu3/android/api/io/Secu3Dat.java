@@ -15,31 +15,46 @@ public class Secu3Dat implements Parcelable {
      static final float ANGLE_MULTIPLIER = 32.0f;
      static final float ADC_DISCRETE = 0.0025f;
      
-     public final static String RECEIVE_SECU_3DAT = "org.secu3.android.RECEIVE_SECU3_DAT";
-     public final static String RECEIVE_CHANGEMODE = "org.secu3.android.CHANGEMODE";
-     public final static String RECEIVE_BOOTLOADER = "org.secu3.android.BOOTLOADER";
-	 public final static String RECEIVE_TEMPER_PAR = "org.secu3.android.RECEIVE_TEMPER_PAR";
-	 public final static String RECEIVE_CARBUR_PAR = "org.secu3.android.RECEIVE_CARBUR_PAR";
-	 public final static String RECEIVE_IDLREG_PAR = "org.secu3.android.RECEIVE_IDLREG_PAR";
-	 public final static String RECEIVE_ANGLES_PAR = "org.secu3.android.RECEIVE_ANGLES_PAR";
-	 public final static String RECEIVE_FUNSET_PAR = "org.secu3.android.RECEIVE_FUNSET_PAR";
-	 public final static String RECEIVE_STARTER_PAR = "org.secu3.android.RECEIVE_STARTER_PAR"; 
-	 public final static String RECEIVE_FNNAME_DAT = "org.secu3.android.FNNAME_DAT";
-	 public final static String RECEIVE_SENSOR_DAT = "org.secu3.android.RECEIVE_SENSOR_DAT";
-	 public final static String RECEIVE_ADCCOR_PAR = "org.secu3.android.RECEIVE_ADCCOR_PAR";
-	 public final static String RECEIVE_ADCRAW_DAT = "org.secu3.android.ADCRAW_DAT";
-	 public final static String RECEIVE_CKPS_PAR = "org.secu3.android.RECEIVE_CKPS_PAR";
-	 public final static String RECEIVE_OP_COMP_NC = "org.secu3.android.OP_COMP_NC";
-	 public final static String RECEIVE_CE_ERR_CODES = "org.secu3.android.CE_ERR_CODES";
-	 public final static String RECEIVE_KNOCK_PAR	  = "org.secu3.android.KNOCK_PAR";
-	 public final static String RECEIVE_CE_SAVED_ERR = "org.secu3.android.CE_SAVED_ERR";
-	 public final static String RECEIVE_FWINFO_DAT = "org.secu3.android.FWINFO_DAT";
-	 public final static String RECEIVE_MISCEL_PAR = "org.secu3.android.RECEIVE_MISKEL_PAR";
-	 public final static String RECEIVE_EDITAB_PAR = "org.secu3.android.EDITTAB_PAR";
-	 public final static String RECEIVE_ATTTAB_PAR = "org.secu3.android.ATTTAB_PAR";
-	 public final static String RECEIVE_DBGVAR_DAT = "org.secu3.android.DBGVAR_DAT";
-	 public final static String RECEIVE_DIAGINP_DAT = "org.secu3.android.DIAGINP_DAT";
-	 public final static String RECEIVE_DIAGOUT_DAT = "org.secu3.android.DIAGOUT_DAT";
+     public final static String RECEIVE_SECU_3DAT 		= "org.secu3.android.intent.action.RECEIVE_SECU3_DAT";
+     public final static String RECEIVE_CHANGEMODE 		= "org.secu3.android.intent.action.RECEIVE_CHANGEMODE";
+     public final static String RECEIVE_BOOTLOADER 		= "org.secu3.android.intent.action.RECEIVE_BOOTLOADER";
+	 public final static String RECEIVE_TEMPER_PAR 		= "org.secu3.android.intent.action.RECEIVE_TEMPER_PAR";
+	 public final static String RECEIVE_CARBUR_PAR 		= "org.secu3.android.intent.action.RECEIVE_CARBUR_PAR";
+	 public final static String RECEIVE_IDLREG_PAR 		= "org.secu3.android.intent.action.RECEIVE_IDLREG_PAR";
+	 public final static String RECEIVE_ANGLES_PAR 		= "org.secu3.android.intent.action.RECEIVE_ANGLES_PAR";
+	 public final static String RECEIVE_FUNSET_PAR 		= "org.secu3.android.intent.action.RECEIVE_FUNSET_PAR";
+	 public final static String RECEIVE_STARTER_PAR 	= "org.secu3.android.intent.action.RECEIVE_STARTER_PAR"; 
+	 public final static String RECEIVE_FNNAME_DAT 		= "org.secu3.android.intent.action.RECEIVE_FNNAME_DAT";
+	 public final static String RECEIVE_SENSOR_DAT 		= "org.secu3.android.intent.action.RECEIVE_SENSOR_DAT";
+	 public final static String RECEIVE_ADCCOR_PAR 		= "org.secu3.android.intent.action.RECEIVE_ADCCOR_PAR";
+	 public final static String RECEIVE_ADCRAW_DAT 		= "org.secu3.android.intent.action.RECEIVE_ADCRAW_DAT";
+	 public final static String RECEIVE_CKPS_PAR 		= "org.secu3.android.intent.action.RECEIVE_CKPS_PAR";
+	 public final static String RECEIVE_OP_COMP_NC 		= "org.secu3.android.intent.action.RECEIVE_OP_COMP_NC";
+	 public final static String RECEIVE_CE_ERR_CODES 	= "org.secu3.android.intent.action.RECEIVE_CE_ERR_CODES";
+	 public final static String RECEIVE_KNOCK_PAR	  	= "org.secu3.android.intent.action.RECEIVE_KNOCK_PAR";
+	 public final static String RECEIVE_CE_SAVED_ERR 	= "org.secu3.android.intent.action.RECEIVE_CE_SAVED_ERR";
+	 public final static String RECEIVE_FWINFO_DAT 		= "org.secu3.android.intent.action.RECEIVE_FWINFO_DAT";
+	 public final static String RECEIVE_MISCEL_PAR 		= "org.secu3.android.intent.action.RECEIVE_MISKEL_PAR";
+	 public final static String RECEIVE_EDITAB_PAR 		= "org.secu3.android.intent.action.RECEIVE_EDITTAB_PAR";
+	 public final static String RECEIVE_ATTTAB_PAR 		= "org.secu3.android.intent.action.RECEIVE_ATTTAB_PAR";
+	 public final static String RECEIVE_DBGVAR_DAT 		= "org.secu3.android.intent.action.RECEIVE_DBGVAR_DAT";
+	 public final static String RECEIVE_DIAGINP_DAT 	= "org.secu3.android.intent.action.RECEIVE_DIAGINP_DAT";
+	 
+	 
+	 public final static String SEND_STARTR_PAR 		= "org.secu3.android.intent.action.SEND_STARTR_PAR";
+	 public final static String SEND_ANGLES_PAR 		= "org.secu3.android.intent.action.SEND_ANGLES_PAR";
+	 public final static String SEND_IDLREG_PAR 		= "org.secu3.android.intent.action.SEND_IDLREG_PAR";
+	 public final static String SEND_KNOCK_PAR 			= "org.secu3.android.intent.action.SEND_KNOCK_PAR";
+	 public final static String SEND_FUNSET_PAR 		= "org.secu3.android.intent.action.SEND_FUNSET_PAR";
+	 public final static String SEND_TEMPER_PAR 		= "org.secu3.android.intent.action.SEND_TEMPER_PAR";
+	 public final static String SEND_CARBUR_PAR 		= "org.secu3.android.intent.action.SEND_CARBUR_PAR";
+	 public final static String SEND_ADCCOR_PAR 		= "org.secu3.android.intent.action.SEND_ADCCOR_PAR";
+	 public final static String SEND_CKPS_PAR 			= "org.secu3.android.intent.action.SEND_CKPS_PAR";
+	 public final static String SEND_MISCEL_PAR 		= "org.secu3.android.intent.action.SEND_MISCEL_PAR";
+	 public final static String SEND_CE_SAVED_ERR 		= "org.secu3.android.intent.action.SEND_CE_SAVED_ERR";
+	 public final static String SEND_DIAGOUT_DAT 		= "org.secu3.android.intent.action.SEND_DIAGOUT_DAT";	
+	 public final static String SEND_EDITAB_PAR 		= "org.secu3.android.intent.action.SEND_EDITTAB_PAR";
+	 public final static String SEND_OP_COMP_NC 		= "org.secu3.android.intent.action.SEND_OP_COMP_NC";
 	 
 	 public final static int OPCODE_EEPROM_PARAM_SAVE    = 1;
 	 public final static int OPCODE_CE_SAVE_ERRORS       = 2;
@@ -306,6 +321,12 @@ public class Secu3Dat implements Parcelable {
 			}	  
 		}		
 		
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
+		
 		public String getLogString() {
 			return (String.format("%s: MAP Factor: %f, MAP Correction: %f, UBAT Factor: %f, UBAT Correction: %f, Temp factor: %f, Temp correction: %f ", getClass().getCanonicalName(), map_adc_factor, map_adc_correction, ubat_adc_factor, ubat_adc_correction, temp_adc_factor, temp_adc_correction));
 		}
@@ -489,6 +510,12 @@ public class Secu3Dat implements Parcelable {
 				throw e;
 			}	  
 		}	
+		
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
 			
 		@Override
 		public String getLogString() {
@@ -588,6 +615,12 @@ public class Secu3Dat implements Parcelable {
 				throw e;
 			}	  
 		} 
+		
+		@Override
+		public String pack() throws Exception {
+			return String.format("%04X%04X%X%04X%04X%04X%02X", ephh_lot, ephh_hit, carb_invers, Math.round(epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER), ephh_lot_g, ephh_hit_g, Math.round(shutoff_delay * 100));
+			// TODO Auto-generated method stub
+		}
 			
 		@Override
 		public String getLogString() {
@@ -717,6 +750,12 @@ public class Secu3Dat implements Parcelable {
 		}
 		
 		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
+		
+		@Override
 		public String getLogString() {
 			return (String.format("%s: %d", getClass().getCanonicalName(), flags));
 		}
@@ -821,6 +860,12 @@ public class Secu3Dat implements Parcelable {
 			}
 		}
 
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
+		
 		@Override
 		public String getLogString() {
 			return (String.format("%s: ", getClass().getCanonicalName()));
@@ -1056,6 +1101,12 @@ public class Secu3Dat implements Parcelable {
 				throw e;
 			}
 		}
+		
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
 
 		@Override
 		public String getLogString() {
@@ -1162,6 +1213,12 @@ public class Secu3Dat implements Parcelable {
 			} catch (Exception e) {
 				throw e;
 			}
+		}
+		
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
 		}
 
 		@Override
@@ -1321,6 +1378,12 @@ public class Secu3Dat implements Parcelable {
 		}
 
 		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
+		
+		@Override
 		public String getLogString() {
 			return (String.format("%s: ", getClass().getCanonicalName()));
 		}
@@ -1424,6 +1487,12 @@ public class Secu3Dat implements Parcelable {
 			}
 		}
 
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
+		
 		@Override
 		public String getLogString() {
 			return (String.format("%s: ", getClass().getCanonicalName()));
@@ -1638,6 +1707,12 @@ public class Secu3Dat implements Parcelable {
 			} catch (Exception e) {
 				throw e;
 			}
+		}	
+		
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub			
+			return super.pack();
 		}
 
 		@Override
@@ -1735,6 +1810,12 @@ public class Secu3Dat implements Parcelable {
 				throw e;
 			}
 		}
+		
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
 
 		@Override		
 		public String getLogString() {
@@ -1805,6 +1886,13 @@ public class Secu3Dat implements Parcelable {
 				throw e;
 			}	  
 		}	
+		
+		
+		@Override
+		public String pack() throws Exception {
+			// TODO Auto-generated method stub
+			return super.pack();
+		}
 		
 		@Override
 		public String getLogString() {

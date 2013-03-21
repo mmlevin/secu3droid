@@ -85,7 +85,8 @@ public class PacketsTest extends TestCase {
 	{
 		CarburPar packet = new CarburPar();
 		try {
-			packet.parse("@k076C083400188076C083400");
+			String data = "@k076C083400188076C083400";
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH low",packet.ephh_lot, 1900);
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH high",packet.ephh_hit, 2100);	
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH low gas",packet.ephh_lot_g, 1900);			
@@ -93,7 +94,7 @@ public class PacketsTest extends TestCase {
 			assertEquals(packet.getClass().getCanonicalName() + "Carburator inverse",packet.carb_invers, 0);
 			assertEquals(packet.getClass().getCanonicalName() + "Carburator off delay",packet.shutoff_delay, 0f);
 			assertEquals(packet.getClass().getCanonicalName() + "Carburator EMR",packet.epm_ont, 6.125f);
-			
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());
 			testParcel(packet);	
 		} catch (Exception e)
 		{
@@ -164,7 +165,8 @@ public class PacketsTest extends TestCase {
 	public void testStartrPar() {
 		StartrPar packet = new StartrPar();
 		try {
-			packet.parse("@o0258028A");
+			String data = "@o0258028A";
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "Starter off rpm",packet.starter_off, 600);
 			assertEquals(packet.getClass().getCanonicalName() + "Starter map switch RPM",packet.smap_abandon, 650);
 			
