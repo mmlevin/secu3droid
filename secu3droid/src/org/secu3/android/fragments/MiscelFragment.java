@@ -37,7 +37,10 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 		for (int i : Secu3Dat.BAUD_RATE) {
 			arr[j++] = i;
 		}
-		baudrate.setAdapter(new ArrayAdapter<Integer>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,arr));
+		
+		ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,arr);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+		baudrate.setAdapter(adapter);
 
 		super.onResume();
 	}

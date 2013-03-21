@@ -65,12 +65,13 @@ public class Secu3Manager {
 	private final static int PROGRESS_TOTAL_PARAMS = 18;
 	
 	private class ConnectedSecu3 extends Thread {
+		public static final int STATUS_TIMEOUT = 10;
 		
 		private final BluetoothSocket socket;
 		private final InputStream in;
-		private final OutputStream out;
-		Timer timer = new Timer();
-		public static final int STATUS_TIMEOUT = 10;
+		private final OutputStream out;			
+		private FnNameDat fnNameDat = null;		
+		private Timer timer = new Timer();
 
 		SECU3_STATE secu3State = SECU3_STATE.SECU3_NORMAL;
 
@@ -157,8 +158,7 @@ public class Secu3Manager {
 								progressCurrent = 0;
 								progressTotal = PROGRESS_TOTAL_PARAMS;
 								subprogress = 0;
-								Secu3Service.Secu3Params.setValid(false);
-								if (Secu3Service.Secu3Params.getFnNameDat() != null) Secu3Service.Secu3Params.getFnNameDat().clear();
+								if (fnNameDat != null) fnNameDat.clear();
 								writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
 								writer.flush();					
 								break;
@@ -178,68 +178,59 @@ public class Secu3Manager {
 						switch (parser.getLastPackedId()) {
 							case Secu3Dat.STARTR_PAR:
 								updateProgress(1 + subprogress);
-								Secu3Service.Secu3Params.setStartrPar((StartrPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.ANGLES_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.ANGLES_PAR:
 								updateProgress(2 + subprogress);
-								Secu3Service.Secu3Params.setAnglesPar((AnglesPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.IDLREG_PAR));
 								writer.flush();
 								break;					
 							case Secu3Dat.IDLREG_PAR:
 								updateProgress(3 + subprogress);
-								Secu3Service.Secu3Params.setIdlRegPar((IdlRegPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.FNNAME_DAT));
 								writer.flush();
 								break;
 							case Secu3Dat.FNNAME_DAT:
 								updateProgress(4 + subprogress);
-								subprogress = (Secu3Service.Secu3Params.getFnNameDat() == null)?0:Secu3Service.Secu3Params.getFnNameDat().names_count();
-								if (Secu3Service.Secu3Params.getFnNameDat() == null) {
-									Secu3Service.Secu3Params.setFnNameDat(new FnNameDat());
+								subprogress = (fnNameDat == null)?0:fnNameDat.names_count();
+								if (fnNameDat == null) {
+									fnNameDat = new FnNameDat();
 								}
-								Secu3Service.Secu3Params.getFnNameDat().parse(packet);
-								if (Secu3Service.Secu3Params.getFnNameDat().names_available()) {									
+								fnNameDat.parse(packet);
+								if (fnNameDat.names_available()) {
+									appContext.sendBroadcast(fnNameDat.getIntent());
 									writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
 									writer.flush();
 								}
 								break;								
 							case Secu3Dat.FUNSET_PAR:
 								updateProgress(5 + subprogress);
-								Secu3Service.Secu3Params.setFunSetPar((FunSetPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.TEMPER_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.TEMPER_PAR:
 								updateProgress(6 + subprogress);
-								Secu3Service.Secu3Params.setTemperPar((TemperPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.CARBUR_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.CARBUR_PAR:
 								updateProgress(7 + subprogress);
-								Secu3Service.Secu3Params.setCarburPar((CarburPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.ADCCOR_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.ADCCOR_PAR:
 								updateProgress(8 + subprogress);
-								Secu3Service.Secu3Params.setAdcCorPar((ADCCorPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.CKPS_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.CKPS_PAR:
 								updateProgress(9 + subprogress);
-								Secu3Service.Secu3Params.setCkpsPar((CKPSPar)parser.getLastPacket());
 								writer.write(ChangeMode.pack(Secu3Dat.MISCEL_PAR));
 								writer.flush();
 								break;
 							case Secu3Dat.MISCEL_PAR:
 								updateProgress(10 + subprogress);
-								Secu3Service.Secu3Params.setMiscelPar((MiscelPar)parser.getLastPacket());
-								Secu3Service.Secu3Params.setValid(true);
 								setTask(saveSecu3Task);
 								break;																		
 						}

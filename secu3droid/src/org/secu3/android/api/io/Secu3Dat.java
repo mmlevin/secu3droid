@@ -872,10 +872,10 @@ public class Secu3Dat implements Parcelable {
 			tables_num = in.readInt();
 			index = in.readInt();
 			name = in.readString();
-			names = (String[]) in.readArray(String.class.getClassLoader());			
-			in.readBooleanArray(collected);
 			all_collected = (Boolean) in.readValue(boolean.class.getClassLoader());
-			collected_count = in.readInt();
+			collected_count = in.readInt();			
+			names = in.createStringArray();
+			collected = in.createBooleanArray();			
 		}
 		
 		@Override
@@ -884,10 +884,10 @@ public class Secu3Dat implements Parcelable {
 			dest.writeInt(tables_num);
 			dest.writeInt(index);
 			dest.writeString(name);
-			dest.writeArray(names);
-			dest.writeBooleanArray(collected);
 			dest.writeValue(all_collected);
-			dest.writeInt(collected_count);
+			dest.writeInt(collected_count);			
+			dest.writeStringArray(names);
+			dest.writeBooleanArray(collected);
 		}
 		
 		@Override

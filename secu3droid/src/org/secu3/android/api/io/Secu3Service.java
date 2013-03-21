@@ -2,18 +2,9 @@ package org.secu3.android.api.io;
 
 import org.secu3.android.MainActivity;
 import org.secu3.android.R;
-import org.secu3.android.api.io.Secu3Dat.ADCCorPar;
-import org.secu3.android.api.io.Secu3Dat.AnglesPar;
-import org.secu3.android.api.io.Secu3Dat.CKPSPar;
-import org.secu3.android.api.io.Secu3Dat.CarburPar;
-import org.secu3.android.api.io.Secu3Dat.FnNameDat;
-import org.secu3.android.api.io.Secu3Dat.FunSetPar;
-import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
-import org.secu3.android.api.io.Secu3Dat.MiscelPar;
-import org.secu3.android.api.io.Secu3Dat.StartrPar;
-import org.secu3.android.api.io.Secu3Dat.TemperPar;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -49,94 +40,13 @@ public class Secu3Service extends Service {
 	
 	NotificationManager notificationManager;
 	private Secu3Manager secu3Manager = null;
-	
-	public static class Secu3Params {
-		private static boolean valid = false;
-		private static StartrPar startrPar;
-		private static AnglesPar anglesPar;
-		private static IdlRegPar idlRegPar;
-		private static FnNameDat fnNameDat;
-		private static FunSetPar funSetPar;
-		private static TemperPar temperPar;
-		private static CarburPar carburPar;
-		private static ADCCorPar adcCorPar;
-		private static CKPSPar ckpsPar;
-		private static MiscelPar miscelPar;
-		
-		public synchronized static boolean isValid() {
-			return valid;
-		}
-		public synchronized static void setValid(boolean valid) {
-			Secu3Params.valid = valid;
-		}
-		public synchronized static StartrPar getStartrPar() {
-			return startrPar;
-		}
-		public synchronized static void setStartrPar(StartrPar startrPar) {
-			Secu3Params.startrPar = startrPar;
-		}
-		public synchronized static AnglesPar getAnglesPar() {
-			return anglesPar;
-		}
-		public synchronized static void setAnglesPar(AnglesPar anglesPar) {
-			Secu3Params.anglesPar = anglesPar;
-		}
-		public synchronized static IdlRegPar getIdlRegPar() {
-			return idlRegPar;
-		}
-		public synchronized static void setIdlRegPar(IdlRegPar idlRegPar) {
-			Secu3Params.idlRegPar = idlRegPar;
-		}
-		public synchronized static FnNameDat getFnNameDat() {
-			return fnNameDat;
-		}
-		public synchronized static void setFnNameDat(FnNameDat fnNameDat) {
-			Secu3Params.fnNameDat = fnNameDat;
-		}
-		public synchronized static FunSetPar getFunSetPar() {
-			return funSetPar;
-		}
-		public synchronized static void setFunSetPar(FunSetPar funSetPar) {
-			Secu3Params.funSetPar = funSetPar;
-		}
-		public synchronized static TemperPar getTemperPar() {
-			return temperPar;
-		}
-		public synchronized static void setTemperPar(TemperPar temperPar) {
-			Secu3Params.temperPar = temperPar;
-		}
-		public synchronized static CarburPar getCarburPar() {
-			return carburPar;
-		}
-		public synchronized static void setCarburPar(CarburPar carburPar) {
-			Secu3Params.carburPar = carburPar;
-		}
-		public synchronized static ADCCorPar getAdcCorPar() {
-			return adcCorPar;
-		}
-		public synchronized static void setAdcCorPar(ADCCorPar adcCorPar) {
-			Secu3Params.adcCorPar = adcCorPar;
-		}
-		public synchronized static CKPSPar getCkpsPar() {
-			return ckpsPar;
-		}
-		public synchronized static void setCkpsPar(CKPSPar ckpsPar) {
-			Secu3Params.ckpsPar = ckpsPar;
-		}
-		public synchronized static MiscelPar getMiscelPar() {
-			return miscelPar;
-		}
-		public synchronized static void setMiscelPar(MiscelPar miscelPar) {
-			Secu3Params.miscelPar = miscelPar;
-		}
-		
-	}
 
+	@SuppressLint("ShowToast")
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);		
+		toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);		
 	}
 	
 	@Override

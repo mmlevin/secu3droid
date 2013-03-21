@@ -28,7 +28,7 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container == null) return null;
-		
+			
 		return inflater.inflate(R.layout.funset_params, null);
 	}
 
@@ -56,10 +56,17 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 			if (packet instanceof FnNameDat) {
 				gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
 				gasTable = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
+				
 				if (((FnNameDat)packet).names_available()) {					
 					tableNames = Arrays.copyOf(((FnNameDat)packet).names,((FnNameDat)packet).names.length);
-					gasolineTable.setAdapter(new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames));
-					gasTable.setAdapter(new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames));
+					
+					ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames);
+					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					gasolineTable.setAdapter(adapter);
+					
+					adapter = new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames);
+					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					gasTable.setAdapter(adapter);
 				}
 			}
 		}		

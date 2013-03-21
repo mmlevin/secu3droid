@@ -25,25 +25,48 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ParamActivity extends FragmentActivity{
+	StartrPar startrPar = null;
+	AnglesPar anglesPar = null;
+	IdlRegPar idlRegPar = null;
+	FunSetPar funSetPar = null;
+	FnNameDat fnNameDat = null;
+	TemperPar temperPar = null;
+	CarburPar carburPar = null;
+	ADCCorPar adcCorPar = null;
+	CKPSPar   ckpsPar = null;
+	MiscelPar miscelPar = null;	
 	
-	StarterFragment starterParPage;
-	AnglesFragment anglesParPage;
-	IdlRegFragment idlRegParPage;
-	FunsetFragment funsetParPage;
-	TemperFragment temperParPage;
-	CarburFragment carburParPage;
-	ADCCorFragment adcCorParPage;
-	CKPSFragment ckpsParPage;
-	MiscelFragment miscelParPage;
+	StarterFragment starterParPage = null;
+	AnglesFragment anglesParPage = null;
+	IdlRegFragment idlRegParPage = null;
+	FunsetFragment funsetParPage = null;
+	TemperFragment temperParPage = null;
+	CarburFragment carburParPage = null;
+	ADCCorFragment adcCorParPage = null;
+	CKPSFragment ckpsParPage = null;
+	MiscelFragment miscelParPage = null;
 	
-	ProgressBar progressBar;
+	ProgressBar progressBar = null;
 		
 	List<Fragment> pages = new ArrayList<Fragment>();
-	TextView textViewStatus;
-	TextView textView;
-	ViewPager pager;
-    ParamPagerAdapter awesomeAdapter;
+	TextView textViewStatus = null;
+	TextView textView = null;
+	ViewPager pager = null;
+    ParamPagerAdapter awesomeAdapter = null;
 	
+    private boolean isValid() {
+    	return (startrPar != null) &&
+    		   (anglesPar != null) &&
+    		   (idlRegPar != null) &&
+    		   (funSetPar != null) &&
+    		   (fnNameDat != null) && fnNameDat.names_available() &&
+    		   (temperPar != null) &&
+    		   (carburPar != null) &&
+    		   (adcCorPar != null) &&
+    		   (ckpsPar != null) &&
+    		   (miscelPar != null);
+    }
+    
     private void readParams() {
     	progressBar.setIndeterminate(true);
     	progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -168,6 +191,7 @@ public class ParamActivity extends FragmentActivity{
 			infil.addAction(Secu3Dat.RECEIVE_STARTER_PAR);
 			infil.addAction(Secu3Dat.RECEIVE_ANGLES_PAR);
 			infil.addAction(Secu3Dat.RECEIVE_IDLREG_PAR);
+			infil.addAction(Secu3Dat.RECEIVE_FNNAME_DAT);
 			infil.addAction(Secu3Dat.RECEIVE_FUNSET_PAR);
 			infil.addAction(Secu3Dat.RECEIVE_TEMPER_PAR);
 			infil.addAction(Secu3Dat.RECEIVE_CARBUR_PAR);
@@ -186,49 +210,52 @@ public class ParamActivity extends FragmentActivity{
 	}
 	
 	void updateUI () {
-		if (Secu3Service.Secu3Params.isValid()) {
-			starterParPage.setData(Secu3Service.Secu3Params.getStartrPar());
-			anglesParPage.setData(Secu3Service.Secu3Params.getAnglesPar());
-			idlRegParPage.setData(Secu3Service.Secu3Params.getIdlRegPar());
-			funsetParPage.setData(Secu3Service.Secu3Params.getFunSetPar());
-			funsetParPage.setData(Secu3Service.Secu3Params.getFnNameDat());
-			temperParPage.setData(Secu3Service.Secu3Params.getTemperPar());
-			carburParPage.setData(Secu3Service.Secu3Params.getCarburPar());
-			adcCorParPage.setData(Secu3Service.Secu3Params.getAdcCorPar());
-			ckpsParPage.setData(Secu3Service.Secu3Params.getCkpsPar());
-			miscelParPage.setData(Secu3Service.Secu3Params.getMiscelPar());
+		if (isValid()) {
+			starterParPage.setData(startrPar);
+			anglesParPage.setData(anglesPar);
+			idlRegParPage.setData(idlRegPar);
+			funsetParPage.setData(fnNameDat);			
+			funsetParPage.setData(funSetPar);
+			temperParPage.setData(temperPar);
+			carburParPage.setData(carburPar);
+			adcCorParPage.setData(adcCorPar);
+			ckpsParPage.setData(ckpsPar);
+			miscelParPage.setData(miscelPar);
 		}
 	}
 	
 	void updateData (Intent intent) {
 		String action = intent.getAction();
 		if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_STARTER_PAR)) {
-			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());
-			starterParPage.setData(packet);
+			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());			
+			starterParPage.setData(startrPar = packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_ANGLES_PAR)) {
 			AnglesPar packet = intent.getParcelableExtra(AnglesPar.class.getCanonicalName());
-			anglesParPage.setData(packet);
+			anglesParPage.setData(anglesPar = packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_IDLREG_PAR)) {
 			IdlRegPar packet = intent.getParcelableExtra(IdlRegPar.class.getCanonicalName());
-			idlRegParPage.setData(packet);
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_FUNSET_PAR)) {
+			idlRegParPage.setData(idlRegPar = packet);
+		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_FNNAME_DAT)) {
+			FnNameDat packet = intent.getParcelableExtra(FnNameDat.class.getCanonicalName());
+			fnNameDat = packet;
+		}else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_FUNSET_PAR)) {
 			FunSetPar packet = intent.getParcelableExtra(FunSetPar.class.getCanonicalName());
-			funsetParPage.setData(packet);
+			funsetParPage.setData(funSetPar = packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_TEMPER_PAR)) {
 			TemperPar packet = intent.getParcelableExtra(TemperPar.class.getCanonicalName());
-			temperParPage.setData(packet);			
+			temperParPage.setData(temperPar = packet);			
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_CARBUR_PAR)) {
 			CarburPar packet = intent.getParcelableExtra(CarburPar.class.getCanonicalName());
-			carburParPage.setData(packet);
+			carburParPage.setData(carburPar = packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_ADCCOR_PAR)) {
 			ADCCorPar packet = intent.getParcelableExtra(ADCCorPar.class.getCanonicalName());
-			adcCorParPage.setData(packet);
+			adcCorParPage.setData(adcCorPar = packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_CKPS_PAR)) {
 			CKPSPar packet = intent.getParcelableExtra(CKPSPar.class.getCanonicalName());
-			ckpsParPage.setData(packet);
+			ckpsParPage.setData(ckpsPar = packet);
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_MISCEL_PAR)) {
 			MiscelPar packet = intent.getParcelableExtra(MiscelPar.class.getCanonicalName());
-			miscelParPage.setData(packet);
+			miscelParPage.setData(miscelPar = packet);
 		} else if (action.equalsIgnoreCase(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS)) {
 			int current = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_TOTAL,0);
