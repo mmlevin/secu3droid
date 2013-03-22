@@ -1,5 +1,7 @@
 package org.secu3.android.api.io;
 
+import java.util.Arrays;
+
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -311,7 +313,7 @@ public class Secu3Dat implements Parcelable {
 			try {			
 				map_adc_factor = (float)Integer.parseInt(data.substring(2,6),16) / 16384f; // AAAA
 				map_adc_correction = (((float)Long.parseLong(data.substring(6,14),16) / 16384f) - 0.5f) / map_adc_factor; // BBBBBBBB
-				ubat_adc_factor = (float)Integer.parseInt(data.substring(14,18),16) / 16384f; // CCC
+				ubat_adc_factor = (float)Integer.parseInt(data.substring(14,18),16) / 16384f; // CCCC
 				ubat_adc_correction = (((float)Long.parseLong(data.substring(18,26),16) / 16384f) - 0.5f) / ubat_adc_factor; // DDDDDDDD			
 				temp_adc_factor = (float)Integer.parseInt(data.substring(26,30),16) / 16384f; // EEEE
 				temp_adc_correction = (((float)Long.parseLong(data.substring(30,38),16) / 16384f) - 0.5f) / temp_adc_factor; // FFFFFFFF						
@@ -323,8 +325,13 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%04X%08X%04X%08X%04X%08X", OUTPUT_PACKET,packet_id,
+					Math.round(map_adc_factor * 16384),
+					Math.round(16384 * (0.5 - map_adc_correction * map_adc_factor)),
+					Math.round(ubat_adc_factor * 16384),
+					Math.round(16384 * (0.5 - ubat_adc_correction * ubat_adc_factor)),
+					Math.round(temp_adc_factor * 16384),
+					Math.round(16384 * (0.5 - temp_adc_correction * temp_adc_correction)));
 		}
 		
 		public String getLogString() {
@@ -513,8 +520,13 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%04X%04X%04X%04X%04X%01X", OUTPUT_PACKET, packet_id,
+					Integer.valueOf(Math.round(max_angle * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(min_angle * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(angle_corr * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(dec_spead * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(inc_spead * ANGLE_MULTIPLIER)).shortValue(),
+					zero_adv_ang);
 		}
 			
 		@Override
@@ -618,8 +630,14 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			return String.format("%04X%04X%X%04X%04X%04X%02X", ephh_lot, ephh_hit, carb_invers, Math.round(epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER), ephh_lot_g, ephh_hit_g, Math.round(shutoff_delay * 100));
-			// TODO Auto-generated method stub
+			return String.format("%s%s%04X%04X%01X%04X%04X%04X%02X", OUTPUT_PACKET, packet_id,
+					ephh_lot,
+					ephh_hit,
+					carb_invers,
+					Integer.valueOf(Math.round(epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue(),
+					ephh_lot_g,
+					ephh_hit_g,
+					Math.round(shutoff_delay * 100));
 		}
 			
 		@Override
@@ -751,8 +769,7 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%04X", OUTPUT_PACKET, packet_id, flags);
 		}
 		
 		@Override
@@ -862,8 +879,7 @@ public class Secu3Dat implements Parcelable {
 
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%01X%01X%02X%02X%02X%01X%02X%02X", OUTPUT_PACKET, packet_id, ckps_edge_type, ref_s_edge_type, ckps_cogs_btdc, ckps_ignit_cogs, ckps_engine_cyl, ckps_merge_ign_outs, ckps_cogs_num, ckps_miss_num);
 		}
 		
 		@Override
@@ -943,8 +959,8 @@ public class Secu3Dat implements Parcelable {
 				result &= this.tables_num == ((FnNameDat)o).tables_num;
 				result &= this.index == ((FnNameDat)o).index;
 				result &= this.name.equals(((FnNameDat)o).name);
-				result &= this.names.equals(((FnNameDat)o).names);
-				result &= this.collected.equals(((FnNameDat)o).collected);
+				result &= Arrays.equals(this.names,((FnNameDat)o).names);			
+				result &= Arrays.equals(this.collected,((FnNameDat)o).collected);
 				result &= this.all_collected == ((FnNameDat)o).all_collected;
 				result &= this.collected_count == ((FnNameDat)o).collected_count;
 			}
@@ -1104,8 +1120,13 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%02X%02X%04X%04X%04X%04X", OUTPUT_PACKET, packet_id,
+					fn_benzin,
+					fn_gas,
+					Integer.valueOf(Math.round(map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue(),
+					Integer.valueOf(Math.round(map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue(),
+					Integer.valueOf(Math.round(map_curve_offset / ADC_DISCRETE)).shortValue(),
+					Integer.valueOf(Math.round(128.0f * map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE)).shortValue());
 		}
 
 		@Override
@@ -1217,8 +1238,13 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%01X%04X%04X%04X%04X%04X%04X", OUTPUT_PACKET,packet_id,idl_regul,
+					Integer.valueOf(Math.round(ifac1 * ANGLE_MULTIPLIER)).shortValue(),
+					Math.round(ifac2 * ANGLE_MULTIPLIER),
+					MINEFR,
+					idling_rpm,
+					Integer.valueOf(Math.round(min_angle * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(max_angle * ANGLE_MULTIPLIER)).shortValue());
 		}
 
 		@Override
@@ -1379,8 +1405,17 @@ public class Secu3Dat implements Parcelable {
 
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%01X%02X%04X%04X%02X%04X%04X%04X%04X%02X", OUTPUT_PACKET,packet_id,
+					knock_use_knock_channel,
+					knock_bpf_frequency_index,
+					Integer.valueOf(Math.round(knock_k_wnd_begin_angle * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(knock_k_wnd_end_angle * ANGLE_MULTIPLIER)).shortValue(),
+					knock_int_time_const_index,
+					Integer.valueOf(Math.round(knock_retard_step * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(knock_advance_step * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(knock_max_retard * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(knock_threshold / ADC_DISCRETE)).shortValue(),
+					knock_recovery_delay);
 		}
 		
 		@Override
@@ -1489,8 +1524,7 @@ public class Secu3Dat implements Parcelable {
 
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%04X%02X%01X%04X%02X%02X", OUTPUT_PACKET,packet_id,baud_rate_index,period_ms / 10, ign_cutoff, ign_cutoff_thrd, hop_start_cogs, hop_durat_cogs);
 		}
 		
 		@Override
@@ -1711,8 +1745,7 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub			
-			return super.pack();
+			return String.format("%s%s%04X%04X", OUTPUT_PACKET, packet_id, starter_off, smap_abandon);
 		}
 
 		@Override
@@ -1813,8 +1846,12 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%01X%01X%01X%04X%04X", OUTPUT_PACKET, packet_id,
+					tmp_use,
+					vent_pwm,
+					cts_use_map,
+					Integer.valueOf(Math.round(vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue(),
+					Integer.valueOf(Math.round(vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue());
 		}
 
 		@Override		
@@ -1890,8 +1927,7 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			// TODO Auto-generated method stub
-			return super.pack();
+			return String.format("%s%s%02X%02X", OUTPUT_PACKET, packet_id, opdata, opcode);
 		}
 		
 		@Override
@@ -1957,7 +1993,7 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			return String.format("%s%s%s\r", OUTPUT_PACKET,CHANGEMODE,mode);
+			return String.format("%s%s%s\r", OUTPUT_PACKET,packet_id,mode);
 		}
 		
 		public static String pack (char mode) {

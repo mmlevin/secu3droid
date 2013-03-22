@@ -66,7 +66,8 @@ public class PacketsTest extends TestCase {
 	{
 		TemperPar packet = new TemperPar();
 		try {
-			packet.parse("@j10001880180");
+			String data = "@j10001880180"; 
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "Use temperature sensor",packet.tmp_use, 1);
 			assertEquals(packet.getClass().getCanonicalName() + "Use fan PWM",packet.vent_pwm, 0);
 			assertEquals(packet.getClass().getCanonicalName() + "Use temp calibration table",packet.cts_use_map, 0);
@@ -75,6 +76,8 @@ public class PacketsTest extends TestCase {
 			
 			testParcel(packet);				
 
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);
@@ -93,9 +96,12 @@ public class PacketsTest extends TestCase {
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH high gas",packet.ephh_hit_g, 2100);			
 			assertEquals(packet.getClass().getCanonicalName() + "Carburator inverse",packet.carb_invers, 0);
 			assertEquals(packet.getClass().getCanonicalName() + "Carburator off delay",packet.shutoff_delay, 0f);
-			assertEquals(packet.getClass().getCanonicalName() + "Carburator EMR",packet.epm_ont, 6.125f);
-			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());
+			assertEquals(packet.getClass().getCanonicalName() + "Carburator EMR",packet.epm_ont, 6.125f);			
+			
 			testParcel(packet);	
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);			
@@ -106,7 +112,8 @@ public class PacketsTest extends TestCase {
 	{
 		IdlRegPar packet = new IdlRegPar();
 		try {
-			packet.parse("@l000040004000A0320FEC00140");
+			String data = "@l000040004000A0320FEC00140"; 
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "Use idle regulator",packet.idl_regul, 0);
 			assertEquals(packet.getClass().getCanonicalName() + "coeff 1",packet.ifac1, 0.125f);
 			assertEquals(packet.getClass().getCanonicalName() + "coeff 2",packet.ifac2, 0.125f);
@@ -115,7 +122,10 @@ public class PacketsTest extends TestCase {
 			assertEquals(packet.getClass().getCanonicalName() + "RPM",packet.idling_rpm, 800);
 			assertEquals(packet.getClass().getCanonicalName() + "Insensitivity",packet.MINEFR, 10);
 			
-			testParcel(packet);				
+			testParcel(packet);	
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 
 		} catch (Exception e)
 		{
@@ -127,7 +137,8 @@ public class PacketsTest extends TestCase {
 	{
 		AnglesPar packet = new AnglesPar();
 		try {
-			packet.parse("@m0640FEC00000006000600");
+			String data = "@m0640FEC00000006000600"; 
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "Max angle",packet.max_angle, 50.0f);
 			assertEquals(packet.getClass().getCanonicalName() + "Min angle",packet.min_angle, -10.0f);
 			assertEquals(packet.getClass().getCanonicalName() + "Correction",packet.angle_corr, 0.00f);
@@ -136,6 +147,9 @@ public class PacketsTest extends TestCase {
 			assertEquals(packet.getClass().getCanonicalName() + "Use zero angle",packet.zero_adv_ang, 0);
 			
 			testParcel(packet);			
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 
 		} catch (Exception e)
 		{
@@ -146,6 +160,7 @@ public class PacketsTest extends TestCase {
 	public void testFunsetPar() {
 		FunSetPar packet = new FunSetPar();
 		try {
+			String data = "@n01010780190000360441";
 			packet.parse("@n01010780190000360441");
 			assertEquals(packet.getClass().getCanonicalName() + "Gasoline table",packet.fn_benzin, 1);
 			assertEquals(packet.getClass().getCanonicalName() + "Gas table",packet.fn_gas, 1);
@@ -154,7 +169,10 @@ public class PacketsTest extends TestCase {
 			assertEquals(packet.getClass().getCanonicalName() + "MAP Sensor offset",packet.map_curve_offset, 0.13499999f);
 			assertEquals(packet.getClass().getCanonicalName() + "MAP Sensor gradient",packet.map_curve_gradient, 53.17383f);			
 
-			testParcel(packet);			
+			testParcel(packet);		
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 
 		} catch (Exception e)
 		{
@@ -171,7 +189,9 @@ public class PacketsTest extends TestCase {
 			assertEquals(packet.getClass().getCanonicalName() + "Starter map switch RPM",packet.smap_abandon, 650);
 			
 			testParcel(packet);				
-
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);			
@@ -181,7 +201,8 @@ public class PacketsTest extends TestCase {
 	public void testADCCorPar() {
 		ADCCorPar packet = new ADCCorPar();
 		try {
-			packet.parse("@r400000002000400000002000400000002000");
+			String data = "@r400000002000400000002000400000002000"; 
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName(), packet.map_adc_factor, 1.0f);
 			assertEquals(packet.getClass().getCanonicalName(), packet.map_adc_correction, 0f);
 			assertEquals(packet.getClass().getCanonicalName(), packet.ubat_adc_factor, 1.0f);
@@ -191,6 +212,8 @@ public class PacketsTest extends TestCase {
 
 			testParcel(packet);				
 
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);			
@@ -200,7 +223,8 @@ public class PacketsTest extends TestCase {
 	public void testCKPSPar() {
 		CKPSPar packet = new CKPSPar();
 		try {
-			packet.parse("@t00140A0403C02");
+			String data = "@t00140A0403C02";
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "CKPS Edge Type",packet.ckps_edge_type, 0);
 			assertEquals(packet.getClass().getCanonicalName() + "CKPS Ref Sensor Edge Type",packet.ref_s_edge_type, 0);			
 			assertEquals(packet.getClass().getCanonicalName() + "Cogs btdc",packet.ckps_cogs_btdc, 20);
@@ -211,6 +235,9 @@ public class PacketsTest extends TestCase {
 			assertEquals(packet.getClass().getCanonicalName() + "Missing cogs num",packet.ckps_miss_num, 2);
 			
 			testParcel(packet);	
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);			
@@ -220,7 +247,8 @@ public class PacketsTest extends TestCase {
 	public void testKnockPar() {
 		KnockPar packet = new KnockPar();
 		try {
-			packet.parse("@w023000003201700800008020003E802");
+			String data = "@w023000003201700800008020003E802"; 
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "Use knock channel",packet.knock_use_knock_channel, 0);
 			assertEquals(packet.getClass().getCanonicalName() + "Knock BPF frequency index ",packet.knock_bpf_frequency_index, 35);
 			assertEquals(packet.getClass().getCanonicalName() + "Knock BPF frequency",packet.knock_bpf_frequency, 5.48f);
@@ -236,6 +264,9 @@ public class PacketsTest extends TestCase {
 			
 			testParcel(packet);				
 
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());
+			
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);			
@@ -245,17 +276,20 @@ public class PacketsTest extends TestCase {
 	public void testMiscelPar() {
 		MiscelPar packet = new MiscelPar();
 		try {
-			packet.parse("@z00CF0801D4C000A");
+			String data = "@z00CF0801D4C000A"; 
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName(), packet.baud_rate_index, 0xCF);
 			assertEquals(packet.getClass().getCanonicalName(), packet.baud_rate, 9600);
-			assertEquals(packet.getClass().getCanonicalName(), packet.period_ms, 8);
+			assertEquals(packet.getClass().getCanonicalName(), packet.period_ms, 80);
 			assertEquals(packet.getClass().getCanonicalName(), packet.ign_cutoff, 0);
 			assertEquals(packet.getClass().getCanonicalName(), packet.ign_cutoff_thrd, 7500);
 			assertEquals(packet.getClass().getCanonicalName(), packet.hop_start_cogs, 0);
 			assertEquals(packet.getClass().getCanonicalName(), packet.hop_durat_cogs, 10);		
 			
 			testParcel(packet);				
-
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);			
@@ -279,10 +313,14 @@ public class PacketsTest extends TestCase {
 	public void testCESavedErrors() {
 		CESavedErr packet= new CESavedErr();
 		try {
-			packet.parse("@x0003");
+			String data = "@x0003";
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "Flags",packet.flags, 3);	
 			
-			testParcel(packet);				
+			testParcel(packet);			
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 
 		} catch (Exception e)
 		{
@@ -293,12 +331,15 @@ public class PacketsTest extends TestCase {
 	public void testOpCompNc() {
 		OPCompNc packet = new OPCompNc();
 		try {
-			packet.parse("@u1234");
+			String data = "@u1234"; 
+			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName(), packet.opdata, 0x12);
 			assertEquals(packet.getClass().getCanonicalName(), packet.opcode, 0x34);
 			
-			testParcel(packet);			
-
+			testParcel(packet);	
+			
+			data = data.replace(Secu3Dat.INPUT_PACKET, Secu3Dat.OUTPUT_PACKET);
+			assertEquals(packet.getClass().getCanonicalName() + "pack routine",data,packet.pack());			
 		} catch (Exception e)
 		{
 			assertNull(e.getMessage(),e);			
