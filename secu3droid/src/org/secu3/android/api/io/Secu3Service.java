@@ -33,6 +33,8 @@ public class Secu3Service extends Service {
 	public static final String SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";
 	public static final String ACTION_SECU3_SERVICE_READ_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_ERRORS";
 	public static final String ACTION_SECU3_SERVICE_READ_SAVED_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SAVED_ERRORS";
+	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";
+	public static final String SECU3_SERVICE_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_PACKET";
 	public static final String SECU3_SERVICE_STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
 	public static final String SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
 	
@@ -98,6 +100,11 @@ public class Secu3Service extends Service {
 		} else if (ACTION_SECU3_SERVICE_READ_SAVED_ERRORS.equals(intent.getAction())) {
 			if (secu3Manager != null) {
 				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SAVED_ERRORS);
+				sendBroadcast(intent);
+			}
+		} else if (ACTION_SECU3_SERVICE_SEND_PACKET.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				secu3Manager.appendPacket (intent.getStringExtra(SECU3_SERVICE_PACKET));
 				sendBroadcast(intent);
 			}
 		}

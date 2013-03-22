@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ParamActivity extends FragmentActivity{
+	public static final String LOG_TAG = "Param Activity";
+	
 	StartrPar startrPar = null;
 	AnglesPar anglesPar = null;
 	IdlRegPar idlRegPar = null;
@@ -167,6 +169,22 @@ public class ParamActivity extends FragmentActivity{
 		case R.id.menu_download:
 			readParams();
 			return true;
+		case R.id.menu_upload:
+			if (isValid()) {
+				try {
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, starterParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, anglesParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, idlRegParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, funsetParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, temperParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, carburParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, adcCorParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, ckpsParPage.getData().pack()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, miscelParPage.getData().pack()));
+				} catch (Exception e) {
+					Log.d (LOG_TAG, e.toString());
+				}
+			}
 		default:
 			return super.onOptionsItemSelected(item);
 		}        

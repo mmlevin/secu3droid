@@ -13,6 +13,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class AnglesFragment extends Fragment implements ISecu3Fragment{
+	AnglesPar packet;
+	
 	EditText minimalAngle;
 	EditText maximalAngle;
 	EditText angleDecrementStep;
@@ -29,6 +31,8 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		this.packet = (AnglesPar) packet;
+		
 		if (packet != null && isAdded()) {
 			minimalAngle = (EditText)getView().findViewById(R.id.anglesMinimalAngleEditText);
 			maximalAngle = (EditText)getView().findViewById(R.id.anglesMaximalAngleEditText);
@@ -44,5 +48,10 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 			zeroAngle.setChecked(((AnglesPar)packet).zero_adv_ang != 0);
 			currentAngle.setText(String.valueOf(((AnglesPar)packet).angle_corr));
 		}		
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }

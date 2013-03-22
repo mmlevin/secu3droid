@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 public class FunsetFragment extends Fragment implements ISecu3Fragment{
+	FunSetPar packet;
+	
 	EditText lowerPressure;
 	EditText upperPressure;
 	EditText sensorOffset;
@@ -34,6 +36,9 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		if (packet instanceof FunSetPar) {
+			this.packet = (FunSetPar) packet;
+		}
 		if (packet != null && isAdded()) {
 			if (packet instanceof FunSetPar) {
 				lowerPressure = (EditText)getView().findViewById(R.id.funsetLowerPressureEditText);
@@ -70,5 +75,10 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 				}
 			}
 		}		
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }

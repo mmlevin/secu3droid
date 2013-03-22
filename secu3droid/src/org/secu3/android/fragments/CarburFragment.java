@@ -13,6 +13,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class CarburFragment extends Fragment implements ISecu3Fragment {
+	CarburPar packet;
+	
 	EditText carburEPHHLowThreshholdGasoline;
 	EditText carburEPHHHighThreshholdGasoline;
 	EditText carburEPHHLowThreshholdGas;
@@ -31,6 +33,8 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		this.packet = (CarburPar) packet;
+		
 		if (packet != null && isAdded()) {
 			carburEPHHLowThreshholdGasoline = (EditText)getView().findViewById(R.id.carburOverrunLowThreshholdGasolineEditText);
 			carburEPHHHighThreshholdGasoline = (EditText)getView().findViewById(R.id.carburOverrunHighThreshholdGasolineEditText);
@@ -48,5 +52,10 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 			carburEPMValveOnPressure.setText(String.valueOf(((CarburPar)packet).epm_ont));
 			carburSensorInverse.setChecked(((CarburPar)packet).carb_invers != 0);
 		}
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }

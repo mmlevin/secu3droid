@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 public class MiscelFragment extends Fragment implements ISecu3Fragment {
+	MiscelPar packet;
+	
 	Spinner baudrate;
 	EditText period;
 	CheckBox enableIgnitionCutoff;
@@ -47,6 +49,8 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		this.packet = (MiscelPar) packet; 
+		
 		if (packet != null && isAdded()) {
 			
 			period = (EditText)getView().findViewById(R.id.miscelPeriodEditText);
@@ -63,5 +67,10 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 			hallOutputDelay.setText(String.valueOf(((MiscelPar)packet).hop_durat_cogs));
 		}
 		
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }

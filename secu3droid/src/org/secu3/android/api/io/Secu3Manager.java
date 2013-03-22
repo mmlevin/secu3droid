@@ -7,9 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,6 +70,8 @@ public class Secu3Manager {
 	
 	private class ConnectedSecu3 extends Thread {
 		public static final int STATUS_TIMEOUT = 10;
+
+		public Queue<String> sendPackets = null;
 		
 		private final BluetoothSocket socket;
 		private final InputStream in;
@@ -87,7 +93,9 @@ public class Secu3Manager {
 			this.socket = socket;
 			
 			InputStream tmpIn = null;
-			OutputStream tmpOut = null;					
+			OutputStream tmpOut = null;		
+			
+			sendPackets = new LinkedList<String>();
 			
 			try {
 				tmpIn = socket.getInputStream();
@@ -262,6 +270,10 @@ public class Secu3Manager {
 				BufferedReader reader = new BufferedReader(new InputStreamReader (in,"ISO-8859-1"));
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out,"ISO-8859-1"));				
 				while (enabled) {
+					if (!sendPackets.isEmpty()) {
+						writer.append(sendPackets.poll() + "\r\n");
+						writer.flush();
+					}					
 					if (reader.ready()) {
 						ready = true;												
 						if ((ch = (char)reader.read()) != -1) {							
@@ -304,6 +316,8 @@ public class Secu3Manager {
 		
 		public void close () {
 			ready = false;
+			
+			sendPackets = null;
 			
 			try {
 				Log.d(LOG_TAG, "Closing Bluetooth input stream");
@@ -480,6 +494,12 @@ public class Secu3Manager {
 		saveSecu3Task = secu3Task;
 		prevSecu3Task = secu3Task;
 		secu3Task = task;
+	}
+	
+	public synchronized void appendPacket (String packet) {
+		if ((connectedSecu3 != null) && (connectedSecu3.sendPackets != null)) {
+			connectedSecu3.sendPackets.add(packet);
+		}
 	}
 	
 	@SuppressWarnings("deprecation")

@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 public class StarterFragment extends Fragment implements ISecu3Fragment {
+	
+	StartrPar packet = null;
 	EditText starterRPM;
 	EditText starterMap;
 	
@@ -23,6 +25,8 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		this.packet = (StartrPar)packet;
+		
 		if (packet != null && isAdded()) {
 			starterRPM = (EditText)getView().findViewById(R.id.starterOffEditText);
 			starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);
@@ -30,5 +34,15 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 			starterRPM.setText(String.valueOf(((StartrPar)packet).starter_off));
 			starterMap.setText(String.valueOf(((StartrPar)packet).smap_abandon));
 		}
+	}
+	
+	@Override
+	public Secu3Dat getData() {		
+		starterRPM = (EditText)getView().findViewById(R.id.starterOffEditText);
+		starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);
+		
+		packet.starter_off = Integer.valueOf(starterRPM.getText().toString());
+		packet.smap_abandon = Integer.valueOf(starterMap.getText().toString());
+		return packet;
 	}
 }

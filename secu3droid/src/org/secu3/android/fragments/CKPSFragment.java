@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 
 public class CKPSFragment extends Fragment implements ISecu3Fragment{
+	CKPSPar packet;
+	
 	RadioButton ckpsFallingEdge;
 	RadioButton ckpsRaisingEdge;
 	RadioButton refSFallingEdge;
@@ -34,6 +36,8 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		this.packet = (CKPSPar) packet;
+		
 		if (packet != null && isAdded()) {
 			ckpsFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSFallingEdgeRadioButton);
 			ckpsRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSRisingEdgeRadioButton);
@@ -58,5 +62,10 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 			ignitionPulseDelay.setText(String.valueOf(((CKPSPar)packet).ckps_ignit_cogs));
 		}
 		
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }

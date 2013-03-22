@@ -13,6 +13,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class TemperFragment extends Fragment implements ISecu3Fragment{
+	TemperPar packet;
+	
 	EditText fanOn;
 	EditText fanOff;
 	CheckBox useTempSensor;
@@ -28,6 +30,7 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		this.packet = (TemperPar) packet;
 		if (packet != null && isAdded()) {
 			fanOn = (EditText)getView().findViewById(R.id.temperFanOnEditText);
 			fanOff = (EditText)getView().findViewById(R.id.temperFanOffEditText);
@@ -42,5 +45,10 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 			useTable.setChecked(((TemperPar)packet).cts_use_map != 0);
 		}
 		
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }

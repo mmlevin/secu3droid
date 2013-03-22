@@ -13,6 +13,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class IdlRegFragment extends Fragment implements ISecu3Fragment{
+	IdlRegPar packet;
+	
 	EditText ifac1;
 	EditText ifac2;
 	EditText minimalAngle;
@@ -30,6 +32,8 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public void setData(Secu3Dat packet) {
+		this.packet = (IdlRegPar) packet;
+		
 		if (packet != null && isAdded()) {
 			ifac1 = (EditText)getView().findViewById(R.id.textview2);
 			ifac2 = (EditText)getView().findViewById(R.id.idlRegIfac2EditText); 
@@ -47,5 +51,10 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 			rpmSensitivity.setText(String.valueOf(((IdlRegPar)packet).MINEFR));
 			useIdleReg.setChecked(((IdlRegPar)packet).idl_regul != 0);
 		}
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }

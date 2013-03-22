@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-public class ADCCorFragment extends Fragment {
+public class ADCCorFragment extends Fragment implements ISecu3Fragment {
+	ADCCorPar packet;
+	
 	EditText adccorMapSensorCoefficient;
 	EditText adccorMapSensorCorrection;
 	EditText adccorVoltageSensorCoefficient;
@@ -26,7 +28,10 @@ public class ADCCorFragment extends Fragment {
 		return inflater.inflate(R.layout.adccor_params, null);
 	}
 	
+	@Override	
 	public void setData (Secu3Dat packet) {
+		this.packet = (ADCCorPar) packet;
+		
 		if (packet != null && isAdded()) {
 			adccorMapSensorCoefficient = (EditText)getView().findViewById(R.id.adccorMAPSensorCoefficientEditText);
 			adccorMapSensorCorrection = (EditText)getView().findViewById(R.id.adccorMAPSensorCorrectionEditText);
@@ -42,5 +47,10 @@ public class ADCCorFragment extends Fragment {
 			adccorTemperatureSensorCoefficient.setText(String.valueOf(((ADCCorPar)packet).temp_adc_factor));
 			adccorTemperatureSensorCorrection.setText(String.valueOf(((ADCCorPar)packet).temp_adc_correction));
 		}
+	}
+
+	@Override
+	public Secu3Dat getData() {
+		return packet;
 	}
 }
