@@ -33,6 +33,19 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 			
 		return inflater.inflate(R.layout.funset_params, null);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		lowerPressure = (EditText)getView().findViewById(R.id.funsetLowerPressureEditText);
+		upperPressure = (EditText)getView().findViewById(R.id.funsetUpperPressureEditText);
+		sensorOffset = (EditText)getView().findViewById(R.id.funsetMAPSensorOffsetEditText);
+		sensorGradient = (EditText)getView().findViewById(R.id.funsetMAPSensorGradientEditText);
+		gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
+		gasTable  = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
+		gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
+		gasTable = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);		
+	}
 
 	@Override
 	public void setData(Secu3Dat packet) {
@@ -40,17 +53,7 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 			this.packet = (FunSetPar) packet;
 		}
 		if (packet != null && isAdded()) {
-			if (packet instanceof FunSetPar) {
-				lowerPressure = (EditText)getView().findViewById(R.id.funsetLowerPressureEditText);
-				upperPressure = (EditText)getView().findViewById(R.id.funsetUpperPressureEditText);
-				sensorOffset = (EditText)getView().findViewById(R.id.funsetMAPSensorOffsetEditText);
-				sensorGradient = (EditText)getView().findViewById(R.id.funsetMAPSensorGradientEditText);
-				gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
-				gasTable  = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
-				gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
-				gasTable = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
-
-				
+			if (packet instanceof FunSetPar) {				
 				lowerPressure.setText (String.valueOf(((FunSetPar)packet).map_lower_pressure));
 				upperPressure.setText (String.valueOf(((FunSetPar)packet).map_upper_pressure));
 				sensorOffset.setText (String.valueOf(((FunSetPar)packet).map_curve_offset));

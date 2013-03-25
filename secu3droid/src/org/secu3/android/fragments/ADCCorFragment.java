@@ -28,18 +28,22 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 		return inflater.inflate(R.layout.adccor_params, null);
 	}
 	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		adccorMapSensorCoefficient = (EditText)getView().findViewById(R.id.adccorMAPSensorCoefficientEditText);
+		adccorMapSensorCorrection = (EditText)getView().findViewById(R.id.adccorMAPSensorCorrectionEditText);
+		adccorVoltageSensorCoefficient = (EditText)getView().findViewById(R.id.adccorVoltageSensorCoefficientEditText);
+		adccorVoltageSensorCorrection = (EditText)getView().findViewById(R.id.adccorVoltageSensorCorrectionEditText);
+		adccorTemperatureSensorCoefficient = (EditText)getView().findViewById(R.id.adccorTemperatureSensorCoefficientEditText);
+		adccorTemperatureSensorCorrection = (EditText)getView().findViewById(R.id.adccorTemperatureSensorCorrectionEditText);		
+	}
+	
 	@Override	
 	public void setData (Secu3Dat packet) {
 		this.packet = (ADCCorPar) packet;
 		
-		if (packet != null && isAdded()) {
-			adccorMapSensorCoefficient = (EditText)getView().findViewById(R.id.adccorMAPSensorCoefficientEditText);
-			adccorMapSensorCorrection = (EditText)getView().findViewById(R.id.adccorMAPSensorCorrectionEditText);
-			adccorVoltageSensorCoefficient = (EditText)getView().findViewById(R.id.adccorVoltageSensorCoefficientEditText);
-			adccorVoltageSensorCorrection = (EditText)getView().findViewById(R.id.adccorVoltageSensorCorrectionEditText);
-			adccorTemperatureSensorCoefficient = (EditText)getView().findViewById(R.id.adccorTemperatureSensorCoefficientEditText);
-			adccorTemperatureSensorCorrection = (EditText)getView().findViewById(R.id.adccorTemperatureSensorCorrectionEditText);
-			
+		if (packet != null && isAdded()) {			
 			adccorMapSensorCoefficient.setText(String.valueOf(((ADCCorPar)packet).map_adc_factor));
 			adccorMapSensorCorrection.setText(String.valueOf(((ADCCorPar)packet).map_adc_correction));
 			adccorVoltageSensorCoefficient.setText(String.valueOf(((ADCCorPar)packet).ubat_adc_factor));

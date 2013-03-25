@@ -32,6 +32,16 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 	}
 	
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		period = (EditText)getView().findViewById(R.id.miscelPeriodEditText);
+		enableIgnitionCutoff = (CheckBox)getView().findViewById(R.id.miscelEnableIgnitionCutoffCheckBox);
+		ignitionCutoffRPM = (EditText)getView().findViewById(R.id.miscelIgnitionCutoffRPMEditText);
+		hallOutputStart = (EditText)getView().findViewById(R.id.miscelHallOutputStartEditText);
+		hallOutputDelay = (EditText)getView().findViewById(R.id.miscelHallOutputDelayEditText);		
+	}
+	
+	@Override
 	public void onResume() {
 		baudrate = (Spinner)getView().findViewById(R.id.miscelBaudrateSpinner);
 		Integer[] arr = new Integer[Secu3Dat.BAUD_RATE.length];		
@@ -51,15 +61,8 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 	public void setData(Secu3Dat packet) {
 		this.packet = (MiscelPar) packet; 
 		
-		if (packet != null && isAdded()) {
-			
-			period = (EditText)getView().findViewById(R.id.miscelPeriodEditText);
-			enableIgnitionCutoff = (CheckBox)getView().findViewById(R.id.miscelEnableIgnitionCutoffCheckBox);
-			ignitionCutoffRPM = (EditText)getView().findViewById(R.id.miscelIgnitionCutoffRPMEditText);
-			hallOutputStart = (EditText)getView().findViewById(R.id.miscelHallOutputStartEditText);
-			hallOutputDelay = (EditText)getView().findViewById(R.id.miscelHallOutputDelayEditText);
-			baudrate.setSelection(Secu3Dat.indexOf (Secu3Dat.BAUD_RATE_INDEX,((MiscelPar)packet).baud_rate_index));
-			
+		if (packet != null && isAdded()) {			
+			baudrate.setSelection(Secu3Dat.indexOf (Secu3Dat.BAUD_RATE_INDEX,((MiscelPar)packet).baud_rate_index));			
 			period.setText(String.valueOf(((MiscelPar)packet).period_ms));
 			enableIgnitionCutoff.setChecked(((MiscelPar)packet).ign_cutoff != 0);
 			ignitionCutoffRPM.setText(String.valueOf(((MiscelPar)packet).ign_cutoff_thrd));

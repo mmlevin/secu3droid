@@ -28,19 +28,23 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 		
 		return inflater.inflate(R.layout.angles_params, null);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		minimalAngle = (EditText)getView().findViewById(R.id.anglesMinimalAngleEditText);
+		maximalAngle = (EditText)getView().findViewById(R.id.anglesMaximalAngleEditText);
+		angleDecrementStep = (EditText)getView().findViewById(R.id.anglesDecrementStepEditText);
+		angleIncrementStep = (EditText)getView().findViewById(R.id.anglesIncrementStepEditText);
+		zeroAngle = (CheckBox)getView().findViewById(R.id.anglesZeroAngleCheckBox);
+		currentAngle = (EditText)getView().findViewById(R.id.anglesCurrentAngleEditText);		
+	}
 
 	@Override
 	public void setData(Secu3Dat packet) {
 		this.packet = (AnglesPar) packet;
 		
-		if (packet != null && isAdded()) {
-			minimalAngle = (EditText)getView().findViewById(R.id.anglesMinimalAngleEditText);
-			maximalAngle = (EditText)getView().findViewById(R.id.anglesMaximalAngleEditText);
-			angleDecrementStep = (EditText)getView().findViewById(R.id.anglesDecrementStepEditText);
-			angleIncrementStep = (EditText)getView().findViewById(R.id.anglesIncrementStepEditText);
-			zeroAngle = (CheckBox)getView().findViewById(R.id.anglesZeroAngleCheckBox);
-			currentAngle = (EditText)getView().findViewById(R.id.anglesCurrentAngleEditText);
-			
+		if (packet != null && isAdded()) {			
 			minimalAngle.setText(String.valueOf(((AnglesPar)packet).min_angle));
 			maximalAngle.setText(String.valueOf(((AnglesPar)packet).max_angle));
 			angleDecrementStep.setText(String.valueOf(((AnglesPar)packet).dec_spead));

@@ -24,23 +24,23 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	}
 
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {		
+		super.onActivityCreated(savedInstanceState);
+		starterRPM = (EditText)getView().findViewById(R.id.starterOffEditText);
+		starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);		
+	}
+	
+	@Override
 	public void setData(Secu3Dat packet) {
-		this.packet = (StartrPar)packet;
-		
-		if (packet != null && isAdded()) {
-			starterRPM = (EditText)getView().findViewById(R.id.starterOffEditText);
-			starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);
-			
+		this.packet = (StartrPar)packet;		
+		if (packet != null && isAdded()) {			
 			starterRPM.setText(String.valueOf(((StartrPar)packet).starter_off));
 			starterMap.setText(String.valueOf(((StartrPar)packet).smap_abandon));
 		}
 	}
 	
 	@Override
-	public Secu3Dat getData() {		
-		starterRPM = (EditText)getView().findViewById(R.id.starterOffEditText);
-		starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);
-		
+	public Secu3Dat getData() {				
 		packet.starter_off = Integer.valueOf(starterRPM.getText().toString());
 		packet.smap_abandon = Integer.valueOf(starterMap.getText().toString());
 		return packet;

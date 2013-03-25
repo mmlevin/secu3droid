@@ -27,17 +27,21 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 		
 		return inflater.inflate(R.layout.temper_params, null);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		fanOn = (EditText)getView().findViewById(R.id.temperFanOnEditText);
+		fanOff = (EditText)getView().findViewById(R.id.temperFanOffEditText);
+		useTempSensor = (CheckBox)getView().findViewById(R.id.temperUseTempSensorCheckBox);
+		usePWM = (CheckBox)getView().findViewById(R.id.temperUsePWMCheckBox);
+		useTable = (CheckBox)getView().findViewById(R.id.temperUseTableCheckBox);		
+	}
 
 	@Override
 	public void setData(Secu3Dat packet) {
 		this.packet = (TemperPar) packet;
-		if (packet != null && isAdded()) {
-			fanOn = (EditText)getView().findViewById(R.id.temperFanOnEditText);
-			fanOff = (EditText)getView().findViewById(R.id.temperFanOffEditText);
-			useTempSensor = (CheckBox)getView().findViewById(R.id.temperUseTempSensorCheckBox);
-			usePWM = (CheckBox)getView().findViewById(R.id.temperUsePWMCheckBox);
-			useTable = (CheckBox)getView().findViewById(R.id.temperUseTableCheckBox);
-			
+		if (packet != null && isAdded()) {		
 			fanOn.setText(String.valueOf(((TemperPar)packet).vent_on));
 			fanOff.setText(String.valueOf(((TemperPar)packet).vent_off));
 			useTempSensor.setChecked(((TemperPar)packet).tmp_use != 0);

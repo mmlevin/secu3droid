@@ -33,23 +33,27 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 		
 		return inflater.inflate(R.layout.ckps_params, null);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		ckpsFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSFallingEdgeRadioButton);
+		ckpsRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSRisingEdgeRadioButton);
+		refSFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSFallingEdgeRadioButton);
+		refSRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSRisingEdgeRadioButton);
+		mergeOutputs = (CheckBox)getView().findViewById(R.id.ckpsMergeOutputsCheckBox);
+		cogsNumber = (EditText)getView().findViewById(R.id.ckpsCogsNumberEditText);
+		missingCogsNumber = (EditText)getView().findViewById(R.id.ckpsMissingCogsNumberEditText);
+		cogsBeforeTDC = (EditText)getView().findViewById(R.id.ckpsCogsBeforeTDCEditText);
+		engineCylinders = (EditText)getView().findViewById(R.id.ckpsEngineCylyndersEditText);
+		ignitionPulseDelay = (EditText)getView().findViewById(R.id.ckpsIgnitionPulseDelayEditText);		
+	}
 
 	@Override
 	public void setData(Secu3Dat packet) {
 		this.packet = (CKPSPar) packet;
 		
-		if (packet != null && isAdded()) {
-			ckpsFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSFallingEdgeRadioButton);
-			ckpsRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSRisingEdgeRadioButton);
-			refSFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSFallingEdgeRadioButton);
-			refSRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSRisingEdgeRadioButton);
-			mergeOutputs = (CheckBox)getView().findViewById(R.id.ckpsMergeOutputsCheckBox);
-			cogsNumber = (EditText)getView().findViewById(R.id.ckpsCogsNumberEditText);
-			missingCogsNumber = (EditText)getView().findViewById(R.id.ckpsMissingCogsNumberEditText);
-			cogsBeforeTDC = (EditText)getView().findViewById(R.id.ckpsCogsBeforeTDCEditText);
-			engineCylinders = (EditText)getView().findViewById(R.id.ckpsEngineCylyndersEditText);
-			ignitionPulseDelay = (EditText)getView().findViewById(R.id.ckpsIgnitionPulseDelayEditText);
-			
+		if (packet != null && isAdded()) {			
 			ckpsFallingEdge.setChecked(((CKPSPar)packet).ckps_edge_type == 0);
 			ckpsRaisingEdge.setChecked(((CKPSPar)packet).ckps_edge_type != 0);
 			refSFallingEdge.setChecked(((CKPSPar)packet).ref_s_edge_type == 0);
