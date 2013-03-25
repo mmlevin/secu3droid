@@ -10,7 +10,14 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/paramsTextViewStatus"
         android:layout_below="@+id/paramsProgressBar"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical">
+    
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pagerTabStrip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"/>
+    </android.support.v4.view.ViewPager>
 
     <ProgressBar
         android:id="@+id/paramsProgressBar"
@@ -27,6 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="TextView" />
+        android:text="@string/status_offline" />
 
 </RelativeLayout>

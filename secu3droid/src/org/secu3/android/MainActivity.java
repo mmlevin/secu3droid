@@ -74,6 +74,10 @@ public class MainActivity extends Activity {
 		case R.id.menu_errors:
 			startActivity(new Intent(this,ErrorsActivity.class));
 			return true;
+		case R.id.menu_exit:
+			stopService(new Intent (this,Secu3Service.class));
+			System.exit(0);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}		
@@ -82,12 +86,7 @@ public class MainActivity extends Activity {
 	private void startService() {		
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
 		Log.d(getString(R.string.app_name),"startService");
-	}
-	
-	public void onStopButtonClick(View v) {
-		stopService(new Intent (this,Secu3Service.class));
-		Log.d(getString(R.string.app_name),"onButtonClick");		
-	}
+	}	
 	
 	@Override
 	protected void onResume() {

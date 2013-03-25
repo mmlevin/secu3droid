@@ -92,10 +92,12 @@ public class ParamActivity extends FragmentActivity{
 	
 	private class ParamPagerAdapter extends FragmentPagerAdapter{
 		List<Fragment> fragments = null;
+		String titles[];
 		
 		public ParamPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
 			super(fm);
 			this.fragments = fragments;
+			titles = getBaseContext().getResources().getStringArray(R.array.fragment_titles);
 		}
 
 
@@ -109,6 +111,10 @@ public class ParamActivity extends FragmentActivity{
 			return fragments.size();
 		}		
 
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return titles[position];
+		}
 	}
 
 	ReceiveMessages receiver;

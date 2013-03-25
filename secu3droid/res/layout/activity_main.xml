@@ -10,23 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="TextView" />
-
-    <Button
-        android:id="@+id/stopButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onStopButtonClick"
-        android:text="Stop service" />
+        android:text="@string/status_offline" />
 
     <TextView
         android:id="@+id/textViewData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/stopButton"
+        android:layout_alignParentTop="true"
         android:maxLines="20"
         android:text="@string/hello_world"
         android:textAppearance="?android:attr/textAppearanceLarge" />

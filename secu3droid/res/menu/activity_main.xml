@@ -3,5 +3,6 @@
     <item android:id="@+id/menu_settings" android:orderInCategory="100" android:title="@string/menu_settings" android:showAsAction="never" android:icon="@android:drawable/ic_menu_preferences"/>
     <item android:id="@+id/menu_params" android:orderInCategory="99" android:title="@string/menu_param" android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_manage"></item>
     <item android:id="@+id/menu_errors" android:orderInCategory="98" android:title="@string/menu_errors" android:showAsAction="ifRoom" android:icon="@drawable/ic_menu_errors"></item>
+	<item android:id="@+id/menu_exit" android:orderInCategory="97" android:title="@string/menu_exit" android:showAsAction="never" android:icon="@android:drawable/ic_menu_close_clear_cancel"/>    
 
 </menu>
