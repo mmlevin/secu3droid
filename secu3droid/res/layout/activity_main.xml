@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/mainTextViewStatus"
         android:layout_alignParentLeft="true"
+        android:onClick="onClick"
         android:text="Show raw data" />
 
 </RelativeLayout>

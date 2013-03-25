@@ -34,6 +34,9 @@ public class Secu3Service extends Service {
 	public static final String ACTION_SECU3_SERVICE_READ_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_ERRORS";
 	public static final String ACTION_SECU3_SERVICE_READ_SAVED_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SAVED_ERRORS";
 	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";
+	public static final String ACTION_SECU3_SERVICE_READ_SENSORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SENSORS";
+	public static final String ACTION_SECU3_SERVICE_READ_RAW_SENSORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_RAW_SENSORS";
+	public static final String ACTION_SECU3_SERVICE_READ_FW_INFO = "org.secu3.android.intent.action.SECU3_SERVICE_READ_FW_INFO";
 	public static final String SECU3_SERVICE_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_PACKET";
 	public static final String SECU3_SERVICE_STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
 	public static final String SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
@@ -68,7 +71,7 @@ public class Secu3Service extends Service {
 						.setSmallIcon(R.drawable.ic_launcher)											
 						.setWhen(System.currentTimeMillis())
 						.setOngoing(true)
-						.setContentIntent(PendingIntent.getActivity(this, 0, new Intent (this,MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT))
+						.setContentIntent(PendingIntent.getActivity(this, 0, new Intent (this,MainActivity.class), Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT))
 						.build();																
 						startForeground(R.string.foreground_service_started_notification, notification);
 						toast.setText(this.getString(R.string.msg_service_started));
@@ -100,6 +103,21 @@ public class Secu3Service extends Service {
 		} else if (ACTION_SECU3_SERVICE_READ_SAVED_ERRORS.equals(intent.getAction())) {
 			if (secu3Manager != null) {
 				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SAVED_ERRORS);
+				sendBroadcast(intent);
+			}
+		} else if (ACTION_SECU3_SERVICE_READ_SENSORS.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SENSORS);
+				sendBroadcast(intent);
+			}
+		} else if (ACTION_SECU3_SERVICE_READ_RAW_SENSORS.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				secu3Manager.setTask(SECU3_TASK.SECU3_RAW_SENSORS);
+				sendBroadcast(intent);
+			}
+		} else if (ACTION_SECU3_SERVICE_READ_FW_INFO.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				secu3Manager.setTask(SECU3_TASK.SECU3_READ_FW_INFO);
 				sendBroadcast(intent);
 			}
 		} else if (ACTION_SECU3_SERVICE_SEND_PACKET.equals(intent.getAction())) {

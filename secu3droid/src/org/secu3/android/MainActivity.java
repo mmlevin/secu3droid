@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ADCRawDat;
+import org.secu3.android.api.io.Secu3Dat.FWInfoDat;
 import org.secu3.android.api.io.Secu3Dat.SensorDat;
 import org.secu3.android.api.io.Secu3Service;
 
@@ -52,9 +53,22 @@ public class MainActivity extends Activity {
 		textViewData = (TextView)findViewById(R.id.textViewData);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		checkBox = (CheckBox)findViewById(R.id.anglesZeroAngleCheckBox);
+		
+		if (savedInstanceState != null) {
+			textViewData.setText(savedInstanceState.getString("data"));
+			textViewStatus.setText(savedInstanceState.getString("status"));
+			checkBox.setChecked(savedInstanceState.getBoolean("checkbox"));
+		}
 		Log.d(getString(R.string.app_name), "onCreate");
 	}
-
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString("data", textViewData.getText().toString());
+		outState.putString("status", textViewStatus.getText().toString());
+		outState.putBoolean("status", checkBox.isChecked());
+		super.onSaveInstanceState(outState);
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -83,10 +97,6 @@ public class MainActivity extends Activity {
 		}		
 	}
 	
-	private void startService() {		
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
-		Log.d(getString(R.string.app_name),"startService");
-	}	
 	
 	@Override
 	protected void onResume() {
@@ -94,9 +104,12 @@ public class MainActivity extends Activity {
 			IntentFilter infil = new IntentFilter();
 			infil.addAction(Secu3Dat.RECEIVE_SENSOR_DAT);
 			infil.addAction(Secu3Dat.RECEIVE_ADCRAW_DAT);
+			infil.addAction(Secu3Dat.RECEIVE_FWINFO_DAT);
 			infil.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
 			registerReceiver(receiver, infil);
-			startService();					
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
+			startService(new Intent (checkBox.isChecked()?Secu3Service.ACTION_SECU3_SERVICE_READ_RAW_SENSORS:Secu3Service.ACTION_SECU3_SERVICE_READ_SENSORS,Uri.EMPTY,this,Secu3Service.class));			
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_READ_FW_INFO,Uri.EMPTY,this,Secu3Service.class));			
 			
 		} catch (Exception e) {
 		}
@@ -123,6 +136,12 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 	}
 
+	public void onClick (View v) {
+		if (v == checkBox) {
+			startService(new Intent (checkBox.isChecked()?Secu3Service.ACTION_SECU3_SERVICE_READ_RAW_SENSORS:Secu3Service.ACTION_SECU3_SERVICE_READ_SENSORS,Uri.EMPTY,this,Secu3Service.class));			
+		}
+	}
+	
 	void updateData(Intent intent) {
 		String s = "";
 		if (!checkBox.isChecked() && intent.getAction().equalsIgnoreCase(Secu3Dat.RECEIVE_SENSOR_DAT)) {
@@ -147,6 +166,8 @@ public class MainActivity extends Activity {
 				s = String.format(Locale.getDefault(),"MAP Sensor data: %fV\r\nVoltage Sensor data: %fV\r\nTemperature Sensor data: %fV\r\nKnock Sensor data: %fV",ad.map_value,ad.ubat_value,ad.temp_value,ad.knock_value);
 				textViewData.setText(s);
 			}
+		} else if (intent.getAction().equals(Secu3Dat.RECEIVE_FWINFO_DAT)) {
+			FWInfoDat packet = (FWInfoDat) intent.getParcelableExtra(FWInfoDat.class.getCanonicalName());
 		}
 	}
 	

@@ -42,7 +42,7 @@ public class Secu3Manager {
 	
 	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
 	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
-	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS};
+	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS,SECU3_READ_FW_INFO};
 	
 	private Service callingService;
 	private BluetoothSocket secu3Socket;
@@ -178,6 +178,10 @@ public class Secu3Manager {
 								writer.write(ChangeMode.pack(Secu3Dat.CE_SAVED_ERR));
 								writer.flush();
 								break;
+							case SECU3_READ_FW_INFO:
+								writer.write(ChangeMode.pack(Secu3Dat.FWINFO_DAT));
+								writer.flush();
+								break;
 						}
 					}
 					
@@ -250,6 +254,12 @@ public class Secu3Manager {
 					} else if (secu3Task == SECU3_TASK.SECU3_READ_SAVED_ERRORS) {
 						switch (parser.getLastPackedId()) {
 						case Secu3Dat.CE_ERR_CODES:							
+							break;						
+						}
+					} else if (secu3Task == SECU3_TASK.SECU3_READ_SAVED_ERRORS) {
+						switch (parser.getLastPackedId()) {
+						case Secu3Dat.FWINFO_DAT:
+							setTask(saveSecu3Task);
 							break;						
 						}
 					}
