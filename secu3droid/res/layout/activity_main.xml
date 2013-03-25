@@ -19,7 +19,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:maxLines="20"
-        android:text="@string/hello_world"
+        android:text="@string/data_will_appear_after_connect"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <CheckBox

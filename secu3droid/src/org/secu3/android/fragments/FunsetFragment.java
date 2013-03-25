@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 public class FunsetFragment extends Fragment implements ISecu3Fragment{
 	FunSetPar packet;
+	FnNameDat extraPacket;
 	
 	EditText lowerPressure;
 	EditText upperPressure;
@@ -46,42 +47,63 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
 		gasTable = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);		
 	}
+	
+	@Override
+	public void onResume() {
+		updateData();		
+		super.onResume();
+	}
+
+	@Override
+	public void updateData() {
+		if (packet != null) {				
+			lowerPressure.setText (String.valueOf(packet.map_lower_pressure));
+			upperPressure.setText (String.valueOf(packet.map_upper_pressure));
+			sensorOffset.setText (String.valueOf(packet.map_curve_offset));
+			sensorGradient.setText (String.valueOf(packet.map_curve_gradient));
+			gasolineTable.setSelection(packet.fn_benzin);
+			gasTable.setSelection(packet.fn_gas);
+		}
+		if ((extraPacket != null) && (extraPacket.names_available())) {					
+			tableNames = Arrays.copyOf(extraPacket.names,extraPacket.names.length);
+			
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			gasolineTable.setAdapter(adapter);
+			
+			adapter = new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			gasTable.setAdapter(adapter);
+			
+			if (packet != null) {
+				gasolineTable.setSelection(packet.fn_benzin);
+				gasTable.setSelection(packet.fn_gas);				
+			}
+		}
+	}
 
 	@Override
 	public void setData(Secu3Dat packet) {
 		if (packet instanceof FunSetPar) {
 			this.packet = (FunSetPar) packet;
 		}
-		if (packet != null && isAdded()) {
-			if (packet instanceof FunSetPar) {				
-				lowerPressure.setText (String.valueOf(((FunSetPar)packet).map_lower_pressure));
-				upperPressure.setText (String.valueOf(((FunSetPar)packet).map_upper_pressure));
-				sensorOffset.setText (String.valueOf(((FunSetPar)packet).map_curve_offset));
-				sensorGradient.setText (String.valueOf(((FunSetPar)packet).map_curve_gradient));
-				gasolineTable.setSelection(((FunSetPar)packet).fn_benzin);
-				gasTable.setSelection(((FunSetPar)packet).fn_gas);
-			}
-			if (packet instanceof FnNameDat) {
-				gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
-				gasTable = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
-				
-				if (((FnNameDat)packet).names_available()) {					
-					tableNames = Arrays.copyOf(((FnNameDat)packet).names,((FnNameDat)packet).names.length);
-					
-					ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames);
-					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					gasolineTable.setAdapter(adapter);
-					
-					adapter = new ArrayAdapter<String>(this.getActivity().getBaseContext(), android.R.layout.simple_spinner_item,tableNames);
-					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					gasTable.setAdapter(adapter);
-				}
-			}
-		}		
+		if (packet instanceof FnNameDat) {
+			this.extraPacket = (FnNameDat) packet;
+		}
 	}
 
 	@Override
 	public Secu3Dat getData() {
+		packet.map_lower_pressure = Float.valueOf(lowerPressure.getText().toString());
+		packet.map_upper_pressure = Float.valueOf(upperPressure.getText().toString());
+		packet.map_curve_offset = Float.valueOf(sensorOffset.getText().toString());
+		packet.map_curve_gradient = Float.valueOf(sensorGradient.getText().toString());
+		packet.fn_benzin = gasolineTable.getSelectedItemPosition();
+		packet.fn_gas = gasTable.getSelectedItemPosition();
 		return packet;
+	}
+	
+	public Secu3Dat getExtraData() {
+		return extraPacket;
 	}
 }

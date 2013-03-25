@@ -6,4 +6,5 @@ public interface ISecu3Fragment {
 
 	public void setData (Secu3Dat packet);
 	public Secu3Dat getData();
+	public void updateData();
 }

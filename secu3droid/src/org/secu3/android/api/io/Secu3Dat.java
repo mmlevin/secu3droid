@@ -1930,6 +1930,11 @@ public class Secu3Dat implements Parcelable {
 			return String.format("%s%s%02X%02X", OUTPUT_PACKET, packet_id, opdata, opcode);
 		}
 		
+		public static String pack (int opcode, int opdata) throws Exception
+		{
+			return String.format("%s%s%02X%02X", OUTPUT_PACKET, OP_COMP_NC, opdata, opcode);
+		}
+		
 		@Override
 		public String getLogString() {
 			return (String.format("%s: ", getClass().getCanonicalName()));

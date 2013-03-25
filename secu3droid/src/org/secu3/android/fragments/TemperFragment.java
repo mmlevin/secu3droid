@@ -37,22 +37,36 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 		usePWM = (CheckBox)getView().findViewById(R.id.temperUsePWMCheckBox);
 		useTable = (CheckBox)getView().findViewById(R.id.temperUseTableCheckBox);		
 	}
+	
+	@Override
+	public void onResume() {
+		updateData();		
+		super.onResume();
+	}
 
 	@Override
-	public void setData(Secu3Dat packet) {
-		this.packet = (TemperPar) packet;
-		if (packet != null && isAdded()) {		
+	public void updateData() {
+		if (packet != null) {		
 			fanOn.setText(String.valueOf(((TemperPar)packet).vent_on));
 			fanOff.setText(String.valueOf(((TemperPar)packet).vent_off));
 			useTempSensor.setChecked(((TemperPar)packet).tmp_use != 0);
 			usePWM.setChecked(((TemperPar)packet).vent_pwm != 0);
 			useTable.setChecked(((TemperPar)packet).cts_use_map != 0);
 		}
-		
+	}
+
+	@Override
+	public void setData(Secu3Dat packet) {
+		this.packet = (TemperPar) packet;		
 	}
 
 	@Override
 	public Secu3Dat getData() {
+		packet.vent_on = Float.valueOf(fanOn.getText().toString());
+		packet.vent_off = Float.valueOf(fanOff.getText().toString());
+		packet.tmp_use = useTempSensor.isChecked()?1:0;
+		packet.vent_pwm = usePWM.isChecked()?1:0;
+		packet.cts_use_map = useTable.isChecked()?1:0;
 		return packet;
 	}
 }

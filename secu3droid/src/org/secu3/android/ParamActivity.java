@@ -23,20 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ParamActivity extends FragmentActivity{
-	public static final String LOG_TAG = "Param Activity";
-	
-	StartrPar startrPar = null;
-	AnglesPar anglesPar = null;
-	IdlRegPar idlRegPar = null;
-	FunSetPar funSetPar = null;
-	FnNameDat fnNameDat = null;
-	TemperPar temperPar = null;
-	CarburPar carburPar = null;
-	ADCCorPar adcCorPar = null;
-	CKPSPar   ckpsPar = null;
-	MiscelPar miscelPar = null;	
+	public static final String LOG_TAG = "Param Activity";	
 	
 	StarterFragment starterParPage = null;
 	AnglesFragment anglesParPage = null;
@@ -57,16 +47,17 @@ public class ParamActivity extends FragmentActivity{
     ParamPagerAdapter awesomeAdapter = null;
 	
     private boolean isValid() {
-    	return (startrPar != null) &&
-    		   (anglesPar != null) &&
-    		   (idlRegPar != null) &&
-    		   (funSetPar != null) &&
-    		   (fnNameDat != null) && fnNameDat.names_available() &&
-    		   (temperPar != null) &&
-    		   (carburPar != null) &&
-    		   (adcCorPar != null) &&
-    		   (ckpsPar != null) &&
-    		   (miscelPar != null);
+    	return (starterParPage.getData() != null) &&
+    		   (anglesParPage.getData() != null) &&
+    		   (idlRegParPage.getData() != null) &&
+    		   (funsetParPage.getData() != null) &&
+    		   (funsetParPage.getExtraData() != null) &&
+    		   (((FnNameDat)funsetParPage.getExtraData()).names_available()) &&
+    		   (temperParPage.getData() != null) &&
+    		   (carburParPage.getData() != null) &&
+    		   (adcCorParPage.getData() != null) &&
+    		   (ckpsParPage.getData() != null) &&
+    		   (miscelParPage.getData() != null);
     }
     
     private void readParams() {
@@ -142,24 +133,6 @@ public class ParamActivity extends FragmentActivity{
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
 		pager = (ViewPager)findViewById(R.id.pager);
 		pager.setAdapter(awesomeAdapter);
-		  pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-		        @Override
-		        public void onPageScrollStateChanged(int arg0) {
-		            if (arg0 == ViewPager.SCROLL_STATE_SETTLING) {
-		            		updateUI();		            	
-		            }
-		        }
-
-				@Override
-				public void onPageScrolled(int arg0, float arg1, int arg2) {
-					
-				}
-
-				@Override
-				public void onPageSelected(int arg0) {					
-				}
-		    });
-		  updateUI();
 	}
 
 	@Override
@@ -191,6 +164,16 @@ public class ParamActivity extends FragmentActivity{
 					Log.d (LOG_TAG, e.toString());
 				}
 			}
+			return true;
+		case R.id.menu_save_eeprom:
+			try {
+		    	progressBar.setIndeterminate(true);
+		    	progressBar.setVisibility(ProgressBar.VISIBLE);				
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, OPCompNc.pack(Secu3Dat.OPCODE_EEPROM_PARAM_SAVE,0)));
+			} catch (Exception e) {
+				Log.d (LOG_TAG, e.toString());
+			}
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}        
@@ -224,6 +207,7 @@ public class ParamActivity extends FragmentActivity{
 			infil.addAction(Secu3Dat.RECEIVE_MISCEL_PAR);
 			infil.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
 			infil.addAction(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS);
+			infil.addAction(Secu3Dat.RECEIVE_OP_COMP_NC);
 			registerReceiver(receiver, infil);
 			
 		} catch (Exception e) {
@@ -231,55 +215,60 @@ public class ParamActivity extends FragmentActivity{
 		finally {
 			super.onResume();
 		}		
-	}
-	
-	void updateUI () {
-		if (isValid()) {
-			starterParPage.setData(startrPar);
-			anglesParPage.setData(anglesPar);
-			idlRegParPage.setData(idlRegPar);
-			funsetParPage.setData(fnNameDat);			
-			funsetParPage.setData(funSetPar);
-			temperParPage.setData(temperPar);
-			carburParPage.setData(carburPar);
-			adcCorParPage.setData(adcCorPar);
-			ckpsParPage.setData(ckpsPar);
-			miscelParPage.setData(miscelPar);
-		}
-	}
+	}	
 	
 	void updateData (Intent intent) {
 		String action = intent.getAction();
 		if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_STARTER_PAR)) {
-			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());			
-			starterParPage.setData(startrPar = packet);
+			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());
+			StarterFragment page = starterParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_ANGLES_PAR)) {
 			AnglesPar packet = intent.getParcelableExtra(AnglesPar.class.getCanonicalName());
-			anglesParPage.setData(anglesPar = packet);
+			AnglesFragment page = anglesParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_IDLREG_PAR)) {
 			IdlRegPar packet = intent.getParcelableExtra(IdlRegPar.class.getCanonicalName());
-			idlRegParPage.setData(idlRegPar = packet);
+			IdlRegFragment page = idlRegParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_FNNAME_DAT)) {
 			FnNameDat packet = intent.getParcelableExtra(FnNameDat.class.getCanonicalName());
-			fnNameDat = packet;
+			FunsetFragment page = funsetParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		}else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_FUNSET_PAR)) {
 			FunSetPar packet = intent.getParcelableExtra(FunSetPar.class.getCanonicalName());
-			funsetParPage.setData(funSetPar = packet);
+			FunsetFragment page = funsetParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_TEMPER_PAR)) {
 			TemperPar packet = intent.getParcelableExtra(TemperPar.class.getCanonicalName());
-			temperParPage.setData(temperPar = packet);			
+			TemperFragment page = temperParPage;
+			page.setData(packet);			
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_CARBUR_PAR)) {
 			CarburPar packet = intent.getParcelableExtra(CarburPar.class.getCanonicalName());
-			carburParPage.setData(carburPar = packet);
+			CarburFragment page = carburParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_ADCCOR_PAR)) {
 			ADCCorPar packet = intent.getParcelableExtra(ADCCorPar.class.getCanonicalName());
-			adcCorParPage.setData(adcCorPar = packet);
+			ADCCorFragment page = adcCorParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_CKPS_PAR)) {
 			CKPSPar packet = intent.getParcelableExtra(CKPSPar.class.getCanonicalName());
-			ckpsParPage.setData(ckpsPar = packet);
+			CKPSFragment page = ckpsParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_MISCEL_PAR)) {
 			MiscelPar packet = intent.getParcelableExtra(MiscelPar.class.getCanonicalName());
-			miscelParPage.setData(miscelPar = packet);
+			MiscelFragment page = miscelParPage;
+			page.setData(packet);
+			if (page.isVisible()) page.updateData();
 		} else if (action.equalsIgnoreCase(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS)) {
 			int current = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_TOTAL,0);
@@ -287,6 +276,12 @@ public class ParamActivity extends FragmentActivity{
 			progressBar.setIndeterminate(current==0);
 			progressBar.setMax(total);
 			progressBar.setProgress(current);
+		} else if (action.equals(Secu3Dat.RECEIVE_OP_COMP_NC)) {
+			OPCompNc packet = intent.getParcelableExtra(OPCompNc.class.getCanonicalName());
+			if ((packet != null) && (packet.opcode == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE)) {
+				progressBar.setVisibility(ProgressBar.GONE);				
+				Toast.makeText(this, String.format("Params saved: error code %d", packet.opdata), Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 	

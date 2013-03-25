@@ -42,12 +42,16 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 		carburEPMValveOnPressure = (EditText)getView().findViewById(R.id.carburEPMValveOnPressureEditText);
 		carburSensorInverse = (CheckBox)getView().findViewById(R.id.carburSensorInverseCheckBox);		
 	}
+	
+	@Override
+	public void onResume() {
+		updateData();		
+		super.onResume();
+	}
 
 	@Override
-	public void setData(Secu3Dat packet) {
-		this.packet = (CarburPar) packet;
-		
-		if (packet != null && isAdded()) {			
+	public void updateData() {
+		if (packet != null) {			
 			carburEPHHLowThreshholdGasoline.setText(String.valueOf(((CarburPar)packet).ephh_lot));
 			carburEPHHHighThreshholdGasoline.setText(String.valueOf(((CarburPar)packet).ephh_hit));
 			carburEPHHLowThreshholdGas.setText(String.valueOf(((CarburPar)packet).ephh_lot_g));
@@ -59,7 +63,19 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 	}
 
 	@Override
+	public void setData(Secu3Dat packet) {
+		this.packet = (CarburPar) packet;		
+	}
+
+	@Override
 	public Secu3Dat getData() {
+		packet.ephh_lot = Integer.valueOf(carburEPHHLowThreshholdGasoline.getText().toString()); 
+		packet.ephh_hit = Integer.valueOf(carburEPHHHighThreshholdGasoline.getText().toString());
+		packet.ephh_lot_g = Integer.valueOf(carburEPHHLowThreshholdGas.getText().toString()); 
+		packet.ephh_hit_g = Integer.valueOf(carburEPHHHighThreshholdGas.getText().toString());
+		packet.shutoff_delay = Float.valueOf(carburOverrunDelay.getText().toString());
+		packet.epm_ont = Float.valueOf(carburEPMValveOnPressure.getText().toString());
+		packet.carb_invers = carburSensorInverse.isChecked()?1:0;
 		return packet;
 	}
 }

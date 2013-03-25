@@ -270,9 +270,9 @@ public class Secu3Manager {
 				BufferedReader reader = new BufferedReader(new InputStreamReader (in,"ISO-8859-1"));
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out,"ISO-8859-1"));				
 				while (enabled) {
-					if (!sendPackets.isEmpty()) {
+					if (!sendPackets.isEmpty()) {						
 						writer.append(sendPackets.poll() + "\r\n");
-						writer.flush();
+						writer.flush();						
 					}					
 					if (reader.ready()) {
 						ready = true;												

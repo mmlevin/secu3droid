@@ -38,12 +38,12 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 		enableIgnitionCutoff = (CheckBox)getView().findViewById(R.id.miscelEnableIgnitionCutoffCheckBox);
 		ignitionCutoffRPM = (EditText)getView().findViewById(R.id.miscelIgnitionCutoffRPMEditText);
 		hallOutputStart = (EditText)getView().findViewById(R.id.miscelHallOutputStartEditText);
-		hallOutputDelay = (EditText)getView().findViewById(R.id.miscelHallOutputDelayEditText);		
+		hallOutputDelay = (EditText)getView().findViewById(R.id.miscelHallOutputDelayEditText);
+		baudrate = (Spinner)getView().findViewById(R.id.miscelBaudrateSpinner);		
 	}
 	
 	@Override
-	public void onResume() {
-		baudrate = (Spinner)getView().findViewById(R.id.miscelBaudrateSpinner);
+	public void onResume() {		
 		Integer[] arr = new Integer[Secu3Dat.BAUD_RATE.length];		
 		int j = 0;
 		for (int i : Secu3Dat.BAUD_RATE) {
@@ -54,14 +54,13 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		baudrate.setAdapter(adapter);
 
+		updateData();		
 		super.onResume();
 	}
 
 	@Override
-	public void setData(Secu3Dat packet) {
-		this.packet = (MiscelPar) packet; 
-		
-		if (packet != null && isAdded()) {			
+	public void updateData() {
+		if (packet != null) {			
 			baudrate.setSelection(Secu3Dat.indexOf (Secu3Dat.BAUD_RATE_INDEX,((MiscelPar)packet).baud_rate_index));			
 			period.setText(String.valueOf(((MiscelPar)packet).period_ms));
 			enableIgnitionCutoff.setChecked(((MiscelPar)packet).ign_cutoff != 0);
@@ -69,11 +68,21 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 			hallOutputStart.setText(String.valueOf(((MiscelPar)packet).hop_start_cogs));
 			hallOutputDelay.setText(String.valueOf(((MiscelPar)packet).hop_durat_cogs));
 		}
-		
+	}
+
+	@Override
+	public void setData(Secu3Dat packet) {
+		this.packet = (MiscelPar) packet; 				
 	}
 
 	@Override
 	public Secu3Dat getData() {
+		packet.baud_rate = baudrate.getSelectedItemPosition();
+		packet.period_ms = Integer.valueOf(period.getText().toString());
+		packet.ign_cutoff = enableIgnitionCutoff.isChecked()?1:0;
+		packet.ign_cutoff_thrd = Integer.valueOf(ignitionCutoffRPM.getText().toString());
+		packet.hop_start_cogs = Integer.valueOf(hallOutputStart.getText().toString());
+		packet.hop_durat_cogs = Integer.valueOf(hallOutputDelay.getText().toString());
 		return packet;
 	}
 }

@@ -48,10 +48,7 @@
 	    android:layout_below="@+id/textView2"
 	    android:ems="10"
 	    android:inputType="number"
-	    android:text="0" >
-
-	    <requestFocus />
-	</EditText>
+	    android:text="0" />
 	
 	</RelativeLayout>
 

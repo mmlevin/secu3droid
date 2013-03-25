@@ -31,12 +31,22 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	}
 	
 	@Override
-	public void setData(Secu3Dat packet) {
-		this.packet = (StartrPar)packet;		
-		if (packet != null && isAdded()) {			
+	public void onResume() {
+		updateData();
+		super.onStart();
+	}
+	
+	@Override
+	public void updateData() {
+		if (packet != null) {
 			starterRPM.setText(String.valueOf(((StartrPar)packet).starter_off));
 			starterMap.setText(String.valueOf(((StartrPar)packet).smap_abandon));
 		}
+	}
+	
+	@Override
+	public void setData(Secu3Dat packet) {
+		this.packet = (StartrPar)packet;				
 	}
 	
 	@Override
