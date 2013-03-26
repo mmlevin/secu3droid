@@ -63,11 +63,11 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 			refSFallingEdge.setChecked(((CKPSPar)packet).ref_s_edge_type == 0);
 			refSRaisingEdge.setChecked(((CKPSPar)packet).ref_s_edge_type != 0);
 			mergeOutputs.setChecked(((CKPSPar)packet).ckps_merge_ign_outs != 0);
-			cogsNumber.setText(String.valueOf(((CKPSPar)packet).ckps_cogs_num));
-			missingCogsNumber.setText(String.valueOf(((CKPSPar)packet).ckps_miss_num));
-			cogsBeforeTDC.setText(String.valueOf(((CKPSPar)packet).ckps_cogs_btdc));
-			engineCylinders.setText(String.valueOf(((CKPSPar)packet).ckps_engine_cyl));
-			ignitionPulseDelay.setText(String.valueOf(((CKPSPar)packet).ckps_ignit_cogs));
+			cogsNumber.setText(String.format("%d",((CKPSPar)packet).ckps_cogs_num));
+			missingCogsNumber.setText(String.format("%d",((CKPSPar)packet).ckps_miss_num));
+			cogsBeforeTDC.setText(String.format("%d",((CKPSPar)packet).ckps_cogs_btdc));
+			engineCylinders.setText(String.format("%d",((CKPSPar)packet).ckps_engine_cyl));
+			ignitionPulseDelay.setText(String.format("%d",((CKPSPar)packet).ckps_ignit_cogs));
 		}
 	}
 
@@ -78,6 +78,7 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {
+		if (packet == null) return null;
 		packet.ckps_edge_type = ckpsFallingEdge.isChecked()?0:1;
 		packet.ref_s_edge_type = refSFallingEdge.isChecked()?0:1;
 		packet.ckps_merge_ign_outs = mergeOutputs.isChecked()?1:0;

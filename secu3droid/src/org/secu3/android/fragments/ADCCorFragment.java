@@ -48,12 +48,12 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 	@Override
 	public void updateData() {
 		if (packet != null) {			
-			adccorMapSensorCoefficient.setText(String.valueOf(((ADCCorPar)packet).map_adc_factor));
-			adccorMapSensorCorrection.setText(String.valueOf(((ADCCorPar)packet).map_adc_correction));
-			adccorVoltageSensorCoefficient.setText(String.valueOf(((ADCCorPar)packet).ubat_adc_factor));
-			adccorVoltageSensorCorrection.setText(String.valueOf(((ADCCorPar)packet).ubat_adc_correction));
-			adccorTemperatureSensorCoefficient.setText(String.valueOf(((ADCCorPar)packet).temp_adc_factor));
-			adccorTemperatureSensorCorrection.setText(String.valueOf(((ADCCorPar)packet).temp_adc_correction));
+			adccorMapSensorCoefficient.setText(String.format("%.2f",((ADCCorPar)packet).map_adc_factor));
+			adccorMapSensorCorrection.setText(String.format("%.2f",((ADCCorPar)packet).map_adc_correction));
+			adccorVoltageSensorCoefficient.setText(String.format("%.2f",((ADCCorPar)packet).ubat_adc_factor));
+			adccorVoltageSensorCorrection.setText(String.format("%.2f",((ADCCorPar)packet).ubat_adc_correction));
+			adccorTemperatureSensorCoefficient.setText(String.format("%.2f",((ADCCorPar)packet).temp_adc_factor));
+			adccorTemperatureSensorCorrection.setText(String.format("%.2f",((ADCCorPar)packet).temp_adc_correction));
 		}
 	}
 	
@@ -64,6 +64,7 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public Secu3Dat getData() {
+		if (packet == null) return null;
 		packet.map_adc_factor = Float.valueOf(adccorMapSensorCoefficient.getText().toString());
 		packet.map_adc_correction = Float.valueOf(adccorMapSensorCorrection.getText().toString());
 		packet.ubat_adc_factor = Float.valueOf(adccorVoltageSensorCoefficient.getText().toString());

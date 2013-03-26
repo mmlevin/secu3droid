@@ -51,12 +51,12 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {		
-			ifac1.setText(String.valueOf(((IdlRegPar)packet).ifac1));
-			ifac2.setText(String.valueOf(((IdlRegPar)packet).ifac2));
-			minimalAngle.setText(String.valueOf(((IdlRegPar)packet).min_angle));
-			maximalAngle.setText(String.valueOf(((IdlRegPar)packet).max_angle));
-			targetRPM.setText(String.valueOf(((IdlRegPar)packet).idling_rpm));
-			rpmSensitivity.setText(String.valueOf(((IdlRegPar)packet).MINEFR));
+			ifac1.setText(String.format("%.2f",((IdlRegPar)packet).ifac1));
+			ifac2.setText(String.format("%.2f",((IdlRegPar)packet).ifac2));
+			minimalAngle.setText(String.format("%.2f",((IdlRegPar)packet).min_angle));
+			maximalAngle.setText(String.format("%.2f",((IdlRegPar)packet).max_angle));
+			targetRPM.setText(String.format("%d",((IdlRegPar)packet).idling_rpm));
+			rpmSensitivity.setText(String.format("%d",((IdlRegPar)packet).MINEFR));
 			useIdleReg.setChecked(((IdlRegPar)packet).idl_regul != 0);
 		}
 	}
@@ -68,6 +68,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {
+		if (packet == null) return null;
 		packet.ifac1 = Float.valueOf(ifac1.getText().toString());
 		packet.ifac2 = Float.valueOf(ifac2.getText().toString());
 		packet.min_angle = Float.valueOf(minimalAngle.getText().toString());

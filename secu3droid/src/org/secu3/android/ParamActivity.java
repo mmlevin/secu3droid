@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.secu3.android.api.io.*;
+import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.fragments.*;
 
@@ -26,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ParamActivity extends FragmentActivity{
-	public static final String LOG_TAG = "Param Activity";	
+	public static final String LOG_TAG = "ParamActivity";	
 	
 	StarterFragment starterParPage = null;
 	AnglesFragment anglesParPage = null;
@@ -45,6 +46,8 @@ public class ParamActivity extends FragmentActivity{
 	TextView textView = null;
 	ViewPager pager = null;
     ParamPagerAdapter awesomeAdapter = null;
+    
+	private boolean isOnline = false;
 	
     private boolean isValid() {
     	return (starterParPage.getData() != null) &&
@@ -63,27 +66,43 @@ public class ParamActivity extends FragmentActivity{
     private void readParams() {
     	progressBar.setIndeterminate(true);
     	progressBar.setVisibility(ProgressBar.VISIBLE);
-    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_READ_PARAMS,Uri.EMPTY,this,Secu3Service.class));
+    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
+    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
     }
     
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
-	@Override
-	   public void onReceive(Context context, Intent intent) 
-	   {    
-	       String action = intent.getAction();
-	       Log.d(getString(R.string.app_name), action);
-	       if(action.equalsIgnoreCase(Secu3Service.SECU3_SERVICE_STATUS_ONLINE)) {
-	    	   updateStatus(intent);
-	       } else {
-	    	   updateData(intent);	   
-	       }	    
-	   }
+		public IntentFilter intentFilter = null;
+		
+		public ReceiveMessages() {
+			intentFilter = new IntentFilter();
+			intentFilter.addAction(Secu3Dat.RECEIVE_STARTER_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_ANGLES_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_IDLREG_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_FNNAME_DAT);
+			intentFilter.addAction(Secu3Dat.RECEIVE_FUNSET_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_TEMPER_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_CARBUR_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_ADCCOR_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_CKPS_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_MISCEL_PAR);
+			intentFilter.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
+			intentFilter.addAction(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS);
+			intentFilter.addAction(Secu3Dat.RECEIVE_OP_COMP_NC);
+		}
+		
+		@Override
+		public void onReceive(Context context, Intent intent) 
+		{    
+			String action = intent.getAction();
+			Log.d(LOG_TAG, action);
+			update(intent);	   	    
+		}
 	}
 	
 	private class ParamPagerAdapter extends FragmentPagerAdapter{
-		List<Fragment> fragments = null;
-		String titles[];
+		private List<Fragment> fragments = null;
+		private String titles[];
 		
 		public ParamPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
 			super(fm);
@@ -112,7 +131,10 @@ public class ParamActivity extends FragmentActivity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);								
+		super.onCreate(savedInstanceState);
+		Log.d(LOG_TAG, "onCreate");
+		
+		setContentView(R.layout.activity_param);
 		
 		pages.add(starterParPage = new StarterFragment());
 		pages.add(anglesParPage = new AnglesFragment());
@@ -125,7 +147,6 @@ public class ParamActivity extends FragmentActivity{
 		pages.add(miscelParPage = new MiscelFragment());
 			
 		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
-		setContentView(R.layout.activity_param);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
 		readParams();
 				
@@ -137,7 +158,6 @@ public class ParamActivity extends FragmentActivity{
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_param, menu);
 		return true;
 	}
@@ -181,112 +201,100 @@ public class ParamActivity extends FragmentActivity{
 
 	@Override
 	protected void onPause() {
+		super.onPause();		
 		try {
 			unregisterReceiver(receiver);
 		} catch (Exception e) {
 			
-		}
-		finally {
-			super.onPause();
-		}
+		}		
 	}
 		
 	@Override
 	protected void onResume() {
+		super.onResume();
+		
+		Log.d(LOG_TAG, "onResume");
+		
+		isOnline = false;
+		
 		try {
-			IntentFilter infil = new IntentFilter();
-			infil.addAction(Secu3Dat.RECEIVE_STARTER_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_ANGLES_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_IDLREG_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_FNNAME_DAT);
-			infil.addAction(Secu3Dat.RECEIVE_FUNSET_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_TEMPER_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_CARBUR_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_ADCCOR_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_CKPS_PAR);
-			infil.addAction(Secu3Dat.RECEIVE_MISCEL_PAR);
-			infil.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
-			infil.addAction(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS);
-			infil.addAction(Secu3Dat.RECEIVE_OP_COMP_NC);
-			registerReceiver(receiver, infil);
+			registerReceiver(receiver, receiver.intentFilter);
 			
 		} catch (Exception e) {
-		}
-		finally {
-			super.onResume();
 		}		
 	}	
 	
-	void updateData (Intent intent) {
-		String action = intent.getAction();
-		if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_STARTER_PAR)) {
+	void update (Intent intent) {
+		if (Secu3Service.SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
+			boolean isOnline = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false);
+			if (isOnline && !this.isOnline) {
+				this.isOnline = true;
+				readParams();
+			}
+			textViewStatus.setText(isOnline?"Online":"Offline");
+		} else if (Secu3Dat.RECEIVE_STARTER_PAR.equals(intent.getAction())) {
 			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());
 			StarterFragment page = starterParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_ANGLES_PAR)) {
+		} else if (Secu3Dat.RECEIVE_ANGLES_PAR.equals(intent.getAction())) {
 			AnglesPar packet = intent.getParcelableExtra(AnglesPar.class.getCanonicalName());
 			AnglesFragment page = anglesParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_IDLREG_PAR)) {
+		} else if (Secu3Dat.RECEIVE_IDLREG_PAR.equals(intent.getAction())) {
 			IdlRegPar packet = intent.getParcelableExtra(IdlRegPar.class.getCanonicalName());
 			IdlRegFragment page = idlRegParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_FNNAME_DAT)) {
+		} else if (Secu3Dat.RECEIVE_FNNAME_DAT.equals(intent.getAction())) {
 			FnNameDat packet = intent.getParcelableExtra(FnNameDat.class.getCanonicalName());
 			FunsetFragment page = funsetParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		}else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_FUNSET_PAR)) {
+		}else if (Secu3Dat.RECEIVE_FUNSET_PAR.equals(intent.getAction())) {
 			FunSetPar packet = intent.getParcelableExtra(FunSetPar.class.getCanonicalName());
 			FunsetFragment page = funsetParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_TEMPER_PAR)) {
+		} else if (Secu3Dat.RECEIVE_TEMPER_PAR.equals(intent.getAction())) {
 			TemperPar packet = intent.getParcelableExtra(TemperPar.class.getCanonicalName());
 			TemperFragment page = temperParPage;
 			page.setData(packet);			
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_CARBUR_PAR)) {
+		} else if (Secu3Dat.RECEIVE_CARBUR_PAR.equals(intent.getAction())) {
 			CarburPar packet = intent.getParcelableExtra(CarburPar.class.getCanonicalName());
 			CarburFragment page = carburParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_ADCCOR_PAR)) {
+		} else if (Secu3Dat.RECEIVE_ADCCOR_PAR.equals(intent.getAction())) {
 			ADCCorPar packet = intent.getParcelableExtra(ADCCorPar.class.getCanonicalName());
 			ADCCorFragment page = adcCorParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_CKPS_PAR)) {
+		} else if (Secu3Dat.RECEIVE_CKPS_PAR.equals(intent.getAction())) {
 			CKPSPar packet = intent.getParcelableExtra(CKPSPar.class.getCanonicalName());
 			CKPSFragment page = ckpsParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Dat.RECEIVE_MISCEL_PAR)) {
+		} else if (Secu3Dat.RECEIVE_MISCEL_PAR.equals(intent.getAction())) {
 			MiscelPar packet = intent.getParcelableExtra(MiscelPar.class.getCanonicalName());
 			MiscelFragment page = miscelParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (action.equalsIgnoreCase(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS)) {
+		} else if (Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_TOTAL,0);
 			if (current == total) progressBar.setVisibility(ProgressBar.GONE);
 			progressBar.setIndeterminate(current==0);
 			progressBar.setMax(total);
 			progressBar.setProgress(current);
-		} else if (action.equals(Secu3Dat.RECEIVE_OP_COMP_NC)) {
+		} else if (Secu3Dat.RECEIVE_OP_COMP_NC.equals(intent.getAction())) {
 			OPCompNc packet = intent.getParcelableExtra(OPCompNc.class.getCanonicalName());
 			if ((packet != null) && (packet.opcode == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE)) {
 				progressBar.setVisibility(ProgressBar.GONE);				
 				Toast.makeText(this, String.format("Params saved: error code %d", packet.opdata), Toast.LENGTH_LONG).show();
 			}
 		}
-	}
-	
-	void updateStatus (Intent intent) {
-		String s = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false)?"Online":"Offline";
-		textViewStatus.setText(s);
 	}
 }

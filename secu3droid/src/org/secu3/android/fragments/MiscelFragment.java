@@ -62,11 +62,11 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 	public void updateData() {
 		if (packet != null) {			
 			baudrate.setSelection(Secu3Dat.indexOf (Secu3Dat.BAUD_RATE_INDEX,((MiscelPar)packet).baud_rate_index));			
-			period.setText(String.valueOf(((MiscelPar)packet).period_ms));
+			period.setText(String.format("%d",((MiscelPar)packet).period_ms));
 			enableIgnitionCutoff.setChecked(((MiscelPar)packet).ign_cutoff != 0);
-			ignitionCutoffRPM.setText(String.valueOf(((MiscelPar)packet).ign_cutoff_thrd));
-			hallOutputStart.setText(String.valueOf(((MiscelPar)packet).hop_start_cogs));
-			hallOutputDelay.setText(String.valueOf(((MiscelPar)packet).hop_durat_cogs));
+			ignitionCutoffRPM.setText(String.format("%d",((MiscelPar)packet).ign_cutoff_thrd));
+			hallOutputStart.setText(String.format("%d",((MiscelPar)packet).hop_start_cogs));
+			hallOutputDelay.setText(String.format("%d",((MiscelPar)packet).hop_durat_cogs));
 		}
 	}
 
@@ -77,6 +77,7 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public Secu3Dat getData() {
+		if (packet == null) return null;
 		packet.baud_rate = baudrate.getSelectedItemPosition();
 		packet.period_ms = Integer.valueOf(period.getText().toString());
 		packet.ign_cutoff = enableIgnitionCutoff.isChecked()?1:0;

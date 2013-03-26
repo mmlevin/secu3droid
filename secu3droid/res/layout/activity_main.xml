@@ -31,4 +31,13 @@
         android:onClick="onClick"
         android:text="Show raw data" />
 
+    <TextView
+        android:id="@+id/textFWInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/anglesZeroAngleCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearance" />
+
 </RelativeLayout>

@@ -47,8 +47,8 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {		
-			fanOn.setText(String.valueOf(((TemperPar)packet).vent_on));
-			fanOff.setText(String.valueOf(((TemperPar)packet).vent_off));
+			fanOn.setText(String.format("%.2f",((TemperPar)packet).vent_on));
+			fanOff.setText(String.format("%.2f",((TemperPar)packet).vent_off));
 			useTempSensor.setChecked(((TemperPar)packet).tmp_use != 0);
 			usePWM.setChecked(((TemperPar)packet).vent_pwm != 0);
 			useTable.setChecked(((TemperPar)packet).cts_use_map != 0);
@@ -62,6 +62,7 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {
+		if (packet == null) return null;
 		packet.vent_on = Float.valueOf(fanOn.getText().toString());
 		packet.vent_off = Float.valueOf(fanOff.getText().toString());
 		packet.tmp_use = useTempSensor.isChecked()?1:0;

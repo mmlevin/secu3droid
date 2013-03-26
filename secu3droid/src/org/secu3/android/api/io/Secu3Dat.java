@@ -36,7 +36,7 @@ public class Secu3Dat implements Parcelable {
 	 public final static String RECEIVE_KNOCK_PAR	  	= "org.secu3.android.intent.action.RECEIVE_KNOCK_PAR";
 	 public final static String RECEIVE_CE_SAVED_ERR 	= "org.secu3.android.intent.action.RECEIVE_CE_SAVED_ERR";
 	 public final static String RECEIVE_FWINFO_DAT 		= "org.secu3.android.intent.action.RECEIVE_FWINFO_DAT";
-	 public final static String RECEIVE_MISCEL_PAR 		= "org.secu3.android.intent.action.RECEIVE_MISKEL_PAR";
+	 public final static String RECEIVE_MISCEL_PAR 		= "org.secu3.android.intent.action.RECEIVE_MISCEL_PAR";
 	 public final static String RECEIVE_EDITAB_PAR 		= "org.secu3.android.intent.action.RECEIVE_EDITTAB_PAR";
 	 public final static String RECEIVE_ATTTAB_PAR 		= "org.secu3.android.intent.action.RECEIVE_ATTTAB_PAR";
 	 public final static String RECEIVE_DBGVAR_DAT 		= "org.secu3.android.intent.action.RECEIVE_DBGVAR_DAT";

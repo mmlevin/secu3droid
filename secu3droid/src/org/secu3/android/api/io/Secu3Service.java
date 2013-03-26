@@ -25,18 +25,15 @@ public class Secu3Service extends Service {
 	public static final String PREF_CONNECTION_RETRIES = "connectionRetries";
 	public static final String PREF_ABOUT = "about";
 	
-	public static final String ACTION_SECU3_SERVICE_START = "org.secu3.android.intent.action.SECU3_SERVICE_START";
+	public static final String ACTION_SECU3_SERVICE_START = "org.secu3.android.intent.action.SECU3_SERVICE_START";	
 	public static final String ACTION_SECU3_SERVICE_STOP = "org.secu3.android.intent.action.SECU3_SERVICE_STOP";
-	public static final String ACTION_SECU3_SERVICE_READ_PARAMS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_PARAMS";
+	public static final String ACTION_SECU3_SERVICE_SET_TASK = "org.secu3.android.intent.action.SECU3_SERVICE_SET_TASK";
+	public static final String ACTION_SECU3_SERVICE_SET_TASK_PARAM = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SET_TASK_PARAM";
+	
 	public static final String RECEIVE_SECU3_SERVICE_PROGRESS = "org.secu3.android.intent.action.SECU3_SERVICE_PROGRESS";
 	public static final String SECU3_SERVICE_PROGRESS_CURRENT = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_CURRENT";
 	public static final String SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";
-	public static final String ACTION_SECU3_SERVICE_READ_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_ERRORS";
-	public static final String ACTION_SECU3_SERVICE_READ_SAVED_ERRORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SAVED_ERRORS";
 	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";
-	public static final String ACTION_SECU3_SERVICE_READ_SENSORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_SENSORS";
-	public static final String ACTION_SECU3_SERVICE_READ_RAW_SENSORS = "org.secu3.android.intent.action.SECU3_SERVICE_READ_RAW_SENSORS";
-	public static final String ACTION_SECU3_SERVICE_READ_FW_INFO = "org.secu3.android.intent.action.SECU3_SERVICE_READ_FW_INFO";
 	public static final String SECU3_SERVICE_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_PACKET";
 	public static final String SECU3_SERVICE_STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
 	public static final String SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
@@ -85,39 +82,14 @@ public class Secu3Service extends Service {
 			} else {
 				toast.setText(this.getString(R.string.msg_service_already_started));
 				toast.show();				
-				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SENSORS);
 				sendBroadcast(intent);
 			}
 		} else if (ACTION_SECU3_SERVICE_STOP.equals(intent.getAction())){
 			stopSelf();
-		} else if (ACTION_SECU3_SERVICE_READ_PARAMS.equals(intent.getAction())) {
+		} else if (ACTION_SECU3_SERVICE_SET_TASK.equals(intent.getAction())) {
+			SECU3_TASK task = SECU3_TASK.values()[intent.getIntExtra(ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_NONE.ordinal())];
 			if (secu3Manager != null) {
-				secu3Manager.setTask(SECU3_TASK.SECU3_READ_PARAMS);
-				sendBroadcast(intent);
-			}
-		} else if (ACTION_SECU3_SERVICE_READ_ERRORS.equals(intent.getAction())) {
-			if (secu3Manager != null) {
-				secu3Manager.setTask(SECU3_TASK.SECU3_READ_ERRORS);
-				sendBroadcast(intent);
-			}
-		} else if (ACTION_SECU3_SERVICE_READ_SAVED_ERRORS.equals(intent.getAction())) {
-			if (secu3Manager != null) {
-				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SAVED_ERRORS);
-				sendBroadcast(intent);
-			}
-		} else if (ACTION_SECU3_SERVICE_READ_SENSORS.equals(intent.getAction())) {
-			if (secu3Manager != null) {
-				secu3Manager.setTask(SECU3_TASK.SECU3_READ_SENSORS);
-				sendBroadcast(intent);
-			}
-		} else if (ACTION_SECU3_SERVICE_READ_RAW_SENSORS.equals(intent.getAction())) {
-			if (secu3Manager != null) {
-				secu3Manager.setTask(SECU3_TASK.SECU3_RAW_SENSORS);
-				sendBroadcast(intent);
-			}
-		} else if (ACTION_SECU3_SERVICE_READ_FW_INFO.equals(intent.getAction())) {
-			if (secu3Manager != null) {
-				secu3Manager.setTask(SECU3_TASK.SECU3_READ_FW_INFO);
+				secu3Manager.setTask(task);
 				sendBroadcast(intent);
 			}
 		} else if (ACTION_SECU3_SERVICE_SEND_PACKET.equals(intent.getAction())) {

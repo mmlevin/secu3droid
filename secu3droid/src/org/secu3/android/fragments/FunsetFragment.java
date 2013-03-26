@@ -57,10 +57,10 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {				
-			lowerPressure.setText (String.valueOf(packet.map_lower_pressure));
-			upperPressure.setText (String.valueOf(packet.map_upper_pressure));
-			sensorOffset.setText (String.valueOf(packet.map_curve_offset));
-			sensorGradient.setText (String.valueOf(packet.map_curve_gradient));
+			lowerPressure.setText (String.format("%.2f",packet.map_lower_pressure));
+			upperPressure.setText (String.format("%.2f",packet.map_upper_pressure));
+			sensorOffset.setText (String.format("%.2f",packet.map_curve_offset));
+			sensorGradient.setText (String.format("%.2f",packet.map_curve_gradient));
 			gasolineTable.setSelection(packet.fn_benzin);
 			gasTable.setSelection(packet.fn_gas);
 		}
@@ -94,6 +94,7 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {
+		if (packet == null) return null;
 		packet.map_lower_pressure = Float.valueOf(lowerPressure.getText().toString());
 		packet.map_upper_pressure = Float.valueOf(upperPressure.getText().toString());
 		packet.map_curve_offset = Float.valueOf(sensorOffset.getText().toString());

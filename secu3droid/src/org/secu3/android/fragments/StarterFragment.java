@@ -39,8 +39,8 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	@Override
 	public void updateData() {
 		if (packet != null) {
-			starterRPM.setText(String.valueOf(((StartrPar)packet).starter_off));
-			starterMap.setText(String.valueOf(((StartrPar)packet).smap_abandon));
+			starterRPM.setText(String.format("%d",((StartrPar)packet).starter_off));
+			starterMap.setText(String.format("%d",((StartrPar)packet).smap_abandon));
 		}
 	}
 	
@@ -50,7 +50,8 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	}
 	
 	@Override
-	public Secu3Dat getData() {				
+	public Secu3Dat getData() {
+		if (packet == null) return null;
 		packet.starter_off = Integer.valueOf(starterRPM.getText().toString());
 		packet.smap_abandon = Integer.valueOf(starterMap.getText().toString());
 		return packet;

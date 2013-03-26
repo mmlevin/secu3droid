@@ -2,6 +2,7 @@ package org.secu3.android;
 
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.CEErrCodes;
+import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.io.Secu3Dat.CESavedErr;
 
@@ -19,38 +20,47 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 public class ErrorsActivity extends Activity {
-	TextView textViewStatus = null;
+	public final String LOG_TAG = "ErrorsActivity";
 	
-	CheckBox CKPSCheckBox;
-	CheckBox EepromCrcError;
-	CheckBox FirmwareCrcError;
-	CheckBox DetonationProcessorError;
-	CheckBox DetonationDetectedError;
-	CheckBox PressureSensorError;
-	CheckBox TemperatureSensorError;
-	CheckBox VoltageError;
-	CheckBox DwellControlError;
-	CheckBox PhaseSensorError;
-	CheckBox RealtimeError;
-	CheckBox ReadingInertion;
+	boolean isOnline = false;
+	
+	TextView textViewStatus = null;	
+	CheckBox CKPSCheckBox = null;
+	CheckBox EepromCrcError = null;
+	CheckBox FirmwareCrcError = null;
+	CheckBox DetonationProcessorError = null;
+	CheckBox DetonationDetectedError = null;
+	CheckBox PressureSensorError = null;
+	CheckBox TemperatureSensorError = null;
+	CheckBox VoltageError = null;
+	CheckBox DwellControlError = null;
+	CheckBox PhaseSensorError = null;
+	CheckBox RealtimeError = null;
+	CheckBox ReadingInertion = null;
 
-	void setRealtime (boolean realtime) {
-		startService(new Intent (realtime?Secu3Service.ACTION_SECU3_SERVICE_READ_ERRORS:Secu3Service.ACTION_SECU3_SERVICE_READ_SAVED_ERRORS,Uri.EMPTY,this,Secu3Service.class));		
+	private void setRealtime (boolean realtime) {
+		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SAVED_ERRORS;
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));		
 	}
 	
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
-	@Override
-	   public void onReceive(Context context, Intent intent) 
-	   {    
-	       String action = intent.getAction();
-	       Log.d(getString(R.string.app_name), action);
-	       if(action.equalsIgnoreCase(Secu3Service.SECU3_SERVICE_STATUS_ONLINE)) {
-	    	   updateStatus(intent);
-	       } else {
-	    	   updateData(intent);
-	       }
-	   }
+		public IntentFilter intentFilter = null;
+		
+		public ReceiveMessages() {
+			intentFilter = new IntentFilter();
+			intentFilter.addAction(Secu3Dat.RECEIVE_CE_ERR_CODES);
+			intentFilter.addAction(Secu3Dat.RECEIVE_CE_SAVED_ERR);
+			intentFilter.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
+		}
+		
+		@Override
+		public void onReceive(Context context, Intent intent) 
+		{    
+			String action = intent.getAction();
+			Log.d(LOG_TAG, action);
+			update(intent);
+		}
 	}
 	
 	ReceiveMessages receiver;
@@ -58,6 +68,9 @@ public class ErrorsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d(LOG_TAG, "onCreate");
+		
 		setContentView(R.layout.activity_errors);
 		
 		receiver = new ReceiveMessages();		
@@ -89,38 +102,37 @@ public class ErrorsActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_errors, menu);
 		return true;
 	}
 	
 	@Override
 	protected void onResume() {
+		super.onResume();
+		
+		Log.d(LOG_TAG, "onResume");
+		
+		isOnline = false;
+		
 		try {
-			IntentFilter infil = new IntentFilter();
-			infil.addAction(Secu3Dat.RECEIVE_CE_ERR_CODES);
-			infil.addAction(Secu3Dat.RECEIVE_CE_SAVED_ERR);
-			infil.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
-			registerReceiver(receiver, infil);
-			
+			registerReceiver(receiver, receiver.intentFilter);			
 		} catch (Exception e) {
 		}
 		finally {
-			setRealtime(RealtimeError.isChecked());
-			super.onResume();
+			
 		}
 	}
 	
 	@Override
 	protected void onPause() {
+		super.onPause();
+		
+		Log.d(LOG_TAG, "onPause");
+		
 		try {
 			unregisterReceiver(receiver);
 		}
-		catch (Exception e) {
-			
-		}
-		finally {
-			super.onPause();
+		catch (Exception e) {		
 		}
 	}
 	
@@ -137,20 +149,20 @@ public class ErrorsActivity extends Activity {
 		PhaseSensorError.setChecked(((flags >> Secu3Dat.ECUERROR_CAMS_MALFUNCTION) & 1)  != 0);		
 	}
 	
-	void updateData (Intent intent) {
-		String action = intent.getAction();		
-		if (Secu3Dat.RECEIVE_CE_SAVED_ERR.equals(action)) {
+	void update (Intent intent) {		
+		if (Secu3Dat.RECEIVE_CE_SAVED_ERR.equals(intent.getAction())) {
 			CESavedErr packet = intent.getParcelableExtra(CESavedErr.class.getCanonicalName());
 			updateFlags(packet.flags);		
-		} else if (Secu3Dat.RECEIVE_CE_ERR_CODES.equals(action)) {
+		} else if (Secu3Dat.RECEIVE_CE_ERR_CODES.equals(intent.getAction())) {
 			CEErrCodes packet = intent.getParcelableExtra(CEErrCodes.class.getCanonicalName());
 			updateFlags(packet.flags);									
+		} else if (Secu3Service.SECU3_SERVICE_STATUS.equals(intent.getAction())) {
+			boolean isOnline = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false);
+			if (isOnline && !this.isOnline) {
+				this.isOnline = true;
+				setRealtime(RealtimeError.isChecked());
+			}			
+			textViewStatus.setText(isOnline?"Online":"Offline");
 		}
-	}
-	
-	void updateStatus(Intent intent) {
-		String s = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false)?"Online":"Offline";
-		textViewStatus.setText(s);
-	}
-	
+	}		
 }

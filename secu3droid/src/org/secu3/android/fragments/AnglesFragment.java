@@ -49,12 +49,12 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {			
-			minimalAngle.setText(String.valueOf(((AnglesPar)packet).min_angle));
-			maximalAngle.setText(String.valueOf(((AnglesPar)packet).max_angle));
-			angleDecrementStep.setText(String.valueOf(((AnglesPar)packet).dec_spead));
-			angleIncrementStep.setText(String.valueOf(((AnglesPar)packet).inc_spead));
+			minimalAngle.setText(String.format("%.2f",((AnglesPar)packet).min_angle));
+			maximalAngle.setText(String.format("%.2f",((AnglesPar)packet).max_angle));
+			angleDecrementStep.setText(String.format("%.2f",((AnglesPar)packet).dec_spead));
+			angleIncrementStep.setText(String.format("%.2f",((AnglesPar)packet).inc_spead));
 			zeroAngle.setChecked(((AnglesPar)packet).zero_adv_ang != 0);
-			currentAngle.setText(String.valueOf(((AnglesPar)packet).angle_corr));
+			currentAngle.setText(String.format("%.2f",((AnglesPar)packet).angle_corr));
 		}
 	}
 	
@@ -64,7 +64,14 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 	}
 
 	@Override
-	public Secu3Dat getData() {
+	public Secu3Dat getData() {	
+		if (packet == null) return null;
+		packet.min_angle = Float.valueOf(minimalAngle.getText().toString());
+		packet.max_angle = Float.valueOf(maximalAngle.getText().toString());
+		packet.dec_spead = Float.valueOf(angleDecrementStep.getText().toString());
+		packet.inc_spead = Float.valueOf(angleIncrementStep.getText().toString());
+		packet.zero_adv_ang = zeroAngle.isChecked()?1:0;
+		packet.angle_corr = Float.valueOf(currentAngle.getText().toString());
 		return packet;
 	}
 }
