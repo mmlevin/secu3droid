@@ -49,6 +49,26 @@
 	    android:ems="10"
 	    android:inputType="number"
 	    android:text="0" />
+
+	<TextView
+	    android:id="@+id/textView3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/starterOffEditText"
+	    android:layout_alignBottom="@+id/starterOffEditText"
+	    android:layout_toRightOf="@+id/starterOffEditText"
+	    android:text="@string/units_rpm"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<TextView
+	    android:id="@+id/textView4"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/starterMapAbandonEditText"
+	    android:layout_alignBottom="@+id/starterMapAbandonEditText"
+	    android:layout_toRightOf="@+id/starterMapAbandonEditText"
+	    android:text="@string/units_rpm"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>
 

@@ -47,6 +47,8 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	String sensorsFormat = "";
+	String sensorsRawFormat = "";
 	ReceiveMessages receiver = null;
 	TextView textViewData = null;
 	TextView textViewStatus = null;
@@ -61,6 +63,8 @@ public class MainActivity extends Activity {
 		Log.d(LOG_TAG, "onCreate");		
 		setContentView(R.layout.activity_main);
 
+		sensorsFormat = getString(R.string.sensors_format);
+		sensorsRawFormat = getString(R.string.sensors_raw_format);
 		textViewData = (TextView)findViewById(R.id.textViewData);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		textFWInfo = (TextView)findViewById(R.id.textFWInfo);
@@ -186,13 +190,7 @@ public class MainActivity extends Activity {
 		} else if (Secu3Dat.RECEIVE_SENSOR_DAT.equals(intent.getAction())) {
 			SensorDat sd = (SensorDat)intent.getParcelableExtra(SensorDat.class.getCanonicalName());
 			if (!checkBox.isChecked() && (sd != null)) {
-				textViewData.setText(String.format(Locale.getDefault(),
-						"RPM: %d min-1\r\nPressure: %.2f kPa\r\n"
-						+ "Voltage: %.2f V\r\nTemperature: %.2f °C\r\n"
-						+ "Angle: %+.2f °\r\nKnock level: %.2f V\r\n"
-						+ "Knock retard: %+.2f °\r\nAir flow: %d\r\n"
-						+ "EPHH valve: %d\r\nCarb sensor: %d\r\n"
-						+ "Gas valve: %d\r\nEPM Valve: %d\r\nCE State: %d",
+				textViewData.setText(String.format(sensorsFormat,
 						sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
 						sd.knock_k, sd.knock_retard, sd.air_flow, sd.ephh_valve,
 						sd.carb, sd.gas, sd.epm_valve, sd.ce_state));
@@ -200,8 +198,7 @@ public class MainActivity extends Activity {
 		} else if (Secu3Dat.RECEIVE_ADCRAW_DAT.equals(intent.getAction())) {
 			ADCRawDat ad = (ADCRawDat)intent.getParcelableExtra(ADCRawDat.class.getCanonicalName());
 			if (checkBox.isChecked() && (ad != null)) {
-				textViewData.setText(String.format(Locale.getDefault(),
-								"MAP Sensor data: %.2fV\r\nVoltage Sensor data: %.2fV\r\nTemperature Sensor data: %.2fV\r\nKnock Sensor data: %.2fV",
+				textViewData.setText(String.format(sensorsRawFormat,
 								ad.map_value, ad.ubat_value, ad.temp_value,
 								ad.knock_value));
 			}			

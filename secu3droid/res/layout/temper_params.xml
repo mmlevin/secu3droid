@@ -78,6 +78,25 @@
 	        android:layout_below="@+id/temperUsePWMCheckBox"
 	        android:text="Use temperature sensor table"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBottom="@+id/temperFanOnEditText"
+	        android:layout_toRightOf="@+id/temperFanOnEditText"
+	        android:text="@string/units_degrees_celcius"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/temperFanOffEditText"
+	        android:layout_alignBottom="@+id/temperFanOffEditText"
+	        android:layout_toRightOf="@+id/temperFanOffEditText"
+	        android:text="@string/units_degrees_celcius"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>
 

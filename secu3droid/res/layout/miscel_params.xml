@@ -115,6 +115,26 @@
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="0" />
+
+	    <TextView
+	        android:id="@+id/textView6"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/miscelPeriodEditText"
+	        android:layout_alignBottom="@+id/miscelPeriodEditText"
+	        android:layout_toRightOf="@+id/miscelPeriodEditText"
+	        android:text="@string/units_ms"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView7"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/miscelIgnitionCutoffRPMEditText"
+	        android:layout_alignBottom="@+id/miscelIgnitionCutoffRPMEditText"
+	        android:layout_toRightOf="@+id/miscelIgnitionCutoffRPMEditText"
+	        android:text="@string/units_rpm"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>
 	

@@ -137,6 +137,46 @@
 	        android:layout_below="@+id/idlRegRPMSensitivityEditText"
 	        android:text="Use idle regulator"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView5"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/idlRegMinimalAngleEditText"
+	        android:layout_alignBottom="@+id/idlRegMinimalAngleEditText"
+	        android:layout_toRightOf="@+id/idlRegMinimalAngleEditText"
+	        android:text="@string/units_degree"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView6"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/idlRegMaximalAngleEditText"
+	        android:layout_alignBottom="@+id/idlRegMaximalAngleEditText"
+	        android:layout_toRightOf="@+id/idlRegMaximalAngleEditText"
+	        android:text="@string/units_degree"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView7"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/idlRegTargetRPMEditText"
+	        android:layout_alignBottom="@+id/idlRegTargetRPMEditText"
+	        android:layout_toRightOf="@+id/idlRegTargetRPMEditText"
+	        android:text="@string/units_rpm"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/textView8"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/idlRegRPMSensitivityEditText"
+	        android:layout_alignBottom="@+id/idlRegRPMSensitivityEditText"
+	        android:layout_toRightOf="@+id/idlRegRPMSensitivityEditText"
+	        android:text="@string/units_rpm"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>
 	
