@@ -4,5 +4,7 @@
     
     <string name="pref_connection_retries_key">connectionRetries</string>
     <string name="pref_bluetooth_device_key">bluetoothDevice</string>
+    <string name="pref_upload_immediately">uploadImmediately</string>
     <string name="pref_about_key">about</string>
+    <string name="defaultConnectionRetries">5</string>    
 </resources>

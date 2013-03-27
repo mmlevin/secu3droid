@@ -10,6 +10,11 @@
 		android:defaultValue="@string/defaultConnectionRetries"
 		android:inputType="numberDecimal"
 		android:summary="@string/pref_connection_retries_summary" />
+	<CheckBoxPreference
+	    android:key="@string/pref_upload_immediately"
+	    android:title="@string/pref_upload_immediately_title"
+	    android:defaultValue="false"
+	    android:summary="@string/pref_upload_immediately_summary"/>	    
 	<Preference
 		android:key="@string/pref_about_key"
 		android:persistent="false"

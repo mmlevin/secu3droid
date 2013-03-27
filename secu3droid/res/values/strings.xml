@@ -15,6 +15,8 @@
     <string name="pref_connection_retries_summary">Number of attempts before exiting: %s</string>       
     <string name="pref_about_title">About</string>
     <string name="pref_about_summary"></string>    
+    <string name="pref_upload_immediately_title">Upload changes immediately</string>
+    <string name="pref_upload_immediately_summary">When Secu-3 params changed</string>
     
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
     <string name="service_closed_because_connection_problem_notification">"Reason: %s"</string>
@@ -24,7 +26,7 @@
         <item quantity="other">Will retry %d more times before closing</item>
     </plurals>
 
-    <string name="defaultConnectionRetries">5</string>
+
     <string name="foreground_service_started_notification_title">Secu3Droid</string>
     <string name="foreground_service_started_notification">Secu3Droid service started</string>
 	<string name="msg_bluetooth_unsupported">Bluetooth is not supported</string>
@@ -52,15 +54,9 @@
     <string name="about_version">Secu3Droid version</string>
     <string name="about_copyright_1">Copyright © 2013 Maksim Levin</string>
     <string name="about_copyright_2">Copyright © 2013 Secu3Droid Project</string>
-    <string name="about_app_desc">Secu3Droid is an application 
-    	for managing Secu-3 ugnition system.
-    </string>
-    <string name="about_license">It is open source software 
-    	distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.
-    </string>
-    <string name="about_sources">The source code is available from Git repository on the project website: 
-		https://github.com/mmlevin/secu3droid
-    </string>
+    <string name="about_app_desc">Secu3Droid is an application for managing Secu-3 ugnition system.</string>
+    <string name="about_license">It is open source software distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
+    <string name="about_sources">The source code is available from Git repository on the project website: https://github.com/mmlevin/secu3droid</string>
     <string-array name="fragment_titles">
         <item >Starter</item>
         <item >Angles</item>
@@ -80,7 +76,6 @@
 	<string name="units_volts">V</string>
 	<string name="units_volts_per_kpa">V/kPa</string>
 	<string name="units_ms">ms</string>
-	<string name="units_degrees_celcius">°C</string>
-    
+	<string name="units_degrees_celcius">°C</string>    
 
 </resources>
