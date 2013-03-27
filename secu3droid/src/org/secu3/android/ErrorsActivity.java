@@ -24,7 +24,7 @@ public class ErrorsActivity extends Activity {
 	
 	boolean isOnline = false;
 	
-	TextView textViewStatus = null;	
+	TextView errorsTextViewStatus = null;	
 	CheckBox CKPSCheckBox = null;
 	CheckBox EepromCrcError = null;
 	CheckBox FirmwareCrcError = null;
@@ -75,7 +75,7 @@ public class ErrorsActivity extends Activity {
 		
 		receiver = new ReceiveMessages();		
 		
-		textViewStatus = (TextView)findViewById(R.id.errorsTextViewStatus);
+		errorsTextViewStatus = (TextView)findViewById(R.id.errorsTextViewStatus);
 		CKPSCheckBox = (CheckBox)findViewById(R.id.errorsCKPSCheckBox);
 		EepromCrcError = (CheckBox)findViewById(R.id.errorsEepromCrcCheckBox);
 		FirmwareCrcError = (CheckBox)findViewById(R.id.errorsFirmwareCrcCheckBox);
@@ -156,13 +156,13 @@ public class ErrorsActivity extends Activity {
 		} else if (Secu3Dat.RECEIVE_CE_ERR_CODES.equals(intent.getAction())) {
 			CEErrCodes packet = intent.getParcelableExtra(CEErrCodes.class.getCanonicalName());
 			updateFlags(packet.flags);									
-		} else if (Secu3Service.SECU3_SERVICE_STATUS.equals(intent.getAction())) {
+		} else if (Secu3Service.SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;
 				setRealtime(RealtimeError.isChecked());
 			}			
-			textViewStatus.setText(isOnline?"Online":"Offline");
+			errorsTextViewStatus.setText(isOnline?"Online":"Offline");
 		}
 	}		
 }
