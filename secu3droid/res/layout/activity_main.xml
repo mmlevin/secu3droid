@@ -12,18 +12,8 @@
         android:layout_centerHorizontal="true"
         android:text="@string/status_offline" />
 
-    <TextView
-        android:id="@+id/textViewData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:maxLines="20"
-        android:text="@string/data_will_appear_after_connect"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <CheckBox
-        android:id="@+id/anglesZeroAngleCheckBox"
+        android:id="@+id/showRawDataCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/mainTextViewStatus"
@@ -35,9 +25,33 @@
         android:id="@+id/textFWInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/anglesZeroAngleCheckBox"
+        android:layout_above="@+id/showRawDataCheckBox"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearance" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textFWInfo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textViewData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="20"
+                android:text="@string/data_will_appear_after_connect"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

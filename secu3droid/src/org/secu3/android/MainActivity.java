@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 		textViewData = (TextView)findViewById(R.id.textViewData);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		textFWInfo = (TextView)findViewById(R.id.textFWInfo);
-		checkBox = (CheckBox)findViewById(R.id.anglesZeroAngleCheckBox);		
+		checkBox = (CheckBox)findViewById(R.id.showRawDataCheckBox);		
 		
 		receiver = new ReceiveMessages();		
 		

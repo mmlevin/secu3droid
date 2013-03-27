@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -115,6 +116,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         textView.setTextColor(defaultColor);
         textView = (TextView) messageView.findViewById(R.id.about_sources);
         textView.setTextColor(defaultColor);
+        
+        textView = (TextView)messageView.findViewById(R.id.about_version_name);
+        try {
+        	PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        	textView.setText(pInfo.versionName);
+        } catch (Exception e) {        	
+        }
        
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.about_title);
