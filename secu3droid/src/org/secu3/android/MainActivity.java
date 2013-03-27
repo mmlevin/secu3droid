@@ -181,9 +181,9 @@ public class MainActivity extends Activity {
 			String s = isOnline?"Online":"Offline";
 			textViewStatus.setText(s);		
 			if (isOnline && !this.isOnline) {
-				this.isOnline = true;
-				setMode(checkBox.isChecked());			
+				this.isOnline = true;						
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_FW_INFO.ordinal()));
+				setMode(checkBox.isChecked());				
 			}				
 		} else if (Secu3Dat.RECEIVE_SENSOR_DAT.equals(intent.getAction())) {
 			SensorDat sd = (SensorDat)intent.getParcelableExtra(SensorDat.class.getCanonicalName());
