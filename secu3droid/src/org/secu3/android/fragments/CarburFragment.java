@@ -6,10 +6,14 @@ import org.secu3.android.api.io.Secu3Dat.CarburPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 
 public class CarburFragment extends Fragment implements ISecu3Fragment {
@@ -22,8 +26,65 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 	EditText carburOverrunDelay;
 	CheckBox carburSensorInverse;
 	EditText carburEPMValveOnPressure;
+
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			float f = 0;
+			int i = 0;
+			try {
+				f = Float.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+					case R.id.carburOverrunValveDelayEditText:
+						packet.shutoff_delay = f;
+						break;
+					case R.id.carburEPMValveOnPressureEditText:
+						packet.epm_ont = f;
+						break;													
+					}
+				}
+			}
+			try {
+				i = Integer.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+					case R.id.carburOverrunLowThreshholdGasolineEditText:
+						packet.ephh_lot = i; 
+						break;
+					case R.id.carburOverrunHighThreshholdGasolineEditText:
+						packet.ephh_hit = i;
+						break;
+					case R.id.carburOverrunLowThreshholdGasEditText:
+						packet.ephh_lot_g = i; 
+						break;
+					case R.id.carburOverrunHighThreshholdGasEditText:
+						packet.ephh_hit_g = i;
+						break;																										
+					}
+				}
+			}			
+		}	
 	
-	
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}
+		
+	}		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container == null) return null;
@@ -40,7 +101,22 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 		carburEPHHHighThreshholdGas = (EditText)getView().findViewById(R.id.carburOverrunHighThreshholdGasEditText);
 		carburOverrunDelay = (EditText)getView().findViewById(R.id.carburOverrunValveDelayEditText);
 		carburEPMValveOnPressure = (EditText)getView().findViewById(R.id.carburEPMValveOnPressureEditText);
-		carburSensorInverse = (CheckBox)getView().findViewById(R.id.carburSensorInverseCheckBox);		
+		carburSensorInverse = (CheckBox)getView().findViewById(R.id.carburSensorInverseCheckBox);
+		
+		carburEPHHLowThreshholdGasoline.addTextChangedListener(new CustomTextWatcher(carburEPHHLowThreshholdGasoline));
+		carburEPHHHighThreshholdGasoline.addTextChangedListener(new CustomTextWatcher(carburEPHHHighThreshholdGasoline));
+		carburEPHHLowThreshholdGas.addTextChangedListener(new CustomTextWatcher(carburEPHHLowThreshholdGas));
+		carburEPHHHighThreshholdGas.addTextChangedListener(new CustomTextWatcher(carburEPHHHighThreshholdGas));
+		carburOverrunDelay.addTextChangedListener(new CustomTextWatcher(carburOverrunDelay));
+		carburEPMValveOnPressure.addTextChangedListener(new CustomTextWatcher(carburEPMValveOnPressure));
+		
+		carburSensorInverse.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (packet != null) packet.carb_invers = isChecked?1:0;				
+			}
+		});
 	}
 	
 	@Override
@@ -69,14 +145,6 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public Secu3Dat getData() {
-		if (packet == null) return null;
-		packet.ephh_lot = Integer.valueOf(carburEPHHLowThreshholdGasoline.getText().toString()); 
-		packet.ephh_hit = Integer.valueOf(carburEPHHHighThreshholdGasoline.getText().toString());
-		packet.ephh_lot_g = Integer.valueOf(carburEPHHLowThreshholdGas.getText().toString()); 
-		packet.ephh_hit_g = Integer.valueOf(carburEPHHHighThreshholdGas.getText().toString());
-		packet.shutoff_delay = Float.valueOf(carburOverrunDelay.getText().toString());
-		packet.epm_ont = Float.valueOf(carburEPMValveOnPressure.getText().toString());
-		packet.carb_invers = carburSensorInverse.isChecked()?1:0;
 		return packet;
 	}
 }

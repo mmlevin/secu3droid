@@ -126,6 +126,7 @@ public class Secu3Manager {
 			}
 		}		
 		
+		@SuppressWarnings("unused")
 		public boolean isReady() {
 			return ready;
 		}

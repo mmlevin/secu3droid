@@ -6,10 +6,14 @@ import org.secu3.android.api.io.Secu3Dat.CKPSPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
@@ -26,6 +30,51 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 	EditText cogsBeforeTDC;
 	EditText engineCylinders;
 	EditText ignitionPulseDelay;
+	
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			int i = 0;
+			try {
+				i = Integer.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+						case R.id.ckpsCogsNumberEditText:
+							packet.ckps_cogs_num = i;
+							break;
+						case R.id.ckpsMissingCogsNumberEditText:
+							packet.ckps_miss_num = i;
+							break;
+						case R.id.ckpsCogsBeforeTDCEditText:
+							packet.ckps_cogs_btdc = i;
+							break;
+						case R.id.ckpsEngineCylyndersEditText:
+							packet.ckps_engine_cyl = i;
+							break;
+						case R.id.ckpsIgnitionPulseDelayEditText:
+							packet.ckps_ignit_cogs = i;
+							break;
+					}
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}		
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +96,40 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 		cogsBeforeTDC = (EditText)getView().findViewById(R.id.ckpsCogsBeforeTDCEditText);
 		engineCylinders = (EditText)getView().findViewById(R.id.ckpsEngineCylyndersEditText);
 		ignitionPulseDelay = (EditText)getView().findViewById(R.id.ckpsIgnitionPulseDelayEditText);		
+		
+		OnCheckedChangeListener radioListener = new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (packet != null) {
+					if (buttonView == ckpsFallingEdge) {
+						packet.ckps_edge_type = isChecked?0:1;
+					} else if (buttonView == ckpsRaisingEdge) {
+						packet.ckps_edge_type = isChecked?1:0;						
+					} else if (buttonView == refSFallingEdge) {
+						packet.ref_s_edge_type = isChecked?0:1;						
+					} else if (buttonView == refSRaisingEdge) {
+						packet.ref_s_edge_type = isChecked?1:0;
+					}					
+				}				
+			}
+		};		
+		ckpsFallingEdge.setOnCheckedChangeListener(radioListener);
+		ckpsRaisingEdge.setOnCheckedChangeListener(radioListener);
+		refSFallingEdge.setOnCheckedChangeListener(radioListener);
+		refSRaisingEdge.setOnCheckedChangeListener(radioListener);
+		
+		mergeOutputs.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (packet != null) packet.ckps_merge_ign_outs = isChecked?1:0;
+			}
+		});
+		
+		cogsNumber.addTextChangedListener(new CustomTextWatcher(cogsNumber));
+		missingCogsNumber.addTextChangedListener(new CustomTextWatcher(missingCogsNumber));
+		cogsBeforeTDC.addTextChangedListener(new CustomTextWatcher(cogsBeforeTDC));
+		engineCylinders.addTextChangedListener(new CustomTextWatcher(engineCylinders));
+		ignitionPulseDelay.addTextChangedListener(new CustomTextWatcher(ignitionPulseDelay));
 	}
 	
 	@Override
@@ -78,15 +161,6 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {
-		if (packet == null) return null;
-		packet.ckps_edge_type = ckpsFallingEdge.isChecked()?0:1;
-		packet.ref_s_edge_type = refSFallingEdge.isChecked()?0:1;
-		packet.ckps_merge_ign_outs = mergeOutputs.isChecked()?1:0;
-		packet.ckps_cogs_num = Integer.valueOf(cogsNumber.getText().toString());
-		packet.ckps_miss_num = Integer.valueOf(missingCogsNumber.getText().toString());
-		packet.ckps_cogs_btdc = Integer.valueOf(cogsBeforeTDC.getText().toString());;
-		packet.ckps_engine_cyl = Integer.valueOf(engineCylinders.getText().toString());
-		packet.ckps_ignit_cogs = Integer.valueOf(ignitionPulseDelay.getText().toString());
 		return packet;
 	}
 }

@@ -6,10 +6,14 @@ import org.secu3.android.api.io.Secu3Dat.TemperPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 
 public class TemperFragment extends Fragment implements ISecu3Fragment{
@@ -20,6 +24,42 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 	CheckBox useTempSensor;
 	CheckBox usePWM;
 	CheckBox useTable;
+
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			float f = 0;
+			try {
+				f = Float.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+						case R.id.temperFanOnEditText:
+							packet.vent_on = f; 
+							break;
+						case R.id.temperFanOffEditText:
+							packet.vent_off = f;
+							break;
+					}
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}		
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +75,29 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 		fanOff = (EditText)getView().findViewById(R.id.temperFanOffEditText);
 		useTempSensor = (CheckBox)getView().findViewById(R.id.temperUseTempSensorCheckBox);
 		usePWM = (CheckBox)getView().findViewById(R.id.temperUsePWMCheckBox);
-		useTable = (CheckBox)getView().findViewById(R.id.temperUseTableCheckBox);		
+		useTable = (CheckBox)getView().findViewById(R.id.temperUseTableCheckBox);	
+				
+		fanOn.addTextChangedListener(new CustomTextWatcher(fanOn));
+		fanOff.addTextChangedListener(new CustomTextWatcher(fanOff));
+		
+		OnCheckedChangeListener checkedListener = new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (packet != null) {
+					if (buttonView == useTempSensor) {	
+						packet.tmp_use = isChecked?1:0;						
+					} else if (buttonView == usePWM) {	
+						packet.vent_pwm = isChecked?1:0;						
+					} else if (buttonView == useTable) {
+						packet.cts_use_map = isChecked?1:0;
+					}
+				}
+			}
+		};
+		
+		useTempSensor.setOnCheckedChangeListener(checkedListener);
+		usePWM.setOnCheckedChangeListener(checkedListener);
+		useTable.setOnCheckedChangeListener(checkedListener);
 	}
 	
 	@Override
@@ -62,12 +124,6 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {
-		if (packet == null) return null;
-		packet.vent_on = Float.valueOf(fanOn.getText().toString());
-		packet.vent_off = Float.valueOf(fanOff.getText().toString());
-		packet.tmp_use = useTempSensor.isChecked()?1:0;
-		packet.vent_pwm = usePWM.isChecked()?1:0;
-		packet.cts_use_map = useTable.isChecked()?1:0;
 		return packet;
 	}
 }

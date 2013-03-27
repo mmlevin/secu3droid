@@ -6,10 +6,13 @@ import org.secu3.android.api.io.Secu3Dat.AnglesPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 public class AnglesFragment extends Fragment implements ISecu3Fragment{
@@ -21,6 +24,51 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 	EditText angleIncrementStep;
 	CheckBox zeroAngle;
 	EditText currentAngle;
+	
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			float f = 0;
+			try {
+				f = Float.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+						case R.id.anglesMinimalAngleEditText:
+							packet.min_angle = f; 
+							break;
+						case R.id.anglesMaximalAngleEditText:
+							packet.max_angle = f;
+							break;
+						case R.id.anglesDecrementStepEditText:
+							packet.dec_spead = f;
+							break;
+						case R.id.anglesIncrementStepEditText:
+							packet.inc_spead = f;
+							break;
+						case R.id.anglesCorrectionAngleEditText:
+							packet.angle_corr = f;
+							break;
+					}
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}		
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +85,20 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 		angleDecrementStep = (EditText)getView().findViewById(R.id.anglesDecrementStepEditText);
 		angleIncrementStep = (EditText)getView().findViewById(R.id.anglesIncrementStepEditText);
 		zeroAngle = (CheckBox)getView().findViewById(R.id.anglesZeroAngleCheckBox);
-		currentAngle = (EditText)getView().findViewById(R.id.anglesCurrentAngleEditText);		
+		currentAngle = (EditText)getView().findViewById(R.id.anglesCorrectionAngleEditText);		
+		
+		minimalAngle.addTextChangedListener(new CustomTextWatcher(minimalAngle));
+		maximalAngle.addTextChangedListener(new CustomTextWatcher(maximalAngle));
+		angleDecrementStep.addTextChangedListener(new CustomTextWatcher(angleDecrementStep));
+		angleIncrementStep.addTextChangedListener(new CustomTextWatcher(angleIncrementStep));
+		currentAngle.addTextChangedListener(new CustomTextWatcher(currentAngle));
+		
+		zeroAngle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (packet != null) packet.zero_adv_ang = isChecked?1:0;			
+			}
+		});
 	}
 
 	@Override
@@ -65,13 +126,6 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {	
-		if (packet == null) return null;
-		packet.min_angle = Float.valueOf(minimalAngle.getText().toString());
-		packet.max_angle = Float.valueOf(maximalAngle.getText().toString());
-		packet.dec_spead = Float.valueOf(angleDecrementStep.getText().toString());
-		packet.inc_spead = Float.valueOf(angleIncrementStep.getText().toString());
-		packet.zero_adv_ang = zeroAngle.isChecked()?1:0;
-		packet.angle_corr = Float.valueOf(currentAngle.getText().toString());
 		return packet;
 	}
 }

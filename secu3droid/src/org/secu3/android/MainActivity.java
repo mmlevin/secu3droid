@@ -1,7 +1,5 @@
 package org.secu3.android;
 
-import java.util.Locale;
-
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ADCRawDat;
 import org.secu3.android.api.io.Secu3Dat.FWInfoDat;

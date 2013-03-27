@@ -6,6 +6,8 @@ import org.secu3.android.api.io.Secu3Dat.StartrPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,42 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	EditText starterRPM;
 	EditText starterMap;
 	
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			int i = 0;
+			try {
+				i = Integer.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+						case R.id.starterOffEditText:
+							packet.starter_off = i;
+							break;
+						case R.id.starterMapAbandonEditText:
+							packet.smap_abandon = i;
+							break;
+					}
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}		
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container == null) return null;
@@ -27,7 +65,9 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {		
 		super.onActivityCreated(savedInstanceState);
 		starterRPM = (EditText)getView().findViewById(R.id.starterOffEditText);
-		starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);		
+		starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);	
+		starterMap.addTextChangedListener(new CustomTextWatcher(starterMap));
+		starterRPM.addTextChangedListener(new CustomTextWatcher(starterRPM));
 	}
 	
 	@Override
@@ -51,9 +91,6 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	
 	@Override
 	public Secu3Dat getData() {
-		if (packet == null) return null;
-		packet.starter_off = Integer.valueOf(starterRPM.getText().toString());
-		packet.smap_abandon = Integer.valueOf(starterMap.getText().toString());
 		return packet;
 	}
 }

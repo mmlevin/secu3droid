@@ -9,9 +9,13 @@ import org.secu3.android.api.io.Secu3Dat.FunSetPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -27,6 +31,48 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 	Spinner gasolineTable;
 	Spinner gasTable;
 	String tableNames[] = null;
+
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			float f = 0;
+			try {
+				f = Float.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+						case R.id.funsetLowerPressureEditText:
+							packet.map_lower_pressure = f; 
+							break;
+						case R.id.funsetUpperPressureEditText:
+							packet.map_upper_pressure = f;
+							break;
+						case R.id.funsetMAPSensorOffsetEditText:
+							packet.map_curve_offset = f;
+							break;
+						case R.id.funsetMAPSensorGradientEditText:
+							packet.map_curve_gradient = f;
+							break;
+					}
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}		
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,10 +88,35 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		upperPressure = (EditText)getView().findViewById(R.id.funsetUpperPressureEditText);
 		sensorOffset = (EditText)getView().findViewById(R.id.funsetMAPSensorOffsetEditText);
 		sensorGradient = (EditText)getView().findViewById(R.id.funsetMAPSensorGradientEditText);
+		
 		gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
 		gasTable  = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
 		gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
 		gasTable = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);		
+		
+		lowerPressure.addTextChangedListener(new CustomTextWatcher(lowerPressure));
+		upperPressure.addTextChangedListener(new CustomTextWatcher(upperPressure));
+		sensorOffset.addTextChangedListener(new CustomTextWatcher(sensorOffset));
+		sensorGradient.addTextChangedListener(new CustomTextWatcher(sensorGradient));
+		
+		OnItemSelectedListener spinerListener = new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+				if (packet != null) {
+					if (v == gasolineTable) {
+						packet.fn_benzin = position;
+					} else if (v == gasTable) {
+						packet.fn_gas = position;
+					}					
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {				
+			}
+		};
+		gasolineTable.setOnItemSelectedListener(spinerListener);
+		gasTable.setOnItemSelectedListener(spinerListener);
 	}
 	
 	@Override
@@ -94,13 +165,6 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 
 	@Override
 	public Secu3Dat getData() {
-		if (packet == null) return null;
-		packet.map_lower_pressure = Float.valueOf(lowerPressure.getText().toString());
-		packet.map_upper_pressure = Float.valueOf(upperPressure.getText().toString());
-		packet.map_curve_offset = Float.valueOf(sensorOffset.getText().toString());
-		packet.map_curve_gradient = Float.valueOf(sensorGradient.getText().toString());
-		packet.fn_benzin = gasolineTable.getSelectedItemPosition();
-		packet.fn_gas = gasTable.getSelectedItemPosition();
 		return packet;
 	}
 	

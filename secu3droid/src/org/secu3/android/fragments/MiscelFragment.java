@@ -6,11 +6,17 @@ import org.secu3.android.api.io.Secu3Dat.MiscelPar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -23,6 +29,49 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 	EditText ignitionCutoffRPM;
 	EditText hallOutputStart;
 	EditText hallOutputDelay;
+	
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			int i = 0;
+			try {
+				i = Integer.valueOf(s.toString());
+			} catch (NumberFormatException e) {				
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+						case R.id.miscelHallOutputStartEditText:						
+							packet.hop_start_cogs = i;
+							break;
+						case R.id.miscelHallOutputDelayEditText:													
+							packet.hop_durat_cogs = i;
+							break;
+						case R.id.miscelIgnitionCutoffRPMEditText:
+							packet.ign_cutoff_thrd = i;
+							break;
+						case R.id.miscelPeriodEditText:
+							packet.period_ms = i;
+							break;
+
+					}
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}		
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +88,33 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 		ignitionCutoffRPM = (EditText)getView().findViewById(R.id.miscelIgnitionCutoffRPMEditText);
 		hallOutputStart = (EditText)getView().findViewById(R.id.miscelHallOutputStartEditText);
 		hallOutputDelay = (EditText)getView().findViewById(R.id.miscelHallOutputDelayEditText);
-		baudrate = (Spinner)getView().findViewById(R.id.miscelBaudrateSpinner);		
+		baudrate = (Spinner)getView().findViewById(R.id.miscelBaudrateSpinner);
+		
+		period.addTextChangedListener(new CustomTextWatcher(period));
+		ignitionCutoffRPM.addTextChangedListener(new CustomTextWatcher(ignitionCutoffRPM));
+		hallOutputStart.addTextChangedListener(new CustomTextWatcher(hallOutputStart));
+		hallOutputDelay.addTextChangedListener(new CustomTextWatcher(hallOutputDelay));
+		
+		baudrate.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+				if (packet != null) {
+					packet.baud_rate = Secu3Dat.BAUD_RATE[position];
+					packet.baud_rate_index = Secu3Dat.BAUD_RATE_INDEX[position];
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {								
+			}			
+		});
+		
+		enableIgnitionCutoff.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (packet != null) packet.ign_cutoff = isChecked?1:0;				
+			}
+		});
 	}
 	
 	@Override
@@ -77,10 +152,7 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public Secu3Dat getData() {
-		if (packet == null) return null;
-		packet.baud_rate = baudrate.getSelectedItemPosition();
 		packet.period_ms = Integer.valueOf(period.getText().toString());
-		packet.ign_cutoff = enableIgnitionCutoff.isChecked()?1:0;
 		packet.ign_cutoff_thrd = Integer.valueOf(ignitionCutoffRPM.getText().toString());
 		packet.hop_start_cogs = Integer.valueOf(hallOutputStart.getText().toString());
 		packet.hop_durat_cogs = Integer.valueOf(hallOutputDelay.getText().toString());

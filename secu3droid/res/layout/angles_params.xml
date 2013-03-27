@@ -12,7 +12,7 @@
 	    android:orientation="vertical" >
 		
 		<EditText
-		    android:id="@+id/anglesCurrentAngleEditText"
+		    android:id="@+id/anglesCorrectionAngleEditText"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
@@ -115,7 +115,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_below="@+id/anglesZeroAngleCheckBox"
-		    android:text="Current angle"
+		    android:text="Octane correction"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
@@ -161,9 +161,9 @@
 		    android:id="@+id/textView10"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_alignBaseline="@+id/anglesCurrentAngleEditText"
-		    android:layout_alignBottom="@+id/anglesCurrentAngleEditText"
-		    android:layout_toRightOf="@+id/anglesCurrentAngleEditText"
+		    android:layout_alignBaseline="@+id/anglesCorrectionAngleEditText"
+		    android:layout_alignBottom="@+id/anglesCorrectionAngleEditText"
+		    android:layout_toRightOf="@+id/anglesCorrectionAngleEditText"
 		    android:text="@string/units_degree"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 	
