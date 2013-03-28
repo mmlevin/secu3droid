@@ -1887,6 +1887,14 @@ public class Secu3Dat implements Parcelable {
 			intent_action = RECEIVE_OP_COMP_NC;
 		}
 		
+		public OPCompNc (int opcode, int opdata) {
+			packet_id = OP_COMP_NC;
+			packet_size = PACKET_SIZE;
+			intent_action = RECEIVE_OP_COMP_NC;
+			this.opcode = opcode;
+			this.opdata = opdata;
+		}
+		
 		public OPCompNc(Parcel in) {
 			super (in);
 			opcode = in.readInt();

@@ -51,7 +51,7 @@ public class ErrorsActivity extends Activity {
 			intentFilter = new IntentFilter();
 			intentFilter.addAction(Secu3Dat.RECEIVE_CE_ERR_CODES);
 			intentFilter.addAction(Secu3Dat.RECEIVE_CE_SAVED_ERR);
-			intentFilter.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 		}
 		
 		@Override
@@ -156,8 +156,8 @@ public class ErrorsActivity extends Activity {
 		} else if (Secu3Dat.RECEIVE_CE_ERR_CODES.equals(intent.getAction())) {
 			CEErrCodes packet = intent.getParcelableExtra(CEErrCodes.class.getCanonicalName());
 			updateFlags(packet.flags);									
-		} else if (Secu3Service.SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
-			boolean isOnline = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false);
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
+			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;
 				setRealtime(RealtimeError.isChecked());

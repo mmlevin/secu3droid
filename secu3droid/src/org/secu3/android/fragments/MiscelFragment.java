@@ -152,10 +152,6 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 
 	@Override
 	public Secu3Dat getData() {
-		packet.period_ms = Integer.valueOf(period.getText().toString());
-		packet.ign_cutoff_thrd = Integer.valueOf(ignitionCutoffRPM.getText().toString());
-		packet.hop_start_cogs = Integer.valueOf(hallOutputStart.getText().toString());
-		packet.hop_durat_cogs = Integer.valueOf(hallOutputDelay.getText().toString());
 		return packet;
 	}
 }

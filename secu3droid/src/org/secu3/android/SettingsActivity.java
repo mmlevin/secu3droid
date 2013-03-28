@@ -19,8 +19,6 @@ import android.widget.TextView;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.secu3.android.api.io.Secu3Service;
-
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	private SharedPreferences sharedPref ;
 	private BluetoothAdapter bluetoothAdapter = null;
@@ -30,8 +28,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private void updateDevicePreferenceSummary(){
         // update bluetooth device summary
 		String deviceName = "";
-        ListPreference prefDevices = (ListPreference)findPreference(Secu3Service.PREF_BLUETOOTH_DEVICE);
-        String deviceAddress = sharedPref.getString(Secu3Service.PREF_BLUETOOTH_DEVICE, null);
+        ListPreference prefDevices = (ListPreference)findPreference(getString(R.string.pref_bluetooth_device_key));
+        String deviceAddress = sharedPref.getString(getString(R.string.pref_bluetooth_device_key), null);
         if (BluetoothAdapter.checkBluetoothAddress(deviceAddress)){
         	deviceName = bluetoothAdapter.getRemoteDevice(deviceAddress).getName();
         }
@@ -43,7 +41,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         // update bluetooth device summary
 		updateDevicePreferenceSummary();
 		// update bluetooth device list
-        ListPreference prefDevices = (ListPreference)findPreference(Secu3Service.PREF_BLUETOOTH_DEVICE);
+        ListPreference prefDevices = (ListPreference)findPreference(getString(R.string.pref_bluetooth_device_key));
         Set<BluetoothDevice> pairedDevices = new HashSet<BluetoothDevice>();
         if (bluetoothAdapter != null){
         	pairedDevices = bluetoothAdapter.getBondedDevices();  
@@ -62,8 +60,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         prefDevices.setEntryValues(entryValues);
         prefDevices.setEntries(entries);
         Preference pref;        
-        pref = (Preference)findPreference(Secu3Service.PREF_CONNECTION_RETRIES);
-        String maxConnRetries = sharedPref.getString(Secu3Service.PREF_CONNECTION_RETRIES, getString(R.string.defaultConnectionRetries));
+        pref = (Preference)findPreference(getString(R.string.pref_connection_retries_key));
+        String maxConnRetries = sharedPref.getString(getString(R.string.pref_connection_retries_key), getString(R.string.defaultConnectionRetries));
         pref.setSummary(getString(R.string.pref_connection_retries_summary,maxConnRetries));
         this.onContentChanged();
     }
@@ -75,7 +73,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		addPreferencesFromResource(R.xml.preferences);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();	
-        Preference pref = findPreference(Secu3Service.PREF_ABOUT);
+        Preference pref = findPreference(getString(R.string.pref_about_key));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {		
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -101,7 +99,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (Secu3Service.PREF_BLUETOOTH_DEVICE.equals(key))	updateDevicePreferenceSummary();	
+		if (getString(R.string.pref_bluetooth_device_key).equals(key))	updateDevicePreferenceSummary();	
 		updateDevicePreferenceList();
 	}
 	

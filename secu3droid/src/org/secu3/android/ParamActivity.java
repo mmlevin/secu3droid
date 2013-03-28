@@ -29,6 +29,8 @@ import android.widget.Toast;
 public class ParamActivity extends FragmentActivity{
 	public static final String LOG_TAG = "ParamActivity";	
 	
+	public static final int PARAMS_NUMBER = 9;
+	
 	StarterFragment starterParPage = null;
 	AnglesFragment anglesParPage = null;
 	IdlRegFragment idlRegParPage = null;
@@ -64,8 +66,6 @@ public class ParamActivity extends FragmentActivity{
     }
     
     private void readParams() {
-    	progressBar.setIndeterminate(true);
-    	progressBar.setVisibility(ProgressBar.VISIBLE);
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
     }
@@ -86,8 +86,8 @@ public class ParamActivity extends FragmentActivity{
 			intentFilter.addAction(Secu3Dat.RECEIVE_ADCCOR_PAR);
 			intentFilter.addAction(Secu3Dat.RECEIVE_CKPS_PAR);
 			intentFilter.addAction(Secu3Dat.RECEIVE_MISCEL_PAR);
-			intentFilter.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
-			intentFilter.addAction(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS);
 			intentFilter.addAction(Secu3Dat.RECEIVE_OP_COMP_NC);
 		}
 		
@@ -166,20 +166,25 @@ public class ParamActivity extends FragmentActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
 		case R.id.menu_download:
+	    	progressBar.setIndeterminate(true);
+	    	progressBar.setVisibility(ProgressBar.VISIBLE);
 			readParams();
 			return true;
 		case R.id.menu_upload:
 			if (isValid()) {
 				try {
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, starterParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, anglesParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, idlRegParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, funsetParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, temperParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, carburParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, adcCorParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, ckpsParPage.getData().pack()));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, miscelParPage.getData().pack()));
+			    	progressBar.setIndeterminate(true);
+			    	progressBar.setVisibility(ProgressBar.VISIBLE);					
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, PARAMS_NUMBER));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, starterParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, anglesParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, idlRegParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, funsetParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, temperParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, carburParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, adcCorParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, ckpsParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, miscelParPage.getData()));
 				} catch (Exception e) {
 					Log.d (LOG_TAG, e.toString());
 				}
@@ -189,7 +194,7 @@ public class ParamActivity extends FragmentActivity{
 			try {
 		    	progressBar.setIndeterminate(true);
 		    	progressBar.setVisibility(ProgressBar.VISIBLE);				
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.SECU3_SERVICE_PACKET, OPCompNc.pack(Secu3Dat.OPCODE_EEPROM_PARAM_SAVE,0)));
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OPCompNc(Secu3Dat.OPCODE_EEPROM_PARAM_SAVE,0)));
 			} catch (Exception e) {
 				Log.d (LOG_TAG, e.toString());
 			}
@@ -225,8 +230,8 @@ public class ParamActivity extends FragmentActivity{
 	}	
 	
 	void update (Intent intent) {
-		if (Secu3Service.SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
-			boolean isOnline = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false);
+		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
+			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;
 				readParams();
@@ -282,9 +287,9 @@ public class ParamActivity extends FragmentActivity{
 			MiscelFragment page = miscelParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
-			int current = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_CURRENT,0);
-			int total = intent.getIntExtra(Secu3Service.SECU3_SERVICE_PROGRESS_TOTAL,0);
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
+			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
+			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);
 			if (current == total) progressBar.setVisibility(ProgressBar.GONE);
 			progressBar.setIndeterminate(current==0);
 			progressBar.setMax(total);

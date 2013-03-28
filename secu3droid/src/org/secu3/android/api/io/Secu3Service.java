@@ -19,26 +19,21 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class Secu3Service extends Service {	
-	private static final String LOG_TAG = "Secu3Service";
-	
-	public static final String PREF_BLUETOOTH_DEVICE = "bluetoothDevice";
-	public static final String PREF_CONNECTION_RETRIES = "connectionRetries";
-	public static final String PREF_ABOUT = "about";
+	private static final String LOG_TAG = "Secu3Service";	
 	
 	public static final String ACTION_SECU3_SERVICE_START = "org.secu3.android.intent.action.SECU3_SERVICE_START";	
 	public static final String ACTION_SECU3_SERVICE_STOP = "org.secu3.android.intent.action.SECU3_SERVICE_STOP";
 	public static final String ACTION_SECU3_SERVICE_SET_TASK = "org.secu3.android.intent.action.SECU3_SERVICE_SET_TASK";
 	public static final String ACTION_SECU3_SERVICE_SET_TASK_PARAM = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SET_TASK_PARAM";
+	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";	
+	public static final String ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_SEND_PACKET_PARAM_PACKET";	
+	public static final String ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS";
 	
-	public static final String RECEIVE_SECU3_SERVICE_PROGRESS = "org.secu3.android.intent.action.SECU3_SERVICE_PROGRESS";
-	public static final String SECU3_SERVICE_PROGRESS_CURRENT = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_CURRENT";
-	public static final String SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";
-	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";
-	public static final String SECU3_SERVICE_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_PACKET";
-	public static final String SECU3_SERVICE_STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
-	public static final String SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
-	
-	private Toast toast;
+	public static final String EVENT_SECU3_SERVICE_STATUS_ONLINE = "org.secu3.android.intent.action.STATUS_ONLINE";
+	public static final String EVENT_SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
+	public static final String EVENT_SECU3_SERVICE_PROGRESS = "org.secu3.android.intent.action.SECU3_SERVICE_PROGRESS";
+	public static final String EVENT_SECU3_SERVICE_PROGRESS_CURRENT = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_CURRENT";
+	public static final String EVENT_SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";		
 	
 	NotificationManager notificationManager;
 	private Secu3Manager secu3Manager = null;
@@ -47,15 +42,14 @@ public class Secu3Service extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);		
+		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);		
 	}
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String deviceAddress = sharedPreferences.getString(PREF_BLUETOOTH_DEVICE, null);
-		int maxConRetries = Integer.parseInt(sharedPreferences.getString(PREF_CONNECTION_RETRIES, this.getString(R.string.defaultConnectionRetries)));
+		String deviceAddress = sharedPreferences.getString(getString(R.string.pref_bluetooth_device_key), null);
+		int maxConRetries = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_connection_retries_key), this.getString(R.string.defaultConnectionRetries)));
 		Log.d(LOG_TAG, "prefs device addr: "+deviceAddress);
 		if (ACTION_SECU3_SERVICE_START.equals(intent.getAction())){
 			if (secu3Manager == null){
@@ -71,8 +65,7 @@ public class Secu3Service extends Service {
 						.setContentIntent(PendingIntent.getActivity(this, 0, new Intent (this,MainActivity.class), Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT))
 						.build();																
 						startForeground(R.string.foreground_service_started_notification, notification);
-						toast.setText(this.getString(R.string.msg_service_started));
-						toast.show();	
+						Toast.makeText(this, R.string.msg_service_started,Toast.LENGTH_LONG).show();
 					} else {
 						stopSelf();
 					}
@@ -80,8 +73,7 @@ public class Secu3Service extends Service {
 					stopSelf();
 				}
 			} else {
-				toast.setText(this.getString(R.string.msg_service_already_started));
-				toast.show();				
+				Toast.makeText(this, R.string.msg_service_already_started, Toast.LENGTH_LONG).show();
 				sendBroadcast(intent);
 			}
 		} else if (ACTION_SECU3_SERVICE_STOP.equals(intent.getAction())){
@@ -94,7 +86,9 @@ public class Secu3Service extends Service {
 			}
 		} else if (ACTION_SECU3_SERVICE_SEND_PACKET.equals(intent.getAction())) {
 			if (secu3Manager != null) {
-				secu3Manager.appendPacket (intent.getStringExtra(SECU3_SERVICE_PACKET));
+				Secu3Dat packet = intent.getParcelableExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET);
+				int packets_counter = intent.getIntExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, 0); 
+				secu3Manager.appendPacket (packet, packets_counter);
 				sendBroadcast(intent);
 			}
 		}
@@ -116,11 +110,9 @@ public class Secu3Service extends Service {
 		secu3Manager  = null;
 		if (manager != null){
 			if (manager.getDisableReason() != 0){
-				toast.setText(getString(R.string.msg_service_stopped_by_problem, getString(manager.getDisableReason())));
-				toast.show();				
+				Toast.makeText(this, getString(R.string.msg_service_stopped_by_problem, getString(manager.getDisableReason())),Toast.LENGTH_LONG).show();				
 			} else {
-				toast.setText(R.string.msg_service_stopped);
-				toast.show();				
+				Toast.makeText(this, R.string.msg_service_stopped, Toast.LENGTH_LONG).show();
 			}
 			manager.disable();
 		}

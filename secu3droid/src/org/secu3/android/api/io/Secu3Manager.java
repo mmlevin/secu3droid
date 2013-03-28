@@ -68,7 +68,7 @@ public class Secu3Manager {
 	private class ConnectedSecu3 extends Thread {
 		public static final int STATUS_TIMEOUT = 10;
 
-		public Queue<String> sendPackets = new LinkedList<String>();
+		public Queue<Secu3Dat> sendPackets = new LinkedList<Secu3Dat>();
 		public Queue<SECU3_TASK> tasks = new LinkedList<Secu3Manager.SECU3_TASK>();
 		
 		private final BluetoothSocket socket;
@@ -115,7 +115,7 @@ public class Secu3Manager {
 			public void run () {
 				if (offline++ >= STATUS_TIMEOUT) { 
 					offline = STATUS_TIMEOUT;
-					appContext.sendBroadcast(new Intent(Secu3Service.SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.SECU3_SERVICE_STATUS, false));
+					appContext.sendBroadcast(new Intent(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS, false));
 				}
 			}
 
@@ -131,9 +131,9 @@ public class Secu3Manager {
 		
 		void updateProgress(int progress) {
 			progressCurrent = progress;
-			appContext.sendBroadcast(new Intent(Secu3Service.RECEIVE_SECU3_SERVICE_PROGRESS)
-												.putExtra(Secu3Service.SECU3_SERVICE_PROGRESS_CURRENT, progressCurrent)
-												.putExtra(Secu3Service.SECU3_SERVICE_PROGRESS_TOTAL, progressTotal));
+			appContext.sendBroadcast(new Intent(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS)
+												.putExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT, progressCurrent)
+												.putExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL, progressTotal));
 		}
 		
 		void updateTask() {
@@ -302,9 +302,17 @@ public class Secu3Manager {
 				BufferedReader reader = new BufferedReader(new InputStreamReader (in,"ISO-8859-1"));
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out,"ISO-8859-1"));				
 				while (enabled) {
-					if (!sendPackets.isEmpty()) {						
-						writer.append(sendPackets.poll() + "\r\n");
-						writer.flush();						
+					if (!sendPackets.isEmpty()) {				
+						try {
+							Secu3Dat packet =sendPackets.poll(); 
+							writer.append(packet.pack() + "\r\n");
+							updateProgress(++progressCurrent);
+							Thread.sleep(200);							
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							writer.flush();
+						}
 					}					
 					if (reader.ready()) {
 						ready = true;												
@@ -331,7 +339,7 @@ public class Secu3Manager {
 									Log.d(LOG_TAG, e.getMessage());
 								}
 								onlineTask.reset();					
-								appContext.sendBroadcast(new Intent(Secu3Service.SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.SECU3_SERVICE_STATUS, true));
+								appContext.sendBroadcast(new Intent(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS, true));
 							}
 						}											
 					} else {
@@ -528,9 +536,13 @@ public class Secu3Manager {
 		}
 	}
 	
-	public synchronized void appendPacket (String packet) {
+	public synchronized void appendPacket (Secu3Dat packet, int packets_counter) {
 		if ((connectedSecu3 != null) && (connectedSecu3.sendPackets != null)) {
 			connectedSecu3.sendPackets.add(packet);
+		}
+		if (packets_counter != 0) {
+			progressTotal = packets_counter;
+			progressCurrent = 0;
 		}
 	}
 	

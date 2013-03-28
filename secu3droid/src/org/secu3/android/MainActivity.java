@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
 			intentFilter.addAction(Secu3Dat.RECEIVE_SENSOR_DAT);
 			intentFilter.addAction(Secu3Dat.RECEIVE_ADCRAW_DAT);
 			intentFilter.addAction(Secu3Dat.RECEIVE_FWINFO_DAT);
-			intentFilter.addAction(Secu3Service.SECU3_SERVICE_STATUS_ONLINE);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 		}
 		
 		@Override
@@ -176,8 +176,8 @@ public class MainActivity extends Activity {
 	}
 	
 	void update(Intent intent) {
-		if (Secu3Service.SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {			
-			boolean isOnline = intent.getBooleanExtra(Secu3Service.SECU3_SERVICE_STATUS,false); 
+		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {			
+			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false); 
 			String s = isOnline?"Online":"Offline";
 			textViewStatus.setText(s);		
 			if (isOnline && !this.isOnline) {
