@@ -88,14 +88,14 @@ public class PacketsTest extends TestCase {
 	{
 		CarburPar packet = new CarburPar();
 		try {
-			String data = "@k076C083400188076C083400";
+			String data = "@k076C083400188076C08347D";
 			packet.parse(data);
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH low",packet.ephh_lot, 1900);
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH high",packet.ephh_hit, 2100);	
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH low gas",packet.ephh_lot_g, 1900);			
 			assertEquals(packet.getClass().getCanonicalName() + "EPHH high gas",packet.ephh_hit_g, 2100);			
 			assertEquals(packet.getClass().getCanonicalName() + "Carburator inverse",packet.carb_invers, 0);
-			assertEquals(packet.getClass().getCanonicalName() + "Carburator off delay",packet.shutoff_delay, 0f);
+			assertEquals(packet.getClass().getCanonicalName() + "Carburator off delay",packet.shutoff_delay, 1.25f);
 			assertEquals(packet.getClass().getCanonicalName() + "Carburator EMR",packet.epm_ont, 6.125f);			
 			
 			testParcel(packet);	
@@ -201,14 +201,14 @@ public class PacketsTest extends TestCase {
 	public void testADCCorPar() {
 		ADCCorPar packet = new ADCCorPar();
 		try {
-			String data = "@r400000002000400000002000400000002000"; 
+			String data = "@r200000016000F052003120001000FFFEE000";
 			packet.parse(data);
-			assertEquals(packet.getClass().getCanonicalName(), packet.map_adc_factor, 1.0f);
-			assertEquals(packet.getClass().getCanonicalName(), packet.map_adc_correction, 0f);
-			assertEquals(packet.getClass().getCanonicalName(), packet.ubat_adc_factor, 1.0f);
-			assertEquals(packet.getClass().getCanonicalName(), packet.ubat_adc_correction, 0f);			
-			assertEquals(packet.getClass().getCanonicalName(), packet.temp_adc_factor, 1.0f);
-			assertEquals(packet.getClass().getCanonicalName(), packet.temp_adc_correction, 0f);
+			assertEquals(packet.getClass().getCanonicalName(), packet.map_adc_factor, 0.5f);
+			assertEquals(packet.getClass().getCanonicalName(), packet.map_adc_correction, 0.024999999f);
+			assertEquals(packet.getClass().getCanonicalName(), packet.ubat_adc_factor, -0.24499512f);
+			assertEquals(packet.getClass().getCanonicalName(), packet.ubat_adc_correction, -2.0000398f);			
+			assertEquals(packet.getClass().getCanonicalName(), packet.temp_adc_factor, 0.25f);
+			assertEquals(packet.getClass().getCanonicalName(), packet.temp_adc_correction, -0.049999997f);
 
 			testParcel(packet);				
 

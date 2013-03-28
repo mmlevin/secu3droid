@@ -311,12 +311,12 @@ public class Secu3Dat implements Parcelable {
 			super.parse(packet);
 			
 			try {			
-				map_adc_factor = (float)Integer.parseInt(data.substring(2,6),16) / 16384f; // AAAA
-				map_adc_correction = (((float)Long.parseLong(data.substring(6,14),16) / 16384f) - 0.5f) / map_adc_factor; // BBBBBBBB
-				ubat_adc_factor = (float)Integer.parseInt(data.substring(14,18),16) / 16384f; // CCCC
-				ubat_adc_correction = (((float)Long.parseLong(data.substring(18,26),16) / 16384f) - 0.5f) / ubat_adc_factor; // DDDDDDDD			
-				temp_adc_factor = (float)Integer.parseInt(data.substring(26,30),16) / 16384f; // EEEE
-				temp_adc_correction = (((float)Long.parseLong(data.substring(30,38),16) / 16384f) - 0.5f) / temp_adc_factor; // FFFFFFFF						
+				map_adc_factor = (float)Integer.valueOf(data.substring(2,6),16).shortValue() / 16384f; // AAAA
+				map_adc_correction = (((float)Long.valueOf(data.substring(6,14),16).intValue() / 16384f) - 0.5f) / map_adc_factor * ADC_DISCRETE; // BBBBBBBB
+				ubat_adc_factor = (float)Integer.valueOf(data.substring(14,18),16).shortValue() / 16384f; // CCCC
+				ubat_adc_correction = (((float)Long.valueOf(data.substring(18,26),16).intValue() / 16384f) - 0.5f) / ubat_adc_factor * ADC_DISCRETE; // DDDDDDDD			
+				temp_adc_factor = (float)Integer.valueOf(data.substring(26,30),16).shortValue() / 16384f; // EEEE
+				temp_adc_correction = (((float)Long.valueOf(data.substring(30,38),16).intValue() / 16384f) - 0.5f) / temp_adc_factor * ADC_DISCRETE; // FFFFFFFF						
 			}
 			catch (Exception e) {
 				throw e;
@@ -325,13 +325,17 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
+			long map_correction_d = Math.round(-map_adc_correction / ADC_DISCRETE);
+			long ubat_correction_d = Math.round(-ubat_adc_correction / ADC_DISCRETE);
+			long temp_correction_d = Math.round(-temp_adc_correction / ADC_DISCRETE);			
+			
 			return String.format("%s%s%04X%08X%04X%08X%04X%08X", OUTPUT_PACKET,packet_id,
-					Math.round(map_adc_factor * 16384),
-					Math.round(16384 * (0.5 - map_adc_correction * map_adc_factor)),
-					Math.round(ubat_adc_factor * 16384),
-					Math.round(16384 * (0.5 - ubat_adc_correction * ubat_adc_factor)),
-					Math.round(temp_adc_factor * 16384),
-					Math.round(16384 * (0.5 - temp_adc_correction * temp_adc_correction)));
+					Integer.valueOf(Math.round(map_adc_factor * 16384)).shortValue(),
+					Long.valueOf(Math.round(16384f * (0.5f - map_correction_d * map_adc_factor))).intValue(),
+					Integer.valueOf(Math.round(ubat_adc_factor * 16384)).shortValue(),
+					Long.valueOf(Math.round(16384f * (0.5f - ubat_correction_d * ubat_adc_factor))).intValue(),
+					Integer.valueOf(Math.round(temp_adc_factor * 16384)).shortValue(),
+					Long.valueOf(Math.round(16384f * (0.5f - temp_correction_d * temp_adc_factor))).intValue());
 		}
 		
 		public String getLogString() {
@@ -621,7 +625,7 @@ public class Secu3Dat implements Parcelable {
 				epm_ont = (float)Integer.valueOf(data.substring(11,15),16).shortValue() / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER; // DDDD		  
 				ephh_lot_g = Integer.parseInt(data.substring(15,19),16); // EEEE
 				ephh_hit_g = Integer.parseInt(data.substring(19,23),16); // FFFF	  	 	 
-				shutoff_delay = (float)Integer.parseInt(data.substring(23,24),16) / 100; // GG
+				shutoff_delay = (float)Integer.parseInt(data.substring(23,25),16) / 100; // GG
 			}
 			catch (Exception e) {
 				throw e;
@@ -642,7 +646,7 @@ public class Secu3Dat implements Parcelable {
 			
 		@Override
 		public String getLogString() {
-			return (String.format("%s: EPHH Lo: %d, EPHH Hi: %d, Inverse: %d, EPM On: %f, EPHH LoG: %d, EPHH Hi G: %d, Shutoff delay: %f", getClass().getCanonicalName(),ephh_lot, ephh_hit, carb_invers, epm_ont, ephh_lot_g, ephh_hit_g, shutoff_delay));
+			return (String.format("%s: EPHH Lo: %d, EPHH Hi: %d, Inverse: %d, EPM On: %f, EPHH LoG: %d, EPHH Hi G: %d, Shutoff delay: %f", getClass().getCanonicalName(),ephh_lot, ephh_hit, carb_invers, epm_ont, ephh_lot_g, ephh_hit_g, shutoff_delay / 10));
 		}
 
 	}

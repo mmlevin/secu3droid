@@ -87,7 +87,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView4"
 	        android:ems="10"
-	        android:inputType="numberDecimal"
+	        android:inputType="number"
 	        android:text="0" />
 
 	    <TextView
@@ -107,7 +107,7 @@
 	        android:layout_below="@+id/textView5"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
-	        android:text="0.0" />
+	        android:text="0" />
 
 	    <CheckBox
 	        android:id="@+id/carburSensorInverseCheckBox"

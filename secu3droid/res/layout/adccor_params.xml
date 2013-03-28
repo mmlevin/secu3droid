@@ -17,7 +17,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView6"
 	        android:ems="10"
-	        android:inputType="numberDecimal"
+	        android:inputType="numberSigned"
 	        android:text="0.0" />
 
 	    <TextView
@@ -36,7 +36,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView1"
 	        android:ems="10"
-	        android:inputType="numberDecimal"
+	        android:inputType="numberSigned"
 	        android:text="0.0" >
 
 	        <requestFocus />
@@ -59,7 +59,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView2"
 	        android:ems="10"
-	        android:inputType="numberDecimal"
+	        android:inputType="numberSigned"
 	        android:text="0.0" />
 
 	    <TextView
@@ -78,7 +78,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView3"
 	        android:ems="10"
-	        android:inputType="numberDecimal"
+	        android:inputType="numberSigned"
 	        android:text="0.0" />
 
 	    <TextView
@@ -97,7 +97,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView4"
 	        android:ems="10"
-	        android:inputType="numberDecimal"
+	        android:inputType="numberSigned"
 	        android:text="0.0" />
 
 	    <TextView
@@ -116,7 +116,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView5"
 	        android:ems="10"
-	        android:inputType="numberDecimal"
+	        android:inputType="numberSigned"
 	        android:text="0.0" />
 
 	    <TextView

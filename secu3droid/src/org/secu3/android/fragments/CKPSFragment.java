@@ -1,5 +1,8 @@
 package org.secu3.android.fragments;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.CKPSPar;
@@ -42,8 +45,11 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 		public void afterTextChanged(Editable s) {
 			int i = 0;
 			try {
-				i = Integer.valueOf(s.toString());
-			} catch (NumberFormatException e) {				
+				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				Number number = format.parse(s.toString());				
+				i = number.intValue();
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
 				if (packet != null) {
 					switch (e.getId()){

@@ -1,5 +1,8 @@
 package org.secu3.android.fragments;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ADCCorPar;
@@ -34,9 +37,13 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 		public void afterTextChanged(Editable s) {
 			float f = 0;
 			try {
-				f = Float.valueOf(s.toString());
-			} catch (NumberFormatException e) {				
-			} finally {
+				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				Number number = format.parse(s.toString());
+				f = number.floatValue();
+			} catch (Exception e) {				
+				e.printStackTrace();
+			}
+			finally {
 				if (packet != null) {
 					switch (e.getId()){
 						case R.id.adccorMAPSensorCoefficientEditText:
@@ -105,12 +112,12 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 	@Override
 	public void updateData() {
 		if (packet != null) {			
-			adccorMapSensorCoefficient.setText(String.format("%.2f",((ADCCorPar)packet).map_adc_factor));
-			adccorMapSensorCorrection.setText(String.format("%.2f",((ADCCorPar)packet).map_adc_correction));
-			adccorVoltageSensorCoefficient.setText(String.format("%.2f",((ADCCorPar)packet).ubat_adc_factor));
-			adccorVoltageSensorCorrection.setText(String.format("%.2f",((ADCCorPar)packet).ubat_adc_correction));
-			adccorTemperatureSensorCoefficient.setText(String.format("%.2f",((ADCCorPar)packet).temp_adc_factor));
-			adccorTemperatureSensorCorrection.setText(String.format("%.2f",((ADCCorPar)packet).temp_adc_correction));
+			adccorMapSensorCoefficient.setText(String.format("%.3f",((ADCCorPar)packet).map_adc_factor));
+			adccorMapSensorCorrection.setText(String.format("%.4f",((ADCCorPar)packet).map_adc_correction));
+			adccorVoltageSensorCoefficient.setText(String.format("%.3f",((ADCCorPar)packet).ubat_adc_factor));
+			adccorVoltageSensorCorrection.setText(String.format("%.4f",((ADCCorPar)packet).ubat_adc_correction));
+			adccorTemperatureSensorCoefficient.setText(String.format("%.3f",((ADCCorPar)packet).temp_adc_factor));
+			adccorTemperatureSensorCorrection.setText(String.format("%.4f",((ADCCorPar)packet).temp_adc_correction));
 		}
 	}
 	

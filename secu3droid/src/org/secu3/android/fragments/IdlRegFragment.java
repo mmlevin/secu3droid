@@ -1,5 +1,8 @@
 package org.secu3.android.fragments;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
@@ -39,8 +42,11 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 			float f = 0;
 			int i = 0;
 			try {
-				f = Float.valueOf(s.toString());
-			} catch (NumberFormatException e) {				
+				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				Number number = format.parse(s.toString());				
+				f = number.floatValue();
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
 				if (packet != null) {
 					switch (e.getId()){
@@ -60,8 +66,11 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 				}
 			}
 			try {
-				i = Integer.valueOf(s.toString());
-			} catch (NumberFormatException e) {				
+				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				Number number = format.parse(s.toString());				
+				i = number.intValue();
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
 				if (packet != null) {
 					switch (e.getId()){
@@ -107,6 +116,8 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 		ifac2.addTextChangedListener(new CustomTextWatcher(ifac2));
 		minimalAngle.addTextChangedListener(new CustomTextWatcher(minimalAngle));
 		maximalAngle.addTextChangedListener(new CustomTextWatcher(maximalAngle));
+		targetRPM.addTextChangedListener(new CustomTextWatcher(targetRPM));
+		rpmSensitivity.addTextChangedListener(new CustomTextWatcher(rpmSensitivity));
 		
 		useIdleReg.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 			@Override

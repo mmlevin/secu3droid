@@ -1,6 +1,8 @@
 package org.secu3.android.fragments;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
@@ -43,8 +45,11 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		public void afterTextChanged(Editable s) {
 			float f = 0;
 			try {
-				f = Float.valueOf(s.toString());
-			} catch (NumberFormatException e) {				
+				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				Number number = format.parse(s.toString());				
+				f = number.floatValue();
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
 				if (packet != null) {
 					switch (e.getId()){
@@ -102,10 +107,10 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		OnItemSelectedListener spinerListener = new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				if (packet != null) {
-					if (v == gasolineTable) {
+				if ((packet != null) && (v != null)) {
+					if (v.getParent() == gasolineTable) {
 						packet.fn_benzin = position;
-					} else if (v == gasTable) {
+					} else if (v.getParent() == gasTable) {
 						packet.fn_gas = position;
 					}					
 				}
@@ -130,8 +135,8 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		if (packet != null) {				
 			lowerPressure.setText (String.format("%.2f",packet.map_lower_pressure));
 			upperPressure.setText (String.format("%.2f",packet.map_upper_pressure));
-			sensorOffset.setText (String.format("%.2f",packet.map_curve_offset));
-			sensorGradient.setText (String.format("%.2f",packet.map_curve_gradient));
+			sensorOffset.setText (String.format("%.3f",packet.map_curve_offset));
+			sensorGradient.setText (String.format("%.3f",packet.map_curve_gradient));
 			gasolineTable.setSelection(packet.fn_benzin);
 			gasTable.setSelection(packet.fn_gas);
 		}

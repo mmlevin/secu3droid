@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Small Text"
+        android:text="@string/status_offline"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <CheckBox
