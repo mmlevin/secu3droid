@@ -39,7 +39,7 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 		public void afterTextChanged(Editable s) {
 			float f = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				f = number.floatValue();
 			} catch (Exception e) {
@@ -115,8 +115,8 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {		
-			fanOn.setText(String.format("%.2f",((TemperPar)packet).vent_on));
-			fanOff.setText(String.format("%.2f",((TemperPar)packet).vent_off));
+			fanOn.setText(String.format(Locale.US,"%.2f",((TemperPar)packet).vent_on));
+			fanOff.setText(String.format(Locale.US,"%.2f",((TemperPar)packet).vent_off));
 			useTempSensor.setChecked(((TemperPar)packet).tmp_use != 0);
 			usePWM.setChecked(((TemperPar)packet).vent_pwm != 0);
 			useTable.setChecked(((TemperPar)packet).cts_use_map != 0);

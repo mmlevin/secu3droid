@@ -39,7 +39,7 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 		public void afterTextChanged(Editable s) {
 			float f = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				f = number.floatValue();
 			} catch (Exception e) {				
@@ -116,12 +116,12 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {			
-			minimalAngle.setText(String.format("%.2f",((AnglesPar)packet).min_angle));
-			maximalAngle.setText(String.format("%.2f",((AnglesPar)packet).max_angle));
-			angleDecrementStep.setText(String.format("%.2f",((AnglesPar)packet).dec_spead));
-			angleIncrementStep.setText(String.format("%.2f",((AnglesPar)packet).inc_spead));
+			minimalAngle.setText(String.format(Locale.US,"%.2f",((AnglesPar)packet).min_angle));
+			maximalAngle.setText(String.format(Locale.US,"%.2f",((AnglesPar)packet).max_angle));
+			angleDecrementStep.setText(String.format(Locale.US,"%.2f",((AnglesPar)packet).dec_spead));
+			angleIncrementStep.setText(String.format(Locale.US,"%.2f",((AnglesPar)packet).inc_spead));
 			zeroAngle.setChecked(((AnglesPar)packet).zero_adv_ang != 0);
-			currentAngle.setText(String.format("%.2f",((AnglesPar)packet).angle_corr));
+			currentAngle.setText(String.format(Locale.US,"%.2f",((AnglesPar)packet).angle_corr));
 		}
 	}
 	

@@ -34,10 +34,10 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 		}
 		
 		@Override
-		public void afterTextChanged(Editable s) {
+		public void afterTextChanged(Editable s) {				
 			float f = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());
 				f = number.floatValue();
 			} catch (Exception e) {				
@@ -112,12 +112,12 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 	@Override
 	public void updateData() {
 		if (packet != null) {			
-			adccorMapSensorCoefficient.setText(String.format("%.3f",((ADCCorPar)packet).map_adc_factor));
-			adccorMapSensorCorrection.setText(String.format("%.4f",((ADCCorPar)packet).map_adc_correction));
-			adccorVoltageSensorCoefficient.setText(String.format("%.3f",((ADCCorPar)packet).ubat_adc_factor));
-			adccorVoltageSensorCorrection.setText(String.format("%.4f",((ADCCorPar)packet).ubat_adc_correction));
-			adccorTemperatureSensorCoefficient.setText(String.format("%.3f",((ADCCorPar)packet).temp_adc_factor));
-			adccorTemperatureSensorCorrection.setText(String.format("%.4f",((ADCCorPar)packet).temp_adc_correction));
+			adccorMapSensorCoefficient.setText(String.format(Locale.US,"%.3f",((ADCCorPar)packet).map_adc_factor));
+			adccorMapSensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).map_adc_correction));
+			adccorVoltageSensorCoefficient.setText(String.format(Locale.US,"%.3f",((ADCCorPar)packet).ubat_adc_factor));
+			adccorVoltageSensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).ubat_adc_correction));
+			adccorTemperatureSensorCoefficient.setText(String.format(Locale.US,"%.3f",((ADCCorPar)packet).temp_adc_factor));
+			adccorTemperatureSensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).temp_adc_correction));
 		}
 	}
 	

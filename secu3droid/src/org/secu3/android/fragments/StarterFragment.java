@@ -33,7 +33,7 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 		public void afterTextChanged(Editable s) {
 			int i = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				i = number.intValue();
 			} catch (Exception e) {
@@ -85,8 +85,8 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 	@Override
 	public void updateData() {
 		if (packet != null) {
-			starterRPM.setText(String.format("%d",((StartrPar)packet).starter_off));
-			starterMap.setText(String.format("%d",((StartrPar)packet).smap_abandon));
+			starterRPM.setText(String.format(Locale.US,"%d",((StartrPar)packet).starter_off));
+			starterMap.setText(String.format(Locale.US,"%d",((StartrPar)packet).smap_abandon));
 		}
 	}
 	

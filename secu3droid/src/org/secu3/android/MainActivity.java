@@ -1,5 +1,7 @@
 package org.secu3.android;
 
+import java.util.Locale;
+
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ADCRawDat;
 import org.secu3.android.api.io.Secu3Dat.FWInfoDat;
@@ -14,6 +16,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +60,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-		
+			
 		Log.d(LOG_TAG, "onCreate");		
 		setContentView(R.layout.activity_main);
 
@@ -188,7 +191,7 @@ public class MainActivity extends Activity {
 		} else if (Secu3Dat.RECEIVE_SENSOR_DAT.equals(intent.getAction())) {
 			SensorDat sd = (SensorDat)intent.getParcelableExtra(SensorDat.class.getCanonicalName());
 			if (!checkBox.isChecked() && (sd != null)) {
-				textViewData.setText(String.format(sensorsFormat,
+				textViewData.setText(String.format(Locale.US,sensorsFormat,
 						sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
 						sd.knock_k, sd.knock_retard, sd.air_flow, sd.ephh_valve,
 						sd.carb, sd.gas, sd.epm_valve, sd.ce_state));
@@ -196,7 +199,7 @@ public class MainActivity extends Activity {
 		} else if (Secu3Dat.RECEIVE_ADCRAW_DAT.equals(intent.getAction())) {
 			ADCRawDat ad = (ADCRawDat)intent.getParcelableExtra(ADCRawDat.class.getCanonicalName());
 			if (checkBox.isChecked() && (ad != null)) {
-				textViewData.setText(String.format(sensorsRawFormat,
+				textViewData.setText(String.format(Locale.US,sensorsRawFormat,
 								ad.map_value, ad.ubat_value, ad.temp_value,
 								ad.knock_value));
 			}			

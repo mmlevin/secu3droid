@@ -45,7 +45,7 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 		public void afterTextChanged(Editable s) {
 			int i = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				i = number.intValue();
 			} catch (Exception e) {
@@ -152,11 +152,11 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 			refSFallingEdge.setChecked(((CKPSPar)packet).ref_s_edge_type == 0);
 			refSRaisingEdge.setChecked(((CKPSPar)packet).ref_s_edge_type != 0);
 			mergeOutputs.setChecked(((CKPSPar)packet).ckps_merge_ign_outs != 0);
-			cogsNumber.setText(String.format("%d",((CKPSPar)packet).ckps_cogs_num));
-			missingCogsNumber.setText(String.format("%d",((CKPSPar)packet).ckps_miss_num));
-			cogsBeforeTDC.setText(String.format("%d",((CKPSPar)packet).ckps_cogs_btdc));
-			engineCylinders.setText(String.format("%d",((CKPSPar)packet).ckps_engine_cyl));
-			ignitionPulseDelay.setText(String.format("%d",((CKPSPar)packet).ckps_ignit_cogs));
+			cogsNumber.setText(String.format(Locale.US,"%d",((CKPSPar)packet).ckps_cogs_num));
+			missingCogsNumber.setText(String.format(Locale.US,"%d",((CKPSPar)packet).ckps_miss_num));
+			cogsBeforeTDC.setText(String.format(Locale.US,"%d",((CKPSPar)packet).ckps_cogs_btdc));
+			engineCylinders.setText(String.format(Locale.US,"%d",((CKPSPar)packet).ckps_engine_cyl));
+			ignitionPulseDelay.setText(String.format(Locale.US,"%d",((CKPSPar)packet).ckps_ignit_cogs));
 		}
 	}
 

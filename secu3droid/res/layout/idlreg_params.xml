@@ -68,7 +68,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/textView2"
 	        android:ems="10"
-	        android:inputType="numberSigned"
+	        android:inputType="numberSigned|numberDecimal"
 	        android:text="0.0" />
 
 	    <TextView
@@ -88,7 +88,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/TextView02"
 	        android:ems="10"
-	        android:inputType="numberSigned"
+	        android:inputType="numberSigned|numberDecimal"
 	        android:text="0.0" />
 
 	    <TextView

@@ -44,7 +44,7 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 		public void afterTextChanged(Editable s) {
 			int i = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				i = number.intValue();
 			} catch (Exception e) {
@@ -143,11 +143,11 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 	public void updateData() {
 		if (packet != null) {			
 			baudrate.setSelection(Secu3Dat.indexOf (Secu3Dat.BAUD_RATE_INDEX,((MiscelPar)packet).baud_rate_index));			
-			period.setText(String.format("%d",((MiscelPar)packet).period_ms));
+			period.setText(String.format(Locale.US,"%d",((MiscelPar)packet).period_ms));
 			enableIgnitionCutoff.setChecked(((MiscelPar)packet).ign_cutoff != 0);
-			ignitionCutoffRPM.setText(String.format("%d",((MiscelPar)packet).ign_cutoff_thrd));
-			hallOutputStart.setText(String.format("%d",((MiscelPar)packet).hop_start_cogs));
-			hallOutputDelay.setText(String.format("%d",((MiscelPar)packet).hop_durat_cogs));
+			ignitionCutoffRPM.setText(String.format(Locale.US,"%d",((MiscelPar)packet).ign_cutoff_thrd));
+			hallOutputStart.setText(String.format(Locale.US,"%d",((MiscelPar)packet).hop_start_cogs));
+			hallOutputDelay.setText(String.format(Locale.US,"%d",((MiscelPar)packet).hop_durat_cogs));
 		}
 	}
 

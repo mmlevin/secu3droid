@@ -68,7 +68,7 @@
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/textView3"
 	    android:ems="10"
-	    android:inputType="numberSigned"
+	    android:inputType="numberSigned|numberDecimal"
 	    android:text="0.0" />
 
 	<TextView

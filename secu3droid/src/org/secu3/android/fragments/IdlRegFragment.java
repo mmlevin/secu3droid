@@ -42,7 +42,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 			float f = 0;
 			int i = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				f = number.floatValue();
 			} catch (Exception e) {
@@ -66,7 +66,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 				}
 			}
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				i = number.intValue();
 			} catch (Exception e) {
@@ -136,12 +136,12 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {		
-			ifac1.setText(String.format("%.2f",((IdlRegPar)packet).ifac1));
-			ifac2.setText(String.format("%.2f",((IdlRegPar)packet).ifac2));
-			minimalAngle.setText(String.format("%.2f",((IdlRegPar)packet).min_angle));
-			maximalAngle.setText(String.format("%.2f",((IdlRegPar)packet).max_angle));
-			targetRPM.setText(String.format("%d",((IdlRegPar)packet).idling_rpm));
-			rpmSensitivity.setText(String.format("%d",((IdlRegPar)packet).MINEFR));
+			ifac1.setText(String.format(Locale.US,"%.2f",((IdlRegPar)packet).ifac1));
+			ifac2.setText(String.format(Locale.US,"%.2f",((IdlRegPar)packet).ifac2));
+			minimalAngle.setText(String.format(Locale.US,"%.2f",((IdlRegPar)packet).min_angle));
+			maximalAngle.setText(String.format(Locale.US,"%.2f",((IdlRegPar)packet).max_angle));
+			targetRPM.setText(String.format(Locale.US,"%d",((IdlRegPar)packet).idling_rpm));
+			rpmSensitivity.setText(String.format(Locale.US,"%d",((IdlRegPar)packet).MINEFR));
 			useIdleReg.setChecked(((IdlRegPar)packet).idl_regul != 0);
 		}
 	}

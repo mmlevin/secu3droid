@@ -45,7 +45,7 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		public void afterTextChanged(Editable s) {
 			float f = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				f = number.floatValue();
 			} catch (Exception e) {
@@ -133,10 +133,10 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void updateData() {
 		if (packet != null) {				
-			lowerPressure.setText (String.format("%.2f",packet.map_lower_pressure));
-			upperPressure.setText (String.format("%.2f",packet.map_upper_pressure));
-			sensorOffset.setText (String.format("%.3f",packet.map_curve_offset));
-			sensorGradient.setText (String.format("%.3f",packet.map_curve_gradient));
+			lowerPressure.setText (String.format(Locale.US,"%.2f",packet.map_lower_pressure));
+			upperPressure.setText (String.format(Locale.US,"%.2f",packet.map_upper_pressure));
+			sensorOffset.setText (String.format(Locale.US,"%.3f",packet.map_curve_offset));
+			sensorGradient.setText (String.format(Locale.US,"%.3f",packet.map_curve_gradient));
 			gasolineTable.setSelection(packet.fn_benzin);
 			gasTable.setSelection(packet.fn_gas);
 		}

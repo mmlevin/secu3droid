@@ -42,7 +42,7 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 			float f = 0;
 			int i = 0;
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				f = number.floatValue();
 			} catch (Exception e) {
@@ -60,7 +60,7 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 				}
 			}
 			try {
-				NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number = format.parse(s.toString());				
 				i = number.intValue();
 			} catch (Exception e) {		
@@ -137,12 +137,12 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 	@Override
 	public void updateData() {
 		if (packet != null) {			
-			carburEPHHLowThreshholdGasoline.setText(String.format("%d",((CarburPar)packet).ephh_lot));
-			carburEPHHHighThreshholdGasoline.setText(String.format("%d",((CarburPar)packet).ephh_hit));
-			carburEPHHLowThreshholdGas.setText(String.format("%d",((CarburPar)packet).ephh_lot_g));
-			carburEPHHHighThreshholdGas.setText(String.format("%d",((CarburPar)packet).ephh_hit_g));
-			carburOverrunDelay.setText(String.format("%.2f",((CarburPar)packet).shutoff_delay));
-			carburEPMValveOnPressure.setText(String.format("%.2f",((CarburPar)packet).epm_ont));
+			carburEPHHLowThreshholdGasoline.setText(String.format(Locale.US,"%d",((CarburPar)packet).ephh_lot));
+			carburEPHHHighThreshholdGasoline.setText(String.format(Locale.US,"%d",((CarburPar)packet).ephh_hit));
+			carburEPHHLowThreshholdGas.setText(String.format(Locale.US,"%d",((CarburPar)packet).ephh_lot_g));
+			carburEPHHHighThreshholdGas.setText(String.format(Locale.US,"%d",((CarburPar)packet).ephh_hit_g));
+			carburOverrunDelay.setText(String.format(Locale.US,"%.2f",((CarburPar)packet).shutoff_delay));
+			carburEPMValveOnPressure.setText(String.format(Locale.US,"%.2f",((CarburPar)packet).epm_ont));
 			carburSensorInverse.setChecked(((CarburPar)packet).carb_invers != 0);
 		}
 	}
