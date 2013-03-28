@@ -16,19 +16,19 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/textView1" >
-	
-	        <RadioButton
-	            android:id="@+id/ckpsCKPSRisingEdgeRadioButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Rising edge"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	        <RadioButton
-	            android:id="@+id/ckpsCKPSFallingEdgeRadioButton"
+	            android:id="@+id/ckpsCKPSNegativeEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Falling edge"
+	            android:text="Negative edge"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <RadioButton
+	            android:id="@+id/ckpsCKPSPositiveEdgeRadioButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Positive edge"
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    </RadioGroup>
@@ -38,19 +38,19 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/textView2" >
-	
-	        <RadioButton
-	            android:id="@+id/ckpsRefSRisingEdgeRadioButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Rising edge"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	        <RadioButton
-	            android:id="@+id/ckpsRefSFallingEdgeRadioButton"
+	            android:id="@+id/ckpsRefSNegativeEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Falling edge"
+	            android:text="Negative edge"
+	            android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	        <RadioButton
+	            android:id="@+id/ckpsRefSPositiveEdgeRadioButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Positive edge"
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    </RadioGroup>

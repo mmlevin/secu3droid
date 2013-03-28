@@ -92,10 +92,10 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		ckpsFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSFallingEdgeRadioButton);
-		ckpsRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSRisingEdgeRadioButton);
-		refSFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSFallingEdgeRadioButton);
-		refSRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSRisingEdgeRadioButton);
+		ckpsFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSNegativeEdgeRadioButton);
+		ckpsRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsCKPSPositiveEdgeRadioButton);
+		refSFallingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSNegativeEdgeRadioButton);
+		refSRaisingEdge = (RadioButton)getView().findViewById(R.id.ckpsRefSPositiveEdgeRadioButton);
 		mergeOutputs = (CheckBox)getView().findViewById(R.id.ckpsMergeOutputsCheckBox);
 		cogsNumber = (EditText)getView().findViewById(R.id.ckpsCogsNumberEditText);
 		missingCogsNumber = (EditText)getView().findViewById(R.id.ckpsMissingCogsNumberEditText);

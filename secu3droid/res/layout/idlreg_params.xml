@@ -17,7 +17,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
-	        android:text="Coefficient 1"
+	        android:text="Positive coefficient"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -36,7 +36,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/idlRegIfac1EditText"
-	        android:text="Coefficient 2"
+	        android:text="Negative coefficient"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
