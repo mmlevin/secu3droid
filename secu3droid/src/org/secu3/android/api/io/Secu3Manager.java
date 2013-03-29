@@ -21,9 +21,6 @@ import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.EncodingCP866;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -31,7 +28,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class Secu3Manager {
@@ -50,10 +46,7 @@ public class Secu3Manager {
 	private ScheduledExecutorService connectionAndReadingPool; 
 	private ConnectedSecu3 connectedSecu3;
 	private int disableReason = 0;
-	private Notification connectionProblemNotification;
-	private Notification serviceStoppedNotification;
 	private Context appContext;
-	private NotificationManager notificationManager;
 	private int maxConnectionRetries;
 	private int nbRetriesRemaining;
 	private boolean connected = false;
@@ -380,18 +373,7 @@ public class Secu3Manager {
 		this.deviceAddress = deviceAddress;
 		this.maxConnectionRetries = maxRetries;
 		this.nbRetriesRemaining =maxRetries + 1;
-		this.appContext = callingService.getApplicationContext();
-		notificationManager = (NotificationManager)callingService.getSystemService(Context.NOTIFICATION_SERVICE);
-		
-		connectionProblemNotification = new NotificationCompat.Builder(appContext)
-											.setSmallIcon(R.drawable.ic_launcher)
-											.setContentIntent(PendingIntent.getService(appContext, 0, new Intent (Secu3Service.ACTION_SECU3_SERVICE_STOP), PendingIntent.FLAG_CANCEL_CURRENT))
-											.build();		
-
-		serviceStoppedNotification = new NotificationCompat.Builder(appContext)
-										 .setSmallIcon(R.drawable.ic_launcher)
-										 .setContentIntent(PendingIntent.getService(appContext, 0, new Intent (Secu3Service.ACTION_SECU3_SERVICE_START), PendingIntent.FLAG_CANCEL_CURRENT))
-										 .build();
+		this.appContext = callingService.getApplicationContext();		
 	}
 	
 	private void setDisableReason (int reasonID) {
@@ -407,7 +389,7 @@ public class Secu3Manager {
 	}
 	
 	public synchronized boolean enable() {
-		notificationManager.cancel(R.string.service_closed_because_connection_problem_notification_title);
+		Secu3Service.secu3Notification.notificationManager.cancel(R.string.service_closed_because_connection_problem_notification_title);
 		if (! enabled){
         	Log.d(LOG_TAG, "enabling Bluetooth GPS manager");
 			final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -470,7 +452,7 @@ public class Secu3Manager {
 						        			Log.d(LOG_TAG, "connected to socket");
 											connected = true;
 											nbRetriesRemaining = 1+maxConnectionRetries ;
-											notificationManager.cancel(R.string.connection_problem_notification_title);
+											Secu3Service.secu3Notification.notificationManager.cancel(R.string.connection_problem_notification_title);
 						        			Log.v(LOG_TAG, "starting socket reading task");
 											connectedSecu3 = new ConnectedSecu3(secu3Socket);
 											connectionAndReadingPool.execute(connectedSecu3);
@@ -505,19 +487,11 @@ public class Secu3Manager {
 		return this.enabled;
 	}
 	
-	@SuppressWarnings("deprecation")
 	private synchronized void disableIfNeeded () {
 		if (enabled) {
 			if (nbRetriesRemaining > 0) {
 				Log.e(LOG_TAG, "Unable to establish connection");
-				connectionProblemNotification.when = System.currentTimeMillis();
-				String pbMessage = appContext.getResources().getQuantityString(R.plurals.connection_problem_notification, nbRetriesRemaining, nbRetriesRemaining);
-				connectionProblemNotification.setLatestEventInfo(appContext, 
-						appContext.getString(R.string.connection_problem_notification_title), 
-						pbMessage, 
-						connectionProblemNotification.contentIntent);
-				connectionProblemNotification.number = 1 + maxConnectionRetries - nbRetriesRemaining;
-				notificationManager.notify(R.string.connection_problem_notification_title, connectionProblemNotification);				
+				Secu3Service.secu3Notification.notifyConnectionProblem(maxConnectionRetries,nbRetriesRemaining);
 			} else {
 				disable (R.string.msg_too_many_connection_problems);
 			}
@@ -546,16 +520,10 @@ public class Secu3Manager {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public synchronized void disable() {
-		notificationManager.cancel(R.string.connection_problem_notification_title);
+		Secu3Service.secu3Notification.notificationManager.cancel(R.string.connection_problem_notification_title);
 		if (getDisableReason() != 0){
-			serviceStoppedNotification.when = System.currentTimeMillis();
-			serviceStoppedNotification.setLatestEventInfo(appContext, 
-					appContext.getString(R.string.service_closed_because_connection_problem_notification_title), 
-					appContext.getString(R.string.service_closed_because_connection_problem_notification, appContext.getString(getDisableReason())),
-					serviceStoppedNotification.contentIntent);
-			notificationManager.notify(R.string.service_closed_because_connection_problem_notification_title, serviceStoppedNotification);
+			Secu3Service.secu3Notification.notifyServiceStopped(getDisableReason());
 		}
 		if (enabled){
         	Log.d(LOG_TAG, "disabling Secu3 manager");

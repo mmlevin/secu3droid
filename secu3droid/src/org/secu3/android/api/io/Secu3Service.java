@@ -1,20 +1,16 @@
 package org.secu3.android.api.io;
 
-import org.secu3.android.MainActivity;
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,12 +33,13 @@ public class Secu3Service extends Service {
 	
 	NotificationManager notificationManager;
 	private Secu3Manager secu3Manager = null;
+	public static Secu3Notification secu3Notification;
 
 	@SuppressLint("ShowToast")
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);		
+		secu3Notification = new Secu3Notification(this);
 	}
 	
 	@Override
@@ -56,15 +53,8 @@ public class Secu3Service extends Service {
 				if (BluetoothAdapter.checkBluetoothAddress(deviceAddress)){
 					secu3Manager = new Secu3Manager(this, deviceAddress, maxConRetries);
 					boolean enabled = secu3Manager.enable();
-					if (enabled) {
-						Notification notification = new NotificationCompat.Builder(this)
-						.setContentTitle(this.getString(R.string.foreground_service_started_notification))
-						.setSmallIcon(R.drawable.ic_launcher)											
-						.setWhen(System.currentTimeMillis())
-						.setOngoing(true)
-						.setContentIntent(PendingIntent.getActivity(this, 0, new Intent (this,MainActivity.class), Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT))
-						.build();																
-						startForeground(R.string.foreground_service_started_notification, notification);
+					if (enabled) {															
+						startForeground(R.string.foreground_service_started_notification, secu3Notification.secu3Notification);
 						Toast.makeText(this, R.string.msg_service_started,Toast.LENGTH_LONG).show();
 					} else {
 						stopSelf();
@@ -105,7 +95,7 @@ public class Secu3Service extends Service {
 	@Override
 	public void onDestroy() {
 		Log.d(getString(R.string.app_name), "Stopping service");
-		notificationManager.cancelAll();
+		secu3Notification.notificationManager.cancelAll();
 		Secu3Manager manager = secu3Manager;
 		secu3Manager  = null;
 		if (manager != null){
