@@ -32,12 +32,12 @@ public class Secu3Notification {
 		
 		connectionProblemNotification = new NotificationCompat.Builder(ctx)
 			.setSmallIcon(R.drawable.ic_launcher)
-			.setContentIntent(PendingIntent.getService(ctx, 0, new Intent (Secu3Service.ACTION_SECU3_SERVICE_STOP), PendingIntent.FLAG_CANCEL_CURRENT))
+			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent (ctx,MainActivity.class), Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT))
 			.build();		
 
 		serviceStoppedNotification = new NotificationCompat.Builder(ctx)
 			.setSmallIcon(R.drawable.ic_launcher)
-			.setContentIntent(PendingIntent.getService(ctx, 0, new Intent (Secu3Service.ACTION_SECU3_SERVICE_START), PendingIntent.FLAG_CANCEL_CURRENT))
+			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent (ctx,MainActivity.class), Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT))
 			.build();		
 	}
 	
@@ -48,22 +48,23 @@ public class Secu3Notification {
 				.setContentTitle(ctx.getString(R.string.connection_problem_notification_title))
 				.setContentText(pbMessage)
 				.setWhen(System.currentTimeMillis())
-				.setNumber(1 + maxConnectionRetries - nbRetriesRemaining).build();
-				
-
-		connectionProblemNotification.setLatestEventInfo(ctx, 
-				ctx.getString(R.string.connection_problem_notification_title), 
-				pbMessage, 
-				connectionProblemNotification.contentIntent);
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setOngoing(true)
+				.setContentIntent(connectionProblemNotification.contentIntent)
+				.setNumber(1 + maxConnectionRetries - nbRetriesRemaining)
+				.build();				
 		notificationManager.notify(R.string.connection_problem_notification_title, connectionProblemNotification);			
 	}
 	
 	public void notifyServiceStopped (int disableReason) {
-		serviceStoppedNotification.when = System.currentTimeMillis();
-		serviceStoppedNotification.setLatestEventInfo(ctx, 
-				ctx.getString(R.string.service_closed_because_connection_problem_notification_title), 
-				ctx.getString(R.string.service_closed_because_connection_problem_notification, ctx.getString(disableReason)),
-				serviceStoppedNotification.contentIntent);
+		serviceStoppedNotification = new NotificationCompat.Builder(ctx)
+				.setContentTitle(ctx.getString(R.string.service_closed_because_connection_problem_notification_title))
+				.setContentText(ctx.getString(R.string.service_closed_because_connection_problem_notification, ctx.getString(disableReason)))
+				.setWhen(System.currentTimeMillis())
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setOngoing(true)
+				.setContentIntent(serviceStoppedNotification.contentIntent)
+				.build();
 		notificationManager.notify(R.string.service_closed_because_connection_problem_notification_title, serviceStoppedNotification);		
 	}
 	

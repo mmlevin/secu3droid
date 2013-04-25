@@ -8,7 +8,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	    <TextView
@@ -17,7 +17,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
-	        android:text="Fan ON temperature"
+	        android:text="@string/temper_fan_on_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -28,7 +28,7 @@
 	        android:layout_below="@+id/textView1"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <TextView
 	        android:id="@+id/textView2"
@@ -36,7 +36,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/temperFanOnEditText"
-	        android:text="Fan OFF temperature"
+	        android:text="@string/temper_fan_off_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -47,7 +47,7 @@
 	        android:layout_below="@+id/textView2"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
-	        android:text="0.0" >
+	        android:text="@string/units_zero_float" >
 
 	        <requestFocus />
 	    </EditText>
@@ -58,7 +58,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/temperFanOffEditText"
-	        android:text="Use temperature sensor"
+	        android:text="@string/temper_use_temp_sensor_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <CheckBox
@@ -67,7 +67,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/temperUseTempSensorCheckBox"
-	        android:text="Use PWM fan control"
+	        android:text="@string/temper_use_pwm_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <CheckBox
@@ -76,7 +76,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/temperUsePWMCheckBox"
-	        android:text="Use temperature sensor table"
+	        android:text="@string/temper_use_table"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView

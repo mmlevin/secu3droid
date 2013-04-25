@@ -9,7 +9,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	<TextView
@@ -18,7 +18,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_alignParentTop="true"
-	    android:text="Starter off RPM:"
+	    android:text="@string/starter_off_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<EditText
@@ -29,7 +29,7 @@
 	    android:layout_below="@+id/textView1"
 	    android:ems="10"
 	    android:inputType="number"
-	    android:text="0" />
+	    android:text="@string/units_zero" />
 
 	<TextView
 	    android:id="@+id/textView2"
@@ -37,7 +37,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/starterOffEditText"
-	    android:text="Starter map abandon:"
+	    android:text="@string/starter_map_abandon_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<EditText
@@ -48,7 +48,7 @@
 	    android:layout_below="@+id/textView2"
 	    android:ems="10"
 	    android:inputType="number"
-	    android:text="0" />
+	    android:text="@string/units_zero" />
 
 	<TextView
 	    android:id="@+id/textView3"

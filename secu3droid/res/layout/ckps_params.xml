@@ -8,7 +8,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 	
 	    <RadioGroup
@@ -21,14 +21,14 @@
 	            android:id="@+id/ckpsCKPSNegativeEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Negative edge"
+	            android:text="@string/ckps_negative_edge"
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	        <RadioButton
 	            android:id="@+id/ckpsCKPSPositiveEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Positive edge"
+	            android:text="@string/ckps_positive_edge_title"
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    </RadioGroup>
@@ -43,14 +43,14 @@
 	            android:id="@+id/ckpsRefSNegativeEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Negative edge"
+	            android:text="@string/ckps_negative_edge"
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	        <RadioButton
 	            android:id="@+id/ckpsRefSPositiveEdgeRadioButton"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Positive edge"
+	            android:text="@string/ckps_positive_edge_title"
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    </RadioGroup>
@@ -61,7 +61,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
-	        android:text="CKPS Edge"
+	        android:text="@string/ckps_ckp_edge_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
@@ -70,7 +70,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/radioGroup1"
-	        android:text="New turn sensor edge"
+	        android:text="@string/ckps_ref_s_edge_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <CheckBox
@@ -79,7 +79,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/radioGroup2"
-	        android:text="Merge outputs"
+	        android:text="@string/ckps_merge_outputs"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
@@ -88,7 +88,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/ckpsMergeOutputsCheckBox"
-	        android:text="Cogs number"
+	        android:text="@string/ckps_cogs_number_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -99,7 +99,7 @@
 	        android:layout_below="@+id/textView3"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView4"
@@ -107,7 +107,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/ckpsCogsNumberEditText"
-	        android:text="Missing cogs number"
+	        android:text="@string/ckps_missing_cogs_number_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -118,7 +118,7 @@
 	        android:layout_below="@+id/textView4"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" >
+	        android:text="@string/units_zero" >
 
 	        <requestFocus />
 	    </EditText>
@@ -129,7 +129,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/ckpsMissingCogsNumberEditText"
-	        android:text="Cogs number before TDC"
+	        android:text="@string/ckps_cogs_before_tdc_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -140,7 +140,7 @@
 	        android:layout_below="@+id/textView5"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView6"
@@ -148,7 +148,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/ckpsCogsBeforeTDCEditText"
-	        android:text="Engine cylynders"
+	        android:text="@string/ckps_engine_cylynders_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -159,7 +159,7 @@
 	        android:layout_below="@+id/textView6"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView7"
@@ -167,7 +167,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/ckpsEngineCylyndersEditText"
-	        android:text="Ignition pulse delay (in cogs)"
+	        android:text="@string/ckps_ignition_pulse_delay_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -178,7 +178,7 @@
 	        android:layout_below="@+id/textView7"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 	
 	</RelativeLayout>
 	

@@ -7,7 +7,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 	
 	    <EditText
@@ -18,7 +18,7 @@
 	        android:layout_below="@+id/textView6"
 	        android:ems="10"
 	        android:inputType="numberSigned"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <TextView
 	        android:id="@+id/textView1"
@@ -26,7 +26,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
-	        android:text="MAP sensor coefficient"
+	        android:text="@string/adccor_map_sensor_factor_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -37,7 +37,7 @@
 	        android:layout_below="@+id/textView1"
 	        android:ems="10"
 	        android:inputType="numberSigned"
-	        android:text="0.0" >
+	        android:text="@string/units_zero_float" >
 
 	        <requestFocus />
 	    </EditText>
@@ -49,7 +49,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/adccorMAPSensorCoefficientEditText"
 	        android:layout_marginTop="16dp"
-	        android:text="MAP sensor correction"
+	        android:text="@string/adccor_map_sensor_correction_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -60,7 +60,7 @@
 	        android:layout_below="@+id/textView2"
 	        android:ems="10"
 	        android:inputType="numberSigned"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <TextView
 	        android:id="@+id/textView3"
@@ -68,7 +68,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/adccorMAPSensorCorrectionEditText"
-	        android:text="Voltage sensor coefficient"
+	        android:text="@string/adccor_voltage_sensor_factor_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -79,7 +79,7 @@
 	        android:layout_below="@+id/textView3"
 	        android:ems="10"
 	        android:inputType="numberSigned"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <TextView
 	        android:id="@+id/textView4"
@@ -87,7 +87,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/adccorVoltageSensorCoefficientEditText"
-	        android:text="Voltage sensor correction"
+	        android:text="@string/adccor_voltage_sensor_correction_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -98,7 +98,7 @@
 	        android:layout_below="@+id/textView4"
 	        android:ems="10"
 	        android:inputType="numberSigned"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <TextView
 	        android:id="@+id/textView5"
@@ -106,7 +106,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/adccorVoltageSensorCorrectionEditText"
-	        android:text="Temperature sensor coefficient"
+	        android:text="@string/adccor_temper_sensor_factor_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -117,7 +117,7 @@
 	        android:layout_below="@+id/textView5"
 	        android:ems="10"
 	        android:inputType="numberSigned"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <TextView
 	        android:id="@+id/textView6"
@@ -125,7 +125,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/adccorTemperatureSensorCoefficientEditText"
-	        android:text="Temperature sensor correction"
+	        android:text="@string/adccor_temper_sensor_correction"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>

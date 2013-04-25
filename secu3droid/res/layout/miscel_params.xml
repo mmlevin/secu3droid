@@ -8,7 +8,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	    <TextView
@@ -17,7 +17,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
-	        android:text="Baudrate"
+	        android:text="@string/miscel_baudrate_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <Spinner
@@ -34,7 +34,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/miscelBaudrateSpinner"
-	        android:text="Packets transmit period"
+	        android:text="@string/miscel_period_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -45,7 +45,7 @@
 	        android:layout_below="@+id/textView2"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <CheckBox
 	        android:id="@+id/miscelEnableIgnitionCutoffCheckBox"
@@ -53,7 +53,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/miscelPeriodEditText"
-	        android:text="Enable ignition cutoff"
+	        android:text="@string/miscel_ignition_cutoff_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -64,7 +64,7 @@
 	        android:layout_below="@+id/textView3"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" >
+	        android:text="@string/units_zero" >
 
 	        <requestFocus />
 	    </EditText>
@@ -75,7 +75,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/miscelEnableIgnitionCutoffCheckBox"
-	        android:text="Ignition cutoff RPM"
+	        android:text="@string/miscel_ignition_cutoff_rpm_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
@@ -84,7 +84,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/miscelIgnitionCutoffRPMEditText"
-	        android:text="Hall output start (cogs after TDC)"
+	        android:text="@string/miscel_hall_output_start_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -95,7 +95,7 @@
 	        android:layout_below="@+id/textView4"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView5"
@@ -103,7 +103,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/miscelHallOutputStartEditText"
-	        android:text="Hall output delay (in cogs)"
+	        android:text="@string/miscel_hall_output_delay_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -114,7 +114,7 @@
 	        android:layout_below="@+id/textView5"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView6"

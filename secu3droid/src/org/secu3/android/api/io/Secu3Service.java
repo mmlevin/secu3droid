@@ -49,22 +49,27 @@ public class Secu3Service extends Service {
 		int maxConRetries = Integer.parseInt(sharedPreferences.getString(getString(R.string.pref_connection_retries_key), this.getString(R.string.defaultConnectionRetries)));
 		Log.d(LOG_TAG, "prefs device addr: "+deviceAddress);
 		if (ACTION_SECU3_SERVICE_START.equals(intent.getAction())){
-			if (secu3Manager == null){
-				if (BluetoothAdapter.checkBluetoothAddress(deviceAddress)){
-					secu3Manager = new Secu3Manager(this, deviceAddress, maxConRetries);
-					boolean enabled = secu3Manager.enable();
-					if (enabled) {															
-						startForeground(R.string.foreground_service_started_notification, secu3Notification.secu3Notification);
-						Toast.makeText(this, R.string.msg_service_started,Toast.LENGTH_LONG).show();
+			if (BluetoothAdapter.getDefaultAdapter() != null) {
+				if (secu3Manager == null){
+					if (BluetoothAdapter.checkBluetoothAddress(deviceAddress)){
+						secu3Manager = new Secu3Manager(this, deviceAddress, maxConRetries);
+						boolean enabled = secu3Manager.enable();
+						if (enabled) {															
+							startForeground(R.string.foreground_service_started_notification, secu3Notification.secu3Notification);
+							Toast.makeText(this, R.string.msg_service_started,Toast.LENGTH_LONG).show();
+						} else {
+							stopSelf();
+						}
 					} else {
 						stopSelf();
 					}
 				} else {
-					stopSelf();
+					Toast.makeText(this, R.string.msg_service_already_started, Toast.LENGTH_LONG).show();
+					sendBroadcast(intent);
 				}
 			} else {
-				Toast.makeText(this, R.string.msg_service_already_started, Toast.LENGTH_LONG).show();
-				sendBroadcast(intent);
+				Toast.makeText(this, R.string.msg_bluetooth_unsupported, Toast.LENGTH_LONG).show();
+				stopSelf();
 			}
 		} else if (ACTION_SECU3_SERVICE_STOP.equals(intent.getAction())){
 			stopSelf();
@@ -100,6 +105,7 @@ public class Secu3Service extends Service {
 		secu3Manager  = null;
 		if (manager != null){
 			if (manager.getDisableReason() != 0){
+				secu3Notification.notifyServiceStopped(manager.getDisableReason());
 				Toast.makeText(this, getString(R.string.msg_service_stopped_by_problem, getString(manager.getDisableReason())),Toast.LENGTH_LONG).show();				
 			} else {
 				Toast.makeText(this, R.string.msg_service_stopped, Toast.LENGTH_LONG).show();

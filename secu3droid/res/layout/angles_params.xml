@@ -8,7 +8,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 		
 		<EditText
@@ -19,7 +19,7 @@
 		    android:layout_below="@+id/textView5"
 		    android:ems="10"
 		    android:inputType="numberSigned"
-		    android:text="0.0" />
+		    android:text="@string/units_zero_float" />
 
 		<TextView
 		    android:id="@+id/textView1"
@@ -27,7 +27,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_alignParentTop="true"
-		    android:text="Minimal Angle"
+		    android:text="@string/angles_min_angle_title"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<EditText
@@ -38,7 +38,7 @@
 		    android:layout_below="@+id/textView1"
 		    android:ems="10"
 		    android:inputType="numberSigned|numberDecimal"
-		    android:text="0.0" />
+		    android:text="@string/units_zero_float" />
 
 		<TextView
 		    android:id="@+id/textView2"
@@ -46,7 +46,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_below="@+id/anglesMinimalAngleEditText"
-		    android:text="Maximal Angle"
+		    android:text="@string/angles_max_angle_title"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<EditText
@@ -57,7 +57,7 @@
 		    android:layout_below="@+id/textView2"
 		    android:ems="10"
 		    android:inputType="numberSigned|numberDecimal"
-		    android:text="0.0" >
+		    android:text="@string/units_zero_float" >
 
 		    <requestFocus />
 		</EditText>
@@ -68,7 +68,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_below="@+id/anglesMaximalAngleEditText"
-		    android:text="Angle decrement step"
+		    android:text="@string/angles_angle_decrement_step_title"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<EditText
@@ -79,7 +79,7 @@
 		    android:layout_below="@+id/textView3"
 		    android:ems="10"
 		    android:inputType="numberDecimal"
-		    android:text="0.0" />
+		    android:text="@string/units_zero_float" />
 
 		<TextView
 		    android:id="@+id/textView4"
@@ -87,7 +87,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_below="@+id/anglesDecrementStepEditText"
-		    android:text="Angle increment step"
+		    android:text="@string/angles_angle_increment_step_title"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<EditText
@@ -98,7 +98,7 @@
 		    android:layout_below="@+id/textView4"
 		    android:ems="10"
 		    android:inputType="numberDecimal"
-		    android:text="0.0" />
+		    android:text="@string/units_zero_float" />
 
 		<CheckBox
 		    android:id="@+id/showRawDataCheckBox"
@@ -106,7 +106,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_below="@+id/anglesIncrementStepEditText"
-		    android:text="Zero angle"
+		    android:text="@string/angles_zero_angle_title"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
@@ -115,7 +115,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
 		    android:layout_below="@+id/showRawDataCheckBox"
-		    android:text="Octane correction"
+		    android:text="@string/angles_octane_correction_title"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView

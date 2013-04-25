@@ -8,7 +8,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	<TextView
@@ -17,7 +17,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_alignParentTop="true"
-	    android:text="Lower pressure"
+	    android:text="@string/funset_lower_pressure_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
@@ -26,7 +26,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/funsetLowerPressureEditText"
-	    android:text="UpperPressure"
+	    android:text="@string/funset_upper_pressure_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<EditText
@@ -37,7 +37,7 @@
 	    android:layout_below="@+id/textView1"
 	    android:ems="10"
 	    android:inputType="numberDecimal"
-	    android:text="0.0" >
+	    android:text="@string/units_zero_float" >
 
 	    <requestFocus />
 	</EditText>
@@ -50,7 +50,7 @@
 	    android:layout_below="@+id/textView2"
 	    android:ems="10"
 	    android:inputType="numberDecimal"
-	    android:text="0.0" />
+	    android:text="@string/units_zero_float" />
 
 	<TextView
 	    android:id="@+id/textView3"
@@ -58,7 +58,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/funsetUpperPressureEditText"
-	    android:text="MAP Sensor Offset"
+	    android:text="@string/funset_map_sensor_offset_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<EditText
@@ -69,7 +69,7 @@
 	    android:layout_below="@+id/textView3"
 	    android:ems="10"
 	    android:inputType="numberSigned|numberDecimal"
-	    android:text="0.0" />
+	    android:text="@string/units_zero_float" />
 
 	<TextView
 	    android:id="@+id/textView4"
@@ -77,7 +77,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/funsetMAPSensorOffsetEditText"
-	    android:text="MAP Sensor Gradient"
+	    android:text="@string/funset_map_sensor_gradient_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<EditText
@@ -88,7 +88,7 @@
 	    android:layout_below="@+id/textView4"
 	    android:ems="10"
 	    android:inputType="numberSigned"
-	    android:text="0.0" />
+	    android:text="@string/units_zero_float" />
 
 	<TextView
 	    android:id="@+id/textView5"
@@ -96,7 +96,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/funsetMAPSensorGradientEditText"
-	    android:text="Gasoline table"
+	    android:text="@string/funset_maps_set_gasoline_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
@@ -105,7 +105,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/funsetGasolineTableSpinner"
-	    android:text="Gas table"
+	    android:text="@string/funset_maps_set_gas_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<Spinner

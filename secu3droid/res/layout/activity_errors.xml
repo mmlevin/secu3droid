@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/errorsTextViewStatus"
         android:layout_alignParentLeft="true"
-        android:text="Realtime errors reading"
+        android:text="@string/errors_realtime_errors_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <CheckBox
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/errorsRealtimeErrorsCheckBox"
         android:layout_alignParentLeft="true"
-        android:text="Inertion display"
+        android:text="@string/errors_inertion_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ScrollView
@@ -46,70 +46,70 @@
                 android:id="@+id/errorsCKPSCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CKPS Error"
+                android:text="@string/errors_ckps_error_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsEepromCrcCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EEPROM CRC Error"
+                android:text="@string/errors_eeprom_crc_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsFirmwareCrcCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Firmware CRC Error"
+                android:text="@string/errors_firmware_crc_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsDetonationProcessorCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No response from detonation processor"
+                android:text="@string/errors_detonation_processor_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsDetonationDetectedCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Detonation was detected"
+                android:text="@string/errors_detonation_detected_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsPressureSensorCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pressure sensor error"
+                android:text="@string/errors_pressure_sensor_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsTemperatureSensorError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Temperature sensor error"
+                android:text="@string/errors_temperature_sensor_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsVoltageErrorCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Abnormal voltage"
+                android:text="@string/errors_voltage_error_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsDwellControlErrorCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dwell control error"
+                android:text="@string/errors_dwell_control_error"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <CheckBox
                 android:id="@+id/errorsPhaseSensorErrorCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phase sensor error"
+                android:text="@string/errors_phase_sensor_error_title"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
         </LinearLayout>

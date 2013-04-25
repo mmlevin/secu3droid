@@ -115,6 +115,7 @@ public class MainActivity extends Activity {
 			startActivity(new Intent(this,ErrorsActivity.class));
 			return true;
 		case R.id.menu_exit:
+			Secu3Service.secu3Notification.notificationManager.cancelAll();
 			stopService(new Intent (this,Secu3Service.class));
 			System.exit(0);
 			return true;

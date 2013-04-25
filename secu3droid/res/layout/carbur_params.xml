@@ -8,7 +8,7 @@
 	<RelativeLayout
 	    android:id="@+id/layout1"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	    <TextView
@@ -17,7 +17,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentTop="true"
-	        android:text="Overrun low threshhold (gasoline)"
+	        android:text="@string/carbur_overrun_lower_threshold_gasoline_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -28,7 +28,7 @@
 	        android:layout_below="@+id/textView1"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView2"
@@ -36,7 +36,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/carburOverrunLowThreshholdGasolineEditText"
-	        android:text="Overrun high threshhold (gasoline)"
+	        android:text="@string/carbur_overrun_upper_threshold_gasoline_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -47,7 +47,7 @@
 	        android:layout_below="@+id/textView2"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" >
+	        android:text="@string/units_zero" >
 
 	        <requestFocus />
 	    </EditText>
@@ -58,7 +58,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/carburOverrunHighThreshholdGasolineEditText"
-	        android:text="Overrun low threshhold (gas)"
+	        android:text="@string/carbur_overrun_lower_threshold_gas_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -69,7 +69,7 @@
 	        android:layout_below="@+id/textView3"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView4"
@@ -77,7 +77,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/carburOverrunLowThreshholdGasEditText"
-	        android:text="Overrun high threshhold (gas)"
+	        android:text="@string/carbur_overrun_upper_threshold_gas_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -88,7 +88,7 @@
 	        android:layout_below="@+id/textView4"
 	        android:ems="10"
 	        android:inputType="number"
-	        android:text="0" />
+	        android:text="@string/units_zero" />
 
 	    <TextView
 	        android:id="@+id/textView5"
@@ -96,7 +96,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/carburOverrunHighThreshholdGasEditText"
-	        android:text="Overrun valve delay"
+	        android:text="@string/carbur_overrun_valve_delay"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -107,7 +107,7 @@
 	        android:layout_below="@+id/textView5"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <CheckBox
 	        android:id="@+id/carburSensorInverseCheckBox"
@@ -115,7 +115,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/carburOverrunValveDelayEditText"
-	        android:text="Carburator sensor inverse"
+	        android:text="@string/carbur_sensor_inverse_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
@@ -124,7 +124,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/carburSensorInverseCheckBox"
-	        android:text="EPM valve ON pressure"
+	        android:text="@string/carbur_epm_valve_on_pressure_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <EditText
@@ -135,7 +135,7 @@
 	        android:layout_below="@+id/textView6"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
-	        android:text="0.0" />
+	        android:text="@string/units_zero_float" />
 
 	    <TextView
 	        android:id="@+id/textView7"
