@@ -9,11 +9,13 @@ import android.util.Log;
 
 /** Общий класс для пакетов **/
 public class Secu3Dat implements Parcelable {	
-	 public final static int MAX_PACKET_SIZE = 64;
+	 public final static int MAX_PACKET_SIZE = 128;
 	
 	 public final static int MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER  = 64;
 	 public final static int UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER = 400;
      public final static int TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER = 4;
+     public final static int TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER = 2;
+     
      static final float ANGLE_MULTIPLIER = 32.0f;
      static final float ADC_DISCRETE = 0.0025f;
      
@@ -238,7 +240,7 @@ public class Secu3Dat implements Parcelable {
 	 
 	 /** Класс пакета параметров коррекции АЦП **/
 	 public static class ADCCorPar extends Secu3Dat {		 
-		static final int PACKET_SIZE = 38;
+		static final int PACKET_SIZE = 74;
 		
 		/** Коэффициент коррекции для канала ДАД АЦП AAAA **/
 		public float  map_adc_factor;                //коэффициент передаточной погрешности
@@ -252,6 +254,12 @@ public class Secu3Dat implements Parcelable {
 		public float  temp_adc_factor;
 		/** Коррекция для канала температуры АЦП FFFFFFFF **/
 		public float  temp_adc_correction;
+		public float tps_adc_factor;
+		public float tps_adc_correction;
+		public float add_i1_factor;
+		public float add_i1_correction;
+		public float add_i2_factor;
+		public float add_i2_correction;
 
 		public static final Parcelable.Creator<ADCCorPar> CREATOR = new Parcelable.Creator<ADCCorPar>() {
 			 public ADCCorPar createFromParcel(Parcel in) {
@@ -278,6 +286,12 @@ public class Secu3Dat implements Parcelable {
 			ubat_adc_correction = in.readFloat();
 			temp_adc_factor = in.readFloat();
 			temp_adc_correction = in.readFloat();
+			tps_adc_factor = in.readFloat();
+			tps_adc_correction = in.readFloat();
+			add_i1_factor = in.readFloat();
+			add_i1_correction = in.readFloat();
+			add_i2_factor = in.readFloat();
+			add_i2_correction = in.readFloat();
 		}
 		
 		@Override
@@ -289,6 +303,12 @@ public class Secu3Dat implements Parcelable {
 			dest.writeFloat(ubat_adc_correction);
 			dest.writeFloat(temp_adc_factor);
 			dest.writeFloat(temp_adc_correction);
+			dest.writeFloat(tps_adc_factor);
+			dest.writeFloat(tps_adc_correction);
+			dest.writeFloat(add_i1_factor);
+			dest.writeFloat(add_i1_correction);
+			dest.writeFloat(add_i2_factor);
+			dest.writeFloat(add_i2_correction);
 		}
 		
 		@Override
@@ -302,6 +322,12 @@ public class Secu3Dat implements Parcelable {
 				result &= this.temp_adc_factor == ((ADCCorPar)o).temp_adc_factor;
 				result &= this.ubat_adc_correction == ((ADCCorPar)o).ubat_adc_correction;
 				result &= this.ubat_adc_factor == ((ADCCorPar)o).ubat_adc_factor;
+				result &= this.tps_adc_factor == ((ADCCorPar)o).tps_adc_factor;
+				result &= this.tps_adc_correction == ((ADCCorPar)o).tps_adc_correction;
+				result &= this.add_i1_factor == ((ADCCorPar)o).add_i1_factor;
+				result &= this.add_i1_correction == ((ADCCorPar)o).add_i1_correction;
+				result &= this.add_i2_factor == ((ADCCorPar)o).add_i2_factor;
+				result &= this.add_i2_correction == ((ADCCorPar)o).add_i2_correction;
 			}
 			return result;
 		}
@@ -317,6 +343,12 @@ public class Secu3Dat implements Parcelable {
 				ubat_adc_correction = (((float)Long.valueOf(data.substring(18,26),16).intValue() / 16384f) - 0.5f) / ubat_adc_factor * ADC_DISCRETE; // DDDDDDDD			
 				temp_adc_factor = (float)Integer.valueOf(data.substring(26,30),16).shortValue() / 16384f; // EEEE
 				temp_adc_correction = (((float)Long.valueOf(data.substring(30,38),16).intValue() / 16384f) - 0.5f) / temp_adc_factor * ADC_DISCRETE; // FFFFFFFF						
+				tps_adc_factor = (float)Integer.valueOf(data.substring(38,42),16).shortValue() / 16384f; // EEEE
+				tps_adc_correction = (((float)Long.valueOf(data.substring(42,50),16).intValue() / 16384f) - 0.5f) / tps_adc_factor * ADC_DISCRETE; // FFFFFFFF
+				add_i1_factor = (float)Integer.valueOf(data.substring(50,54),16).shortValue() / 16384f; // EEEE
+				add_i1_correction = (((float)Long.valueOf(data.substring(54,62),16).intValue() / 16384f) - 0.5f) / add_i1_factor * ADC_DISCRETE; // FFFFFFFF
+				add_i2_factor = (float)Integer.valueOf(data.substring(62,66),16).shortValue() / 16384f; // EEEE
+				add_i2_correction = (((float)Long.valueOf(data.substring(66,74),16).intValue() / 16384f) - 0.5f) / add_i2_factor * ADC_DISCRETE; // FFFFFFFF
 			}
 			catch (Exception e) {
 				throw e;
@@ -327,19 +359,30 @@ public class Secu3Dat implements Parcelable {
 		public String pack() throws Exception {
 			long map_correction_d = Math.round(-map_adc_correction / ADC_DISCRETE);
 			long ubat_correction_d = Math.round(-ubat_adc_correction / ADC_DISCRETE);
-			long temp_correction_d = Math.round(-temp_adc_correction / ADC_DISCRETE);			
+			long temp_correction_d = Math.round(-temp_adc_correction / ADC_DISCRETE);
+			long tps_correction_d = Math.round(-tps_adc_correction / ADC_DISCRETE);
+			long add_i1_correction_d = Math.round(-add_i1_correction / ADC_DISCRETE);
+			long add_i2_correction_d = Math.round(-add_i2_correction / ADC_DISCRETE);
 			
-			return String.format("%s%s%04X%08X%04X%08X%04X%08X", OUTPUT_PACKET,packet_id,
+			return String.format("%s%s%04X%08X%04X%08X%04X%08X%04X%08X%04X%08X%04X%08X", OUTPUT_PACKET,packet_id,
 					Integer.valueOf(Math.round(map_adc_factor * 16384)).shortValue(),
 					Long.valueOf(Math.round(16384f * (0.5f - map_correction_d * map_adc_factor))).intValue(),
 					Integer.valueOf(Math.round(ubat_adc_factor * 16384)).shortValue(),
 					Long.valueOf(Math.round(16384f * (0.5f - ubat_correction_d * ubat_adc_factor))).intValue(),
 					Integer.valueOf(Math.round(temp_adc_factor * 16384)).shortValue(),
-					Long.valueOf(Math.round(16384f * (0.5f - temp_correction_d * temp_adc_factor))).intValue());
+					Long.valueOf(Math.round(16384f * (0.5f - temp_correction_d * temp_adc_factor))).intValue(),
+					Integer.valueOf(Math.round(tps_adc_factor * 16384)).shortValue(),
+					Long.valueOf(Math.round(16384f * (0.5f - tps_correction_d * tps_adc_factor))).intValue(),
+					Integer.valueOf(Math.round(add_i1_factor * 16384)).shortValue(),
+					Long.valueOf(Math.round(16384f * (0.5f - add_i1_correction_d * add_i1_factor))).intValue(),
+					Integer.valueOf(Math.round(add_i2_factor * 16384)).shortValue(),
+					Long.valueOf(Math.round(16384f * (0.5f - add_i2_correction_d * add_i2_factor))).intValue()
+					);
 		}
 		
 		public String getLogString() {
-			return (String.format("%s: MAP Factor: %f, MAP Correction: %f, UBAT Factor: %f, UBAT Correction: %f, Temp factor: %f, Temp correction: %f ", getClass().getCanonicalName(), map_adc_factor, map_adc_correction, ubat_adc_factor, ubat_adc_correction, temp_adc_factor, temp_adc_correction));
+			return (String.format("%s: MAP Factor: %f, MAP Correction: %f, UBAT Factor: %f, UBAT Correction: %f, Temp factor: %f, Temp correction: %f, TPS factor: %f, TPS Correction: %f, ADD_I1 factor: %f, ADD_I1 Correction: %f, ADD_I2 factor: %f, ADD_I2 Correction: %f", getClass().getCanonicalName(),
+					map_adc_factor, map_adc_correction, ubat_adc_factor, ubat_adc_correction, temp_adc_factor, temp_adc_correction,tps_adc_factor,tps_adc_correction,add_i1_factor,add_i1_correction,add_i2_factor,add_i2_correction));
 		}
 	
 	}
@@ -541,7 +584,7 @@ public class Secu3Dat implements Parcelable {
 	
 	/** Класс пакета параметров карбюратора **/
 	public static class CarburPar extends Secu3Dat {
-		public final int PACKET_SIZE = 25;
+		public final int PACKET_SIZE = 27;
 				
 		/** Нижний порог ЭПХХ для бензина (об./мин) AAAA**/
 		public int  ephh_lot;
@@ -557,6 +600,8 @@ public class Secu3Dat implements Parcelable {
 		public int  ephh_hit_g;
 		/** Задержка выключения клапана ЭПХХ * 10мс GG **/
 		public float shutoff_delay;                  //задержка выключения клапана
+		/** Порог переключения в режим ХХ по ДПДЗ **/
+		public float tps_threshold;
 			 
 		public static final Parcelable.Creator<CarburPar> CREATOR = new Parcelable.Creator<CarburPar>() {
 			 public CarburPar createFromParcel(Parcel in) {
@@ -584,6 +629,7 @@ public class Secu3Dat implements Parcelable {
 			ephh_lot_g = in.readInt();
 			ephh_hit_g = in.readInt();
 			shutoff_delay = in.readFloat();
+			tps_threshold = in.readFloat();
 		}
 
 		@Override
@@ -596,6 +642,7 @@ public class Secu3Dat implements Parcelable {
 			dest.writeInt(ephh_lot_g);
 			dest.writeInt(ephh_hit_g);
 			dest.writeFloat(shutoff_delay);
+			dest.writeFloat(tps_threshold);
 		}
 		
 		@Override
@@ -610,6 +657,7 @@ public class Secu3Dat implements Parcelable {
 				result &= this.ephh_lot_g == ((CarburPar)o).ephh_lot_g;
 				result &= this.ephh_hit_g == ((CarburPar)o).ephh_hit_g;
 				result &= this.shutoff_delay == ((CarburPar)o).shutoff_delay;
+				result &= this.tps_threshold == ((CarburPar)o).tps_threshold;
 			}
 			return result;
 		}
@@ -626,6 +674,7 @@ public class Secu3Dat implements Parcelable {
 				ephh_lot_g = Integer.parseInt(data.substring(15,19),16); // EEEE
 				ephh_hit_g = Integer.parseInt(data.substring(19,23),16); // FFFF	  	 	 
 				shutoff_delay = (float)Integer.parseInt(data.substring(23,25),16) / 100; // GG
+				tps_threshold = (float)Integer.parseInt(data.substring(25,27),16) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 			}
 			catch (Exception e) {
 				throw e;
@@ -634,14 +683,15 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			return String.format("%s%s%04X%04X%01X%04X%04X%04X%02X", OUTPUT_PACKET, packet_id,
+			return String.format("%s%s%04X%04X%01X%04X%04X%04X%02X%02X", OUTPUT_PACKET, packet_id,
 					ephh_lot,
 					ephh_hit,
 					carb_invers,
 					Integer.valueOf(Math.round(epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue(),
 					ephh_lot_g,
 					ephh_hit_g,
-					Math.round(shutoff_delay * 100));
+					Math.round(shutoff_delay * 100),
+					Integer.valueOf(Math.round(tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER)));
 		}
 			
 		@Override
@@ -1028,7 +1078,7 @@ public class Secu3Dat implements Parcelable {
 
 	/** Класс пакета используемых таблиц **/
 	public static class FunSetPar extends Secu3Dat {
-		static final int PACKET_SIZE = 22;
+		static final int PACKET_SIZE = 30;
 
 		/** Номер семейства характеристик, используемого для бензина AA **/
 		public int fn_benzin;
@@ -1042,6 +1092,11 @@ public class Secu3Dat implements Parcelable {
 		public float map_curve_offset;
 		/** Наклон кривой ДАД FFFF **/
 		public float map_curve_gradient;
+		/** Смещение кривой ДПДЗ в Вольтах EEEE **/
+		public float tps_curve_offset;
+		/** Наклон кривой ДПДЗ FFFF **/
+		public float tps_curve_gradient;
+
 
 		public static final Parcelable.Creator<FunSetPar> CREATOR = new Parcelable.Creator<FunSetPar>() {
 			 public FunSetPar createFromParcel(Parcel in) {
@@ -1068,6 +1123,8 @@ public class Secu3Dat implements Parcelable {
 			map_upper_pressure = in.readFloat();
 			map_curve_offset = in.readFloat();
 			map_curve_gradient = in.readFloat();
+			tps_curve_offset = in.readFloat();
+			tps_curve_gradient = in.readFloat();
 		}
 		
 		@Override
@@ -1079,6 +1136,8 @@ public class Secu3Dat implements Parcelable {
 			dest.writeFloat(map_upper_pressure);
 			dest.writeFloat(map_curve_offset);
 			dest.writeFloat(map_curve_gradient);
+			dest.writeFloat(tps_curve_offset);
+			dest.writeFloat(tps_curve_gradient);
 		}
 		
 		@Override
@@ -1092,6 +1151,8 @@ public class Secu3Dat implements Parcelable {
 				result &= this.map_upper_pressure == ((FunSetPar)o).map_upper_pressure;
 				result &= this.map_curve_offset == ((FunSetPar)o).map_curve_offset;
 				result &= this.map_curve_gradient == ((FunSetPar)o).map_curve_gradient;
+				result &= this.tps_curve_offset == ((FunSetPar)o).tps_curve_offset;
+				result &= this.tps_curve_gradient == ((FunSetPar)o).tps_curve_gradient;
 			}
 			return result;
 		}		
@@ -1117,6 +1178,14 @@ public class Secu3Dat implements Parcelable {
 				map_curve_gradient = (float) Integer.valueOf(
 						data.substring(18, 22), 16).shortValue()
 						/ (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * 128.0f * ADC_DISCRETE); // FFFF
+				
+				tps_curve_offset = (float) Integer.valueOf(
+						data.substring(22, 26), 16).shortValue()
+						* ADC_DISCRETE; // EEEE
+				
+				tps_curve_gradient = (float) Integer.valueOf(
+						data.substring(26, 30), 16).shortValue()
+						/ (TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER * 64 * 128.0f * ADC_DISCRETE); // FFFF
 			} catch (Exception e) {
 				throw e;
 			}
@@ -1124,29 +1193,31 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			return String.format("%s%s%02X%02X%04X%04X%04X%04X", OUTPUT_PACKET, packet_id,
+			return String.format("%s%s%02X%02X%04X%04X%04X%04X%04X%04X", OUTPUT_PACKET, packet_id,
 					fn_benzin,
 					fn_gas,
 					Integer.valueOf(Math.round(map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue(),
 					Integer.valueOf(Math.round(map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER)).shortValue(),
 					Integer.valueOf(Math.round(map_curve_offset / ADC_DISCRETE)).shortValue(),
-					Integer.valueOf(Math.round(128.0f * map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE)).shortValue());
+					Integer.valueOf(Math.round(128.0f * map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE)).shortValue(),
+					Integer.valueOf(Math.round(tps_curve_offset / ADC_DISCRETE)).shortValue(),
+					Integer.valueOf(Math.round(128.0f * tps_curve_gradient * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER * 64 * ADC_DISCRETE)).shortValue());
 		}
 
 		@Override
 		public String getLogString() {
 			return (String
-					.format("%s: Gasoline: %d, Gas: %d, Lower pressure: %f, Upper pressure: %f, Curve offset: %f, Curve gradient: %f",
+					.format("%s: Gasoline: %d, Gas: %d, Lower pressure: %f, Upper pressure: %f, Curve offset: %f, Curve gradient: %f, TPS Offset: %f, TPS gradient: %f",
 							getClass().getCanonicalName(), fn_benzin, fn_gas,
 							map_lower_pressure, map_upper_pressure,
-							map_curve_offset, map_curve_gradient));
+							map_curve_offset, map_curve_gradient,tps_curve_offset,tps_curve_gradient));
 		}
 
 	}
 
 	/** Класс пакета параметров холостого хода **/
 	public static class IdlRegPar extends Secu3Dat {
-		static final int PACKET_SIZE = 27;
+		static final int PACKET_SIZE = 31;
 
 		/** Признак использования регулятора (0,1) A **/
 		public int idl_regul;
@@ -1162,6 +1233,9 @@ public class Secu3Dat implements Parcelable {
 		public float min_angle; // со знаком
 		/** Максимально разрешенный УОЗ GGGG **/
 		public float max_angle; // со знаком
+		/** Температура включения регулятора **/
+		public float turn_on_temp;
+		
 
 		public static final Parcelable.Creator<IdlRegPar> CREATOR = new Parcelable.Creator<IdlRegPar>() {
 			 public IdlRegPar createFromParcel(Parcel in) {
@@ -1189,6 +1263,7 @@ public class Secu3Dat implements Parcelable {
 			idling_rpm = in.readInt();
 			min_angle = in.readFloat();
 			max_angle = in.readFloat();
+			turn_on_temp = in.readFloat();
 		}
 		
 		@Override
@@ -1201,6 +1276,7 @@ public class Secu3Dat implements Parcelable {
 			dest.writeInt(idling_rpm);
 			dest.writeFloat(min_angle);
 			dest.writeFloat(max_angle);
+			dest.writeFloat(turn_on_temp);
 		}
 		
 		@Override
@@ -1215,6 +1291,7 @@ public class Secu3Dat implements Parcelable {
 				result &= this.idling_rpm == ((IdlRegPar)o).idling_rpm;
 				result &= this.min_angle == ((IdlRegPar)o).min_angle;
 				result &= this.max_angle == ((IdlRegPar)o).max_angle;
+				result &= this.turn_on_temp == ((IdlRegPar)o).turn_on_temp;
 			}
 			return result;
 		}		
@@ -1235,6 +1312,7 @@ public class Secu3Dat implements Parcelable {
 						.shortValue() / ANGLE_MULTIPLIER; // FFFF
 				max_angle = (float) Integer.valueOf(data.substring(23, 27), 16)
 						.shortValue() / ANGLE_MULTIPLIER; // GGGG
+				turn_on_temp = (float) Integer.parseInt(data.substring(27,31),16) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 			} catch (Exception e) {
 				throw e;
 			}
@@ -1242,21 +1320,22 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			return String.format("%s%s%01X%04X%04X%04X%04X%04X%04X", OUTPUT_PACKET,packet_id,idl_regul,
+			return String.format("%s%s%01X%04X%04X%04X%04X%04X%04X%04X", OUTPUT_PACKET,packet_id,idl_regul,
 					Integer.valueOf(Math.round(ifac1 * ANGLE_MULTIPLIER)).shortValue(),
 					Math.round(ifac2 * ANGLE_MULTIPLIER),
 					MINEFR,
 					idling_rpm,
 					Integer.valueOf(Math.round(min_angle * ANGLE_MULTIPLIER)).shortValue(),
-					Integer.valueOf(Math.round(max_angle * ANGLE_MULTIPLIER)).shortValue());
+					Integer.valueOf(Math.round(max_angle * ANGLE_MULTIPLIER)).shortValue(),
+					Integer.valueOf(Math.round(turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER)));
 		}
 
 		@Override
 		public String getLogString() {
 			return (String
-					.format("%s: Use: %d, Ifac1: %f, Ifac2: %f, Mine FR: %d, RPM: %d, Min angle: %f, Max angle: %f",
+					.format("%s: Use: %d, Ifac1: %f, Ifac2: %f, Mine FR: %d, RPM: %d, Min angle: %f, Max angle: %f, Turn on temp: %f",
 							getClass().getCanonicalName(), idl_regul, ifac1, ifac2,
-							MINEFR, idling_rpm, min_angle, max_angle));
+							MINEFR, idling_rpm, min_angle, max_angle, turn_on_temp));
 		}
 
 	}
@@ -1540,7 +1619,7 @@ public class Secu3Dat implements Parcelable {
 
 	/** Класс пакета параметров реального времени **/
 	static public class SensorDat extends Secu3Dat {
-		static final int PACKET_SIZE = 34;
+		static final int PACKET_SIZE = 48;
 		
 		/** Частота вращения коленвала AAAA **/
 		public int frequen; // частота вращения коленвала (усредненная)
@@ -1562,6 +1641,10 @@ public class Secu3Dat implements Parcelable {
 		public int ephh_valve; // состояние клапана ЭПХХ
 		/** Состояние клапана ЭМР (1 - открыта, 0 - закрыта) BB **/
 		public int epm_valve; // состояние клапана ЭМР
+		/** Состояние вентилятора охлаждения **/
+		public int cool_fan;
+		/** Состояние блокировки стартера **/
+		public int st_block;
 		/** Уровень сигнала детонации на выходе HIP9011 KKKK **/
 		public float knock_k; // уровень сигнала детонации (усредненный за время
 								// фазового окна)
@@ -1569,6 +1652,14 @@ public class Secu3Dat implements Parcelable {
 		public float knock_retard; // корректировка УОЗ при детонации
 		/** Состояние индикатора CE (1 - включен, 0 - выключен) BB **/
 		public int ce_state; // !currently is not used!
+		/** Биты ошибок CE **/
+		public int ce_errors;
+		/** ДПДЗ **/
+		public float tps;
+		/** ADD_I1 **/
+		public float add_i1;
+		/** ADD_I2 **/
+		public float add_i2;
 
 		public static final Parcelable.Creator<SensorDat> CREATOR = new Parcelable.Creator<SensorDat>() {
 			 public SensorDat createFromParcel(Parcel in) {
@@ -1601,7 +1692,13 @@ public class Secu3Dat implements Parcelable {
 			dest.writeInt(carb);
 			dest.writeInt(gas);
 			dest.writeInt(epm_valve);
+			dest.writeInt(cool_fan);
+			dest.writeInt(st_block);
 			dest.writeInt(ce_state);
+			dest.writeInt(ce_errors);
+			dest.writeFloat(tps);
+			dest.writeFloat(add_i1);
+			dest.writeFloat(add_i2);
 		}
 		
 		public SensorDat (Parcel in) {
@@ -1618,7 +1715,13 @@ public class Secu3Dat implements Parcelable {
 			this.carb = in.readInt();
 			this.gas = in.readInt();
 			this.epm_valve = in.readInt();
-			this.ce_state = in.readInt();
+			this.cool_fan = in.readInt();
+			this.st_block = in.readInt();
+			this.ce_state = in.readInt();			
+			this.ce_errors = in.readInt();
+			this.tps = in.readFloat();
+			this.add_i1 = in.readFloat();
+			this.add_i2 = in.readFloat();
 		}				
 
 		@Override
@@ -1638,7 +1741,13 @@ public class Secu3Dat implements Parcelable {
 				result &= this.carb == ((SensorDat)o).carb;
 				result &= this.gas == ((SensorDat)o).gas;
 				result &= this.epm_valve == ((SensorDat)o).epm_valve;
+				result &= this.cool_fan == ((SensorDat)o).cool_fan;
+				result &= this.st_block == ((SensorDat)o).st_block;
 				result &= this.ce_state == ((SensorDat)o).ce_state;
+				result &= this.ce_errors == (((SensorDat)o)).ce_errors;
+				result &= this.tps == (((SensorDat)o)).tps;
+				result &= this.add_i1 == (((SensorDat)o)).add_i1;
+				result &= this.add_i2 == (((SensorDat)o)).add_i2;
 			}
 			return result;
 		}
@@ -1668,7 +1777,14 @@ public class Secu3Dat implements Parcelable {
 				carb = (flags & 0x02) >> 1;
 				gas = (flags & 0x04) >> 2;
 				epm_valve = (flags & 0x08) >> 3;
-				ce_state = (flags & 0xA0) >> 4;
+				ce_state = (flags & 0x10) >> 4;
+				cool_fan = (flags & 0x20) >> 5;
+				st_block = (flags & 0x40) >> 6;
+				
+				tps = (float)Integer.parseInt(data.substring(34, 36),16) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER; // TPS AA
+				add_i1 = Integer.parseInt(data.substring(36, 40),16) * ADC_DISCRETE; // ADD_I1 AAAA
+				add_i2 = Integer.parseInt(data.substring(40, 44),16) * ADC_DISCRETE; // ADD_I1 AAAA
+				ce_errors = Integer.parseInt(data.substring(44,48),16); // CE errors
 			} catch (Exception e) {
 				throw e;
 			}
@@ -1677,11 +1793,11 @@ public class Secu3Dat implements Parcelable {
 		@Override
 		public String getLogString() {
 			return String
-					.format("%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d",
+					.format("%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d, CE Errors: %d, TPS: %f, ADD_I1: %f, ADD_I2: %f",
 							getClass().getCanonicalName(), frequen, pressure, voltage,
 							temperat, adv_angle, knock_k, knock_retard,
 							air_flow, ephh_valve, carb, gas, epm_valve,
-							ce_state);
+							ce_state,ce_errors,tps,add_i1,add_i2);
 		}					
 	}
 

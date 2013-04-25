@@ -33,7 +33,7 @@ public class PacketsTest extends TestCase {
 		
 		SensorDat packet = new SensorDat();
 		try {
-			packet.parse ("@q032009C51518013400AA000000000311"); 
+			packet.parse ("@@q032009C51518013400AA00000000035114000000000001"); 
 			assertEquals(packet.getClass().getCanonicalName() + "Engine RPM",packet.frequen, 800);
 			assertEquals(packet.getClass().getCanonicalName() + "Pressure",packet.pressure, 39.078125f);
 			assertEquals(packet.getClass().getCanonicalName() + "Voltage",packet.voltage, 13.5f);
