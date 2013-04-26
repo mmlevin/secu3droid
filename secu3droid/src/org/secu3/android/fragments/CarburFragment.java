@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.CarburPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,7 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 
-public class CarburFragment extends Fragment implements ISecu3Fragment {
+public class CarburFragment extends Secu3Fragment implements ISecu3Fragment {
 	CarburPar packet;
 	
 	EditText carburEPHHLowThreshholdGasoline;
@@ -60,8 +59,9 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 					case R.id.carburTPSThresholdEditText:
 						packet.tps_threshold = f;
 						break;
-					}
-				}
+					}			
+					dataChanged(packet);
+				}				
 			}
 			try {
 				NumberFormat format = NumberFormat.getInstance(Locale.US);
@@ -85,6 +85,7 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 						packet.ephh_hit_g = i;
 						break;																										
 					}
+					dataChanged(packet);
 				}
 			}			
 		}	
@@ -129,7 +130,10 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (packet != null) packet.carb_invers = isChecked?1:0;				
+				if (packet != null) {
+					packet.carb_invers = isChecked?1:0;	
+					dataChanged(packet);
+				}
 			}
 		});
 	}

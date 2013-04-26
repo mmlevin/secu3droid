@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ChokePar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,7 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
-public class ChokeFragment extends Fragment implements ISecu3Fragment {
+public class ChokeFragment extends Secu3Fragment implements ISecu3Fragment {
 	
 	ChokePar packet = null;
 	EditText chokeSteps;
@@ -46,7 +45,8 @@ public class ChokeFragment extends Fragment implements ISecu3Fragment {
 						case R.id.chokeStepsEditText:
 							packet.steps = i;
 							break;
-					}
+					}	
+					dataChanged(packet);
 				}
 			}
 		}
@@ -77,7 +77,10 @@ public class ChokeFragment extends Fragment implements ISecu3Fragment {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (packet != null) packet.testing = isChecked?1:0;				
+				if (packet != null) {
+					packet.testing = isChecked?1:0;
+					dataChanged(packet);						
+				}		
 			}
 		});
 	}

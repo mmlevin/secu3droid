@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.CKPSPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,7 +19,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
-public class CKPSFragment extends Fragment implements ISecu3Fragment{
+public class CKPSFragment extends Secu3Fragment implements ISecu3Fragment{
 	CKPSPar packet;
 	
 	RadioButton ckpsFallingEdge;
@@ -69,6 +68,7 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 							packet.ckps_ignit_cogs = i;
 							break;
 					}
+					dataChanged(packet);
 				}
 			}
 		}
@@ -115,7 +115,8 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 						packet.ref_s_edge_type = isChecked?0:1;						
 					} else if (buttonView == refSRaisingEdge) {
 						packet.ref_s_edge_type = isChecked?1:0;
-					}					
+					}	
+					dataChanged(packet);
 				}				
 			}
 		};		
@@ -127,7 +128,10 @@ public class CKPSFragment extends Fragment implements ISecu3Fragment{
 		mergeOutputs.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (packet != null) packet.ckps_merge_ign_outs = isChecked?1:0;
+				if (packet != null) {
+					packet.ckps_merge_ign_outs = isChecked?1:0;
+					dataChanged(packet);
+				}
 			}
 		});
 		

@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.MiscelPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,7 +22,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class MiscelFragment extends Fragment implements ISecu3Fragment {
+public class MiscelFragment extends Secu3Fragment implements ISecu3Fragment {
 	MiscelPar packet;
 	
 	Spinner baudrate;
@@ -65,8 +64,9 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 							packet.period_ms = i;
 							break;
 
-					}
-				}
+					}		
+					dataChanged(packet);
+				}			
 			}
 		}
 
@@ -107,6 +107,7 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 				if (packet != null) {
 					packet.baud_rate = Secu3Dat.BAUD_RATE[position];
 					packet.baud_rate_index = Secu3Dat.BAUD_RATE_INDEX[position];
+					dataChanged(packet);
 				}
 			}
 
@@ -118,7 +119,10 @@ public class MiscelFragment extends Fragment implements ISecu3Fragment {
 		enableIgnitionCutoff.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (packet != null) packet.ign_cutoff = isChecked?1:0;				
+				if (packet != null) {
+					packet.ign_cutoff = isChecked?1:0;	
+					dataChanged(packet);
+				}
 			}
 		});
 	}

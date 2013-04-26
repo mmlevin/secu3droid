@@ -7,6 +7,7 @@ import org.secu3.android.api.io.*;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.fragments.*;
+import org.secu3.android.fragments.ISecu3Fragment.OnDataChangedListener;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ParamActivity extends FragmentActivity{
+public class ParamActivity extends FragmentActivity implements OnDataChangedListener{
 	public static final String LOG_TAG = "ParamActivity";	
 	
 	public static final int PARAMS_NUMBER = 9;
@@ -149,6 +150,8 @@ public class ParamActivity extends FragmentActivity{
 		pages.add(ckpsParPage = new CKPSFragment());
 		pages.add(miscelParPage = new MiscelFragment());
 		pages.add(chokeParPage = new ChokeFragment());
+		
+		chokeParPage.setOnDataChangedListener(this);
 			
 		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
@@ -165,6 +168,7 @@ public class ParamActivity extends FragmentActivity{
 		getMenuInflater().inflate(R.menu.activity_param, menu);
 		return true;
 	}
+	
 	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -312,5 +316,12 @@ public class ParamActivity extends FragmentActivity{
 				Toast.makeText(this, String.format("Params saved: error code %d", packet.opdata), Toast.LENGTH_LONG).show();
 			}
 		}
+	}
+
+	@Override
+	public void onDataChanged(Fragment fragment, Secu3Dat packet) {
+		if (fragment == chokeParPage) {
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, chokeParPage.getData()));
+		}		
 	}
 }

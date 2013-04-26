@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ADCCorPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-public class ADCCorFragment extends Fragment implements ISecu3Fragment {
+public class ADCCorFragment extends Secu3Fragment implements ISecu3Fragment {
 	ADCCorPar packet;
 	
 	EditText adccorMapSensorCoefficient;
@@ -89,6 +88,7 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 							packet.add_i2_correction = f;
 							break;
 					}
+					dataChanged(packet);
 				}
 			}
 		}

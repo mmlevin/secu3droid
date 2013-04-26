@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.StartrPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-public class StarterFragment extends Fragment implements ISecu3Fragment {
+public class StarterFragment extends Secu3Fragment implements ISecu3Fragment {
 	
 	StartrPar packet = null;
 	EditText starterRPM;
@@ -48,6 +47,7 @@ public class StarterFragment extends Fragment implements ISecu3Fragment {
 							packet.smap_abandon = i;
 							break;
 					}
+					dataChanged(packet);
 				}
 			}
 		}

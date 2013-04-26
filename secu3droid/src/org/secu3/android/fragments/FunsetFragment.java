@@ -10,7 +10,6 @@ import org.secu3.android.api.io.Secu3Dat.FnNameDat;
 import org.secu3.android.api.io.Secu3Dat.FunSetPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,7 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class FunsetFragment extends Fragment implements ISecu3Fragment{
+public class FunsetFragment extends Secu3Fragment implements ISecu3Fragment{
 	FunSetPar packet;
 	FnNameDat extraPacket;
 	
@@ -74,6 +73,7 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 							packet.tps_curve_gradient = f;
 							break;
 					}
+					dataChanged(packet);
 				}
 			}
 		}
@@ -125,7 +125,8 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 						packet.fn_benzin = position;
 					} else if (v.getParent() == gasTable) {
 						packet.fn_gas = position;
-					}					
+					}		
+					dataChanged(packet);
 				}
 			}
 

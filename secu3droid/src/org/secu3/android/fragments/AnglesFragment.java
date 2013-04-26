@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.AnglesPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,7 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-public class AnglesFragment extends Fragment implements ISecu3Fragment{
+public class AnglesFragment extends Secu3Fragment implements ISecu3Fragment{
 	AnglesPar packet;
 	
 	EditText minimalAngle;
@@ -63,6 +62,7 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 							packet.angle_corr = f;
 							break;
 					}
+					dataChanged(packet);
 				}
 			}
 		}
@@ -102,7 +102,10 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 		zeroAngle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (packet != null) packet.zero_adv_ang = isChecked?1:0;			
+				if (packet != null) {
+					packet.zero_adv_ang = isChecked?1:0;	
+					dataChanged(packet);
+				}
 			}
 		});
 	}

@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,7 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 
-public class IdlRegFragment extends Fragment implements ISecu3Fragment{
+public class IdlRegFragment extends Secu3Fragment implements ISecu3Fragment{
 	IdlRegPar packet;
 	
 	EditText ifac1;
@@ -67,6 +66,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 						packet.turn_on_temp = f;
 						break;
 					}
+					dataChanged(packet);
 				}
 			}
 			try {
@@ -85,6 +85,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 						packet.MINEFR = i;
 						break;
 					}
+					dataChanged(packet);
 				}
 			}			
 		}	
@@ -128,7 +129,10 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 		useIdleReg.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (packet != null) packet.idl_regul = isChecked?1:0;				
+				if (packet != null) {
+					packet.idl_regul = isChecked?1:0;
+					dataChanged(packet);
+				}
 			}
 		});
 	}

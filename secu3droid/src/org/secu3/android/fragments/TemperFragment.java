@@ -8,7 +8,6 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.TemperPar;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,7 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 
-public class TemperFragment extends Fragment implements ISecu3Fragment{
+public class TemperFragment extends Secu3Fragment implements ISecu3Fragment{
 	TemperPar packet;
 	
 	EditText fanOn;
@@ -54,6 +53,7 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 							packet.vent_off = f;
 							break;
 					}
+					dataChanged(packet);
 				}
 			}
 		}
@@ -96,7 +96,8 @@ public class TemperFragment extends Fragment implements ISecu3Fragment{
 						packet.vent_pwm = isChecked?1:0;						
 					} else if (buttonView == useTable) {
 						packet.cts_use_map = isChecked?1:0;
-					}
+					}	
+					dataChanged(packet);
 				}
 			}
 		};
