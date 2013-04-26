@@ -394,7 +394,7 @@ public class Secu3Dat implements Parcelable {
 	 
 	/** Класс пакета сырых данных АЦП **/
 	public static class ADCRawDat extends Secu3Dat {
-		static final int PACKET_SIZE = 18;
+		static final int PACKET_SIZE = 30;
 			
 		/** Сырое значение АЦП для ДАД AAAA **/
 		public float map_value;
@@ -404,6 +404,9 @@ public class Secu3Dat implements Parcelable {
 		public float temp_value;
 		/** Сырое значение АЦП для датчика детонации DDDD **/
 		public float knock_value;
+		public float tps_value;
+		public float add_i1_value;
+		public float add_i2_value;
 			
 		public static final Parcelable.Creator<ADCRawDat> CREATOR = new Parcelable.Creator<ADCRawDat>() {
 			 public ADCRawDat createFromParcel(Parcel in) {
@@ -428,6 +431,9 @@ public class Secu3Dat implements Parcelable {
 			ubat_value = in.readFloat();
 			temp_value = in.readFloat();
 			knock_value = in.readFloat();
+			tps_value = in.readFloat();
+			add_i1_value = in.readFloat();
+			add_i2_value = in.readFloat();
 		}
 
 		@Override
@@ -437,6 +443,9 @@ public class Secu3Dat implements Parcelable {
 			dest.writeFloat(ubat_value);
 			dest.writeFloat(temp_value);
 			dest.writeFloat(knock_value);
+			dest.writeFloat(tps_value);
+			dest.writeFloat(add_i1_value);
+			dest.writeFloat(add_i2_value);
 		}
 		
 		@Override
@@ -448,6 +457,9 @@ public class Secu3Dat implements Parcelable {
 				result &= this.ubat_value == ((ADCRawDat)o).ubat_value;
 				result &= this.temp_value == ((ADCRawDat)o).temp_value;
 				result &= this.knock_value == ((ADCRawDat)o).knock_value;
+				result &= this.tps_value == ((ADCRawDat)o).tps_value;
+				result &= this.add_i1_value == ((ADCRawDat)o).add_i1_value;
+				result &= this.add_i2_value == ((ADCRawDat)o).add_i2_value;
 			}
 			return result;
 		}
@@ -460,7 +472,10 @@ public class Secu3Dat implements Parcelable {
 				map_value = (float)Integer.parseInt(data.substring(2,6),16) * ADC_DISCRETE; // AAAA
 				ubat_value = (float)Integer.parseInt(data.substring(6,10),16) * ADC_DISCRETE; // BBBB
 				temp_value = (float)Integer.parseInt(data.substring(10,14),16) * ADC_DISCRETE; // CCCC
-				knock_value = (float)Integer.parseInt(data.substring(14,18),16) * ADC_DISCRETE; // DDDD			
+				knock_value = (float)Integer.parseInt(data.substring(14,18),16) * ADC_DISCRETE; // DDDD		
+				tps_value = (float)Integer.parseInt(data.substring(18,22),16) * ADC_DISCRETE; // DDDD
+				add_i1_value = (float)Integer.parseInt(data.substring(22,26),16) * ADC_DISCRETE; // DDDD
+				add_i2_value = (float)Integer.parseInt(data.substring(26,30),16) * ADC_DISCRETE; // DDDD
 			}
 			catch (Exception e) {
 				throw e;

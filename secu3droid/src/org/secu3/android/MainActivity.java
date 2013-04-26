@@ -207,14 +207,14 @@ public class MainActivity extends Activity {
 				textViewData.setText(String.format(Locale.US,sensorsFormat,
 						sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
 						sd.knock_k, sd.knock_retard, sd.air_flow, sd.ephh_valve,
-						sd.carb, sd.gas, sd.epm_valve, sd.ce_state));
+						sd.carb, sd.gas, sd.epm_valve, sd.cool_fan,sd.st_block,sd.add_i1,sd.add_i2,sd.tps));
 			}			
 		} else if (Secu3Dat.RECEIVE_ADCRAW_DAT.equals(intent.getAction())) {
 			ADCRawDat ad = (ADCRawDat)intent.getParcelableExtra(ADCRawDat.class.getCanonicalName());
 			if (checkBox.isChecked() && (ad != null)) {
 				textViewData.setText(String.format(Locale.US,sensorsRawFormat,
 								ad.map_value, ad.ubat_value, ad.temp_value,
-								ad.knock_value));
+								ad.knock_value,ad.tps_value,ad.add_i1_value,ad.add_i2_value));
 			}			
 		} else if (Secu3Dat.RECEIVE_FWINFO_DAT.equals(intent.getAction())) {
 			FWInfoDat packet = (FWInfoDat) intent.getParcelableExtra(FWInfoDat.class.getCanonicalName());
