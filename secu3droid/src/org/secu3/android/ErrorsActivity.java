@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ErrorsActivity extends Activity {
@@ -25,18 +26,10 @@ public class ErrorsActivity extends Activity {
 	boolean isOnline = false;
 	
 	TextView errorsTextViewStatus = null;	
-	CheckBox CKPSCheckBox = null;
-	CheckBox EepromCrcError = null;
-	CheckBox FirmwareCrcError = null;
-	CheckBox DetonationProcessorError = null;
-	CheckBox DetonationDetectedError = null;
-	CheckBox PressureSensorError = null;
-	CheckBox TemperatureSensorError = null;
-	CheckBox VoltageError = null;
-	CheckBox DwellControlError = null;
-	CheckBox PhaseSensorError = null;
 	CheckBox RealtimeError = null;
 	CheckBox ReadingInertion = null;
+	
+	private CheckBox errors[] = null;
 
 	private void setRealtime (boolean realtime) {
 		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SAVED_ERRORS;
@@ -73,19 +66,21 @@ public class ErrorsActivity extends Activity {
 		
 		setContentView(R.layout.activity_errors);
 		
-		receiver = new ReceiveMessages();		
+		receiver = new ReceiveMessages();
+		
+		errors = new CheckBox[Secu3Dat.SECU3_ECU_ERRORS_COUNT];
+		String errorNames[] = getResources().getStringArray(R.array.errors_ecu_errors_names);
+		String errorBCs[] = getResources().getStringArray(R.array.errors_ecu_errors_blink_codes);
+		LinearLayout l = (LinearLayout)findViewById(R.id.errorsLinearLayout);
+		
+		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+			errors[i] = new CheckBox(this);
+			errors[i].setText(String.format("(%s) - %s",errorBCs[i],errorNames[i]));
+			errors[i].setTextAppearance(this, R.style.secu3TextAppearance);
+			l.addView(errors[i]);			
+		}		
 		
 		errorsTextViewStatus = (TextView)findViewById(R.id.errorsTextViewStatus);
-		CKPSCheckBox = (CheckBox)findViewById(R.id.errorsCKPSCheckBox);
-		EepromCrcError = (CheckBox)findViewById(R.id.errorsEepromCrcCheckBox);
-		FirmwareCrcError = (CheckBox)findViewById(R.id.errorsFirmwareCrcCheckBox);
-		DetonationProcessorError = (CheckBox)findViewById(R.id.errorsDetonationProcessorCheckBox);
-		DetonationDetectedError = (CheckBox)findViewById(R.id.errorsDetonationDetectedCheckBox);
-		PressureSensorError = (CheckBox)findViewById(R.id.errorsPressureSensorCheckBox);
-		TemperatureSensorError = (CheckBox)findViewById(R.id.errorsTemperatureSensorError);
-		VoltageError = (CheckBox)findViewById(R.id.errorsVoltageErrorCheckBox);
-		DwellControlError = (CheckBox)findViewById(R.id.errorsDwellControlErrorCheckBox);
-		PhaseSensorError = (CheckBox)findViewById(R.id.errorsPhaseSensorErrorCheckBox);
 		RealtimeError = (CheckBox)findViewById(R.id.errorsRealtimeErrorsCheckBox);
 		ReadingInertion = (CheckBox)findViewById(R.id.errorsInertionCheckBox);
 		
@@ -137,16 +132,10 @@ public class ErrorsActivity extends Activity {
 	}
 	
 	void updateFlags (int flags) {
-		CKPSCheckBox.setChecked(((flags >> Secu3Dat.ECUERROR_CKPS_MALFUNCTION) & 1) != 0);
-		EepromCrcError.setChecked(((flags >> Secu3Dat.ECUERROR_EEPROM_PARAM_BROKEN) & 1)  != 0);
-		FirmwareCrcError.setChecked(((flags >> Secu3Dat.ECUERROR_PROGRAM_CODE_BROKEN) & 1)  != 0);
-		DetonationProcessorError.setChecked(((flags >> Secu3Dat.ECUERROR_KSP_CHIP_FAILED) & 1)  != 0);
-		DetonationDetectedError.setChecked(((flags >> Secu3Dat.ECUERROR_KNOCK_DETECTED) & 1)  != 0);
-		PressureSensorError.setChecked(((flags >> Secu3Dat.ECUERROR_MAP_SENSOR_FAIL) & 1)  != 0);
-		TemperatureSensorError.setChecked(((flags >> Secu3Dat.ECUERROR_TEMP_SENSOR_FAIL) & 1)  != 0);
-		VoltageError.setChecked(((flags >> Secu3Dat.ECUERROR_VOLT_SENSOR_FAIL) & 1)  != 0);
-		DwellControlError.setChecked(((flags >> Secu3Dat.ECUERROR_DWELL_CONTROL) & 1)  != 0);
-		PhaseSensorError.setChecked(((flags >> Secu3Dat.ECUERROR_CAMS_MALFUNCTION) & 1)  != 0);		
+		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+			errors[i].setChecked(((flags & 0x01) != 0)?true:false);
+			flags >>= 1; 
+		}
 	}
 	
 	void update (Intent intent) {		

@@ -134,16 +134,35 @@
 	<string name="adccor_voltage_sensor_correction_title">Voltage Sensor correction:</string>
 	<string name="adccor_temper_sensor_factor_title">Temperature Sensor factor:</string>
 	<string name="adccor_temper_sensor_correction">Temperature Sensor correction:</string>
-	<string name="errors_ckps_error_title">Failures in working of CKP sensor - synchronization errors</string>
-	<string name="errors_eeprom_crc_title">EEPROM parameters are damaged (CRC)</string>
-	<string name="errors_firmware_crc_title">Firmware code is damaged (CRC)</string>
-	<string name="errors_detonation_processor_title">Knock chip doesn\'t respond</string>
-	<string name="errors_detonation_detected_title">Detonation detected</string>
-	<string name="errors_pressure_sensor_title">Breakage or wrong work of MAP sensor</string>
-	<string name="errors_temperature_sensor_title">Breakage or wrong work of coolant temperature sensor</string>
-	<string name="errors_voltage_error_title">Abnormal board voltage</string>
-	<string name="errors_dwell_control_error">Dwell control</string>
-	<string name="errors_phase_sensor_error_title">Breakage or wrong work of cam sensor</string>
+
+	<string-array name="errors_ecu_errors_names">
+		<item>Failures in working of CKP sensor - synchronization errors</item>
+		<item>EEPROM parameters are damaged (CRC)</item>
+		<item>Firmware code is damaged (CRC)</item>
+		<item>Knock chip doesn\'t respond</item>
+		<item>Detonation detected</item>
+		<item>Breakage or wrong work of MAP sensor</item>
+		<item>Breakage or wrong work of coolant temperature sensor</item>
+		<item>Abnormal board voltage</item>
+		<item>Dwell control</item>
+		<item>Breakage or wrong work of cam sensor</item>	    	   
+		<item>Breakage or wrong indications of TPS</item>
+	</string-array>
+	
+	<string-array name="errors_ecu_errors_blink_codes">
+	    <item>21</item>
+	    <item>13</item>
+	    <item>14</item>
+	    <item>31</item>
+	    <item>32</item>
+	    <item>22</item>
+	    <item>23</item>
+	    <item>24</item>
+	    <item>41</item>
+	    <item>25</item>
+	    <item>26</item>
+	</string-array>
+	
 	<string name="errors_realtime_errors_title">Read errors in realtime</string>
 	<string name="errors_inertion_title">Show errors with inertness</string>
 	<string name="show_raw_data_title">Show raw values of sensors</string>

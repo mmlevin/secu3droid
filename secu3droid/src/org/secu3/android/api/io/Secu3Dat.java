@@ -70,6 +70,7 @@ public class Secu3Dat implements Parcelable {
 	 public final static int OPCODE_DIAGNOST_ENTER       = 6;  //enter diagnostic mode
 	 public final static int OPCODE_DIAGNOST_LEAVE       = 7;  //leave diagnostic mode
 	 
+	 public final static int SECU3_ECU_ERRORS_COUNT		  = 11;
 	 public final static int ECUERROR_CKPS_MALFUNCTION    = 0;
 	 public final static int ECUERROR_EEPROM_PARAM_BROKEN = 1;
 	 public final static int ECUERROR_PROGRAM_CODE_BROKEN = 2;
@@ -80,6 +81,7 @@ public class Secu3Dat implements Parcelable {
 	 public final static int ECUERROR_VOLT_SENSOR_FAIL    = 7;
 	 public final static int ECUERROR_DWELL_CONTROL       = 8;
 	 public final static int ECUERROR_CAMS_MALFUNCTION    = 9;
+	 public final static int ECUERROR_TPS_SENSOR_FAIL     = 10;
 
 	 
 	 public final static int FW_SIGNATURE_INFO_SIZE	  = 48;
