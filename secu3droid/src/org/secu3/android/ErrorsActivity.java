@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -34,6 +35,14 @@ public class ErrorsActivity extends Activity {
 	private void setRealtime (boolean realtime) {
 		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SAVED_ERRORS;
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));		
+	}
+	
+	private int getErrors () {
+		int res = 0;
+		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+			if (errors [i].isChecked()) res |= 0x01 << i; 
+		}
+		return res;
 	}
 	
 	public class ReceiveMessages extends BroadcastReceiver 
@@ -90,15 +99,42 @@ public class ErrorsActivity extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (buttonView == RealtimeError) {
 					setRealtime(RealtimeError.isChecked());
+					ReadingInertion.setEnabled (RealtimeError.isChecked());
+					invalidateOptionsMenu();
 				}				
 			}
 		});
+		RealtimeError.setChecked(false);
+		ReadingInertion.setEnabled(false);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_errors, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_errors_write:
+			CESavedErr err = new CESavedErr();
+			err.flags = getErrors();
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, err));			
+			return true;
+		case R.id.menu_errors_read:
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SAVED_ERRORS.ordinal()));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(R.id.menu_errors_read).setEnabled(!RealtimeError.isChecked());
+		menu.findItem(R.id.menu_errors_write).setEnabled(!RealtimeError.isChecked());
+		return super.onPrepareOptionsMenu(menu);
 	}
 	
 	@Override
@@ -142,6 +178,7 @@ public class ErrorsActivity extends Activity {
 		if (Secu3Dat.RECEIVE_CE_SAVED_ERR.equals(intent.getAction())) {
 			CESavedErr packet = intent.getParcelableExtra(CESavedErr.class.getCanonicalName());
 			updateFlags(packet.flags);		
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
 		} else if (Secu3Dat.RECEIVE_CE_ERR_CODES.equals(intent.getAction())) {
 			CEErrCodes packet = intent.getParcelableExtra(CEErrCodes.class.getCanonicalName());
 			updateFlags(packet.flags);									

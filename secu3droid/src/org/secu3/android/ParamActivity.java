@@ -169,12 +169,12 @@ public class ParamActivity extends FragmentActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
-		case R.id.menu_download:
+		case R.id.menu_params_download:
 	    	progressBar.setIndeterminate(true);
 	    	progressBar.setVisibility(ProgressBar.VISIBLE);
 			readParams();
 			return true;
-		case R.id.menu_upload:
+		case R.id.menu_params_upload:
 			if (isValid()) {
 				try {
 			    	progressBar.setIndeterminate(true);
@@ -195,7 +195,7 @@ public class ParamActivity extends FragmentActivity{
 				}
 			}
 			return true;
-		case R.id.menu_save_eeprom:
+		case R.id.menu_params_save_eeprom:
 			try {
 		    	progressBar.setIndeterminate(true);
 		    	progressBar.setVisibility(ProgressBar.VISIBLE);				

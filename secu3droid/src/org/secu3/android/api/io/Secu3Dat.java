@@ -846,6 +846,10 @@ public class Secu3Dat implements Parcelable {
 			return String.format("%s%s%04X", OUTPUT_PACKET, packet_id, flags);
 		}
 		
+		public static String pack (int flags) {
+			return String.format("%s%s%04X", OUTPUT_PACKET, CE_SAVED_ERR, flags);
+		}
+		
 		@Override
 		public String getLogString() {
 			return (String.format("%s: %d", getClass().getCanonicalName(), flags));
@@ -1884,7 +1888,7 @@ public class Secu3Dat implements Parcelable {
 		@Override
 		public String getLogString() {
 			return String
-					.format("%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d, CE Errors: %d, TPS: %f, ADD_I1: %f, ADD_I2: %f",
+					.format("%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, EPHH Valve: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d, CE Errors: %d, TPS: %f, ADD_I1: %f, ADD_I2: %f",
 							getClass().getCanonicalName(), frequen, pressure, voltage,
 							temperat, adv_angle, knock_k, knock_retard,
 							air_flow, ephh_valve, carb, gas, epm_valve,

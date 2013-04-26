@@ -45,9 +45,11 @@
     <string name="menu_errors">Errors</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_exit">Exit</string>
-    <string name="menu_download">Download</string>
-    <string name="menu_upload">Upload</string>
-    <string name="menu_save_eeprom">Save</string>
+    <string name="menu_params_download_title">Download</string>
+    <string name="menu_params_upload_title">Upload</string>
+    <string name="menu_params_save_eeprom_title">Save</string>
+    <string name="menu_errors_read">Read saved</string>
+    <string name="menu_errors_write">Write saved</string>
     
     <string name="about_title">About</string>
     <string name="about_version">Secu3Droid version</string>
