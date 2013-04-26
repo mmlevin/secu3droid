@@ -60,7 +60,7 @@ public class ChokeFragment extends Fragment implements ISecu3Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container == null) return null;
-		return inflater.inflate(R.layout.starter_params, null);
+		return inflater.inflate(R.layout.choke_params, null);
 	}
 
 	@Override

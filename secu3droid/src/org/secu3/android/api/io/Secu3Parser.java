@@ -28,6 +28,7 @@ public class Secu3Parser extends Secu3Dat {
 		parsers.put(String.valueOf(CE_SAVED_ERR), new CESavedErr());
 		parsers.put(String.valueOf(FWINFO_DAT), new FWInfoDat());
 		parsers.put(String.valueOf(MISCEL_PAR), new MiscelPar());
+		parsers.put(String.valueOf(CHOKE_PAR), new ChokePar());
 	}
 	
 	public void parse (String packet) throws Exception {
