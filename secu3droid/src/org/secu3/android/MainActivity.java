@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
 	TextView textFWInfo = null;
 	CheckBox checkBox = null;
 	boolean isOnline;
+	boolean errors = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
@@ -99,6 +100,13 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem m = menu.findItem(R.id.menu_errors);
+		m.setIcon(errors?R.drawable.ic_menu_errors_highlighted:R.drawable.ic_menu_errors);
 		return true;
 	}
 	
@@ -190,6 +198,11 @@ public class MainActivity extends Activity {
 			}				
 		} else if (Secu3Dat.RECEIVE_SENSOR_DAT.equals(intent.getAction())) {
 			SensorDat sd = (SensorDat)intent.getParcelableExtra(SensorDat.class.getCanonicalName());
+			boolean errors = sd.ce_errors != 0;
+			if (errors != this.errors) {
+				this.errors = errors;
+				invalidateOptionsMenu();
+			}
 			if (!checkBox.isChecked() && (sd != null)) {
 				textViewData.setText(String.format(Locale.US,sensorsFormat,
 						sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
