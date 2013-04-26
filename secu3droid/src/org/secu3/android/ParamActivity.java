@@ -11,10 +11,12 @@ import org.secu3.android.fragments.ISecu3Fragment.OnDataChangedListener;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -51,7 +53,10 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 	ViewPager pager = null;
     ParamPagerAdapter awesomeAdapter = null;
     
+    SharedPreferences sharedPref = null;
 	private boolean isOnline = false;
+	private boolean uploadImmediatelly;
+		
 	
     private boolean isValid() {
     	return (starterParPage.getData() != null) &&
@@ -69,6 +74,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
     }
     
     private void readParams() {
+    	setOnDataChangedListeners(null);    	
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
     }
@@ -138,6 +144,8 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		super.onCreate(savedInstanceState);		
 		Log.d(LOG_TAG, "onCreate");
 		
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		uploadImmediatelly = sharedPref.getBoolean(getString(R.string.pref_upload_immediately), false);
 		setContentView(R.layout.activity_param);
 		
 		pages.add(starterParPage = new StarterFragment());
@@ -149,9 +157,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		pages.add(adcCorParPage = new ADCCorFragment());
 		pages.add(ckpsParPage = new CKPSFragment());
 		pages.add(miscelParPage = new MiscelFragment());
-		pages.add(chokeParPage = new ChokeFragment());
-		
-		chokeParPage.setOnDataChangedListener(this);
+		pages.add(chokeParPage = new ChokeFragment());		
 			
 		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
@@ -161,6 +167,19 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
 		pager = (ViewPager)findViewById(R.id.paramsPager);
 		pager.setAdapter(awesomeAdapter);
+	}
+
+	private void setOnDataChangedListeners(OnDataChangedListener listener) {
+		starterParPage.setOnDataChangedListener(listener);
+		anglesParPage.setOnDataChangedListener(listener);
+		idlRegParPage.setOnDataChangedListener(listener);
+		funsetParPage.setOnDataChangedListener(listener);
+		temperParPage.setOnDataChangedListener(listener);
+		carburParPage.setOnDataChangedListener(listener);
+		adcCorParPage.setOnDataChangedListener(listener);
+		ckpsParPage.setOnDataChangedListener(listener);
+		miscelParPage.setOnDataChangedListener(listener);
+		chokeParPage.setOnDataChangedListener(listener);
 	}
 
 	@Override
@@ -175,7 +194,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
     	switch (item.getItemId()) {
 		case R.id.menu_params_download:
 	    	progressBar.setIndeterminate(true);
-	    	progressBar.setVisibility(ProgressBar.VISIBLE);
+	    	progressBar.setVisibility(ProgressBar.VISIBLE);	    	
 			readParams();
 			return true;
 		case R.id.menu_params_upload:
@@ -305,7 +324,10 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);
-			if (current == total) progressBar.setVisibility(ProgressBar.GONE);
+			if (current == total) {
+				progressBar.setVisibility(ProgressBar.GONE);
+				setOnDataChangedListeners(this);
+			}
 			progressBar.setIndeterminate(current==0);
 			progressBar.setMax(total);
 			progressBar.setProgress(current);
@@ -320,8 +342,8 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 
 	@Override
 	public void onDataChanged(Fragment fragment, Secu3Dat packet) {
-		if (fragment == chokeParPage) {
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, chokeParPage.getData()));
-		}		
+		if ((packet != null) && (uploadImmediatelly || (fragment == chokeParPage))) {
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
+		}
 	}
 }
