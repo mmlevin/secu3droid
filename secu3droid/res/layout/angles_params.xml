@@ -6,23 +6,13 @@
     android:fadeScrollbars="false">
     
 	<RelativeLayout
-	    android:id="@+id/layout1"
+	    android:id="@+id/anglesLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
-		
-		<EditText
-		    android:id="@+id/anglesCorrectionAngleEditText"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentLeft="true"
-		    android:layout_below="@+id/textView5"
-		    android:ems="10"
-		    android:inputType="numberSigned"
-		    android:text="@string/units_zero_float" />
 
 		<TextView
-		    android:id="@+id/textView1"
+		    android:id="@+id/anglesTextView1"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
@@ -35,13 +25,13 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
-		    android:layout_below="@+id/textView1"
+		    android:layout_below="@+id/anglesTextView1"
 		    android:ems="10"
 		    android:inputType="numberSigned|numberDecimal"
 		    android:text="@string/units_zero_float" />
 
 		<TextView
-		    android:id="@+id/textView2"
+		    android:id="@+id/anglesTextView2"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
@@ -54,7 +44,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
-		    android:layout_below="@+id/textView2"
+		    android:layout_below="@+id/anglesTextView2"
 		    android:ems="10"
 		    android:inputType="numberSigned|numberDecimal"
 		    android:text="@string/units_zero_float" >
@@ -63,7 +53,7 @@
 		</EditText>
 
 		<TextView
-		    android:id="@+id/textView3"
+		    android:id="@+id/anglesTextView3"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
@@ -76,13 +66,13 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
-		    android:layout_below="@+id/textView3"
+		    android:layout_below="@+id/anglesTextView3"
 		    android:ems="10"
 		    android:inputType="numberDecimal"
 		    android:text="@string/units_zero_float" />
 
 		<TextView
-		    android:id="@+id/textView4"
+		    android:id="@+id/anglesTextView4"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
@@ -95,13 +85,13 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
-		    android:layout_below="@+id/textView4"
+		    android:layout_below="@+id/anglesTextView4"
 		    android:ems="10"
 		    android:inputType="numberDecimal"
 		    android:text="@string/units_zero_float" />
 
 		<CheckBox
-		    android:id="@+id/showRawDataCheckBox"
+		    android:id="@+id/mainShowRawDataCheckBox"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
@@ -110,46 +100,52 @@
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
-		    android:id="@+id/textView5"
+		    android:id="@+id/anglesTextView5"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentLeft="true"
-		    android:layout_below="@+id/showRawDataCheckBox"
+		    android:layout_below="@+id/mainShowRawDataCheckBox"
 		    android:text="@string/angles_octane_correction_title"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
+		<EditText
+		    android:id="@+id/anglesCorrectionAngleEditText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/anglesTextView5"
+		    android:ems="10"
+		    android:inputType="numberSigned"
+		    android:text="@string/units_zero_float" />
+
 		<TextView
-		    android:id="@+id/textView6"
+		    android:id="@+id/anglesTextView6"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignBaseline="@+id/anglesMinimalAngleEditText"
-		    android:layout_alignBottom="@+id/anglesMinimalAngleEditText"
 		    android:layout_toRightOf="@+id/anglesMinimalAngleEditText"
 		    android:text="@string/units_degree"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
-		    android:id="@+id/textView7"
+		    android:id="@+id/anglesTextView7"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignBaseline="@+id/anglesMaximalAngleEditText"
-		    android:layout_alignBottom="@+id/anglesMaximalAngleEditText"
 		    android:layout_toRightOf="@+id/anglesMaximalAngleEditText"
 		    android:text="@string/units_degree"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
-		    android:id="@+id/textView8"
+		    android:id="@+id/anglesTextView8"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignBaseline="@+id/anglesDecrementStepEditText"
-		    android:layout_alignBottom="@+id/anglesDecrementStepEditText"
 		    android:layout_toRightOf="@+id/anglesDecrementStepEditText"
 		    android:text="@string/units_degree"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
-		    android:id="@+id/textView9"
+		    android:id="@+id/anglesTextView9"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignTop="@+id/anglesIncrementStepEditText"
@@ -158,11 +154,10 @@
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 		<TextView
-		    android:id="@+id/textView10"
+		    android:id="@+id/anglesTextView10"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignBaseline="@+id/anglesCorrectionAngleEditText"
-		    android:layout_alignBottom="@+id/anglesCorrectionAngleEditText"
 		    android:layout_toRightOf="@+id/anglesCorrectionAngleEditText"
 		    android:text="@string/units_degree"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />

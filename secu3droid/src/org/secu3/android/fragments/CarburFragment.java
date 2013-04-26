@@ -29,6 +29,7 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 	EditText carburOverrunDelay;
 	CheckBox carburSensorInverse;
 	EditText carburEPMValveOnPressure;
+	EditText carburTpsThreshold;
 
 	private class CustomTextWatcher implements TextWatcher {
 		EditText e = null;
@@ -55,7 +56,10 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 						break;
 					case R.id.carburEPMValveOnPressureEditText:
 						packet.epm_ont = f;
-						break;													
+						break;	
+					case R.id.carburTPSThresholdEditText:
+						packet.tps_threshold = f;
+						break;
 					}
 				}
 			}
@@ -111,12 +115,14 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 		carburOverrunDelay = (EditText)getView().findViewById(R.id.carburOverrunValveDelayEditText);
 		carburEPMValveOnPressure = (EditText)getView().findViewById(R.id.carburEPMValveOnPressureEditText);
 		carburSensorInverse = (CheckBox)getView().findViewById(R.id.carburSensorInverseCheckBox);
+		carburTpsThreshold =  (EditText)getView().findViewById(R.id.carburTPSThresholdEditText);
 		
 		carburEPHHLowThreshholdGasoline.addTextChangedListener(new CustomTextWatcher(carburEPHHLowThreshholdGasoline));
 		carburEPHHHighThreshholdGasoline.addTextChangedListener(new CustomTextWatcher(carburEPHHHighThreshholdGasoline));
 		carburEPHHLowThreshholdGas.addTextChangedListener(new CustomTextWatcher(carburEPHHLowThreshholdGas));
 		carburEPHHHighThreshholdGas.addTextChangedListener(new CustomTextWatcher(carburEPHHHighThreshholdGas));
 		carburOverrunDelay.addTextChangedListener(new CustomTextWatcher(carburOverrunDelay));
+		carburTpsThreshold.addTextChangedListener(new CustomTextWatcher(carburTpsThreshold));
 		carburEPMValveOnPressure.addTextChangedListener(new CustomTextWatcher(carburEPMValveOnPressure));
 		
 		carburSensorInverse.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -143,6 +149,7 @@ public class CarburFragment extends Fragment implements ISecu3Fragment {
 			carburEPHHHighThreshholdGas.setText(String.format(Locale.US,"%d",((CarburPar)packet).ephh_hit_g));
 			carburOverrunDelay.setText(String.format(Locale.US,"%.2f",((CarburPar)packet).shutoff_delay));
 			carburEPMValveOnPressure.setText(String.format(Locale.US,"%.2f",((CarburPar)packet).epm_ont));
+			carburTpsThreshold.setText(String.format(Locale.US,"%.1f",((CarburPar)packet).tps_threshold));
 			carburSensorInverse.setChecked(((CarburPar)packet).carb_invers != 0);
 		}
 	}

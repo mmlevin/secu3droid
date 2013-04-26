@@ -7,13 +7,13 @@
     android:fadeScrollbars="false">
     
 	<RelativeLayout
-	    android:id="@+id/layout1"
+	    android:id="@+id/starterLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	<TextView
-	    android:id="@+id/textView1"
+	    android:id="@+id/starterTextView1"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -26,13 +26,13 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView1"
+	    android:layout_below="@+id/starterTextView1"
 	    android:ems="10"
 	    android:inputType="number"
 	    android:text="@string/units_zero" />
 
 	<TextView
-	    android:id="@+id/textView2"
+	    android:id="@+id/starterTextView2"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -45,27 +45,25 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView2"
+	    android:layout_below="@+id/starterTextView2"
 	    android:ems="10"
 	    android:inputType="number"
 	    android:text="@string/units_zero" />
 
 	<TextView
-	    android:id="@+id/textView3"
+	    android:id="@+id/starterTextView3"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignBaseline="@+id/starterOffEditText"
-	    android:layout_alignBottom="@+id/starterOffEditText"
 	    android:layout_toRightOf="@+id/starterOffEditText"
 	    android:text="@string/units_rpm"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
-	    android:id="@+id/textView4"
+	    android:id="@+id/starterTextView4"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignBaseline="@+id/starterMapAbandonEditText"
-	    android:layout_alignBottom="@+id/starterMapAbandonEditText"
 	    android:layout_toRightOf="@+id/starterMapAbandonEditText"
 	    android:text="@string/units_rpm"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />

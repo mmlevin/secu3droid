@@ -6,13 +6,13 @@
     android:fadeScrollbars="false">
     
 	<RelativeLayout
-	    android:id="@+id/layout1"
+	    android:id="@+id/temperLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	    <TextView
-	        android:id="@+id/textView1"
+	        android:id="@+id/temperTextView1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -25,13 +25,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView1"
+	        android:layout_below="@+id/temperTextView1"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
 	        android:text="@string/units_zero_float" />
 
 	    <TextView
-	        android:id="@+id/textView2"
+	        android:id="@+id/temperTextView2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -44,7 +44,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView2"
+	        android:layout_below="@+id/temperTextView2"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
 	        android:text="@string/units_zero_float" >
@@ -80,20 +80,18 @@
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView3"
+	        android:id="@+id/temperTextView3"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignBottom="@+id/temperFanOnEditText"
 	        android:layout_toRightOf="@+id/temperFanOnEditText"
 	        android:text="@string/units_degrees_celcius"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView4"
+	        android:id="@+id/temperTextView4"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/temperFanOffEditText"
-	        android:layout_alignBottom="@+id/temperFanOffEditText"
 	        android:layout_toRightOf="@+id/temperFanOffEditText"
 	        android:text="@string/units_degrees_celcius"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />

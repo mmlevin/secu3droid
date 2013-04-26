@@ -6,13 +6,13 @@
     android:fadeScrollbars="false">
     
 	<RelativeLayout
-	    android:id="@+id/layout1"
+	    android:id="@+id/carburLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	    <TextView
-	        android:id="@+id/textView1"
+	        android:id="@+id/carburTextView1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -25,13 +25,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView1"
+	        android:layout_below="@+id/carburTextView1"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" />
 
 	    <TextView
-	        android:id="@+id/textView2"
+	        android:id="@+id/carburTextView2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -44,7 +44,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView2"
+	        android:layout_below="@+id/carburTextView2"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" >
@@ -53,7 +53,7 @@
 	    </EditText>
 
 	    <TextView
-	        android:id="@+id/textView3"
+	        android:id="@+id/carburTextView3"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -66,13 +66,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView3"
+	        android:layout_below="@+id/carburTextView3"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" />
 
 	    <TextView
-	        android:id="@+id/textView4"
+	        android:id="@+id/carburTextView4"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -85,13 +85,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView4"
+	        android:layout_below="@+id/carburTextView4"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" />
 
 	    <TextView
-	        android:id="@+id/textView5"
+	        android:id="@+id/carburTextView5"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -104,7 +104,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView5"
+	        android:layout_below="@+id/carburTextView5"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
 	        android:text="@string/units_zero_float" />
@@ -119,7 +119,7 @@
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView6"
+	        android:id="@+id/carburTextView6"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -132,69 +132,92 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView6"
+	        android:layout_below="@+id/carburTextView6"
 	        android:ems="10"
 	        android:inputType="numberDecimal"
 	        android:text="@string/units_zero_float" />
 
 	    <TextView
-	        android:id="@+id/textView7"
+	        android:id="@+id/carburTextView7"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/carburOverrunLowThreshholdGasolineEditText"
-	        android:layout_alignBottom="@+id/carburOverrunLowThreshholdGasolineEditText"
 	        android:layout_toRightOf="@+id/carburOverrunLowThreshholdGasolineEditText"
 	        android:text="@string/units_rpm"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView8"
+	        android:id="@+id/carburTextView8"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/carburOverrunHighThreshholdGasolineEditText"
-	        android:layout_alignBottom="@+id/carburOverrunHighThreshholdGasolineEditText"
 	        android:layout_toRightOf="@+id/carburOverrunHighThreshholdGasolineEditText"
 	        android:text="@string/units_rpm"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView9"
+	        android:id="@+id/carburTextView9"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/carburOverrunLowThreshholdGasEditText"
-	        android:layout_alignBottom="@+id/carburOverrunLowThreshholdGasEditText"
 	        android:layout_toRightOf="@+id/carburOverrunLowThreshholdGasEditText"
 	        android:text="@string/units_rpm"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView10"
+	        android:id="@+id/carburTextView10"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/carburOverrunHighThreshholdGasEditText"
-	        android:layout_alignBottom="@+id/carburOverrunHighThreshholdGasEditText"
 	        android:layout_toRightOf="@+id/carburOverrunHighThreshholdGasEditText"
 	        android:text="@string/units_rpm"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView11"
+	        android:id="@+id/carburTextView11"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/carburOverrunValveDelayEditText"
-	        android:layout_alignBottom="@+id/carburOverrunValveDelayEditText"
 	        android:layout_toRightOf="@+id/carburOverrunValveDelayEditText"
 	        android:text="@string/units_sec"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView12"
+	        android:id="@+id/carburTextView12"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignBaseline="@+id/carburEPMValveOnPressureEditText"
-	        android:layout_alignBottom="@+id/carburEPMValveOnPressureEditText"
 	        android:layout_toRightOf="@+id/carburEPMValveOnPressureEditText"
 	        android:text="@string/units_pressure_kpa"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <TextView
+	        android:id="@+id/carburTextView13"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/carburEPMValveOnPressureEditText"
+	        android:text="@string/carbur_tps_threshold_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/carburTPSThresholdEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignRight="@+id/carburTPSThresholdEditText"
+	        android:layout_below="@+id/carburTextView13"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="@string/units_zero_float" />
+
+	    <TextView
+	        android:id="@+id/carburTextView14"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/carburTPSThresholdEditText"
+	        android:layout_toRightOf="@+id/carburTPSThresholdEditText"
+	        android:text="@string/units_percents"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>

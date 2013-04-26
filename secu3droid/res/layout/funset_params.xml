@@ -6,13 +6,13 @@
     android:fadeScrollbars="false">
     
 	<RelativeLayout
-	    android:id="@+id/layout1"
+	    android:id="@+id/funsetLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
 
 	<TextView
-	    android:id="@+id/textView1"
+	    android:id="@+id/funsetTextView1"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -21,7 +21,7 @@
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
-	    android:id="@+id/textView2"
+	    android:id="@+id/funsetTextView2"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -34,7 +34,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView1"
+	    android:layout_below="@+id/funsetTextView1"
 	    android:ems="10"
 	    android:inputType="numberDecimal"
 	    android:text="@string/units_zero_float" >
@@ -47,13 +47,13 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView2"
+	    android:layout_below="@+id/funsetTextView2"
 	    android:ems="10"
 	    android:inputType="numberDecimal"
 	    android:text="@string/units_zero_float" />
 
 	<TextView
-	    android:id="@+id/textView3"
+	    android:id="@+id/funsetTextView3"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -66,13 +66,13 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView3"
+	    android:layout_below="@+id/funsetTextView3"
 	    android:ems="10"
 	    android:inputType="numberSigned|numberDecimal"
 	    android:text="@string/units_zero_float" />
 
 	<TextView
-	    android:id="@+id/textView4"
+	    android:id="@+id/funsetTextView4"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -85,13 +85,13 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView4"
+	    android:layout_below="@+id/funsetTextView4"
 	    android:ems="10"
 	    android:inputType="numberSigned"
 	    android:text="@string/units_zero_float" />
 
 	<TextView
-	    android:id="@+id/textView5"
+	    android:id="@+id/funsetTextView5"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -99,8 +99,16 @@
 	    android:text="@string/funset_maps_set_gasoline_title"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
+	<Spinner
+	    android:id="@+id/funsetGasolineTableSpinner"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/funsetTextView5"
+	    android:spinnerMode="dialog"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
 	<TextView
-	    android:id="@+id/textView6"
+	    android:id="@+id/funsetTextView6"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
@@ -109,61 +117,105 @@
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<Spinner
-	    android:id="@+id/funsetGasolineTableSpinner"
-	    android:spinnerMode="dialog"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView5"
-	    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	<Spinner
 	    android:id="@+id/funsetGasTableSpinner"
 	    android:spinnerMode="dialog"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_below="@+id/textView6"
+	    android:layout_below="@+id/funsetTextView6"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
-	    android:id="@+id/textView7"
+	    android:id="@+id/funsetTextView7"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignBaseline="@+id/funsetLowerPressureEditText"
-	    android:layout_alignBottom="@+id/funsetLowerPressureEditText"
 	    android:layout_toRightOf="@+id/funsetLowerPressureEditText"
 	    android:text="@string/units_pressure_kpa"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
-	    android:id="@+id/textView8"
+	    android:id="@+id/funsetTextView8"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignBaseline="@+id/funsetUpperPressureEditText"
-	    android:layout_alignBottom="@+id/funsetUpperPressureEditText"
 	    android:layout_toRightOf="@+id/funsetUpperPressureEditText"
 	    android:text="@string/units_pressure_kpa"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
-	    android:id="@+id/textView9"
+	    android:id="@+id/funsetTextView9"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignBaseline="@+id/funsetMAPSensorOffsetEditText"
-	    android:layout_alignBottom="@+id/funsetMAPSensorOffsetEditText"
 	    android:layout_toRightOf="@+id/funsetMAPSensorOffsetEditText"
 	    android:text="@string/units_volts"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
-	    android:id="@+id/textView10"
+	    android:id="@+id/funsetTextView10"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignBaseline="@+id/funsetMAPSensorGradientEditText"
-	    android:layout_alignBottom="@+id/funsetMAPSensorGradientEditText"
 	    android:layout_toRightOf="@+id/funsetMAPSensorGradientEditText"
 	    android:text="@string/units_volts_per_kpa"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<TextView
+	    android:id="@+id/funsetTextView11"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetGasTableSpinner"
+	    android:layout_marginTop="16dp"
+	    android:text="@string/funset_tps_curve_offset_title"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<EditText
+	    android:id="@+id/funsetTpsSensorOffsetEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetTextView11"
+	    android:ems="10"
+	    android:inputType="numberDecimal"
+	    android:text="@string/units_zero_float" />
+
+	<TextView
+	    android:id="@+id/funsetTextView12"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/funsetTpsSensorOffsetEditText"
+	    android:layout_toRightOf="@+id/funsetTpsSensorOffsetEditText"
+	    android:text="@string/units_volts"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<TextView
+	    android:id="@+id/funsetTextView13"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetTpsSensorOffsetEditText"
+	    android:text="@string/funset_tps_curve_gradient_title"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<EditText
+	    android:id="@+id/funsetTpsSensorGradientEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/funsetTextView13"
+	    android:ems="10"
+	    android:inputType="numberDecimal"
+	    android:text="@string/units_zero_float" />
+
+	<TextView
+	    android:id="@+id/funsetTextView14"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/funsetTpsSensorGradientEditText"
+	    android:layout_toRightOf="@+id/funsetTpsSensorGradientEditText"
+	    android:text="@string/units_percent_per_volts"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	</RelativeLayout>

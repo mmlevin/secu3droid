@@ -90,7 +90,7 @@ public class AnglesFragment extends Fragment implements ISecu3Fragment{
 		maximalAngle = (EditText)getView().findViewById(R.id.anglesMaximalAngleEditText);
 		angleDecrementStep = (EditText)getView().findViewById(R.id.anglesDecrementStepEditText);
 		angleIncrementStep = (EditText)getView().findViewById(R.id.anglesIncrementStepEditText);
-		zeroAngle = (CheckBox)getView().findViewById(R.id.showRawDataCheckBox);
+		zeroAngle = (CheckBox)getView().findViewById(R.id.mainShowRawDataCheckBox);
 		currentAngle = (EditText)getView().findViewById(R.id.anglesCorrectionAngleEditText);		
 		
 		minimalAngle.addTextChangedListener(new CustomTextWatcher(minimalAngle));

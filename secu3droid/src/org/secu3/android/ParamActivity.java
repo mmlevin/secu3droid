@@ -152,7 +152,7 @@ public class ParamActivity extends FragmentActivity{
 				
 		receiver = new ReceiveMessages();
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
-		pager = (ViewPager)findViewById(R.id.pager);
+		pager = (ViewPager)findViewById(R.id.paramsPager);
 		pager.setAdapter(awesomeAdapter);
 	}
 

@@ -30,6 +30,8 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 	EditText upperPressure;
 	EditText sensorOffset;
 	EditText sensorGradient;
+	EditText tpsOffset;
+	EditText tpsGradient;
 	Spinner gasolineTable;
 	Spinner gasTable;
 	String tableNames[] = null;
@@ -65,6 +67,12 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 						case R.id.funsetMAPSensorGradientEditText:
 							packet.map_curve_gradient = f;
 							break;
+						case R.id.funsetTpsSensorOffsetEditText:
+							packet.tps_curve_offset = f;
+							break;
+						case R.id.funsetTpsSensorGradientEditText:
+							packet.tps_curve_gradient = f;
+							break;
 					}
 				}
 			}
@@ -93,6 +101,9 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		upperPressure = (EditText)getView().findViewById(R.id.funsetUpperPressureEditText);
 		sensorOffset = (EditText)getView().findViewById(R.id.funsetMAPSensorOffsetEditText);
 		sensorGradient = (EditText)getView().findViewById(R.id.funsetMAPSensorGradientEditText);
+		tpsOffset = (EditText)getView().findViewById(R.id.funsetTpsSensorOffsetEditText);
+		tpsGradient =  (EditText)getView().findViewById(R.id.funsetTpsSensorGradientEditText);
+				
 		
 		gasolineTable = (Spinner)getView().findViewById(R.id.funsetGasolineTableSpinner);
 		gasTable  = (Spinner)getView().findViewById(R.id.funsetGasTableSpinner);
@@ -103,6 +114,8 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 		upperPressure.addTextChangedListener(new CustomTextWatcher(upperPressure));
 		sensorOffset.addTextChangedListener(new CustomTextWatcher(sensorOffset));
 		sensorGradient.addTextChangedListener(new CustomTextWatcher(sensorGradient));
+		tpsOffset.addTextChangedListener(new CustomTextWatcher(tpsOffset));
+		tpsGradient.addTextChangedListener(new CustomTextWatcher(tpsGradient));
 		
 		OnItemSelectedListener spinerListener = new OnItemSelectedListener() {
 			@Override
@@ -137,6 +150,8 @@ public class FunsetFragment extends Fragment implements ISecu3Fragment{
 			upperPressure.setText (String.format(Locale.US,"%.2f",packet.map_upper_pressure));
 			sensorOffset.setText (String.format(Locale.US,"%.3f",packet.map_curve_offset));
 			sensorGradient.setText (String.format(Locale.US,"%.3f",packet.map_curve_gradient));
+			tpsOffset.setText (String.format(Locale.US,"%.3f",packet.tps_curve_offset));
+			tpsGradient.setText (String.format(Locale.US,"%.3f",packet.tps_curve_gradient));
 			gasolineTable.setSelection(packet.fn_benzin);
 			gasTable.setSelection(packet.fn_gas);
 		}

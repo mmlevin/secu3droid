@@ -80,8 +80,8 @@
 	<string name="units_degrees_celcius">°C</string>
 	<string name="starter_off_title">RPM when starter will be turned off:</string>
 	<string name="starter_map_abandon_title">RPM when switching from start map:</string>
-	<string name="angles_min_angle_title">Min. advance angle:</string>
-	<string name="angles_max_angle_title">Max. advance angle:</string>
+	<string name="angles_min_angle_title">Minimal advance angle:</string>
+	<string name="angles_max_angle_title">Maximal advance angle:</string>
 	<string name="angles_angle_decrement_step_title">Angle decrement step:</string>
 	<string name="angles_angle_increment_step_title">Angle increment step:</string>
 	<string name="angles_zero_angle_title">Zero advance angle:</string>
@@ -145,5 +145,18 @@
 	<string name="errors_phase_sensor_error_title">Breakage or wrong work of cam sensor</string>
 	<string name="errors_realtime_errors_title">Read errors in realtime</string>
 	<string name="errors_inertion_title">Show errors with inertness</string>
-	<string name="show_raw_data_title">Show raw values of sensors</string>    
+	<string name="show_raw_data_title">Show raw values of sensors</string>
+	<string name="idlreg_turn_on_temp_title">Regulator turn on temperature:</string>
+	<string name="funset_tps_curve_offset_title">TPS curve offset:</string>
+	<string name="units_percent_per_volts">%/V</string>
+	<string name="funset_tps_curve_gradient_title">TPS curve gradient:</string>
+	<string name="carbur_tps_threshold_title">TPS threshold:</string>
+	<string name="units_percents">%</string>
+	<string name="adccor_tps_sensor_factor_title">TPS Sensor factor:</string>
+	<string name="adccor_tps_sensor_correction_title">TPS Sensor correction:</string>
+	<string name="adccor_addi1_sensor_factor_title">ADD_IO1 Sensor factor:</string>
+	<string name="adccor_addi1_sensor_correction_title">ADD_IO1 Sensor correction:</string>
+	<string name="adccor_addi2_sensor_factor_title">ADD_IO2 Sensor factor:</string>
+	<string name="adccor_addi2_sensor_correction_title">ADD_IO2 Sensor correction:</string>
+	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>    
 </resources>

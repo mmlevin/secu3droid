@@ -6,16 +6,25 @@
     android:fadeScrollbars="false">
         
 	<RelativeLayout
-	    android:id="@+id/layout1"
+	    android:id="@+id/ckpsLayout"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
+
+		<TextView
+		    android:id="@+id/ckpsTextView1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_alignParentTop="true"
+		    android:text="@string/ckps_ckp_edge_title"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	    <RadioGroup
-	        android:id="@+id/radioGroup1"
+	        android:id="@+id/ckpsRadioGroupCKPS"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/textView1" >
+	        android:layout_below="@+id/ckpsTextView1" >
 
 	        <RadioButton
 	            android:id="@+id/ckpsCKPSNegativeEdgeRadioButton"
@@ -32,12 +41,20 @@
 	            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    </RadioGroup>
-	
-	    <RadioGroup
-	        android:id="@+id/radioGroup2"
+
+	    <TextView
+	        android:id="@+id/ckpsTextView2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/textView2" >
+	        android:layout_below="@+id/ckpsRadioGroupCKPS"
+	        android:text="@string/ckps_ref_s_edge_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	    <RadioGroup
+	        android:id="@+id/ckpsRadioGroupREFS"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/ckpsTextView2" >
 
 	        <RadioButton
 	            android:id="@+id/ckpsRefSNegativeEdgeRadioButton"
@@ -55,35 +72,17 @@
 
 	    </RadioGroup>
 
-	    <TextView
-	        android:id="@+id/textView1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:layout_alignParentTop="true"
-	        android:text="@string/ckps_ckp_edge_title"
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	    <TextView
-	        android:id="@+id/textView2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/radioGroup1"
-	        android:text="@string/ckps_ref_s_edge_title"
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
-
 	    <CheckBox
 	        android:id="@+id/ckpsMergeOutputsCheckBox"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/radioGroup2"
+	        android:layout_below="@+id/ckpsRadioGroupREFS"
 	        android:text="@string/ckps_merge_outputs"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	    <TextView
-	        android:id="@+id/textView3"
+	        android:id="@+id/ckpsTextView3"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -96,13 +95,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView3"
+	        android:layout_below="@+id/ckpsTextView3"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" />
 
 	    <TextView
-	        android:id="@+id/textView4"
+	        android:id="@+id/ckpsTextView4"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -115,7 +114,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView4"
+	        android:layout_below="@+id/ckpsTextView4"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" >
@@ -124,7 +123,7 @@
 	    </EditText>
 
 	    <TextView
-	        android:id="@+id/textView5"
+	        android:id="@+id/ckpsTextView5"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -137,13 +136,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView5"
+	        android:layout_below="@+id/ckpsTextView5"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" />
 
 	    <TextView
-	        android:id="@+id/textView6"
+	        android:id="@+id/ckpsTextView6"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -156,13 +155,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView6"
+	        android:layout_below="@+id/ckpsTextView6"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" />
 
 	    <TextView
-	        android:id="@+id/textView7"
+	        android:id="@+id/ckpsTextView7"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -175,7 +174,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView7"
+	        android:layout_below="@+id/ckpsTextView7"
 	        android:ems="10"
 	        android:inputType="number"
 	        android:text="@string/units_zero" />

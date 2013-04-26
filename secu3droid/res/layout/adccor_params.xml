@@ -5,23 +5,13 @@
     android:fadeScrollbars="false">
     
 	<RelativeLayout
-	    android:id="@+id/layout1"
+	    android:id="@+id/paramsLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" >
-	
-	    <EditText
-	        android:id="@+id/adccorTemperatureSensorCorrectionEditText"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView6"
-	        android:ems="10"
-	        android:inputType="numberSigned"
-	        android:text="@string/units_zero_float" />
 
 	    <TextView
-	        android:id="@+id/textView1"
+	        android:id="@+id/adccorTextView1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -34,7 +24,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView1"
+	        android:layout_below="@+id/adccorTextView1"
 	        android:ems="10"
 	        android:inputType="numberSigned"
 	        android:text="@string/units_zero_float" >
@@ -43,7 +33,7 @@
 	    </EditText>
 
 	    <TextView
-	        android:id="@+id/textView2"
+	        android:id="@+id/adccorTextView2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -57,13 +47,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView2"
+	        android:layout_below="@+id/adccorTextView2"
 	        android:ems="10"
 	        android:inputType="numberSigned"
 	        android:text="@string/units_zero_float" />
 
 	    <TextView
-	        android:id="@+id/textView3"
+	        android:id="@+id/adccorTextView3"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -76,13 +66,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView3"
+	        android:layout_below="@+id/adccorTextView3"
 	        android:ems="10"
 	        android:inputType="numberSigned"
 	        android:text="@string/units_zero_float" />
 
 	    <TextView
-	        android:id="@+id/textView4"
+	        android:id="@+id/adccorTextView4"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -95,13 +85,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView4"
+	        android:layout_below="@+id/adccorTextView4"
 	        android:ems="10"
 	        android:inputType="numberSigned"
 	        android:text="@string/units_zero_float" />
 
 	    <TextView
-	        android:id="@+id/textView5"
+	        android:id="@+id/adccorTextView5"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
@@ -114,19 +104,142 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@+id/textView5"
+	        android:layout_below="@+id/adccorTextView5"
 	        android:ems="10"
 	        android:inputType="numberSigned"
 	        android:text="@string/units_zero_float" />
 
 	    <TextView
-	        android:id="@+id/textView6"
+	        android:id="@+id/adccorTextView6"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/adccorTemperatureSensorCoefficientEditText"
 	        android:text="@string/adccor_temper_sensor_correction"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/adccorTemperatureSensorCorrectionEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/adccorTextView6"
+	        android:ems="10"
+	        android:inputType="numberSigned"
+	        android:text="@string/units_zero_float" />
+
+	    <TextView
+	        android:id="@+id/adccorTextView7"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/adccorTemperatureSensorCorrectionEditText"
+	        android:text="@string/adccor_tps_sensor_factor_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/adccorTPSSensorCoefficientEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorTextView7"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="@string/units_zero_float" />
+
+	    <TextView
+	        android:id="@+id/adccorTextView8"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/adccorTPSSensorCoefficientEditText"
+	        android:text="@string/adccor_tps_sensor_correction_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/adccorTPSSensorCorrectionEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorTextView8"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="@string/units_zero_float" />
+
+	    <TextView
+	        android:id="@+id/adccorTextView9"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/adccorTPSSensorCorrectionEditText"
+	        android:text="@string/adccor_addi1_sensor_factor_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/adccorADDIO1SensorCoefficientEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorTextView9"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="@string/units_zero_float" />
+
+	    <TextView
+	        android:id="@+id/adccorTextView10"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/adccorADDIO1SensorCoefficientEditText"
+	        android:text="@string/adccor_addi1_sensor_correction_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/adccorADDIO1SensorCorrectionEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorTextView10"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="@string/units_zero_float" />
+
+	    <TextView
+	        android:id="@+id/adccorTextView11"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorADDIO1SensorCorrectionEditText"
+	        android:text="@string/adccor_addi2_sensor_factor_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/adccorADDIO2SensorCoefficientEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorTextView11"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="@string/units_zero_float" />
+
+	    <TextView
+	        android:id="@+id/adccorTextView12"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorADDIO2SensorCoefficientEditText"
+	        android:text="@string/adccor_addi2_sensor_correction_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	    <EditText
+	        android:id="@+id/adccorADDIO2SensorCorrectionEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/adccorTextView12"
+	        android:ems="10"
+	        android:inputType="numberDecimal"
+	        android:text="@string/units_zero_float" />
 	
 	</RelativeLayout>
 	

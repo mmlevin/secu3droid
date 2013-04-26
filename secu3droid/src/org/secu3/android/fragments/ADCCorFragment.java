@@ -25,6 +25,12 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 	EditText adccorVoltageSensorCorrection;
 	EditText adccorTemperatureSensorCoefficient;
 	EditText adccorTemperatureSensorCorrection;
+	EditText adccorTpsSensorCoefficient;
+	EditText adccorTpsSensorCorrection;
+	EditText adccorADDIO1SensorCoefficient;
+	EditText adccorADDIO1SensorCorrection;
+	EditText adccorADDIO2SensorCoefficient;
+	EditText adccorADDIO2SensorCorrection;
 
 	private class CustomTextWatcher implements TextWatcher {
 		EditText e = null;
@@ -64,6 +70,24 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 						case R.id.adccorVoltageSensorCorrectionEditText:
 							packet.ubat_adc_correction = f;
 							break;
+						case R.id.adccorTPSSensorCoefficientEditText:
+							packet.tps_adc_factor = f;
+							break;
+						case R.id.adccorTPSSensorCorrectionEditText:
+							packet.tps_adc_correction = f;
+							break;
+						case R.id.adccorADDIO1SensorCoefficientEditText:
+							packet.add_i1_factor = f;
+							break;
+						case R.id.adccorADDIO1SensorCorrectionEditText:
+							packet.add_i1_correction = f;
+							break;
+						case R.id.adccorADDIO2SensorCoefficientEditText:
+							packet.add_i2_factor = f;
+							break;
+						case R.id.adccorADDIO2SensorCorrectionEditText:
+							packet.add_i2_correction = f;
+							break;
 					}
 				}
 			}
@@ -94,6 +118,12 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 		adccorVoltageSensorCorrection = (EditText)getView().findViewById(R.id.adccorVoltageSensorCorrectionEditText);
 		adccorTemperatureSensorCoefficient = (EditText)getView().findViewById(R.id.adccorTemperatureSensorCoefficientEditText);
 		adccorTemperatureSensorCorrection = (EditText)getView().findViewById(R.id.adccorTemperatureSensorCorrectionEditText);		
+		adccorTpsSensorCoefficient = (EditText)getView().findViewById(R.id.adccorTPSSensorCoefficientEditText);
+		adccorTpsSensorCorrection = (EditText)getView().findViewById(R.id.adccorTPSSensorCorrectionEditText);
+		adccorADDIO1SensorCoefficient = (EditText)getView().findViewById(R.id.adccorADDIO1SensorCoefficientEditText);
+		adccorADDIO1SensorCorrection = (EditText)getView().findViewById(R.id.adccorADDIO1SensorCorrectionEditText);
+		adccorADDIO2SensorCoefficient = (EditText)getView().findViewById(R.id.adccorADDIO2SensorCoefficientEditText);
+		adccorADDIO2SensorCorrection = (EditText)getView().findViewById(R.id.adccorADDIO2SensorCorrectionEditText);
 		
 		adccorMapSensorCoefficient.addTextChangedListener(new CustomTextWatcher(adccorMapSensorCoefficient));
 		adccorMapSensorCorrection.addTextChangedListener(new CustomTextWatcher(adccorMapSensorCorrection));
@@ -101,6 +131,12 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 		adccorVoltageSensorCorrection.addTextChangedListener(new CustomTextWatcher(adccorVoltageSensorCorrection));
 		adccorTemperatureSensorCoefficient.addTextChangedListener(new CustomTextWatcher(adccorTemperatureSensorCoefficient));
 		adccorTemperatureSensorCorrection.addTextChangedListener(new CustomTextWatcher(adccorTemperatureSensorCorrection));
+		adccorTpsSensorCoefficient.addTextChangedListener(new CustomTextWatcher(adccorTpsSensorCoefficient));
+		adccorTpsSensorCorrection.addTextChangedListener(new CustomTextWatcher(adccorTpsSensorCorrection));
+		adccorADDIO1SensorCoefficient.addTextChangedListener(new CustomTextWatcher(adccorADDIO1SensorCoefficient));
+		adccorADDIO1SensorCorrection.addTextChangedListener(new CustomTextWatcher(adccorADDIO1SensorCorrection));
+		adccorADDIO2SensorCoefficient.addTextChangedListener(new CustomTextWatcher(adccorADDIO2SensorCoefficient));
+		adccorADDIO2SensorCorrection.addTextChangedListener(new CustomTextWatcher(adccorADDIO2SensorCorrection));
 	}
 	
 	@Override
@@ -118,6 +154,12 @@ public class ADCCorFragment extends Fragment implements ISecu3Fragment {
 			adccorVoltageSensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).ubat_adc_correction));
 			adccorTemperatureSensorCoefficient.setText(String.format(Locale.US,"%.3f",((ADCCorPar)packet).temp_adc_factor));
 			adccorTemperatureSensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).temp_adc_correction));
+			adccorTpsSensorCoefficient.setText(String.format(Locale.US,"%.3f",((ADCCorPar)packet).tps_adc_factor));
+			adccorTpsSensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).tps_adc_correction));
+			adccorADDIO1SensorCoefficient.setText(String.format(Locale.US,"%.3f",((ADCCorPar)packet).add_i1_factor));
+			adccorADDIO1SensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).add_i1_correction));
+			adccorADDIO2SensorCoefficient.setText(String.format(Locale.US,"%.3f",((ADCCorPar)packet).add_i2_factor));
+			adccorADDIO2SensorCorrection.setText(String.format(Locale.US,"%.4f",((ADCCorPar)packet).add_i2_correction));
 		}
 	}
 	

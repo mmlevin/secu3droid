@@ -28,6 +28,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 	EditText maximalAngle;
 	EditText targetRPM;
 	EditText rpmSensitivity;
+	EditText turnOnTemp;
 	CheckBox useIdleReg;
 	
 	private class CustomTextWatcher implements TextWatcher {
@@ -50,17 +51,20 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 			} finally {
 				if (packet != null) {
 					switch (e.getId()){
-					case R.id.idlRegIfac1EditText:
+					case R.id.idlregIfac1EditText:
 						packet.ifac1 = f;
 						break;
-					case R.id.idlRegIfac2EditText:
+					case R.id.idlregIfac2EditText:
 						packet.ifac2 = f;
 						break;					
-					case R.id.idlRegMaximalAngleEditText:
+					case R.id.idlregMaximalAngleEditText:
 						packet.max_angle = f;
 						break;
-					case R.id.idlRegMinimalAngleEditText:
+					case R.id.idlregMinimalAngleEditText:
 						packet.min_angle = f;
+						break;
+					case R.id.idlregTurnOnTempEditText:
+						packet.turn_on_temp = f;
 						break;
 					}
 				}
@@ -74,10 +78,10 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 			} finally {
 				if (packet != null) {
 					switch (e.getId()){
-					case R.id.idlRegTargetRPMEditText:
+					case R.id.idlregTargetRPMEditText:
 						packet.idling_rpm = i; 
 						break;
-					case R.id.idlRegRPMSensitivityEditText:
+					case R.id.idlregRPMSensitivityEditText:
 						packet.MINEFR = i;
 						break;
 					}
@@ -104,13 +108,14 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		ifac1 = (EditText)getView().findViewById(R.id.idlRegIfac1EditText);
-		ifac2 = (EditText)getView().findViewById(R.id.idlRegIfac2EditText); 
-		minimalAngle = (EditText)getView().findViewById(R.id.idlRegMinimalAngleEditText);
-		maximalAngle = (EditText)getView().findViewById(R.id.idlRegMaximalAngleEditText);
-		targetRPM = (EditText)getView().findViewById(R.id.idlRegTargetRPMEditText);
-		rpmSensitivity = (EditText)getView().findViewById(R.id.idlRegRPMSensitivityEditText);
-		useIdleReg = (CheckBox)getView().findViewById(R.id.idlRegUseIdleRegulatorCheckBox);		
+		ifac1 = (EditText)getView().findViewById(R.id.idlregIfac1EditText);
+		ifac2 = (EditText)getView().findViewById(R.id.idlregIfac2EditText); 
+		minimalAngle = (EditText)getView().findViewById(R.id.idlregMinimalAngleEditText);
+		maximalAngle = (EditText)getView().findViewById(R.id.idlregMaximalAngleEditText);
+		targetRPM = (EditText)getView().findViewById(R.id.idlregTargetRPMEditText);
+		rpmSensitivity = (EditText)getView().findViewById(R.id.idlregRPMSensitivityEditText);
+		useIdleReg = (CheckBox)getView().findViewById(R.id.idlregUseIdleRegulatorCheckBox);
+		turnOnTemp = (EditText)getView().findViewById(R.id.idlregTurnOnTempEditText);
 		
 		ifac1.addTextChangedListener(new CustomTextWatcher(ifac1));
 		ifac2.addTextChangedListener(new CustomTextWatcher(ifac2));
@@ -118,6 +123,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 		maximalAngle.addTextChangedListener(new CustomTextWatcher(maximalAngle));
 		targetRPM.addTextChangedListener(new CustomTextWatcher(targetRPM));
 		rpmSensitivity.addTextChangedListener(new CustomTextWatcher(rpmSensitivity));
+		turnOnTemp.addTextChangedListener(new CustomTextWatcher(turnOnTemp));
 		
 		useIdleReg.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 			@Override
@@ -142,6 +148,7 @@ public class IdlRegFragment extends Fragment implements ISecu3Fragment{
 			maximalAngle.setText(String.format(Locale.US,"%.2f",((IdlRegPar)packet).max_angle));
 			targetRPM.setText(String.format(Locale.US,"%d",((IdlRegPar)packet).idling_rpm));
 			rpmSensitivity.setText(String.format(Locale.US,"%d",((IdlRegPar)packet).MINEFR));
+			turnOnTemp.setText(String.format(Locale.US, "%.2f",((IdlRegPar)packet).turn_on_temp));
 			useIdleReg.setChecked(((IdlRegPar)packet).idl_regul != 0);
 		}
 	}

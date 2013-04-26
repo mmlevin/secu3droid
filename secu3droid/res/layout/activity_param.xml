@@ -5,12 +5,12 @@
     tools:context=".ParamActivity" >
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+        android:id="@+id/paramsPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/paramsTextViewStatus"
+        android:layout_above="@+id/paramsNoteText"
         android:layout_below="@+id/paramsProgressBar"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical" >
     
         <android.support.v4.view.PagerTabStrip
             android:id="@+id/pagerTabStrip"
@@ -35,5 +35,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/status_offline" />
+
+    <TextView
+        android:id="@+id/paramsNoteText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/paramsTextViewStatus"
+        android:layout_alignParentLeft="true"
+        android:text="@string/params_note_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

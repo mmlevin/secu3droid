@@ -13,7 +13,7 @@
         android:text="@string/status_offline" />
 
     <CheckBox
-        android:id="@+id/showRawDataCheckBox"
+        android:id="@+id/mainShowRawDataCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/mainTextViewStatus"
@@ -22,20 +22,20 @@
         android:text="@string/show_raw_data_title" />
 
     <TextView
-        android:id="@+id/textFWInfo"        
+        android:id="@+id/mainTextFWInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/showRawDataCheckBox"
+        android:layout_above="@+id/mainShowRawDataCheckBox"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:textAppearance="?android:attr/textAppearance"
-        android:text="" />
+        android:text=""
+        android:textAppearance="?android:attr/textAppearance" />
 
     <ScrollView
-        android:id="@+id/scrollView1"
+        android:id="@+id/mainScrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textFWInfo"
+        android:layout_above="@+id/mainTextFWInfo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >

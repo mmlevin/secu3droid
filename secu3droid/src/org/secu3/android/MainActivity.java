@@ -67,8 +67,8 @@ public class MainActivity extends Activity {
 		sensorsRawFormat = getString(R.string.sensors_raw_format);
 		textViewData = (TextView)findViewById(R.id.textViewData);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
-		textFWInfo = (TextView)findViewById(R.id.textFWInfo);
-		checkBox = (CheckBox)findViewById(R.id.showRawDataCheckBox);		
+		textFWInfo = (TextView)findViewById(R.id.mainTextFWInfo);
+		checkBox = (CheckBox)findViewById(R.id.mainShowRawDataCheckBox);		
 		
 		receiver = new ReceiveMessages();		
 		

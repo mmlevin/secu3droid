@@ -32,7 +32,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ScrollView
-        android:id="@+id/scrollView1"
+        android:id="@+id/errorsScrollView"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_above="@+id/errorsInertionCheckBox" >
