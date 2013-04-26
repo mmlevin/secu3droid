@@ -14,12 +14,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ToggleButton;
 
 public class ChokeFragment extends Fragment implements ISecu3Fragment {
 	
 	ChokePar packet = null;
 	EditText chokeSteps;
+	ToggleButton chokeTest;
 	
 	private class CustomTextWatcher implements TextWatcher {
 		EditText e = null;
@@ -68,6 +71,15 @@ public class ChokeFragment extends Fragment implements ISecu3Fragment {
 		super.onActivityCreated(savedInstanceState);
 		chokeSteps = (EditText)getView().findViewById(R.id.chokeStepsEditText);
 		chokeSteps.addTextChangedListener(new CustomTextWatcher(chokeSteps));
+		
+		chokeTest = (ToggleButton)getView().findViewById(R.id.chokeTestButton);	
+		chokeTest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (packet != null) packet.testing = isChecked?1:0;				
+			}
+		});
 	}
 	
 	@Override

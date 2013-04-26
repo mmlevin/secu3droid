@@ -179,7 +179,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@+id/idlregTextView11"
 	        android:ems="10"
-	        android:inputType="numberSigned|numberDecimal"
+	        android:inputType="numberDecimal"
 	        android:text="@string/units_zero_float" />
 	         
 	    <TextView

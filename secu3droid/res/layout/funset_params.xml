@@ -87,7 +87,7 @@
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/funsetTextView4"
 	    android:ems="10"
-	    android:inputType="numberSigned"
+	    android:inputType="numberSigned|numberDecimal"
 	    android:text="@string/units_zero_float" />
 
 	<TextView
@@ -178,7 +178,7 @@
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/funsetTextView11"
 	    android:ems="10"
-	    android:inputType="numberDecimal"
+	    android:inputType="numberSigned|numberDecimal"
 	    android:text="@string/units_zero_float" />
 
 	<TextView

@@ -160,5 +160,6 @@
 	<string name="adccor_addi2_sensor_factor_title">ADD_IO2 Sensor factor:</string>
 	<string name="adccor_addi2_sensor_correction_title">ADD_IO2 Sensor correction:</string>
 	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>
-	<string name="choke_steps_title">Number of SM steps:</string>    
+	<string name="choke_steps_title">Number of SM steps:</string>
+	<string name="choke_testing_title">TEST</string>    
 </resources>

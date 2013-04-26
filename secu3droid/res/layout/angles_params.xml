@@ -114,7 +114,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_below="@+id/anglesTextView5"
 		    android:ems="10"
-		    android:inputType="numberSigned"
+		    android:inputType="numberSigned|numberDecimal"
 		    android:text="@string/units_zero_float" />
 
 		<TextView

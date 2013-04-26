@@ -30,6 +30,15 @@
 	    android:ems="10"
 	    android:inputType="number"
 	    android:text="@string/units_zero" />
+
+	<ToggleButton
+	    android:id="@+id/chokeTestButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/chokeStepsEditText"
+	    android:layout_toRightOf="@+id/chokeStepsEditText"
+	    android:textOff="@string/choke_testing_title"
+	    android:textOn="@string/choke_testing_title" />
 	
 	</RelativeLayout>
 
