@@ -65,7 +65,8 @@
         <item >Carburetor</item>
         <item >ADC Errors Corr.</item>
         <item >CKPS</item>
-		<item >Miscellaneous</item>        
+		<item >Miscellaneous</item>
+		<item >Choke control</item>          
     </string-array>
 	<string name="data_will_appear_after_connect">Data will be visible there after connection to Secu-3 device</string>
 	<string name="units_rpm">min-1</string>
@@ -158,5 +159,6 @@
 	<string name="adccor_addi1_sensor_correction_title">ADD_IO1 Sensor correction:</string>
 	<string name="adccor_addi2_sensor_factor_title">ADD_IO2 Sensor factor:</string>
 	<string name="adccor_addi2_sensor_correction_title">ADD_IO2 Sensor correction:</string>
-	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>    
+	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>
+	<string name="choke_steps_title">Number of SM steps:</string>    
 </resources>

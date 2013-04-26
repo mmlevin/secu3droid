@@ -40,6 +40,7 @@ public class ParamActivity extends FragmentActivity{
 	ADCCorFragment adcCorParPage = null;
 	CKPSFragment ckpsParPage = null;
 	MiscelFragment miscelParPage = null;
+	ChokeFragment chokeParPage = null;
 	
 	ProgressBar progressBar = null;
 		
@@ -62,7 +63,8 @@ public class ParamActivity extends FragmentActivity{
     		   (carburParPage.getData() != null) &&
     		   (adcCorParPage.getData() != null) &&
     		   (ckpsParPage.getData() != null) &&
-    		   (miscelParPage.getData() != null);
+    		   (miscelParPage.getData() != null) &&
+    		   (chokeParPage.getData() != null);
     }
     
     private void readParams() {
@@ -86,6 +88,7 @@ public class ParamActivity extends FragmentActivity{
 			intentFilter.addAction(Secu3Dat.RECEIVE_ADCCOR_PAR);
 			intentFilter.addAction(Secu3Dat.RECEIVE_CKPS_PAR);
 			intentFilter.addAction(Secu3Dat.RECEIVE_MISCEL_PAR);
+			intentFilter.addAction(Secu3Dat.RECEIVE_CHOKE_PAR);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS);
 			intentFilter.addAction(Secu3Dat.RECEIVE_OP_COMP_NC);
@@ -145,6 +148,7 @@ public class ParamActivity extends FragmentActivity{
 		pages.add(adcCorParPage = new ADCCorFragment());
 		pages.add(ckpsParPage = new CKPSFragment());
 		pages.add(miscelParPage = new MiscelFragment());
+		pages.add(chokeParPage = new ChokeFragment());
 			
 		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
@@ -185,6 +189,7 @@ public class ParamActivity extends FragmentActivity{
 					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, adcCorParPage.getData()));
 					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, ckpsParPage.getData()));
 					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, miscelParPage.getData()));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, chokeParPage.getData()));
 				} catch (Exception e) {
 					Log.d (LOG_TAG, e.toString());
 				}
@@ -285,9 +290,15 @@ public class ParamActivity extends FragmentActivity{
 		} else if (Secu3Dat.RECEIVE_MISCEL_PAR.equals(intent.getAction())) {
 			MiscelPar packet = intent.getParcelableExtra(MiscelPar.class.getCanonicalName());
 			MiscelFragment page = miscelParPage;
+			page.setData(packet);			
+			if (page.isVisible()) page.updateData();
+		} else if (Secu3Dat.RECEIVE_CHOKE_PAR.equals(intent.getAction())) {
+			ChokePar packet = intent.getParcelableExtra(ChokePar.class.getCanonicalName());
+			ChokeFragment page = chokeParPage;
 			page.setData(packet);
 			if (page.isVisible()) page.updateData();
-		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
+		}
+		else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);
 			if (current == total) progressBar.setVisibility(ProgressBar.GONE);

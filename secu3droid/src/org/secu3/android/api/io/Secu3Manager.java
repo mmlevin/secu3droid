@@ -56,7 +56,7 @@ public class Secu3Manager {
 	private int progressCurrent = 0;
 	private int progressTotal = 0;
 	private int subprogress = 0;
-	private final static int PROGRESS_TOTAL_PARAMS = 18;
+	private final static int PROGRESS_TOTAL_PARAMS = 19;
 	
 	private class ConnectedSecu3 extends Thread {
 		public static final int STATUS_TIMEOUT = 10;
@@ -243,8 +243,13 @@ public class Secu3Manager {
 							break;
 						case Secu3Dat.MISCEL_PAR:
 							updateProgress(10 + subprogress);
-							updateTask();
-							break;																		
+							writer.write(ChangeMode.pack(Secu3Dat.CHOKE_PAR));
+							writer.flush();
+							break;	
+						case Secu3Dat.CHOKE_PAR:
+							updateProgress(11 + subprogress);
+							updateTask();							
+							break;
 						}			
 						break;
 					case SECU3_READ_ERRORS:

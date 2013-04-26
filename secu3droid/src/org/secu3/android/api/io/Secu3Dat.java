@@ -43,6 +43,7 @@ public class Secu3Dat implements Parcelable {
 	 public final static String RECEIVE_ATTTAB_PAR 		= "org.secu3.android.intent.action.RECEIVE_ATTTAB_PAR";
 	 public final static String RECEIVE_DBGVAR_DAT 		= "org.secu3.android.intent.action.RECEIVE_DBGVAR_DAT";
 	 public final static String RECEIVE_DIAGINP_DAT 	= "org.secu3.android.intent.action.RECEIVE_DIAGINP_DAT";
+	 public final static String RECEIVE_CHOKE_PAR 		= "org.secu3.android.intent.action.RECEIVE_CHOKE_PAR";
 	 
 	 
 	 public final static String SEND_STARTR_PAR 		= "org.secu3.android.intent.action.SEND_STARTR_PAR";
@@ -59,6 +60,7 @@ public class Secu3Dat implements Parcelable {
 	 public final static String SEND_DIAGOUT_DAT 		= "org.secu3.android.intent.action.SEND_DIAGOUT_DAT";	
 	 public final static String SEND_EDITAB_PAR 		= "org.secu3.android.intent.action.SEND_EDITTAB_PAR";
 	 public final static String SEND_OP_COMP_NC 		= "org.secu3.android.intent.action.SEND_OP_COMP_NC";
+	 public final static String SEND_CHOKE_PAR 			= "org.secu3.android.intent.action.SEND_CHOKE_PAR";
 	 
 	 public final static int OPCODE_EEPROM_PARAM_SAVE    = 1;
 	 public final static int OPCODE_CE_SAVE_ERRORS       = 2;
@@ -126,17 +128,18 @@ public class Secu3Dat implements Parcelable {
 
 	 public final static char DIAGINP_DAT = '=';   //!< diagnostics: send input values (analog & digital values)
 	 public final static char DIAGOUT_DAT = '^';   //!< diagnostics: receive output states (bits)
+	 public final static char CHOKE_PAR = '%'; 
 	 
 	 public final static int INPUT_OUTPUT_POS = 0;
 	 public final static int PACKET_ID_POS = 1;
 
 	 public final static String PACKET_ID[] = {"CHANGEMODE","BOOTLOADER","TEMPER_PAR","CARBUR_PAR","IDLREG_PAR","ANGLES_PAR","FUNSET_PAR","STARTR_PAR",
 			 "FNNAME_DAT","SENSOR_DAT","ADCCOR_PAR","ADCRAW_DAT","CKPS_PAR","OP_COMP_NC","CE_ERR_CODES","KNOCK_PAR",
-			 "CE_SAVED_ERR","FWINFO_DAT","MISCEL_PAR","EDITAB_PAR","ATTTAB_PAR","DBGVAR_DAT","DIAGINP_DAT","DIAGOUT_DAT"};
+			 "CE_SAVED_ERR","FWINFO_DAT","MISCEL_PAR","EDITAB_PAR","ATTTAB_PAR","DBGVAR_DAT","DIAGINP_DAT","DIAGOUT_DAT","CHOKE_PAR"};
 	 
 	 public final static char PACKET_ID_INDEX[] = {CHANGEMODE,BOOTLOADER,TEMPER_PAR,CARBUR_PAR,IDLREG_PAR,ANGLES_PAR,FUNSET_PAR,STARTR_PAR,
 		 FNNAME_DAT,SENSOR_DAT,ADCCOR_PAR,ADCRAW_DAT,CKPS_PAR,OP_COMP_NC,CE_ERR_CODES,KNOCK_PAR,
-		 CE_SAVED_ERR,FWINFO_DAT,MISCEL_PAR,EDITAB_PAR,ATTTAB_PAR,DBGVAR_DAT,DIAGINP_DAT,DIAGOUT_DAT};
+		 CE_SAVED_ERR,FWINFO_DAT,MISCEL_PAR,EDITAB_PAR,ATTTAB_PAR,DBGVAR_DAT,DIAGINP_DAT,DIAGOUT_DAT,CHOKE_PAR};
 
 	 public final static int BAUD_RATE[] = {2400,4800,9600,14400,19200,28800,38400,57600};
 	 public final static int BAUD_RATE_INDEX[] = {0x340,0x1A0,0xCF,0x8A,0x67,0x44,0x33,0x22};
@@ -833,6 +836,77 @@ public class Secu3Dat implements Parcelable {
 
 	}
 
+	/** Класс пакета управления подсосом **/
+	public static class ChokePar extends Secu3Dat {
+		static final int PACKET_SIZE = 7;
+
+		public int steps;
+		public int testing;
+
+		public static final Parcelable.Creator<ChokePar> CREATOR = new Parcelable.Creator<ChokePar>() {
+			 public ChokePar createFromParcel(Parcel in) {
+				 Log.d(this.getClass().getCanonicalName(), "Create from Parcel");			 
+				 return new ChokePar(in);
+			 }
+
+			 public ChokePar[] newArray(int size) {
+				 return new ChokePar[size];
+			 }
+		};
+		
+		public ChokePar() {
+			packet_id = CHOKE_PAR;
+			packet_size = PACKET_SIZE;
+			intent_action = RECEIVE_CHOKE_PAR;
+		}
+		
+		public ChokePar(Parcel in) {
+			super(in);
+			steps = in.readInt();
+		}
+		
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			super.writeToParcel(dest, flags);
+			dest.writeInt(this.steps);
+			dest.writeInt(this.testing);
+		}		
+
+		@Override
+		public boolean equals(Object o) {
+			boolean result = false;
+			if (super.equals(o)) {
+				result = true;
+				result &= this.steps == ((ChokePar)o).steps;
+				result &= this.testing == ((ChokePar)o).testing;
+			}
+			return result;
+		}
+		
+		@Override
+		public void parse(String packet) throws Exception {
+			super.parse(packet);
+
+			try {
+				steps = Integer.parseInt(data.substring(2, 6), 16); // AAAA
+				testing = Integer.parseInt(data.substring(6, 7), 16); // B
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+		
+		@Override
+		public String pack() throws Exception {
+			return String.format("%s%s%04X%01X", OUTPUT_PACKET, packet_id, steps,testing);
+		}
+		
+		@Override
+		public String getLogString() {
+			return (String.format("%s: %d,%d", getClass().getCanonicalName(), steps,testing));
+		}
+
+	}
+	
 	/** Класс параметров настройки ДПКВ и ДНО **/
 	public static class CKPSPar extends Secu3Dat {
 		static final int PACKET_SIZE = 15;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="Starter"
+    android:fadeScrollbars="false">
+    
+	<RelativeLayout
+	    android:id="@+id/chokeLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+
+	<TextView
+	    android:id="@+id/chokeTextView1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:text="@string/choke_steps_title"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<EditText
+	    android:id="@+id/chokeStepsEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/chokeTextView1"
+	    android:ems="10"
+	    android:inputType="number"
+	    android:text="@string/units_zero" />
+	
+	</RelativeLayout>
+
+</ScrollView>
