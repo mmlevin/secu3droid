@@ -39,6 +39,32 @@
 	    android:layout_toRightOf="@+id/chokeStepsEditText"
 	    android:textOff="@string/choke_testing_title"
 	    android:textOn="@string/choke_testing_title" />
+
+	<TextView
+	    android:id="@+id/chokeTextView2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@id/chokeStepsEditText"
+	    android:text="@string/choke_manual_title"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<Button
+	    android:id="@+id/chokeManualStepDown"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/chokeTextView2"
+	    android:text="@string/choke_manual_step_down" />
+
+	<Button
+	    android:id="@+id/chokeManualStepUp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/chokeTextView2"
+	    android:layout_toRightOf="@+id/chokeManualStepDown"
+	    android:text="@string/choke_manual_step_up" />
 	
 	</RelativeLayout>
 

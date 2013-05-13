@@ -13,8 +13,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 public class ChokeFragment extends Secu3Fragment implements ISecu3Fragment {
@@ -22,6 +24,8 @@ public class ChokeFragment extends Secu3Fragment implements ISecu3Fragment {
 	ChokePar packet = null;
 	EditText chokeSteps;
 	ToggleButton chokeTest;
+	Button chokeManualStepUpButton;
+	Button chokeManualStepDownButton;	
 	
 	private class CustomTextWatcher implements TextWatcher {
 		EditText e = null;
@@ -44,9 +48,9 @@ public class ChokeFragment extends Secu3Fragment implements ISecu3Fragment {
 					switch (e.getId()){
 						case R.id.chokeStepsEditText:
 							packet.steps = i;
+							dataChanged(packet);							
 							break;
 					}	
-					dataChanged(packet);
 				}
 			}
 		}
@@ -70,11 +74,10 @@ public class ChokeFragment extends Secu3Fragment implements ISecu3Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {		
 		super.onActivityCreated(savedInstanceState);
 		chokeSteps = (EditText)getView().findViewById(R.id.chokeStepsEditText);
-		chokeSteps.addTextChangedListener(new CustomTextWatcher(chokeSteps));
+		chokeSteps.addTextChangedListener(new CustomTextWatcher(chokeSteps));		
 		
 		chokeTest = (ToggleButton)getView().findViewById(R.id.chokeTestButton);	
-		chokeTest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			
+		chokeTest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (packet != null) {
@@ -83,6 +86,29 @@ public class ChokeFragment extends Secu3Fragment implements ISecu3Fragment {
 				}		
 			}
 		});
+		
+		chokeManualStepUpButton = (Button)getView().findViewById(R.id.chokeManualStepUp);
+		chokeManualStepDownButton = (Button)getView().findViewById(R.id.chokeManualStepDown);
+		
+		chokeManualStepUpButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				if (packet != null)	{
+					packet.manual_delta = 127;
+					dataChanged(packet);	
+				}
+			}
+		});
+
+		chokeManualStepDownButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				if (packet != null)	{
+					packet.manual_delta = -127;
+					dataChanged(packet);	
+				}
+			}
+		});			
 	}
 	
 	@Override

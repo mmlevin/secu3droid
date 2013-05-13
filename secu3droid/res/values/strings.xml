@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Secu3Droid</string>
-    <string name="sensors_format">RPM: %1$d min-1\r\nPressure: %2$.2f kPa\r\nVoltage: %3$.2f V\r\nTemperature: %4$.2f °C\r\nAdvance angle: %5$+.2f °\r\nKnock level: %6$.2f V\r\nKnock retard: %7$+.2f °\r\nAir flow: %8$d\r\nFI valve: %9$d\r\nThrottle sensor: %10$d\r\nGas valve: %11$d\r\nPower Valve: %12$d\r\nCooling fan: %13$d\r\nStarter blocked: %14$d\r\nADD_IO1: %15$.2f\r\nADD_IO2: %16$.2f\r\nThrottle Position Sensor:%17$.2f</string>
+    <string name="sensors_format">RPM: %1$d min-1\r\nPressure: %2$.2f kPa\r\nVoltage: %3$.2f V\r\nTemperature: %4$.2f °C\r\nAdvance angle: %5$+.2f °\r\nKnock level: %6$.2f V\r\nKnock retard: %7$+.2f °\r\nAir flow: %8$d\r\nFI valve: %9$d\r\nThrottle sensor: %10$d\r\nGas valve: %11$d\r\nPower Valve: %12$d\r\nCooling fan: %13$d\r\nStarter blocked: %14$d\r\nADD_IO1: %15$.2f\r\nADD_IO2: %16$.2f\r\nThrottle Position Sensor:%17$.2f\r\nChoke position: %18$.2f</string>
     <string name="sensors_raw_format">"MAP Sensor data: %1$.2f V\r\nVoltage Sensor data: %2$.2f V\r\nTemperature Sensor data: %3$.2f V\r\nKnock Sensor data: %4$.2f V\r\nTPS Sensor data: %5$.2f V\r\nADD_IO1 Sensor data: %6$.2f V\r\nADD_IO2 data: %7$.2f V"</string>
     <string name="title_activity_param">Parameters</string>
     <string name="menu_settings">Settings</string>
@@ -182,5 +182,10 @@
 	<string name="adccor_addi2_sensor_correction_title">ADD_IO2 Sensor correction:</string>
 	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>
 	<string name="choke_steps_title">Number of SM steps:</string>
-	<string name="choke_testing_title">TEST</string>    
+	<string name="choke_testing_title">TEST</string>
+	<string name="choke_manual_title">Manual choke control:</string>
+	<string name="choke_manual_set_title">Set</string>
+	<string name="choke_manual_step_down">Less</string>
+	<string name="choke_manual_step_up">More</string>
+	<string name="choke_manual_reset_title">Reset</string>    
 </resources>

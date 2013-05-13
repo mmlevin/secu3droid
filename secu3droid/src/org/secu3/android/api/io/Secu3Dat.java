@@ -15,6 +15,7 @@ public class Secu3Dat implements Parcelable {
 	 public final static int UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER = 400;
      public final static int TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER = 4;
      public final static int TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER = 2;
+     public final static int CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER = 2;
      
      static final float ANGLE_MULTIPLIER = 32.0f;
      static final float ADC_DISCRETE = 0.0025f;
@@ -859,10 +860,11 @@ public class Secu3Dat implements Parcelable {
 
 	/** Класс пакета управления подсосом **/
 	public static class ChokePar extends Secu3Dat {
-		static final int PACKET_SIZE = 7;
+		static final int PACKET_SIZE = 9;
 
 		public int steps;
 		public int testing;
+		public byte manual_delta;
 
 		public static final Parcelable.Creator<ChokePar> CREATOR = new Parcelable.Creator<ChokePar>() {
 			 public ChokePar createFromParcel(Parcel in) {
@@ -884,6 +886,8 @@ public class Secu3Dat implements Parcelable {
 		public ChokePar(Parcel in) {
 			super(in);
 			steps = in.readInt();
+			testing = in.readInt();
+			manual_delta = in.readByte();
 		}
 		
 		@Override
@@ -891,6 +895,7 @@ public class Secu3Dat implements Parcelable {
 			super.writeToParcel(dest, flags);
 			dest.writeInt(this.steps);
 			dest.writeInt(this.testing);
+			dest.writeByte(this.manual_delta);
 		}		
 
 		@Override
@@ -900,6 +905,7 @@ public class Secu3Dat implements Parcelable {
 				result = true;
 				result &= this.steps == ((ChokePar)o).steps;
 				result &= this.testing == ((ChokePar)o).testing;
+				result &= this.manual_delta == ((ChokePar)o).manual_delta;
 			}
 			return result;
 		}
@@ -911,6 +917,7 @@ public class Secu3Dat implements Parcelable {
 			try {
 				steps = Integer.parseInt(data.substring(2, 6), 16); // AAAA
 				testing = Integer.parseInt(data.substring(6, 7), 16); // B
+				manual_delta = Integer.valueOf(data.substring(7, 9), 16).byteValue(); // CC
 			} catch (Exception e) {
 				throw e;
 			}
@@ -918,12 +925,12 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String pack() throws Exception {
-			return String.format("%s%s%04X%01X", OUTPUT_PACKET, packet_id, steps,testing);
+			return String.format("%s%s%04X%01X%02X", OUTPUT_PACKET, packet_id, steps,testing,Integer.valueOf(manual_delta).byteValue());
 		}
 		
 		@Override
 		public String getLogString() {
-			return (String.format("%s: %d,%d", getClass().getCanonicalName(), steps,testing));
+			return (String.format("%s: %d,%d,%d", getClass().getCanonicalName(), steps,testing,manual_delta));
 		}
 
 	}
@@ -1714,7 +1721,7 @@ public class Secu3Dat implements Parcelable {
 
 	/** Класс пакета параметров реального времени **/
 	static public class SensorDat extends Secu3Dat {
-		static final int PACKET_SIZE = 48;
+		static final int PACKET_SIZE = 50;
 		
 		/** Частота вращения коленвала AAAA **/
 		public int frequen; // частота вращения коленвала (усредненная)
@@ -1755,6 +1762,8 @@ public class Secu3Dat implements Parcelable {
 		public float add_i1;
 		/** ADD_I2 **/
 		public float add_i2;
+		
+		public float choke_pos;
 
 		public static final Parcelable.Creator<SensorDat> CREATOR = new Parcelable.Creator<SensorDat>() {
 			 public SensorDat createFromParcel(Parcel in) {
@@ -1794,6 +1803,7 @@ public class Secu3Dat implements Parcelable {
 			dest.writeFloat(tps);
 			dest.writeFloat(add_i1);
 			dest.writeFloat(add_i2);
+			dest.writeFloat(choke_pos);
 		}
 		
 		public SensorDat (Parcel in) {
@@ -1817,6 +1827,7 @@ public class Secu3Dat implements Parcelable {
 			this.tps = in.readFloat();
 			this.add_i1 = in.readFloat();
 			this.add_i2 = in.readFloat();
+			this.choke_pos = in.readFloat();
 		}				
 
 		@Override
@@ -1843,6 +1854,7 @@ public class Secu3Dat implements Parcelable {
 				result &= this.tps == (((SensorDat)o)).tps;
 				result &= this.add_i1 == (((SensorDat)o)).add_i1;
 				result &= this.add_i2 == (((SensorDat)o)).add_i2;
+				result &= this.choke_pos == (((SensorDat)o)).choke_pos;
 			}
 			return result;
 		}
@@ -1880,6 +1892,7 @@ public class Secu3Dat implements Parcelable {
 				add_i1 = Integer.parseInt(data.substring(36, 40),16) * ADC_DISCRETE; // ADD_I1 AAAA
 				add_i2 = Integer.parseInt(data.substring(40, 44),16) * ADC_DISCRETE; // ADD_I1 AAAA
 				ce_errors = Integer.parseInt(data.substring(44,48),16); // CE errors
+				choke_pos = (float)Integer.parseInt(data.substring(48,50),16) / Secu3Dat.CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER; // Choke position
 			} catch (Exception e) {
 				throw e;
 			}
@@ -1888,11 +1901,11 @@ public class Secu3Dat implements Parcelable {
 		@Override
 		public String getLogString() {
 			return String
-					.format("%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, EPHH Valve: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d, CE Errors: %d, TPS: %f, ADD_I1: %f, ADD_I2: %f",
+					.format("%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, EPHH Valve: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d, CE Errors: %d, TPS: %f, ADD_I1: %f, ADD_I2: %f, Choke: %f",
 							getClass().getCanonicalName(), frequen, pressure, voltage,
 							temperat, adv_angle, knock_k, knock_retard,
 							air_flow, ephh_valve, carb, gas, epm_valve,
-							ce_state,ce_errors,tps,add_i1,add_i2);
+							ce_state,ce_errors,tps,add_i1,add_i2,choke_pos);
 		}					
 	}
 

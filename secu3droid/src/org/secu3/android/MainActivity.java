@@ -207,7 +207,7 @@ public class MainActivity extends Activity {
 				textViewData.setText(String.format(Locale.US,sensorsFormat,
 						sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
 						sd.knock_k, sd.knock_retard, sd.air_flow, sd.ephh_valve,
-						sd.carb, sd.gas, sd.epm_valve, sd.cool_fan,sd.st_block,sd.add_i1,sd.add_i2,sd.tps));
+						sd.carb, sd.gas, sd.epm_valve, sd.cool_fan,sd.st_block,sd.add_i1,sd.add_i2,sd.tps,sd.choke_pos));
 			}			
 		} else if (Secu3Dat.RECEIVE_ADCRAW_DAT.equals(intent.getAction())) {
 			ADCRawDat ad = (ADCRawDat)intent.getParcelableExtra(ADCRawDat.class.getCanonicalName());
