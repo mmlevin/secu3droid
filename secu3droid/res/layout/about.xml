@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
   Secu3Droid - An open source, free manager for SECU-3 engine
   control unit
   Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
@@ -22,63 +22,61 @@
  
   contacts:
              http://secu-3.org
-             email: mmlevin@mail.ru
+             email: mmlevin@mail.ru
 -->
 
-<ScrollView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	>
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"
-	>
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"
-		>
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				style="@style/about_text"
-				android:text="@string/about_version"
-			/>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-			<TextView
-			    android:id="@+id/about_version_name"
-			    style="@style/about_text"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-		</LinearLayout>
- 		
-		<TextView
-			style="@style/about_text"
-			android:text="@string/about_copyright_1"
-		/>
-		<TextView
-			style="@style/about_text"
-			android:text="@string/about_copyright_2"
-		/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-		<TextView
-		    android:id="@+id/about_description"
-		    style="@style/about_text"
-		    android:text="@string/about_app_desc" />
+            <TextView
+                style="@style/about_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/about_version" />
 
-		<TextView
-			android:id="@+id/about_license"
-			style="@style/about_text"
- 			android:text="@string/about_license"
- 			android:autoLink="none"
-		/>
-		<TextView
-			android:id="@+id/about_sources"
-			style="@style/about_text"
-			android:text="@string/about_sources"
-		/>
-	</LinearLayout>
+            <TextView
+                android:id="@+id/about_version_name"
+                style="@style/about_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="SelectableText" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/about_text"
+            android:text="@string/about_copyright_1" />
+
+        <TextView
+            style="@style/about_text"
+            android:text="@string/about_copyright_2" />
+
+        <TextView
+            android:id="@+id/about_description"
+            style="@style/about_text"
+            android:text="@string/about_app_desc" />
+
+        <TextView
+            android:id="@+id/about_license"
+            style="@style/about_text"
+            android:autoLink="none"
+            android:text="@string/about_license" />
+
+        <TextView
+            android:id="@+id/about_sources"
+            style="@style/about_text"
+            android:text="@string/about_sources" />
+    </LinearLayout>
+
 </ScrollView>

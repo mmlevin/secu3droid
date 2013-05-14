@@ -41,7 +41,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
 public class ChokeFragment extends Secu3Fragment implements ISecu3Fragment {
