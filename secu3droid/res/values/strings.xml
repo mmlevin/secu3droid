@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Secu3Droid - An open source, free manager for SECU-3 engine
+  control unit
+  Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
+  
+  SECU-3  - An open source, free engine control unit
+  Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+  contacts:
+             http://secu-3.org
+             email: mmlevin@mail.ru
+-->
+
 <resources>
 
     <string name="app_name">Secu3Droid</string>
@@ -55,7 +81,7 @@
     <string name="about_version">Secu3Droid version</string>
     <string name="about_copyright_1">Copyright © 2013 Maksim Levin</string>
     <string name="about_copyright_2">Copyright © 2013 Secu3Droid Project</string>
-    <string name="about_app_desc">Secu3Droid is an application for managing Secu-3 ugnition system.</string>
+    <string name="about_app_desc">Secu3Droid is an application for managing Secu-3 ignition system. Secu-3 is an open source, free engine control unit, see <a href="http://secu-3.org"><b>http://secu-3.org</b></a>"</string>
     <string name="about_license">It is open source software distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
     <string name="about_sources">The source code is available from Git repository on the project website: https://github.com/mmlevin/secu3droid</string>
     <string-array name="fragment_titles">
