@@ -41,6 +41,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -226,7 +227,8 @@ public class MainActivity extends Activity {
 			boolean errors = sd.ce_errors != 0;
 			if (errors != this.errors) {
 				this.errors = errors;
-				invalidateOptionsMenu();
+				ActivityCompat.invalidateOptionsMenu(this);
+				//invalidateOptionsMenu();
 			}
 			if (!checkBox.isChecked() && (sd != null)) {
 				textViewData.setText(String.format(Locale.US,sensorsFormat,
