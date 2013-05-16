@@ -26,6 +26,7 @@
 package org.secu3.android.api.io;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.os.Parcel;
@@ -412,7 +413,7 @@ public class Secu3Dat implements Parcelable {
 		}
 		
 		public String getLogString() {
-			return (String.format("%s: MAP Factor: %f, MAP Correction: %f, UBAT Factor: %f, UBAT Correction: %f, Temp factor: %f, Temp correction: %f, TPS factor: %f, TPS Correction: %f, ADD_I1 factor: %f, ADD_I1 Correction: %f, ADD_I2 factor: %f, ADD_I2 Correction: %f", getClass().getCanonicalName(),
+			return (String.format(Locale.US,"%s: MAP Factor: %f, MAP Correction: %f, UBAT Factor: %f, UBAT Correction: %f, Temp factor: %f, Temp correction: %f, TPS factor: %f, TPS Correction: %f, ADD_I1 factor: %f, ADD_I1 Correction: %f, ADD_I2 factor: %f, ADD_I2 Correction: %f", getClass().getCanonicalName(),
 					map_adc_factor, map_adc_correction, ubat_adc_factor, ubat_adc_correction, temp_adc_factor, temp_adc_correction,tps_adc_factor,tps_adc_correction,add_i1_factor,add_i1_correction,add_i2_factor,add_i2_correction));
 		}
 	
@@ -624,7 +625,7 @@ public class Secu3Dat implements Parcelable {
 			
 		@Override
 		public String getLogString() {
-			return (String.format("%s: Max angle: %f, Min angle: %f, Angle corr: %f, Dec spread: %f, Inc spread: %f, Zero angle: %d", getClass().getCanonicalName(), max_angle, min_angle, angle_corr, dec_spead, inc_spead, zero_adv_ang));
+			return (String.format(Locale.US,"%s: Max angle: %f, Min angle: %f, Angle corr: %f, Dec spread: %f, Inc spread: %f, Zero angle: %d", getClass().getCanonicalName(), max_angle, min_angle, angle_corr, dec_spead, inc_spead, zero_adv_ang));
 		}		
 	}
 	
@@ -742,7 +743,7 @@ public class Secu3Dat implements Parcelable {
 			
 		@Override
 		public String getLogString() {
-			return (String.format("%s: EPHH Lo: %d, EPHH Hi: %d, Inverse: %d, EPM On: %f, EPHH LoG: %d, EPHH Hi G: %d, Shutoff delay: %f", getClass().getCanonicalName(),ephh_lot, ephh_hit, carb_invers, epm_ont, ephh_lot_g, ephh_hit_g, shutoff_delay / 10));
+			return (String.format(Locale.US,"%s: EPHH Lo: %d, EPHH Hi: %d, Inverse: %d, EPM On: %f, EPHH LoG: %d, EPHH Hi G: %d, Shutoff delay: %f", getClass().getCanonicalName(),ephh_lot, ephh_hit, carb_invers, epm_ont, ephh_lot_g, ephh_hit_g, shutoff_delay / 10));
 		}
 
 	}
@@ -806,7 +807,7 @@ public class Secu3Dat implements Parcelable {
 			
 		@Override
 		public String getLogString() {
-			return (String.format("%s: %d", getClass().getCanonicalName(), flags));
+			return (String.format(Locale.US,"%s: %d", getClass().getCanonicalName(), flags));
 		}
 
 	}
@@ -878,7 +879,7 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String getLogString() {
-			return (String.format("%s: %d", getClass().getCanonicalName(), flags));
+			return (String.format(Locale.US,"%s: %d", getClass().getCanonicalName(), flags));
 		}
 
 	}
@@ -955,7 +956,7 @@ public class Secu3Dat implements Parcelable {
 		
 		@Override
 		public String getLogString() {
-			return (String.format("%s: %d,%d,%d", getClass().getCanonicalName(), steps,testing,manual_delta));
+			return (String.format(Locale.US,"%s: %d,%d,%d", getClass().getCanonicalName(), steps,testing,manual_delta));
 		}
 
 	}
@@ -1334,7 +1335,7 @@ public class Secu3Dat implements Parcelable {
 		@Override
 		public String getLogString() {
 			return (String
-					.format("%s: Gasoline: %d, Gas: %d, Lower pressure: %f, Upper pressure: %f, Curve offset: %f, Curve gradient: %f, TPS Offset: %f, TPS gradient: %f",
+					.format(Locale.US,"%s: Gasoline: %d, Gas: %d, Lower pressure: %f, Upper pressure: %f, Curve offset: %f, Curve gradient: %f, TPS Offset: %f, TPS gradient: %f",
 							getClass().getCanonicalName(), fn_benzin, fn_gas,
 							map_lower_pressure, map_upper_pressure,
 							map_curve_offset, map_curve_gradient,tps_curve_offset,tps_curve_gradient));
@@ -1460,7 +1461,7 @@ public class Secu3Dat implements Parcelable {
 		@Override
 		public String getLogString() {
 			return (String
-					.format("%s: Use: %d, Ifac1: %f, Ifac2: %f, Mine FR: %d, RPM: %d, Min angle: %f, Max angle: %f, Turn on temp: %f",
+					.format(Locale.US,"%s: Use: %d, Ifac1: %f, Ifac2: %f, Mine FR: %d, RPM: %d, Min angle: %f, Max angle: %f, Turn on temp: %f",
 							getClass().getCanonicalName(), idl_regul, ifac1, ifac2,
 							MINEFR, idling_rpm, min_angle, max_angle, turn_on_temp));
 		}
@@ -1926,7 +1927,7 @@ public class Secu3Dat implements Parcelable {
 		@Override
 		public String getLogString() {
 			return String
-					.format("%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, EPHH Valve: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d, CE Errors: %d, TPS: %f, ADD_I1: %f, ADD_I2: %f, Choke: %f",
+					.format(Locale.US,"%s: RPM: %d, Pressure: %f, Voltage: %f, Temparature: %f, Angle: %f, Knock level: %f, Knock retard: %f, Air flow: %d, EPHH Valve: %d, Carb sensor: %d, Gas sensor: %d, EPM Valve: %d, CE State: %d, CE Errors: %d, TPS: %f, ADD_I1: %f, ADD_I2: %f, Choke: %f",
 							getClass().getCanonicalName(), frequen, pressure, voltage,
 							temperat, adv_angle, knock_k, knock_retard,
 							air_flow, ephh_valve, carb, gas, epm_valve,
@@ -2003,7 +2004,7 @@ public class Secu3Dat implements Parcelable {
 
 		@Override
 		public String getLogString() {
-			return (String.format("%s: Off RPM: %d, Map RPM: %d", getClass()
+			return (String.format(Locale.US,"%s: Off RPM: %d, Map RPM: %d", getClass()
 					.getCanonicalName(), starter_off, smap_abandon));
 		}
 				
@@ -2110,7 +2111,7 @@ public class Secu3Dat implements Parcelable {
 		@Override		
 		public String getLogString() {
 			return (String
-					.format("%s: Use: %d, Fan PWM: %d, Use map: %d, Fan on: %f, Fan off: %f",
+					.format(Locale.US,"%s: Use: %d, Fan PWM: %d, Use map: %d, Fan on: %f, Fan off: %f",
 							getClass().getCanonicalName(), tmp_use, vent_pwm,
 							cts_use_map, vent_on, vent_off));
 		}
@@ -2385,6 +2386,240 @@ public class Secu3Dat implements Parcelable {
 			return (String.format("%s: ", getClass().getCanonicalName()));
 		}
 
+	}
+	
+	public static class DiagInpDat extends Secu3Dat {
+		static final int PACKET_SIZE = 36;
+		
+		public float voltage;                        //board voltage
+		public float map;                            //MAP sensor
+		public float temp;                           //coolant temperature
+		public float add_io1;                        //additional input 1 (analog)
+		public float add_io2;                        //additional input 2 (analog)
+		public float carb;                           //carburetor switch, throttle position sensor (analog)
+		public int gas;                              //gas valve state (digital)
+		public int ckps;                             //CKP sensor (digital)
+		public int ref_s;                            //VR type cam sensor (digital)
+		public int ps;                               //Hall-effect cam sensor (digital)
+		public int bl;                               //"Bootloader" jumper
+		public int de;                               //"Default EEPROM" jumper
+		public float ks_1;                           //knock sensor 1  
+		public float ks_2;                           //knock sensor 2
+		
+		public static final Parcelable.Creator<DiagInpDat> CREATOR = new Parcelable.Creator<DiagInpDat>() {
+			 public DiagInpDat createFromParcel(Parcel in) {
+				 Log.d(this.getClass().getCanonicalName(), "Create from Parcel");			 
+				 return new DiagInpDat(in);
+			 }
+
+			 public DiagInpDat[] newArray(int size) {
+				 return new DiagInpDat[size];
+			 }
+		};	
+		
+		public DiagInpDat() {
+			packet_id = DIAGINP_DAT;
+			packet_size = PACKET_SIZE;
+			intent_action = RECEIVE_DIAGINP_DAT;
+		}
+		
+		public DiagInpDat (Parcel in) {
+			super (in);
+			voltage = in.readFloat();
+			map = in.readFloat();
+			temp = in.readFloat();
+			add_io1 = in.readFloat();
+			add_io2 = in.readFloat();
+			carb = in.readFloat();
+			gas = in.readInt();
+			ckps = in.readInt();
+			ref_s = in.readInt();
+			ps = in.readInt();
+			bl = in.readInt();
+			de = in.readInt();
+			ks_1 = in.readFloat();
+			ks_2 = in.readFloat();
+		}
+		
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			super.writeToParcel(dest, flags);
+			dest.writeFloat(voltage);
+			dest.writeFloat(map);
+			dest.writeFloat(temp);
+			dest.writeFloat(add_io1);
+			dest.writeFloat(add_io2);
+			dest.writeFloat(carb);
+			dest.writeInt(gas);
+			dest.writeInt(ckps);
+			dest.writeInt(ref_s);
+			dest.writeInt(ps);
+			dest.writeInt(bl);
+			dest.writeInt(de);
+			dest.writeFloat(ks_1);
+			dest.writeFloat(ks_2);
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			boolean result = false;
+			if (super.equals(o)) {
+				result = true;
+				result &= this.voltage == ((DiagInpDat)o).voltage;
+				result &= this.map == ((DiagInpDat)o).map;
+				result &= this.temp == ((DiagInpDat)o).temp;
+				result &= this.add_io1 == ((DiagInpDat)o).add_io1;
+				result &= this.add_io2 == ((DiagInpDat)o).add_io2;
+				result &= this.carb == ((DiagInpDat)o).carb;
+				result &= this.gas == ((DiagInpDat)o).gas;
+				result &= this.ckps == ((DiagInpDat)o).ckps;
+				result &= this.ref_s == ((DiagInpDat)o).ref_s;
+				result &= this.ps == ((DiagInpDat)o).ps;
+				result &= this.bl == ((DiagInpDat)o).bl;
+				result &= this.de == ((DiagInpDat)o).de;
+				result &= this.ks_1 == ((DiagInpDat)o).ks_1;
+				result &= this.ks_2 == ((DiagInpDat)o).ks_2;
+			}
+			return result;
+		}
+		
+		@Override
+		public void parse (String packet) throws Exception {			  
+			super.parse(packet);			
+			try {			
+				voltage = (float) Integer.parseInt(data.substring(2,6),16) * ADC_DISCRETE;
+				map = (float) Integer.parseInt(data.substring(6,10),16) * ADC_DISCRETE;
+				temp = (float) Integer.parseInt(data.substring(10,14),16) * ADC_DISCRETE;
+				add_io1 = (float) Integer.parseInt(data.substring(14,18),16) * ADC_DISCRETE; 
+				add_io2 = (float) Integer.parseInt(data.substring(18,22),16) * ADC_DISCRETE;
+				carb =  (float) Integer.parseInt(data.substring(22,26),16) * ADC_DISCRETE; // Be carefool, it may be not only float, but (0;1)
+				ks_1 = (float) Integer.parseInt(data.substring(26,30),16) * ADC_DISCRETE;
+				ks_2 = (float) Integer.parseInt(data.substring(30,34),16) * ADC_DISCRETE;
+				int i = Integer.parseInt(data.substring(34,36),16);				
+				gas = (i >> 0) & 0x01;
+				ckps = (i >> 1) & 0x01; 
+				ref_s = (i >> 2) & 0x01;
+				ps = (i >> 3) & 0x01;
+				bl = (i >> 4) & 0x01;
+				de = (i >> 5) & 0x01;
+
+			}
+			catch (Exception e) {
+				throw e;
+			}	  
+		}		
+		
+		@Override
+		public String getLogString() {
+			return (String.format("%s: ", getClass().getCanonicalName()));
+		}		
+	}
+	
+	public static class DiagOutDat extends Secu3Dat{
+		static final int PACKET_SIZE = 36;
+		
+		public int ign_out1;                         //ignition output 1
+		public int ign_out2;                         //ignition output 2  
+		public int ign_out3;                         //ignition output 3
+		public int ign_out4;                         //ignition output 4
+		public int add_io1;                          //additional output 1
+		public int add_io2;                          //additional output 2		
+		public int ie;                               //idle edconomizer
+		public int fe;                               //fuel economizer
+		public int ecf;                              //electric cooling fan
+		public int ce;                               //Check engine
+		public int st_block;                         //starter blocking
+		
+		
+		public static final Parcelable.Creator<DiagOutDat> CREATOR = new Parcelable.Creator<DiagOutDat>() {
+			 public DiagOutDat createFromParcel(Parcel in) {
+				 Log.d(this.getClass().getCanonicalName(), "Create from Parcel");			 
+				 return new DiagOutDat(in);
+			 }
+
+			 public DiagOutDat[] newArray(int size) {
+				 return new DiagOutDat[size];
+			 }
+		};	
+		
+		public DiagOutDat() {
+			packet_id = DIAGOUT_DAT;
+			packet_size = PACKET_SIZE;
+		}
+		
+		public DiagOutDat (Parcel in) {
+			super (in);
+			ign_out1 = in.readInt();
+			ign_out2 = in.readInt();
+			ign_out3 = in.readInt();
+			ign_out4 = in.readInt();
+			add_io1 = in.readInt();
+			add_io2 = in.readInt();			
+			ie = in.readInt();
+			fe = in.readInt();
+			ecf = in.readInt();
+			ce = in.readInt();
+			st_block = in.readInt();
+
+		}
+		
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			super.writeToParcel(dest, flags);
+			dest.writeInt(ign_out1);
+			dest.writeInt(ign_out2);
+			dest.writeInt(ign_out3);
+			dest.writeInt(ign_out4);
+			dest.writeInt(add_io1);
+			dest.writeInt(add_io2);			
+			dest.writeInt(ie);
+			dest.writeInt(fe);
+			dest.writeInt(ecf);
+			dest.writeInt(ce);
+			dest.writeInt(st_block);
+
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			boolean result = false;
+			if (super.equals(o)) {
+				result = true;
+				result &= this.ign_out1 == ((DiagOutDat)o).ign_out1;
+				result &= this.ign_out2 == ((DiagOutDat)o).ign_out2;
+				result &= this.ign_out3 == ((DiagOutDat)o).ign_out3;
+				result &= this.ign_out4 == ((DiagOutDat)o).ign_out4;
+				result &= this.add_io1 == ((DiagOutDat)o).add_io1;
+				result &= this.add_io2 == ((DiagOutDat)o).add_io2;				
+				result &= this.ie == ((DiagOutDat)o).ie;
+				result &= this.fe == ((DiagOutDat)o).fe;
+				result &= this.ecf == ((DiagOutDat)o).ecf;
+				result &= this.ce == ((DiagOutDat)o).ce;
+				result &= this.st_block == ((DiagOutDat)o).st_block;				
+			}
+			return result;
+		}
+		
+		@Override
+		public String pack() throws Exception {
+			int i = 0;
+			i |= (ign_out1 & 0x01) << 0;
+			i |= (ign_out2 & 0x01) << 1;
+			i |= (ign_out3 & 0x01) << 2;
+			i |= (ign_out4 & 0x01) << 3;
+			i |= (add_io1 & 0x01)  << 4;
+			i |= (add_io2 & 0x01)  << 5;
+			i |= (ie & 0x01) 	   << 6;
+			i |= (fe & 0x01) 	   << 7;
+			i |= (ecf & 0x01) 	   << 8;
+			i |= (ce & 0x01) 	   << 9;
+			i |= (st_block & 0x01) << 10;
+			return String.format("%s%s%04X\r", OUTPUT_PACKET, DIAGOUT_DAT, i);
+		}
+		
+		public static String pack(int outputs) throws Exception {
+			return String.format("%s%s%04X\r", OUTPUT_PACKET, DIAGOUT_DAT, outputs);
+		}
 	}
 }
 
