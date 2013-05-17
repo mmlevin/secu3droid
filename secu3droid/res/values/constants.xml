@@ -33,4 +33,42 @@
     <string name="pref_upload_immediately">uploadImmediately</string>
     <string name="pref_about_key">about</string>
     <string name="defaultConnectionRetries">5</string>    
+    
+    <string-array name="errors_ecu_errors_blink_codes">
+        <item>21</item>
+        <item>13</item>
+        <item>14</item>
+        <item>31</item>
+        <item>32</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>41</item>
+        <item>25</item>
+        <item>26</item>
+    </string-array>
+    
+    <string-array name="diagnostics_output_names">
+        <item>IGN_OUT1</item>
+        <item>IGN_OUT2</item>
+        <item>IGN_OUT3</item>
+        <item>IGN_OUT4</item>
+        <item>ADD_IO1</item>
+        <item>ADD_IO2</item>
+        <item>IE</item>
+        <item>FE</item>
+        <item>ECF</item>
+        <item>CE</item>
+        <item>ST_BLOCK</item>
+    </string-array>
+    
+    <string-array name="diagnostics_input_names">
+        <item>GAS_V</item>
+        <item>CKPS</item>
+        <item>REF_S</item>
+        <item>PS</item>
+        <item>BL jumper</item>
+        <item>DE jumper</item>
+    </string-array>
+        
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
   Secu3Droid - An open source, free manager for SECU-3 engine
   control unit
   Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
@@ -22,7 +22,7 @@
  
   contacts:
              http://secu-3.org
-             email: mmlevin@mail.ru
+             email: mmlevin@mail.ru
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,12 +44,14 @@
         <service
             android:name="org.secu3.android.api.io.Secu3Service"
             android:enabled="true" />
+
         <activity
             android:name="org.secu3.android.MainActivity"
-            android:launchMode="singleTask"            
-            android:label="@string/app_name" >            
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -64,6 +66,10 @@
         <activity
             android:name="org.secu3.android.SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="org.secu3.android.DiagnosticsActivity"
+            android:label="@string/title_activity_diagnostics" >
         </activity>
     </application>
 

@@ -28,10 +28,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"    
     tools:context=".ErrorsActivity" >
 
     <TextView
-        android:id="@+id/errorsTextViewStatus"
+        android:id="@+id/errorsStatusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -43,7 +47,7 @@
         android:id="@+id/errorsRealtimeErrorsCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/errorsTextViewStatus"
+        android:layout_above="@+id/errorsStatusTextView"
         android:layout_alignParentLeft="true"
         android:text="@string/errors_realtime_errors_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />

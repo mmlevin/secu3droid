@@ -76,7 +76,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 	TextView textViewStatus = null;
 	TextView textView = null;
 	ViewPager pager = null;
-    ParamPagerAdapter awesomeAdapter = null;
+    ParamPagerAdapter paramAdapter = null;
     
     SharedPreferences sharedPref = null;
 	private boolean isOnline = false;
@@ -142,7 +142,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		public ParamPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
 			super(fm);
 			this.fragments = fragments;
-			titles = getBaseContext().getResources().getStringArray(R.array.fragment_titles);
+			titles = getBaseContext().getResources().getStringArray(R.array.params_fragments_titles);
 		}
 
 
@@ -184,14 +184,14 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		pages.add(miscelParPage = new MiscelFragment());
 		pages.add(chokeParPage = new ChokeFragment());		
 			
-		awesomeAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
+		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
 		readParams();
 				
 		receiver = new ReceiveMessages();
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
 		pager = (ViewPager)findViewById(R.id.paramsPager);
-		pager.setAdapter(awesomeAdapter);
+		pager.setAdapter(paramAdapter);
 	}
 
 	private void setOnDataChangedListeners(OnDataChangedListener listener) {

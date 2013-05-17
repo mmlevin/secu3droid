@@ -37,8 +37,10 @@ import org.secu3.android.api.io.Secu3Service;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.ActivityCompat;
@@ -48,9 +50,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
-	final static String LOG_TAG = "MainActivity";
+	final static String LOG_TAG = "MainActivity";	
 	
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
@@ -83,10 +86,12 @@ public class MainActivity extends Activity {
 	boolean isOnline;
 	boolean errors = false;
 	
+	FWInfoDat fwInfoDat = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-			
+
 		Log.d(LOG_TAG, "onCreate");		
 		setContentView(R.layout.activity_main);
 
@@ -152,6 +157,24 @@ public class MainActivity extends Activity {
 			Secu3Service.secu3Notification.notificationManager.cancelAll();
 			stopService(new Intent (this,Secu3Service.class));
 			System.exit(0);
+			return true;
+		case R.id.menu_diagnostics:
+			new AlertDialog.Builder(this)
+				.setTitle(android.R.string.dialog_alert_title)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setMessage(R.string.menu_diagnostics_warning_title)
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {						
+						if ((fwInfoDat == null) || ((fwInfoDat.options & FWInfoDat.COPT_DIAGNOSTICS) == 0)) {
+							Toast.makeText(getApplicationContext(), R.string.diagnostics_not_supported_title, Toast.LENGTH_LONG).show();
+						}
+						startActivity(new Intent (getApplicationContext(),DiagnosticsActivity.class));
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.create()
+				.show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -244,9 +267,9 @@ public class MainActivity extends Activity {
 								ad.knock_value,ad.tps_value,ad.add_i1_value,ad.add_i2_value));
 			}			
 		} else if (Secu3Dat.RECEIVE_FWINFO_DAT.equals(intent.getAction())) {
-			FWInfoDat packet = (FWInfoDat) intent.getParcelableExtra(FWInfoDat.class.getCanonicalName());
-			if (packet != null) {
-				textFWInfo.setText(packet.info);
+			fwInfoDat = (FWInfoDat) intent.getParcelableExtra(FWInfoDat.class.getCanonicalName());
+			if (fwInfoDat != null) {
+				textFWInfo.setText(fwInfoDat.info);
 			}			
 		}
 	}

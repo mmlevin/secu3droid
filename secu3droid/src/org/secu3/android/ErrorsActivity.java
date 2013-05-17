@@ -38,6 +38,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +55,7 @@ public class ErrorsActivity extends Activity {
 	TextView errorsTextViewStatus = null;	
 	CheckBox RealtimeError = null;
 	CheckBox ReadingInertion = null;
-	
+		
 	private CheckBox errors[] = null;
 
 	private void setRealtime (boolean realtime) {
@@ -94,7 +95,7 @@ public class ErrorsActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		
 		Log.d(LOG_TAG, "onCreate");
 		
@@ -114,7 +115,7 @@ public class ErrorsActivity extends Activity {
 			l.addView(errors[i]);			
 		}		
 		
-		errorsTextViewStatus = (TextView)findViewById(R.id.errorsTextViewStatus);
+		errorsTextViewStatus = (TextView)findViewById(R.id.errorsStatusTextView);
 		RealtimeError = (CheckBox)findViewById(R.id.errorsRealtimeErrorsCheckBox);
 		ReadingInertion = (CheckBox)findViewById(R.id.errorsInertionCheckBox);
 		
@@ -125,7 +126,7 @@ public class ErrorsActivity extends Activity {
 				if (buttonView == RealtimeError) {
 					setRealtime(RealtimeError.isChecked());
 					ReadingInertion.setEnabled (RealtimeError.isChecked());
-					invalidateOptionsMenu();
+					ActivityCompat.invalidateOptionsMenu(ErrorsActivity.this);
 				}				
 			}
 		});

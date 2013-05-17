@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
   Secu3Droid - An open source, free manager for SECU-3 engine
   control unit
   Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
@@ -22,7 +22,7 @@
  
   contacts:
              http://secu-3.org
-             email: mmlevin@mail.ru
+             email: mmlevin@mail.ru
 -->
 
 <resources>
@@ -33,50 +33,47 @@
     <string name="title_activity_param">Parameters</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_param">Parameters</string>
-        
     <string name="pref_bluetooth_device_title">Choose Bluetooth Device</string>
-    <string name="pref_bluetooth_device_summary">"Current device: %s"</string> 
-    <string name="pref_connection_retries_title">Connection retry number</string>    
-    <string name="pref_connection_retries_summary">Number of attempts before exiting: %s</string>       
+    <string name="pref_bluetooth_device_summary">"Current device: %s"</string>
+    <string name="pref_connection_retries_title">Connection retry number</string>
+    <string name="pref_connection_retries_summary">Number of attempts before exiting: %s</string>
     <string name="pref_about_title">About</string>
-    <string name="pref_about_summary"></string>    
+    <string name="pref_about_summary"></string>
     <string name="pref_upload_immediately_title">Upload changes immediately</string>
     <string name="pref_upload_immediately_summary">When Secu-3 params changed</string>
-    
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
     <string name="service_closed_because_connection_problem_notification">"Reason: %s"</string>
-	<string name="connection_problem_notification_title">Secu3: connection problem</string>    
+    <string name="connection_problem_notification_title">Secu3: connection problem</string>
+
     <plurals name="connection_problem_notification">
         <item quantity="one">Will retry one more time before closing</item>
         <item quantity="other">Will retry %d more times before closing</item>
     </plurals>
 
-
     <string name="foreground_service_started_notification_title">Secu3Droid</string>
     <string name="foreground_service_started_notification">Secu3Droid service started</string>
-	<string name="msg_bluetooth_unsupported">Bluetooth is not supported on your Android device</string>
+    <string name="msg_bluetooth_unsupported">Bluetooth is not supported on your Android device</string>
     <string name="msg_bluetooth_disabled">Bluetooth is disabled</string>
     <string name="msg_bluetooth_secu3_unavaible">Cannot connect to Secu-3 device</string>
     <string name="msg_service_started">Secu3Droid… started</string>
     <string name="msg_service_stopped">Secu3Droid service… stopped</string>
     <string name="msg_service_stopped_by_problem">"Cannot start: %s"</string>
     <string name="msg_service_already_started">Secu3Droid… is already on</string>
-    <string name="msg_too_many_connection_problems">Too many connection problems</string>        
-        
+    <string name="msg_too_many_connection_problems">Too many connection problems</string>
     <string name="status_offline">Offline</string>
     <string name="status_online">Online</string>
-    
     <string name="title_activity_errors">Errors</string>
     <string name="title_activity_settings">Settings</string>
     <string name="menu_errors">Errors</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_exit">Exit</string>
+    <string name="menu_diagnostics">Diagnostics</string>
+    <string name="menu_diagnostics_warning_title">Disconnect ignition coils before entering diagnostics mode! Ignoring may cause coils breakage!</string>
     <string name="menu_params_download_title">Download</string>
     <string name="menu_params_upload_title">Upload</string>
     <string name="menu_params_save_eeprom_title">Save</string>
     <string name="menu_errors_read">Read saved</string>
     <string name="menu_errors_write">Write saved</string>
-    
     <string name="about_title">About</string>
     <string name="about_version">Secu3Droid version</string>
     <string name="about_copyright_1">Copyright © 2013 Maksim Levin</string>
@@ -84,134 +81,132 @@
     <string name="about_app_desc">Secu3Droid is an application for managing Secu-3 ignition system. Secu-3 is an open source, free engine control unit, see <a href="http://secu-3.org"><b>http://secu-3.org</b></a>"</string>
     <string name="about_license">It is open source software distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
     <string name="about_sources">The source code is available from Git repository on the project website: https://github.com/mmlevin/secu3droid</string>
-    <string-array name="fragment_titles">
-        <item >Start</item>
-        <item >Angles</item>
-        <item >Idling</item>
-        <item >Functions</item>
-        <item >Temperature</item>
-        <item >Carburetor</item>
-        <item >ADC Errors Corr.</item>
-        <item >CKPS</item>
-		<item >Miscellaneous</item>
-		<item >Choke control</item>          
-    </string-array>
-	<string name="data_will_appear_after_connect">Data will be visible there after connection to Secu-3 device</string>
-	<string name="units_rpm">min-1</string>
-	<string name="units_zero">0</string>
-	<string name="units_zero_float">0.0</string>
-	<string name="units_degree">°</string>
-	<string name="units_sec">sec</string>
-	<string name="units_pressure_kpa">kPa</string>
-	<string name="units_volts">V</string>
-	<string name="units_volts_per_kpa">V/kPa</string>
-	<string name="units_ms">ms</string>
-	<string name="units_degrees_celcius">°C</string>
-	<string name="starter_off_title">RPM when starter will be turned off:</string>
-	<string name="starter_map_abandon_title">RPM when switching from start map:</string>
-	<string name="angles_min_angle_title">Minimal advance angle:</string>
-	<string name="angles_max_angle_title">Maximal advance angle:</string>
-	<string name="angles_angle_decrement_step_title">Angle decrement step:</string>
-	<string name="angles_angle_increment_step_title">Angle increment step:</string>
-	<string name="angles_zero_angle_title">Zero advance angle:</string>
-	<string name="angles_octane_correction_title">Octane correction:</string>
-	<string name="idlreg_ifac1_title">Positive regulator\'s factor:</string>
-	<string name="idlreg_ifac2_title">Negative regulator\'s factor:</string>
-	<string name="idlreg_minimal_angle_title">Minimal regulation limit:</string>
-	<string name="idlreg_maximal_angle_title">Maximal regulation limit:</string>
-	<string name="idlreg_target_rpm_title">Goal RPM:</string>
-	<string name="idlreg_rpm_sensitivity_title">Dead band of RPM:</string>
-	<string name="idlreg_use_idle_regulator_title">Use regulator</string>
-	<string name="funset_lower_pressure_title">Lower pressure value:</string>
-	<string name="funset_upper_pressure_title">Upper pressure value:</string>
-	<string name="funset_map_sensor_offset_title">MAP Sensor Curve offset:</string>
-	<string name="funset_map_sensor_gradient_title">MAP sensor curve gradient:</string>
-	<string name="funset_maps_set_gasoline_title">Maps set for gasoline:</string>
-	<string name="funset_maps_set_gas_title">Maps set for gas:</string>
-	<string name="temper_fan_on_title">Fan turn on threshold:</string>
-	<string name="temper_fan_off_title">Fan turn off threshold:</string>
-	<string name="temper_use_temp_sensor_title">Use coolant temperature sensor</string>
-	<string name="temper_use_pwm_title">Control cooling fan using PWM</string>
-	<string name="temper_use_table">Use table to define sensor\'s curve</string>
-	<string name="carbur_overrun_lower_threshold_gasoline_title">Idle cut-off valve lower threshold for gasoline:</string>
-	<string name="carbur_overrun_upper_threshold_gasoline_title">Idle cut-off valve upper threshold for gasoline:</string>
-	<string name="carbur_overrun_lower_threshold_gas_title">Idle cut-off valve lower threshold for gas:</string>
-	<string name="carbur_overrun_upper_threshold_gas_title">Idle cut-off valve upper threshold for gas:</string>
-	<string name="carbur_overrun_valve_delay">Valve turn off delay:</string>
-	<string name="carbur_epm_valve_on_pressure_title">PVS turn on threshold:</string>
-	<string name="carbur_sensor_inverse_title">Inversion of throttle position switch</string>
-	<string name="miscel_baudrate_title">Data transmission baudrate:</string>
-	<string name="miscel_period_title">Data packets transmission period:</string>
-	<string name="miscel_ignition_cutoff_title">Enable ignition cutoff</string>
-	<string name="miscel_ignition_cutoff_rpm_title">Ignition cutoff RPM:</string>
-	<string name="miscel_hall_output_start_title">Hall output pulse start relative to TDC (in wheel teeth):</string>
-	<string name="miscel_hall_output_delay_title">Hall output pulse duration (in wheel teeth):</string>
-	<string name="ckps_ckp_edge_title">CKPS edge</string>
-	<string name="ckps_negative_edge">Negative edge</string>
-	<string name="ckps_positive_edge_title">Positive edge</string>
-	<string name="ckps_merge_outputs">Merge signals to single output</string>
-	<string name="ckps_cogs_number_title">Number of wheel\'s teeth:</string>
-	<string name="ckps_missing_cogs_number_title">Number of missing teeth:</string>
-	<string name="ckps_ref_s_edge_title">REF_S edge</string>
-	<string name="ckps_cogs_before_tdc_title">Number of teeth before TDC:</string>
-	<string name="ckps_engine_cylynders_title">Number of engine cylynders:</string>
-	<string name="ckps_ignition_pulse_delay_title">Duration of igniter\'s pulse driver in teeth of wheel:</string>
-	<string name="adccor_map_sensor_factor_title">MAP Sensor factor:</string>
-	<string name="adccor_map_sensor_correction_title">MAP Sensor correction:</string>
-	<string name="adccor_voltage_sensor_factor_title">Voltage Sensor factor:</string>
-	<string name="adccor_voltage_sensor_correction_title">Voltage Sensor correction:</string>
-	<string name="adccor_temper_sensor_factor_title">Temperature Sensor factor:</string>
-	<string name="adccor_temper_sensor_correction">Temperature Sensor correction:</string>
 
-	<string-array name="errors_ecu_errors_names">
-		<item>Failures in working of CKP sensor - synchronization errors</item>
-		<item>EEPROM parameters are damaged (CRC)</item>
-		<item>Firmware code is damaged (CRC)</item>
-		<item>Knock chip doesn\'t respond</item>
-		<item>Detonation detected</item>
-		<item>Breakage or wrong work of MAP sensor</item>
-		<item>Breakage or wrong work of coolant temperature sensor</item>
-		<item>Abnormal board voltage</item>
-		<item>Dwell control</item>
-		<item>Breakage or wrong work of cam sensor</item>	    	   
-		<item>Breakage or wrong indications of TPS</item>
-	</string-array>
-	
-	<string-array name="errors_ecu_errors_blink_codes">
-	    <item>21</item>
-	    <item>13</item>
-	    <item>14</item>
-	    <item>31</item>
-	    <item>32</item>
-	    <item>22</item>
-	    <item>23</item>
-	    <item>24</item>
-	    <item>41</item>
-	    <item>25</item>
-	    <item>26</item>
-	</string-array>
-	
-	<string name="errors_realtime_errors_title">Read errors in realtime</string>
-	<string name="errors_inertion_title">Show errors with inertness</string>
-	<string name="show_raw_data_title">Show raw values of sensors</string>
-	<string name="idlreg_turn_on_temp_title">Regulator turn on temperature:</string>
-	<string name="funset_tps_curve_offset_title">TPS curve offset:</string>
-	<string name="units_percent_per_volts">%/V</string>
-	<string name="funset_tps_curve_gradient_title">TPS curve gradient:</string>
-	<string name="carbur_tps_threshold_title">TPS threshold:</string>
-	<string name="units_percents">%</string>
-	<string name="adccor_tps_sensor_factor_title">TPS Sensor factor:</string>
-	<string name="adccor_tps_sensor_correction_title">TPS Sensor correction:</string>
-	<string name="adccor_addi1_sensor_factor_title">ADD_IO1 Sensor factor:</string>
-	<string name="adccor_addi1_sensor_correction_title">ADD_IO1 Sensor correction:</string>
-	<string name="adccor_addi2_sensor_factor_title">ADD_IO2 Sensor factor:</string>
-	<string name="adccor_addi2_sensor_correction_title">ADD_IO2 Sensor correction:</string>
-	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>
-	<string name="choke_steps_title">Number of SM steps:</string>
-	<string name="choke_testing_title">TEST</string>
-	<string name="choke_manual_title">Manual choke control:</string>
-	<string name="choke_manual_set_title">Set</string>
-	<string name="choke_manual_step_down">Less</string>
-	<string name="choke_manual_step_up">More</string>
-	<string name="choke_manual_reset_title">Reset</string>    
+    <string-array name="params_fragments_titles">
+        <item>Start</item>
+        <item>Angles</item>
+        <item>Idling</item>
+        <item>Functions</item>
+        <item>Temperature</item>
+        <item>Carburetor</item>
+        <item>ADC Errors Corr.</item>
+        <item>CKPS</item>
+        <item>Miscellaneous</item>
+        <item>Choke control</item>
+    </string-array>
+    
+    <string-array name="diagnostics_fragments_title">
+        <item>Outputs</item>
+        <item >Inputs</item>
+    </string-array>
+
+    <string name="data_will_appear_after_connect">Data will be visible there after connection to Secu-3 device</string>
+    <string name="units_rpm">min-1</string>
+    <string name="units_zero">0</string>
+    <string name="units_zero_float">0.0</string>
+    <string name="units_degree">°</string>
+    <string name="units_sec">sec</string>
+    <string name="units_pressure_kpa">kPa</string>
+    <string name="units_volts">V</string>
+    <string name="units_volts_per_kpa">V/kPa</string>
+    <string name="units_ms">ms</string>
+    <string name="units_degrees_celcius">°C</string>
+    <string name="starter_off_title">RPM when starter will be turned off:</string>
+    <string name="starter_map_abandon_title">RPM when switching from start map:</string>
+    <string name="angles_min_angle_title">Minimal advance angle:</string>
+    <string name="angles_max_angle_title">Maximal advance angle:</string>
+    <string name="angles_angle_decrement_step_title">Angle decrement step:</string>
+    <string name="angles_angle_increment_step_title">Angle increment step:</string>
+    <string name="angles_zero_angle_title">Zero advance angle:</string>
+    <string name="angles_octane_correction_title">Octane correction:</string>
+    <string name="idlreg_ifac1_title">Positive regulator\'s factor:</string>
+    <string name="idlreg_ifac2_title">Negative regulator\'s factor:</string>
+    <string name="idlreg_minimal_angle_title">Minimal regulation limit:</string>
+    <string name="idlreg_maximal_angle_title">Maximal regulation limit:</string>
+    <string name="idlreg_target_rpm_title">Goal RPM:</string>
+    <string name="idlreg_rpm_sensitivity_title">Dead band of RPM:</string>
+    <string name="idlreg_use_idle_regulator_title">Use regulator</string>
+    <string name="funset_lower_pressure_title">Lower pressure value:</string>
+    <string name="funset_upper_pressure_title">Upper pressure value:</string>
+    <string name="funset_map_sensor_offset_title">MAP Sensor Curve offset:</string>
+    <string name="funset_map_sensor_gradient_title">MAP sensor curve gradient:</string>
+    <string name="funset_maps_set_gasoline_title">Maps set for gasoline:</string>
+    <string name="funset_maps_set_gas_title">Maps set for gas:</string>
+    <string name="temper_fan_on_title">Fan turn on threshold:</string>
+    <string name="temper_fan_off_title">Fan turn off threshold:</string>
+    <string name="temper_use_temp_sensor_title">Use coolant temperature sensor</string>
+    <string name="temper_use_pwm_title">Control cooling fan using PWM</string>
+    <string name="temper_use_table">Use table to define sensor\'s curve</string>
+    <string name="carbur_overrun_lower_threshold_gasoline_title">Idle cut-off valve lower threshold for gasoline:</string>
+    <string name="carbur_overrun_upper_threshold_gasoline_title">Idle cut-off valve upper threshold for gasoline:</string>
+    <string name="carbur_overrun_lower_threshold_gas_title">Idle cut-off valve lower threshold for gas:</string>
+    <string name="carbur_overrun_upper_threshold_gas_title">Idle cut-off valve upper threshold for gas:</string>
+    <string name="carbur_overrun_valve_delay">Valve turn off delay:</string>
+    <string name="carbur_epm_valve_on_pressure_title">PVS turn on threshold:</string>
+    <string name="carbur_sensor_inverse_title">Inversion of throttle position switch</string>
+    <string name="miscel_baudrate_title">Data transmission baudrate:</string>
+    <string name="miscel_period_title">Data packets transmission period:</string>
+    <string name="miscel_ignition_cutoff_title">Enable ignition cutoff</string>
+    <string name="miscel_ignition_cutoff_rpm_title">Ignition cutoff RPM:</string>
+    <string name="miscel_hall_output_start_title">Hall output pulse start relative to TDC (in wheel teeth):</string>
+    <string name="miscel_hall_output_delay_title">Hall output pulse duration (in wheel teeth):</string>
+    <string name="ckps_ckp_edge_title">CKPS edge</string>
+    <string name="ckps_negative_edge">Negative edge</string>
+    <string name="ckps_positive_edge_title">Positive edge</string>
+    <string name="ckps_merge_outputs">Merge signals to single output</string>
+    <string name="ckps_cogs_number_title">Number of wheel\'s teeth:</string>
+    <string name="ckps_missing_cogs_number_title">Number of missing teeth:</string>
+    <string name="ckps_ref_s_edge_title">REF_S edge</string>
+    <string name="ckps_cogs_before_tdc_title">Number of teeth before TDC:</string>
+    <string name="ckps_engine_cylynders_title">Number of engine cylynders:</string>
+    <string name="ckps_ignition_pulse_delay_title">Duration of igniter\'s pulse driver in teeth of wheel:</string>
+    <string name="adccor_map_sensor_factor_title">MAP Sensor factor:</string>
+    <string name="adccor_map_sensor_correction_title">MAP Sensor correction:</string>
+    <string name="adccor_voltage_sensor_factor_title">Voltage Sensor factor:</string>
+    <string name="adccor_voltage_sensor_correction_title">Voltage Sensor correction:</string>
+    <string name="adccor_temper_sensor_factor_title">Temperature Sensor factor:</string>
+    <string name="adccor_temper_sensor_correction">Temperature Sensor correction:</string>
+
+    <string-array name="errors_ecu_errors_names">
+        <item>Failures in working of CKP sensor - synchronization errors</item>
+        <item>EEPROM parameters are damaged (CRC)</item>
+        <item>Firmware code is damaged (CRC)</item>
+        <item>Knock chip doesn\'t respond</item>
+        <item>Detonation detected</item>
+        <item>Breakage or wrong work of MAP sensor</item>
+        <item>Breakage or wrong work of coolant temperature sensor</item>
+        <item>Abnormal board voltage</item>
+        <item>Dwell control</item>
+        <item>Breakage or wrong work of cam sensor</item>
+        <item>Breakage or wrong indications of TPS</item>
+    </string-array>
+
+    <string name="errors_realtime_errors_title">Read errors in realtime</string>
+    <string name="errors_inertion_title">Show errors with inertness</string>
+    <string name="show_raw_data_title">Show raw values of sensors</string>
+    <string name="idlreg_turn_on_temp_title">Regulator turn on temperature:</string>
+    <string name="funset_tps_curve_offset_title">TPS curve offset:</string>
+    <string name="units_percent_per_volts">%/V</string>
+    <string name="funset_tps_curve_gradient_title">TPS curve gradient:</string>
+    <string name="carbur_tps_threshold_title">TPS threshold:</string>
+    <string name="units_percents">%</string>
+    <string name="adccor_tps_sensor_factor_title">TPS Sensor factor:</string>
+    <string name="adccor_tps_sensor_correction_title">TPS Sensor correction:</string>
+    <string name="adccor_addi1_sensor_factor_title">ADD_IO1 Sensor factor:</string>
+    <string name="adccor_addi1_sensor_correction_title">ADD_IO1 Sensor correction:</string>
+    <string name="adccor_addi2_sensor_factor_title">ADD_IO2 Sensor factor:</string>
+    <string name="adccor_addi2_sensor_correction_title">ADD_IO2 Sensor correction:</string>
+    <string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>
+    <string name="choke_steps_title">Number of SM steps:</string>
+    <string name="choke_testing_title">TEST</string>
+    <string name="choke_manual_title">Manual choke control:</string>
+    <string name="choke_manual_set_title">Set</string>
+    <string name="choke_manual_step_down">Less</string>
+    <string name="choke_manual_step_up">More</string>
+    <string name="choke_manual_reset_title">Reset</string>
+    <string name="title_activity_diagnostics">Diagnostics</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="diagnostics_not_supported_title">Diagnostics option disabled in your firmware or Secu-3 device not connected</string>
+
 </resources>
