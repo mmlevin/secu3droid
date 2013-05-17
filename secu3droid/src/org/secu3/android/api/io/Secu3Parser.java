@@ -47,13 +47,14 @@ public class Secu3Parser extends Secu3Dat {
 		parsers.put(String.valueOf(ADCCOR_PAR), new ADCCorPar());
 		parsers.put(String.valueOf(ADCRAW_DAT), new ADCRawDat());
 		parsers.put(String.valueOf(CKPS_PAR), new CKPSPar());
-		parsers.put(String.valueOf(OP_COMP_NC), new OPCompNc());
+		parsers.put(String.valueOf(OP_COMP_NC), new OpCompNc());
 		parsers.put(String.valueOf(CE_ERR_CODES), new CEErrCodes());
 		parsers.put(String.valueOf(KNOCK_PAR), new KnockPar());
 		parsers.put(String.valueOf(CE_SAVED_ERR), new CESavedErr());
 		parsers.put(String.valueOf(FWINFO_DAT), new FWInfoDat());
 		parsers.put(String.valueOf(MISCEL_PAR), new MiscelPar());
 		parsers.put(String.valueOf(CHOKE_PAR), new ChokePar());
+		parsers.put(String.valueOf(DIAGINP_DAT), new DiagInpDat());
 	}
 	
 	public void parse (String packet) throws Exception {

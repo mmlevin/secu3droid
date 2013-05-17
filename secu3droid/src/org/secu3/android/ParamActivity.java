@@ -247,7 +247,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			try {
 		    	progressBar.setIndeterminate(true);
 		    	progressBar.setVisibility(ProgressBar.VISIBLE);				
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OPCompNc(Secu3Dat.OPCODE_EEPROM_PARAM_SAVE,0)));
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Dat.OPCODE_EEPROM_PARAM_SAVE,0)));
 			} catch (Exception e) {
 				Log.d (LOG_TAG, e.toString());
 			}
@@ -289,7 +289,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 				this.isOnline = true;
 				readParams();
 			}
-			textViewStatus.setText(isOnline?"Online":"Offline");
+			textViewStatus.setText(isOnline?R.string.status_online:R.string.status_offline);
 		} else if (Secu3Dat.RECEIVE_STARTER_PAR.equals(intent.getAction())) {
 			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());
 			StarterFragment page = starterParPage;
@@ -357,7 +357,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			progressBar.setMax(total);
 			progressBar.setProgress(current);
 		} else if (Secu3Dat.RECEIVE_OP_COMP_NC.equals(intent.getAction())) {
-			OPCompNc packet = intent.getParcelableExtra(OPCompNc.class.getCanonicalName());
+			OpCompNc packet = intent.getParcelableExtra(OpCompNc.class.getCanonicalName());
 			if ((packet != null) && (packet.opcode == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE)) {
 				progressBar.setVisibility(ProgressBar.GONE);				
 				Toast.makeText(this, String.format("Params saved: error code %d", packet.opdata), Toast.LENGTH_LONG).show();

@@ -60,15 +60,6 @@
         <item>ECF</item>
         <item>CE</item>
         <item>ST_BLOCK</item>
-    </string-array>
-    
-    <string-array name="diagnostics_input_names">
-        <item>GAS_V</item>
-        <item>CKPS</item>
-        <item>REF_S</item>
-        <item>PS</item>
-        <item>BL jumper</item>
-        <item>DE jumper</item>
-    </string-array>
+    </string-array>    
         
 </resources>

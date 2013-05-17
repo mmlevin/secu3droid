@@ -25,6 +25,8 @@
 
 package org.secu3.android.fragments;
 
+import java.util.Locale;
+
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.DiagInpDat;
@@ -33,9 +35,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class DiagnosticsInputsFragment extends Secu3Fragment implements ISecu3Fragment {
-	DiagInpDat packet;	
+	DiagInpDat packet = null;	
+	
+	TextView dataTextView = null;
+	String formatString;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +54,14 @@ public class DiagnosticsInputsFragment extends Secu3Fragment implements ISecu3Fr
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		LinearLayout l = (LinearLayout)getView().findViewById(R.id.diagnosticsInputsLinearLayout);
+		
+		formatString = getResources().getString(R.string.diagnostics_input);
+		
+		dataTextView = new TextView(getActivity());
+		dataTextView.setTextAppearance(getActivity(), R.style.secu3TextAppearance);
+		dataTextView.setText(String.format(Locale.US, formatString,0f,0f,0f,0f,0f,0,0,0,0,0,0,0,0f,0f));
+		l.addView(dataTextView);
 	}
 	
 	@Override
@@ -57,7 +72,8 @@ public class DiagnosticsInputsFragment extends Secu3Fragment implements ISecu3Fr
 
 	@Override
 	public void updateData() {
-		if (packet != null) {			
+		if (packet != null) {
+			dataTextView.setText(String.format(Locale.US, formatString, packet.voltage,packet.map,packet.temp,packet.add_io1,packet.add_io2,packet.carb,packet.gas,packet.ckps,packet.ref_s,packet.ps,packet.bl,packet.de,packet.ks_1,packet.ks_2));
 		}
 	}
 

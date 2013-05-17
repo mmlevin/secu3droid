@@ -2118,30 +2118,30 @@ public class Secu3Dat implements Parcelable {
 
 	}
 	
-	public static class OPCompNc extends Secu3Dat { //используется если надо просто принять или послать определенный код действия
+	public static class OpCompNc extends Secu3Dat { //используется если надо просто принять или послать определенный код действия
 		static final int PACKET_SIZE = 6;
 		
 		public int opcode;   //operation code
 		public int opdata;   //operation data
 		
-		public static final Parcelable.Creator<OPCompNc> CREATOR = new Parcelable.Creator<OPCompNc>() {
-			 public OPCompNc createFromParcel(Parcel in) {
+		public static final Parcelable.Creator<OpCompNc> CREATOR = new Parcelable.Creator<OpCompNc>() {
+			 public OpCompNc createFromParcel(Parcel in) {
 				 Log.d(this.getClass().getCanonicalName(), "Create from Parcel");			 
-				 return new OPCompNc(in);
+				 return new OpCompNc(in);
 			 }
 
-			 public OPCompNc[] newArray(int size) {
-				 return new OPCompNc[size];
+			 public OpCompNc[] newArray(int size) {
+				 return new OpCompNc[size];
 			 }
 		};	
 		
-		public OPCompNc() {
+		public OpCompNc() {
 			packet_id = OP_COMP_NC;
 			packet_size = PACKET_SIZE;
 			intent_action = RECEIVE_OP_COMP_NC;
 		}
 		
-		public OPCompNc (int opcode, int opdata) {
+		public OpCompNc (int opcode, int opdata) {
 			packet_id = OP_COMP_NC;
 			packet_size = PACKET_SIZE;
 			intent_action = RECEIVE_OP_COMP_NC;
@@ -2149,7 +2149,7 @@ public class Secu3Dat implements Parcelable {
 			this.opdata = opdata;
 		}
 		
-		public OPCompNc(Parcel in) {
+		public OpCompNc(Parcel in) {
 			super (in);
 			opcode = in.readInt();
 			opdata = in.readInt();
@@ -2167,8 +2167,8 @@ public class Secu3Dat implements Parcelable {
 			boolean result = false;
 			if (super.equals(o)) {
 				result = true;
-				result &= this.opcode == ((OPCompNc)o).opcode;
-				result &= this.opdata == ((OPCompNc)o).opdata;
+				result &= this.opcode == ((OpCompNc)o).opcode;
+				result &= this.opdata == ((OpCompNc)o).opdata;
 			}
 			return result;
 		}
@@ -2396,7 +2396,7 @@ public class Secu3Dat implements Parcelable {
 		public float temp;                           //coolant temperature
 		public float add_io1;                        //additional input 1 (analog)
 		public float add_io2;                        //additional input 2 (analog)
-		public float carb;                           //carburetor switch, throttle position sensor (analog)
+		public int carb;                             //carburetor switch, throttle position sensor (analog)
 		public int gas;                              //gas valve state (digital)
 		public int ckps;                             //CKP sensor (digital)
 		public int ref_s;                            //VR type cam sensor (digital)
@@ -2430,7 +2430,7 @@ public class Secu3Dat implements Parcelable {
 			temp = in.readFloat();
 			add_io1 = in.readFloat();
 			add_io2 = in.readFloat();
-			carb = in.readFloat();
+			carb = in.readInt();
 			gas = in.readInt();
 			ckps = in.readInt();
 			ref_s = in.readInt();
@@ -2449,7 +2449,7 @@ public class Secu3Dat implements Parcelable {
 			dest.writeFloat(temp);
 			dest.writeFloat(add_io1);
 			dest.writeFloat(add_io2);
-			dest.writeFloat(carb);
+			dest.writeInt(carb);
 			dest.writeInt(gas);
 			dest.writeInt(ckps);
 			dest.writeInt(ref_s);
@@ -2492,7 +2492,7 @@ public class Secu3Dat implements Parcelable {
 				temp = (float) Integer.parseInt(data.substring(10,14),16) * ADC_DISCRETE;
 				add_io1 = (float) Integer.parseInt(data.substring(14,18),16) * ADC_DISCRETE; 
 				add_io2 = (float) Integer.parseInt(data.substring(18,22),16) * ADC_DISCRETE;
-				carb =  (float) Integer.parseInt(data.substring(22,26),16) * ADC_DISCRETE; // Be carefool, it may be not only float, but (0;1)
+				carb =  Integer.parseInt(data.substring(22,26),16);
 				ks_1 = (float) Integer.parseInt(data.substring(26,30),16) * ADC_DISCRETE;
 				ks_2 = (float) Integer.parseInt(data.substring(30,34),16) * ADC_DISCRETE;
 				int i = Integer.parseInt(data.substring(34,36),16);				
@@ -2560,7 +2560,6 @@ public class Secu3Dat implements Parcelable {
 			ecf = in.readInt();
 			ce = in.readInt();
 			st_block = in.readInt();
-
 		}
 		
 		@Override
@@ -2615,6 +2614,20 @@ public class Secu3Dat implements Parcelable {
 			i |= (ce & 0x01) 	   << 9;
 			i |= (st_block & 0x01) << 10;
 			return String.format("%s%s%04X\r", OUTPUT_PACKET, DIAGOUT_DAT, i);
+		}
+		
+		public void setOutputs (int outputs) {
+			ign_out1 = (outputs >> 0) & 0x01;
+			ign_out2 = (outputs >> 1) & 0x01;
+			ign_out3 = (outputs >> 2) & 0x01;
+			ign_out4 = (outputs >> 3) & 0x01;
+			add_io1 = (outputs >> 4) & 0x01;
+			add_io2 = (outputs >> 5) & 0x01;			
+			ie = (outputs >> 6) & 0x01;
+			fe = (outputs >> 7) & 0x01;
+			ecf = (outputs >> 8) & 0x01;
+			ce = (outputs >> 9) & 0x01;
+			st_block = (outputs >> 10) & 0x01;
 		}
 		
 		public static String pack(int outputs) throws Exception {

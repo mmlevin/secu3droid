@@ -33,9 +33,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 
 public class DiagnosticsOutputsFragment extends Secu3Fragment implements ISecu3Fragment {
-	DiagOutDat packet;	
+	DiagOutDat packet = new DiagOutDat();	
+	
+	CheckBox outputs[] = null;
+
+	private int getOutputs () {
+		int res = 0;
+		for (int i = 0; i != outputs.length; ++i) {
+			if (outputs [i].isChecked()) res |= 0x01 << i; 
+		}
+		return res;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +61,30 @@ public class DiagnosticsOutputsFragment extends Secu3Fragment implements ISecu3F
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		
+		String outputNames[] = getResources().getStringArray(R.array.diagnostics_output_names);		
+		outputs = new CheckBox[outputNames.length];
+
+		LinearLayout l = (LinearLayout)getView().findViewById(R.id.diagnosticsOutputsLinearLayout);
+		
+		CompoundButton.OnCheckedChangeListener listener = new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				int i = getOutputs();
+				if (packet != null) {
+					packet.setOutputs(i);
+					dataChanged(packet);
+				}				
+			}
+		};
+		
+		for (int i = 0; i != outputs.length; ++i) {
+			outputs[i] = new CheckBox(getActivity());
+			outputs[i].setText(outputNames[i]);
+			outputs[i].setTextAppearance(getActivity(), R.style.secu3TextAppearance);
+			outputs[i].setOnCheckedChangeListener(listener);
+			l.addView(outputs[i]);			
+		}			
 	}
 	
 	@Override
