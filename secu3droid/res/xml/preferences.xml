@@ -41,7 +41,12 @@
 	    android:key="@string/pref_upload_immediately"
 	    android:title="@string/pref_upload_immediately_title"
 	    android:defaultValue="false"
-	    android:summary="@string/pref_upload_immediately_summary"/>	    
+	    android:summary="@string/pref_upload_immediately_summary"/>	
+	<CheckBoxPreference
+	    android:key="@string/pref_write_log"
+	    android:title="@string/pref_write_log_title"
+	    android:defaultValue="false" 
+	    android:summary="@string/pref_write_log_summary"/>    
 	<Preference
 		android:key="@string/pref_about_key"
 		android:persistent="false"

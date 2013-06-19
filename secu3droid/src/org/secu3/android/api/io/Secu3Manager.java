@@ -61,7 +61,7 @@ public class Secu3Manager {
 	
 	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
 	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
-	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS,SECU3_READ_FW_INFO};
+	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS,SECU3_READ_FW_INFO,SECU3_START_LOGGING,SECU3_STOP_LOGGING};
 	
 	private Service callingService;
 	private BluetoothSocket secu3Socket;
@@ -77,6 +77,7 @@ public class Secu3Manager {
 	private boolean connected = false;
 	private SECU3_TASK secu3Task = SECU3_TASK.SECU3_NONE;
 	private SECU3_TASK prevSecu3Task = SECU3_TASK.SECU3_NONE;
+	private Secu3Logger logger = new Secu3Logger();	
 	
 	private int progressCurrent = 0;
 	private int progressTotal = 0;
@@ -174,6 +175,12 @@ public class Secu3Manager {
 						// No task received
 						case SECU3_NONE:
 							break;
+						case SECU3_START_LOGGING:
+							logger.BeginLogging();
+							break;
+						case SECU3_STOP_LOGGING:
+							logger.EndLogging();
+							break;							
 						// Task to read sensors
 						case SECU3_READ_SENSORS:					
 							writer.write(ChangeMode.pack(Secu3Dat.SENSOR_DAT));
@@ -206,9 +213,17 @@ public class Secu3Manager {
 							break;
 						}
 					}
+
+					logger.OnPacketReceived(parser.getLastPacket());
 					
 					switch (secu3Task) {
 					case SECU3_NONE:
+						updateTask();
+						break;
+					case SECU3_START_LOGGING:
+						updateTask();
+						break;
+					case SECU3_STOP_LOGGING:
 						updateTask();
 						break;
 					case SECU3_READ_PARAMS:
@@ -558,6 +573,7 @@ public class Secu3Manager {
 		if (enabled){
         	Log.d(LOG_TAG, "disabling Secu3 manager");
 			enabled = false;
+			logger.EndLogging();
 			connectionAndReadingPool.shutdown();
 			Runnable closeAndShutdown = new Runnable() {				
 				@Override

@@ -42,6 +42,9 @@
     <string name="pref_about_summary"></string>
     <string name="pref_upload_immediately_title">Upload changes immediately</string>
     <string name="pref_upload_immediately_summary">When Secu-3 params changed</string>
+    <string name="pref_write_log_title">Write log</string>
+    <string name="pref_write_log_summary">Write log of sensor\'s data</string>
+    
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
     <string name="service_closed_because_connection_problem_notification">"Reason: %s"</string>
     <string name="connection_problem_notification_title">Secu3: connection problem</string>

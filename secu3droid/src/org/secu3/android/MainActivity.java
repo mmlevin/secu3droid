@@ -155,8 +155,7 @@ public class MainActivity extends Activity {
 			return true;
 		case R.id.menu_exit:
 			Secu3Service.secu3Notification.notificationManager.cancelAll();
-			stopService(new Intent (this,Secu3Service.class));
-			System.exit(0);
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_STOP,Uri.EMPTY,this,Secu3Service.class));
 			return true;
 		case R.id.menu_diagnostics:
 			new AlertDialog.Builder(this)
@@ -251,7 +250,6 @@ public class MainActivity extends Activity {
 			if (errors != this.errors) {
 				this.errors = errors;
 				ActivityCompat.invalidateOptionsMenu(this);
-				//invalidateOptionsMenu();
 			}
 			if (!checkBox.isChecked() && (sd != null)) {
 				textViewData.setText(String.format(Locale.US,sensorsFormat,

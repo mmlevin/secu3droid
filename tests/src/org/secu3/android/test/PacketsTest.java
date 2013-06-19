@@ -329,7 +329,7 @@ public class PacketsTest extends TestCase {
 	}
 	
 	public void testOpCompNc() {
-		OPCompNc packet = new OPCompNc();
+		OpCompNc packet = new OpCompNc();
 		try {
 			String data = "@u1234"; 
 			packet.parse(data);
