@@ -46,7 +46,11 @@
 	    android:key="@string/pref_write_log"
 	    android:title="@string/pref_write_log_title"
 	    android:defaultValue="false" 
-	    android:summary="@string/pref_write_log_summary"/>    
+	    android:summary="@string/pref_write_log_summary"/>  
+	<EditTextPreference 
+	    android:key="@string/pref_write_log_path"
+	    android:title="@string/pref_write_log_path_title"
+	    android:summary="@string/pref_write_log_path_summary"/>  
 	<Preference
 		android:key="@string/pref_about_key"
 		android:persistent="false"

@@ -41,11 +41,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.EncodingCP866;
-
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -53,6 +51,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class Secu3Manager {
@@ -175,8 +174,7 @@ public class Secu3Manager {
 						// No task received
 						case SECU3_NONE:
 							break;
-						case SECU3_START_LOGGING:
-							logger.BeginLogging();
+						case SECU3_START_LOGGING:				logger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path), ""));						logger.BeginLogging();
 							break;
 						case SECU3_STOP_LOGGING:
 							logger.EndLogging();

@@ -44,6 +44,8 @@
     <string name="pref_upload_immediately_summary">When Secu-3 params changed</string>
     <string name="pref_write_log_title">Write log</string>
     <string name="pref_write_log_summary">Write log of sensor\'s data</string>
+    <string name="pref_write_log_path_title">Path for storing logs</string>
+    <string name="pref_write_log_path_summary">Directory where Secu3Droid should store logs. If empty, logs will be stored to %1$s</string>
     
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
     <string name="service_closed_because_connection_problem_notification">"Reason: %s"</string>

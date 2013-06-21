@@ -3,11 +3,9 @@ package org.secu3.android.api.io;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
-
 import org.secu3.android.api.io.Secu3Dat.SensorDat;
 
 import android.os.Environment;
@@ -21,6 +19,7 @@ public class Secu3Logger {
 	BufferedWriter logWriter = null;	
 	boolean started = false;
 	Time time = null;
+	private String path = null;
 
 	final char CSV_DELIMETER = ',';
 	final String cCSVTimeTemplateString = "%02d:%02d:%02d.%02d";
@@ -77,9 +76,8 @@ public class Secu3Logger {
 			time = new Time();
 			time.setToNow();
 			String fname = time.format("%Y.%m.%d_%H.%M.%S.csv");
-			String path = Environment.getExternalStorageDirectory().getPath()+File.separator;
 			try {
-				logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path+fname),"ISO-8859-1"));
+				logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path+File.separator+fname),"ISO-8859-1"));
 				Log.d(LOG_TAG, path+fname);
 				started = true;
 				return true;
@@ -101,5 +99,18 @@ public class Secu3Logger {
 			Log.d(LOG_TAG,e.getMessage());
 			return false;
 		}
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		if ((path == null) || (path.isEmpty())) path = Secu3Logger.getDefaultPath();
+		this.path = path;
+	}
+	
+	public static String getDefaultPath() {
+		return Environment.getExternalStorageDirectory().getPath();
 	}
 }

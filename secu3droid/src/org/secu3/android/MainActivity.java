@@ -33,7 +33,6 @@ import org.secu3.android.api.io.Secu3Dat.FWInfoDat;
 import org.secu3.android.api.io.Secu3Dat.SensorDat;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Service;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;

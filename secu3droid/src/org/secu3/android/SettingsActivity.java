@@ -40,9 +40,10 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import org.secu3.android.api.io.Secu3Logger;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	private SharedPreferences sharedPref ;
@@ -96,7 +97,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		addPreferencesFromResource(R.xml.preferences);
+		addPreferencesFromResource(R.xml.preferences);							
+		
+		findPreference(getString(R.string.pref_write_log_path)).setSummary(String.format(getString(R.string.pref_write_log_path_summary), Secu3Logger.getDefaultPath()));
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();	
         Preference pref = findPreference(getString(R.string.pref_about_key));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {		
@@ -105,8 +108,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				SettingsActivity.this.displayAboutDialog();
 				return true;
 			}
-		});
-        
+		});                
 	}	
 	
 	@Override
