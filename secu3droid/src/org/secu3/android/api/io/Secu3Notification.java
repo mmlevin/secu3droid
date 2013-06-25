@@ -34,6 +34,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 public class Secu3Notification {
 	public Notification secu3Notification;
@@ -91,6 +92,14 @@ public class Secu3Notification {
 				.setContentIntent(serviceStoppedNotification.contentIntent)
 				.build();
 		notificationManager.notify(R.string.service_closed_because_connection_problem_notification_title, serviceStoppedNotification);		
+	}
+	
+	public void toast (String message) {
+		Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
+	}
+	
+	public void toast (int messageId) {
+		Toast.makeText(ctx, messageId, Toast.LENGTH_LONG).show();
 	}
 	
 	

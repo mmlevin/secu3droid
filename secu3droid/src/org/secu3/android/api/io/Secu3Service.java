@@ -61,7 +61,6 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	private Secu3Manager secu3Manager = null;
 	public static Secu3Notification secu3Notification;
 
-	@SuppressLint("ShowToast")
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -84,7 +83,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 						boolean enabled = secu3Manager.enable();
 						if (enabled) {															
 							startForeground(R.string.foreground_service_started_notification, secu3Notification.secu3Notification);
-							Toast.makeText(this, R.string.msg_service_started,Toast.LENGTH_LONG).show();
+							secu3Notification.toast(R.string.msg_service_started);
 						} else {
 							stopSelf();
 						}
@@ -92,11 +91,11 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 						stopSelf();
 					}
 				} else {
-					Toast.makeText(this, R.string.msg_service_already_started, Toast.LENGTH_LONG).show();
+					secu3Notification.toast(R.string.msg_service_already_started);
 					sendBroadcast(intent);
 				}
 			} else {
-				Toast.makeText(this, R.string.msg_bluetooth_unsupported, Toast.LENGTH_LONG).show();
+				secu3Notification.toast(R.string.msg_bluetooth_unsupported);
 				stopSelf();
 			}
 		} else if (ACTION_SECU3_SERVICE_STOP.equals(intent.getAction())){
@@ -107,9 +106,9 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 			if (manager != null){
 				if (manager.getDisableReason() != 0){
 					secu3Notification.notifyServiceStopped(manager.getDisableReason());
-					Toast.makeText(this, getString(R.string.msg_service_stopped_by_problem, getString(manager.getDisableReason())),Toast.LENGTH_LONG).show();				
+					secu3Notification.toast(getString(R.string.msg_service_stopped_by_problem, getString(manager.getDisableReason())));				
 				} else {
-					Toast.makeText(this, R.string.msg_service_stopped, Toast.LENGTH_LONG).show();
+					secu3Notification.toast(R.string.msg_service_stopped);
 				}
 				manager.disable();
 			}			

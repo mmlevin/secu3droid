@@ -174,7 +174,9 @@ public class Secu3Manager {
 						// No task received
 						case SECU3_NONE:
 							break;
-						case SECU3_START_LOGGING:				logger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path), ""));						logger.BeginLogging();
+						case SECU3_START_LOGGING:
+							logger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path), ""));
+							logger.BeginLogging();
 							break;
 						case SECU3_STOP_LOGGING:
 							logger.EndLogging();
