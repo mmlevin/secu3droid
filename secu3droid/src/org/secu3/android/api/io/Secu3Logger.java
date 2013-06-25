@@ -12,18 +12,19 @@ import android.os.Environment;
 import android.text.format.Time;
 import android.util.Log;
 
-public class Secu3Logger {
-	
+public class Secu3Logger {		
 	private final String LOG_TAG = "Secu3Logger";
 	
-	BufferedWriter logWriter = null;	
-	boolean started = false;
-	Time time = null;
+	private BufferedWriter logWriter = null;	
+	private boolean started = false;
+	private Time time = null;
 	private String path = null;
 
-	final char CSV_DELIMETER = ',';
-	final String cCSVTimeTemplateString = "%02d:%02d:%02d.%02d";
-	final String cCSVDataTemplateString = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%s\r\n";
+	private static final char CSV_DELIMETER = ',';
+	private static final String cCSVTimeTemplateString = "%H:%M:%S";
+	private static final String cCSVDataTemplateString = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%s\r\n";
+	private static final String cCSVFileNameTemplateString = "%Y.%m.%d_%H.%M.%S.csv";
+	private static final String CSVMillisTemplateString = "%s.%02d";	
 	
 
 	private String IntToBinaryString(int i)
@@ -37,7 +38,7 @@ public class Secu3Logger {
 		if (started && (packet != null) && (packet.packet_id == Secu3Dat.SENSOR_DAT)) {				
 			long t = System.currentTimeMillis();
 			time.set(t);
-			String time = String.format("%s.%02d",this.time.format("%H:%M:%S"), (t%1000)/10);
+			String time = String.format(CSVMillisTemplateString,this.time.format(cCSVTimeTemplateString), (t%1000)/10);
 			char x = CSV_DELIMETER;
 			String formatString = String.format(Locale.US,cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 			String out = String.format (Locale.US,formatString, ((SensorDat)packet).frequen,
@@ -75,7 +76,7 @@ public class Secu3Logger {
 		else {
 			time = new Time();
 			time.setToNow();
-			String fname = time.format("%Y.%m.%d_%H.%M.%S.csv");
+			String fname = time.format(cCSVFileNameTemplateString);
 			try {
 				logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path+File.separator+fname),"ISO-8859-1"));
 				Log.d(LOG_TAG, path+fname);
