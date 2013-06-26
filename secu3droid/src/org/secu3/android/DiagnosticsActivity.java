@@ -7,6 +7,7 @@ import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.DiagInpDat;
 import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.io.Secu3Dat.OpCompNc;
+import org.secu3.android.fragments.DiagnosticsChartFragment;
 import org.secu3.android.fragments.DiagnosticsInputsFragment;
 import org.secu3.android.fragments.DiagnosticsOutputsFragment;
 import org.secu3.android.fragments.ISecu3Fragment.OnDataChangedListener;
@@ -31,6 +32,8 @@ public class DiagnosticsActivity extends FragmentActivity implements OnDataChang
 	
 	DiagnosticsInputsFragment inputFragment = null;
 	DiagnosticsOutputsFragment outputsFragment = null;
+	DiagnosticsChartFragment chartFragment = null;
+	
 	List<Fragment> pages = new ArrayList<Fragment>();
 	DiagnosticsPagerAdapter diagnosticsAdapter = null;
 	ViewPager pager = null;
@@ -91,6 +94,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnDataChang
 		
 		pages.add(inputFragment = new DiagnosticsInputsFragment());
 		pages.add(outputsFragment = new DiagnosticsOutputsFragment());
+		//pages.add(chartFragment = new DiagnosticsChartFragment()); 
 		
 		diagnosticsAdapter = new DiagnosticsPagerAdapter(getSupportFragmentManager(),pages);
 		receiver = new ReceiveMessages();
@@ -152,8 +156,17 @@ public class DiagnosticsActivity extends FragmentActivity implements OnDataChang
 		} else if (Secu3Dat.RECEIVE_DIAGINP_DAT.equals(intent.getAction())) {
 			DiagInpDat packet = intent.getParcelableExtra(DiagInpDat.class.getCanonicalName());
 			DiagnosticsInputsFragment page = inputFragment;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			if (page != null) {
+				page.setData(packet);
+				if (page.isVisible()) page.updateData();
+			}
+			
+			DiagnosticsChartFragment page1 = chartFragment;
+			if (page1 != null) {
+				page1.setData(packet);
+				if (page1.isVisible()) page1.updateData();
+			}
+			
 		}
 	}
 }

@@ -103,7 +103,8 @@
     
     <string-array name="diagnostics_fragments_title">
         <item>Inputs</item>
-        <item >Outputs</item>
+        <item>Outputs</item>
+        <item>Chart</item>
     </string-array>
 
     <string name="data_will_appear_after_connect">Data will be visible there after connection to Secu-3 device</string>

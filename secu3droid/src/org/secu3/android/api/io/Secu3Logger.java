@@ -107,7 +107,7 @@ public class Secu3Logger {
 	}
 
 	public void setPath(String path) {
-		if ((path == null) || (path.isEmpty())) path = Secu3Logger.getDefaultPath();
+		if ((path == null) || (path.length() == 0)) path = Secu3Logger.getDefaultPath();
 		this.path = path;
 	}
 	

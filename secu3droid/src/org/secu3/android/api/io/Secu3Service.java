@@ -28,7 +28,6 @@ package org.secu3.android.api.io;
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -38,7 +37,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class Secu3Service extends Service implements OnSharedPreferenceChangeListener {	
 	private static final String LOG_TAG = "Secu3Service";	
