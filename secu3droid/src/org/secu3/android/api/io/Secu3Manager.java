@@ -436,7 +436,7 @@ public class Secu3Manager {
 	public synchronized boolean enable() {
 		Secu3Service.secu3Notification.notificationManager.cancel(R.string.service_closed_because_connection_problem_notification_title);
 		if (! enabled){
-        	Log.d(LOG_TAG, "enabling Bluetooth GPS manager");
+        	Log.d(LOG_TAG, "enabling Secu3 bluetooth manager");
 			final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 	        if (bluetoothAdapter == null) {
 	            // Device does not support Bluetooth
@@ -518,7 +518,7 @@ public class Secu3Manager {
 							}
 						};
 						this.enabled = true;
-			        	Log.d(LOG_TAG, "Bluetooth GPS manager enabled");
+			        	Log.d(LOG_TAG, "Bluetooth Secu3 manager enabled");
 			        	Log.v(LOG_TAG, "starting notification thread");
 						notificationPool = Executors.newSingleThreadExecutor();
 			        	Log.v(LOG_TAG, "starting connection and reading thread");
@@ -544,7 +544,7 @@ public class Secu3Manager {
 	}
 	
 	public synchronized void disable(int reasonId) {
-    	Log.d(LOG_TAG, "disabling Bluetooth GPS manager reason: "+callingService.getString(reasonId));
+    	Log.d(LOG_TAG, "disabling Secu3 bluetooth manager reason: "+callingService.getString(reasonId));
 		setDisableReason(reasonId);
     	disable();
 	}	
@@ -590,7 +590,7 @@ public class Secu3Manager {
 						}
 						if ((secu3Socket != null) && ((connectedSecu3 == null) || (connectedSecu3.socket != secu3Socket))){
 							try {
-								Log.d(LOG_TAG, "closing Bluetooth GPS socket");
+								Log.d(LOG_TAG, "closing Bluetooth socket");
 								secu3Socket.close();
 							} catch (IOException closeException) {
 								Log.e(LOG_TAG, "error while closing socket", closeException);
@@ -602,7 +602,7 @@ public class Secu3Manager {
 			notificationPool.execute(closeAndShutdown);
 			notificationPool.shutdown();
 			callingService.stopSelf();
-        	Log.d(LOG_TAG, "Bluetooth GPS manager disabled");
+        	Log.d(LOG_TAG, "Bluetooth Secu3 manager disabled");
 		}
 	}	
 }
