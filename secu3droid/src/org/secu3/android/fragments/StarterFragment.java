@@ -25,33 +25,66 @@
 
 package org.secu3.android.fragments;
 
-import java.util.ArrayList;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.secu3.android.R;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.StartrPar;
-import org.secu3.android.api.utils.BaseParamItem;
-import org.secu3.android.api.utils.CustomNumberPickerDialog;
-import org.secu3.android.api.utils.CustomNumberPickerDialog.OnCustomNumberPickerAcceptListener;
-import org.secu3.android.api.utils.CustomNumberPickerFloatDialog;
-import org.secu3.android.api.utils.CustomNumberPickerIntegerDialog;
-import org.secu3.android.api.utils.ParamItemBoolean;
-import org.secu3.android.api.utils.ParamItemFloat;
-import org.secu3.android.api.utils.ParamItemInteger;
-import org.secu3.android.api.utils.ParamItemsAdapter;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 
-public class StarterFragment extends Secu3Fragment implements ISecu3Fragment,OnItemClickListener,OnCustomNumberPickerAcceptListener  {
+public class StarterFragment extends Secu3Fragment implements ISecu3Fragment {
 	
 	StartrPar packet = null;
-	ParamItemsAdapter adapter = null;
-	CustomNumberPickerDialog dialog = null;	
+	EditText starterRPM;
+	EditText starterMap;
+	
+	private class CustomTextWatcher implements TextWatcher {
+		EditText e = null;
+		
+		public CustomTextWatcher(EditText e) {
+			this.e =e;  
+		}
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			int i = 0;
+			try {
+				NumberFormat format = NumberFormat.getInstance(Locale.US);
+				Number number = format.parse(s.toString());				
+				i = number.intValue();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (packet != null) {
+					switch (e.getId()){
+						case R.id.starterOffEditText:
+							packet.starter_off = i;
+							break;
+						case R.id.starterMapAbandonEditText:
+							packet.smap_abandon = i;
+							break;
+					}
+					dataChanged(packet);
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {			
+		}		
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,38 +93,12 @@ public class StarterFragment extends Secu3Fragment implements ISecu3Fragment,OnI
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		ListView lv = (ListView)getView().findViewById(R.id.starterParamsListView);				
-		
-        ArrayList<BaseParamItem> items = new ArrayList<BaseParamItem>();
-        items.add(new ParamItemInteger(getActivity(), "RPM when starter will be turned off", "It will turn off starter after engine starts", "min-1", 600, 200, 2000, 10));
-        items.add(new ParamItemInteger(getActivity(), "RPM when switching from start map", "It will switch ignition map from start to working", "min-1", 650, 200, 2000, 10));
-        items.add(new ParamItemBoolean(getActivity(), "Zero advance angle", "If checked, advance angle will set to 0", true));        
-        items.add(new ParamItemFloat(getActivity(), "Minimal advance angle", "Minimal working value of ignition advance angle", "°", -10.0f , -20.0f, 40.0f, 0.25f));
-        items.add(new ParamItemFloat(getActivity(), "Maximal advance angle", "Maximal working value of ignition advance angle", "°", -10.0f , -20.0f, 40.0f, 0.25f));
-        
-        adapter = new ParamItemsAdapter(items);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(this);		
+	public void onActivityCreated(Bundle savedInstanceState) {		
 		super.onActivityCreated(savedInstanceState);
-	}
-	
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,	long id) {
-		BaseParamItem i = (BaseParamItem) adapter.getItem(position);
-		if (i instanceof ParamItemInteger) {
-			dialog = new CustomNumberPickerIntegerDialog();
-	        ((CustomNumberPickerIntegerDialog) dialog).setRange(((ParamItemInteger) i).getValue(), ((ParamItemInteger) i).getMinValue(), ((ParamItemInteger) i).getMaxValue(), ((ParamItemInteger) i).getStepValue());
-	        dialog.setOnCustomNumberPickerAcceprListener(this);
-	        dialog.show(getActivity().getSupportFragmentManager(), i.getName());			        
-		} else if (i instanceof ParamItemFloat) {
-			dialog = new CustomNumberPickerFloatDialog();
-			((CustomNumberPickerFloatDialog) dialog).setRange(((ParamItemFloat) i).getValue(), ((ParamItemFloat) i).getMinValue(), ((ParamItemFloat) i).getMaxValue(), ((ParamItemFloat) i).getStepValue());
-			dialog.setOnCustomNumberPickerAcceprListener(this);
-	        dialog.show(getActivity().getSupportFragmentManager(), i.getName());				
-		} else if (i instanceof ParamItemBoolean) {
-			adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);
-		}
+		starterRPM = (EditText)getView().findViewById(R.id.starterOffEditText);
+		starterMap = (EditText)getView().findViewById(R.id.starterMapAbandonEditText);	
+		starterMap.addTextChangedListener(new CustomTextWatcher(starterMap));
+		starterRPM.addTextChangedListener(new CustomTextWatcher(starterRPM));
 	}
 	
 	@Override
@@ -103,6 +110,8 @@ public class StarterFragment extends Secu3Fragment implements ISecu3Fragment,OnI
 	@Override
 	public void updateData() {
 		if (packet != null) {
+			starterRPM.setText(String.format(Locale.US,"%d",((StartrPar)packet).starter_off));
+			starterMap.setText(String.format(Locale.US,"%d",((StartrPar)packet).smap_abandon));
 		}
 	}
 	
@@ -114,10 +123,5 @@ public class StarterFragment extends Secu3Fragment implements ISecu3Fragment,OnI
 	@Override
 	public Secu3Dat getData() {
 		return packet;
-	}
-
-	@Override
-	public void setValue(String value, int position) {
-		adapter.setValue(value, position);		
 	}
 }

@@ -23,57 +23,35 @@
  *            email: mmlevin@mail.ru
 */
 
-package org.secu3.android.api.utils;
+package org.secu3.android.parameters;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
+import java.util.ArrayList;
 
-public abstract class BaseParamItem {
-	private Context context;
-	private String name;
-	private String units;
-	private String summary;
-	
-	protected LayoutInflater inflater;
-	
-	protected View getView(int resourceID) {
-		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflater.inflate(resourceID, null);
-		return v;
+import org.secu3.android.parameters.items.BaseParamItem;
+
+public class ParamsPage {		
+	private int nameId = 0;
+	private ArrayList<BaseParamItem> items = null;
+
+	public int getNameId() {
+		return nameId;
+	}
+
+	public void setName(int nameId) {
+		this.nameId = nameId;
 	}
 	
-	abstract public View getView();
-
-	public Context getContext() {
-		return context;
+	public ParamsPage(int nameId) {
+		this.nameId = nameId;
 	}
-
-	public void setContext(Context context) {
-		this.context = context;
+	public void addParamItem (BaseParamItem item) {
+		if (items == null) {
+			items = new ArrayList<BaseParamItem>();
+		}
+		items.add(item);
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getUnits() {
-		return units;
-	}
-
-	public void setUnits(String units) {
-		this.units = units;
-	}
-
-	public String getSummary() {
-		return summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
+	
+	public ArrayList<BaseParamItem> getItems() {
+		return items;
 	}
 }

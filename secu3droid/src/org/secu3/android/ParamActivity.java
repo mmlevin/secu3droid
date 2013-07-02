@@ -25,15 +25,34 @@
 
 package org.secu3.android;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.secu3.android.api.io.*;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Dat.*;
+import org.secu3.android.api.utils.CustomNumberPickerDialog;
+import org.secu3.android.api.utils.CustomNumberPickerDialog.OnCustomNumberPickerAcceptListener;
+import org.secu3.android.api.utils.CustomNumberPickerFloatDialog;
+import org.secu3.android.api.utils.CustomNumberPickerIntegerDialog;
+import org.secu3.android.api.utils.ResourcesUtils;
 import org.secu3.android.fragments.*;
 import org.secu3.android.fragments.ISecu3Fragment.OnDataChangedListener;
-
+import org.secu3.android.parameters.ParamItemToggleButton;
+import org.secu3.android.parameters.ParamItemsAdapter;
+import org.secu3.android.parameters.ParamPagerAdapter;
+import org.secu3.android.parameters.ParamsPage;
+import org.secu3.android.parameters.items.BaseParamItem;
+import org.secu3.android.parameters.items.ParamItemBoolean;
+import org.secu3.android.parameters.items.ParamItemButton;
+import org.secu3.android.parameters.items.ParamItemFloat;
+import org.secu3.android.parameters.items.ParamItemInteger;
+import org.secu3.android.parameters.items.ParamItemLabel;
+import org.secu3.android.parameters.items.ParamItemSpinner;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -44,17 +63,19 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class ParamActivity extends FragmentActivity implements OnDataChangedListener{
+public class ParamActivity extends FragmentActivity implements OnDataChangedListener, OnItemClickListener,OnCustomNumberPickerAcceptListener {
 	public static final String LOG_TAG = "ParamActivity";	
 	
 	public static final int PARAMS_NUMBER = 9;
@@ -72,34 +93,21 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 	
 	ProgressBar progressBar = null;
 		
-	List<Fragment> pages = new ArrayList<Fragment>();
+	ArrayList<ParamsPage> pages;
 	TextView textViewStatus = null;
 	TextView textView = null;
 	ViewPager pager = null;
     ParamPagerAdapter paramAdapter = null;
-    
+    ParamItemsAdapter adapter = null;
+    int position = Integer.MAX_VALUE;
+	CustomNumberPickerDialog dialog = null;
+
     SharedPreferences sharedPref = null;
 	private boolean isOnline = false;
 	private boolean uploadImmediatelly;
 		
-	
-    private boolean isValid() {
-    	return (starterParPage.getData() != null) &&
-    		   (anglesParPage.getData() != null) &&
-    		   (idlRegParPage.getData() != null) &&
-    		   (funsetParPage.getData() != null) &&
-    		   (funsetParPage.getExtraData() != null) &&
-    		   (((FnNameDat)funsetParPage.getExtraData()).names_available()) &&
-    		   (temperParPage.getData() != null) &&
-    		   (carburParPage.getData() != null) &&
-    		   (adcCorParPage.getData() != null) &&
-    		   (ckpsParPage.getData() != null) &&
-    		   (miscelParPage.getData() != null) &&
-    		   (chokeParPage.getData() != null);
-    }
-    
-    private void readParams() {
-    	setOnDataChangedListeners(null);    	
+	    
+    private void readParams() {    	
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
     }
@@ -135,35 +143,193 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		}
 	}
 	
-	private class ParamPagerAdapter extends FragmentPagerAdapter{
-		private List<Fragment> fragments = null;
-		private String titles[];
-		
-		public ParamPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
-			super(fm);
-			this.fragments = fragments;
-			titles = getBaseContext().getResources().getStringArray(R.array.params_fragments_titles);
-		}
-
-
-		@Override
-		public Fragment getItem (int position) {
-			return fragments.get(position);
-		}
-
-		@Override
-		public int getCount() {
-			return fragments.size();
-		}		
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return titles[position];
-		}
-	}
-
 	ReceiveMessages receiver;
 
+	public void createFormFromXml (int id) throws InvalidAlgorithmParameterException {
+		String name;
+		ParamsPage page = null;
+		BaseParamItem item = null;
+
+		int parameterType = 0;		
+		String parameterName = null;
+		String parameterSummary = null;
+		String parameterUnits = null;
+		String parameterStrValue = null;
+		String parameterValue = null;
+		String parameterMinValue = null;
+		String parameterMaxValue = null;
+		String parameterStepValue = null;
+		String parameterIndex = null;
+		String attr = null;
+		String attrValue = null;		
+		
+		try {
+			XmlPullParser xpp = getResources().getXml(id);
+			pages = new ArrayList<ParamsPage>();
+			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+				switch (xpp.getEventType()) {
+				case XmlPullParser.START_DOCUMENT:
+					break;
+				case XmlPullParser.START_TAG:
+					name = xpp.getName();
+					if (name.equalsIgnoreCase("Parameters")) {
+						if (pages.size() != 0) throw new InvalidAlgorithmParameterException("Pages adapter is non empty, probably nested Parameter element"); 
+					} else					
+					// Found new page element
+					if (name.equalsIgnoreCase("Page")) {
+						if (page != null) {
+							throw new InvalidAlgorithmParameterException("Pages can't be nested");
+						}
+						int count = xpp.getAttributeCount(); 
+						if (count > 0) {
+							for (int i = 0; i != count; i++) {
+								attr  = xpp.getAttributeName(i);
+								attrValue = xpp.getAttributeValue(i);
+								if (attr.equals("name")) {
+									if (ResourcesUtils.isResource(attrValue)) {
+										page = new ParamsPage(ResourcesUtils.referenceToInt(attrValue));
+									} else throw new InvalidAlgorithmParameterException("Page name must be a string reference");									
+									pages.add(page);
+								}
+							}
+						}						
+					} else
+					// Found new parameter element
+					if (name.equalsIgnoreCase("Parameter")){
+						if (item != null) {
+							throw new InvalidAlgorithmParameterException("Parameters can't be nested");
+						}
+						int count = xpp.getAttributeCount(); 
+						parameterName = null;
+						parameterSummary = null;
+						parameterUnits = null;
+						parameterStrValue = null;
+						parameterValue = null;
+						parameterMinValue = null;
+						parameterMaxValue = null;
+						parameterStepValue = null;
+						parameterIndex = null;
+						if (count > 0) {
+							for (int i = 0; i != count; i++) {
+								attr  = xpp.getAttributeName(i);
+								attrValue = xpp.getAttributeValue(i);
+								if (attr.equalsIgnoreCase("name")) {
+									if (ResourcesUtils.isResource(attrValue)) {
+										parameterName = attrValue;
+									} else throw new InvalidAlgorithmParameterException("Parameter name must be a string reference");									
+								} else if (attr.equalsIgnoreCase("summary")) {
+									parameterSummary = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else									
+								if (attr.equalsIgnoreCase("units")) {
+									parameterUnits = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else
+								if (attr.equalsIgnoreCase("type")) {
+									if (ResourcesUtils.isResource(attrValue)) {
+										parameterType = ResourcesUtils.referenceToInt(attrValue);
+									} else throw new InvalidAlgorithmParameterException("Parameter type must be a reference");									
+								} else 
+								if (attr.equalsIgnoreCase("value")) {
+									parameterValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else
+								if (attr.equalsIgnoreCase("str_value")) {
+									parameterStrValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else	
+								if (attr.equalsIgnoreCase("minValue")) {
+									parameterMinValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else 
+								if (attr.equalsIgnoreCase("maxValue")) {
+									parameterMaxValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else 
+								if (attr.equalsIgnoreCase("stepValue")) {
+									parameterStepValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} 
+								else 
+								if (attr.equalsIgnoreCase("index")) {
+									parameterIndex = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								}
+							}
+						}											
+					}
+					break;
+				case XmlPullParser.END_TAG:
+					name = xpp.getName();
+					if (name.equalsIgnoreCase("Parameters")) {
+						if (pages.size() == 0) throw new InvalidAlgorithmParameterException("Parameters closed, but not opened");
+					} else				
+					if (name.equalsIgnoreCase("Page")) {
+						if (page == null) throw new InvalidAlgorithmParameterException("Page closed, but not opened");
+						else page = null;
+					} else
+					if (name.equalsIgnoreCase("Parameter")) {
+						if ((parameterName == null) || (parameterType == 0) || (TextUtils.isEmpty(parameterName))) throw new InvalidAlgorithmParameterException("Parameter element is invalid");
+						else {
+							switch (parameterType) {
+							case R.id.parameter_type_boolean:
+								item = new ParamItemBoolean(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterValue);
+								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
+								break;
+							case R.id.parameter_type_integer:
+								try {
+									item = new ParamItemInteger(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+											parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
+								} catch (ParseException e) {
+									throw new InvalidAlgorithmParameterException("Wrong integer parameter attributes");
+								}
+								break;
+							case R.id.parameter_type_float:
+								try {
+									item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+											parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
+								} catch (ParseException e) {
+									throw new InvalidAlgorithmParameterException("Wrong integer parameter attributes");
+								}								
+								break;
+							case R.id.parameter_type_label:
+								item = new ParamItemLabel(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
+								break;
+							case R.id.parameter_type_button:
+								item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
+								break;
+							case R.id.parameter_type_toggle_button:
+								item = new ParamItemToggleButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
+								break;
+							case R.id.parameter_type_spinner:
+								try {
+									item = new ParamItemSpinner(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterStrValue,parameterIndex);
+									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
+								} catch (ParseException e) {
+									throw new InvalidAlgorithmParameterException("Wrong spinner parameter attributes");
+								}								
+								break;
+							default: throw new InvalidAlgorithmParameterException("Unknown parameter type");
+							}
+							if (item != null) {
+								page.addParamItem(item);
+								item = null;
+							}
+						}
+					}
+					break;
+				case XmlPullParser.TEXT:					
+					break;
+				default:
+					break;
+				}
+				xpp.next();
+			}
+	    	} catch (XmlPullParserException e) {
+	    		e.printStackTrace();
+	    	} catch (IOException e) {
+	    		e.printStackTrace();
+	    	}
+		
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
@@ -173,18 +339,13 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		uploadImmediatelly = sharedPref.getBoolean(getString(R.string.pref_upload_immediately), false);
 		setContentView(R.layout.activity_param);
 		
-		pages.add(starterParPage = new StarterFragment());
-		pages.add(anglesParPage = new AnglesFragment());
-		pages.add(idlRegParPage = new IdlRegFragment());
-		pages.add(funsetParPage = new FunsetFragment());
-		pages.add(temperParPage = new TemperFragment());
-		pages.add(carburParPage = new CarburFragment());
-		pages.add(adcCorParPage = new ADCCorFragment());
-		pages.add(ckpsParPage = new CKPSFragment());
-		pages.add(miscelParPage = new MiscelFragment());
-		pages.add(chokeParPage = new ChokeFragment());		
-			
-		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),pages);
+		try {
+			createFormFromXml(R.xml.parameters);
+		} catch (InvalidAlgorithmParameterException e) {
+			Log.e(LOG_TAG, e.getMessage());
+		}
+					
+		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),this,pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
 		readParams();
 				
@@ -192,19 +353,6 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
 		pager = (ViewPager)findViewById(R.id.paramsPager);
 		pager.setAdapter(paramAdapter);
-	}
-
-	private void setOnDataChangedListeners(OnDataChangedListener listener) {
-		starterParPage.setOnDataChangedListener(listener);
-		anglesParPage.setOnDataChangedListener(listener);
-		idlRegParPage.setOnDataChangedListener(listener);
-		funsetParPage.setOnDataChangedListener(listener);
-		temperParPage.setOnDataChangedListener(listener);
-		carburParPage.setOnDataChangedListener(listener);
-		adcCorParPage.setOnDataChangedListener(listener);
-		ckpsParPage.setOnDataChangedListener(listener);
-		miscelParPage.setOnDataChangedListener(listener);
-		chokeParPage.setOnDataChangedListener(listener);
 	}
 
 	@Override
@@ -223,7 +371,8 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			readParams();
 			return true;
 		case R.id.menu_params_upload:
-			if (isValid()) {
+			//if (isValid()) {
+			if (false) {
 				try {
 			    	progressBar.setIndeterminate(true);
 			    	progressBar.setVisibility(ProgressBar.VISIBLE);					
@@ -273,6 +422,15 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		
 		Log.d(LOG_TAG, "onResume");
 		
+		pager = (ViewPager)findViewById(R.id.paramsPager);
+		pager.setAdapter(paramAdapter);
+		paramAdapter.notifyDataSetChanged();
+		
+		dialog = (CustomNumberPickerDialog)getLastCustomNonConfigurationInstance();
+		if (dialog != null) {
+			dialog.setOnCustomNumberPickerAcceprListener(this);
+		}			
+		
 		isOnline = false;
 		
 		try {
@@ -280,6 +438,39 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			
 		} catch (Exception e) {
 		}		
+	}	
+	
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,	long id) {
+		adapter = (ParamItemsAdapter) parent.getAdapter();
+		if (adapter != null) {
+			this.position = position;
+			BaseParamItem i = (BaseParamItem) adapter.getItem(position);
+			if (i instanceof ParamItemInteger) {
+				dialog = new CustomNumberPickerIntegerDialog();
+		        ((CustomNumberPickerIntegerDialog) dialog).setRange(((ParamItemInteger) i).getValue(), ((ParamItemInteger) i).getMinValue(), ((ParamItemInteger) i).getMaxValue(), ((ParamItemInteger) i).getStepValue());
+		        dialog.setOnCustomNumberPickerAcceprListener(this);
+		        dialog.show(getSupportFragmentManager(), i.getName());			        
+			} else if (i instanceof ParamItemFloat) {
+				dialog = new CustomNumberPickerFloatDialog();
+				((CustomNumberPickerFloatDialog) dialog).setRange(((ParamItemFloat) i).getValue(), ((ParamItemFloat) i).getMinValue(), ((ParamItemFloat) i).getMaxValue(), ((ParamItemFloat) i).getStepValue());
+				dialog.setOnCustomNumberPickerAcceprListener(this);
+		        dialog.show(getSupportFragmentManager(), i.getName());				
+			} else if (i instanceof ParamItemBoolean) {
+				adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);
+			}
+		}
+	}
+	
+	@Override
+	public void setValue(String value, int position) {
+		if (adapter != null) adapter.setValue(value, this.position);
+	}
+	
+	@Override
+	public Object onRetainCustomNonConfigurationInstance() {
+		return dialog;
 	}	
 	
 	void update (Intent intent) {
@@ -351,7 +542,6 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);
 			if (current == total) {
 				progressBar.setVisibility(ProgressBar.GONE);
-				setOnDataChangedListeners(this);
 			}
 			progressBar.setIndeterminate(current==0);
 			progressBar.setMax(total);

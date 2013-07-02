@@ -23,51 +23,39 @@
  *            email: mmlevin@mail.ru
 */
 
-package org.secu3.android.api.utils;
+package org.secu3.android.parameters.items;
 
 import org.secu3.android.R;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
-public class ParamItemBoolean extends BaseParamItem {
-	private boolean value;
-	
-	public ParamItemBoolean(Context context, String name, String summary, boolean value) {
+public class ParamItemLabel extends BaseParamItem {
+	public ParamItemLabel(Context context, String name, String summary) {
 		this.setContext(context);
 		this.setName(name);
 		this.setSummary(summary);
-		this.value = value;
 	}
-	
-	public ParamItemBoolean(Context context, int nameID, int summaryID, boolean value) {
+		
+	public ParamItemLabel(Context context, int nameID, int summaryID) {
+		this.setNameId(nameID);
+		this.setSummaryId(summaryID);
+		this.setUnitsId(summaryID);
 		this.setContext(context);
 		this.setName(context.getString(nameID));
 		this.setSummary(context.getString(summaryID));
-		this.value = value;
 	}
 	
 	@Override
 	public View getView() {	
-		View v = super.getView(R.layout.params_list_item_boolean);
+		View v = super.getView(R.layout.params_list_item_label);
 		
 		TextView paramName = (TextView) v.findViewById(R.id.param_name);
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
-		CheckBox paramValueBoolean = (CheckBox) v.findViewById(R.id.param_value_boolean);
         
 		paramName.setText(this.getName());
-		paramSummary.setText(this.getSummary());
-        paramValueBoolean.setChecked(this.getValue());			
+		paramSummary.setText(this.getSummary());			
 		return v;
-	}
-
-	public boolean getValue() {
-		return value;
-	}
-
-	public void setValue(boolean value) {
-		this.value = value;
 	}
 }

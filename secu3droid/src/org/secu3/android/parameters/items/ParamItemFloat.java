@@ -23,8 +23,10 @@
  *            email: mmlevin@mail.ru
 */
 
-package org.secu3.android.api.utils;
+package org.secu3.android.parameters.items;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 
 import org.secu3.android.R;
@@ -34,10 +36,10 @@ import android.view.View;
 import android.widget.TextView;
 
 public class ParamItemFloat extends BaseParamItem {
-	private float value;
-	private float minValue;		
-	private float maxValue;
-	private float stepValue;
+	private float value = 0;
+	private float minValue = 0;		
+	private float maxValue = 0;
+	private float stepValue = 0;
 	private String format = "%.02f";
 	
 	public ParamItemFloat(Context context, String name, String summary, String units, float value, float minValue, float maxValue, float stepValue) {
@@ -50,6 +52,20 @@ public class ParamItemFloat extends BaseParamItem {
 		this.maxValue = maxValue;
 		this.stepValue = stepValue;
 	}
+	
+	public ParamItemFloat(Context context, String name, String summary, String units, String value, String minValue, String maxValue, String stepValue) throws ParseException {
+		NumberFormat format = NumberFormat.getInstance(Locale.US);
+		
+		this.setContext(context);
+		this.setName(name);
+		this.setSummary(summary);
+		this.setUnits(units);
+			
+		if (value != null) this.value = format.parse(value).floatValue();
+		if (minValue != null) this.minValue = format.parse(minValue).floatValue();
+		if (maxValue != null) this.maxValue = format.parse(maxValue).floatValue();
+		if (stepValue != null) this.stepValue = format.parse(stepValue).floatValue();
+	}	
 	
 	public ParamItemFloat(Context context, int nameID, int summaryID, int unitsID, float value, float minValue, float maxValue, float stepValue) {
 		this.setContext(context);

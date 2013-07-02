@@ -25,17 +25,74 @@
              email: mmlevin@mail.ru
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:tag="Starter"
     android:fadeScrollbars="false">
-
-    <ListView
-        android:id="@+id/starterParamsListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
     
-</LinearLayout>
+	<RelativeLayout
+	    android:id="@+id/starterLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+
+	<TextView
+	    android:id="@+id/starterTextView1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:text="@string/starter_off_title"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<EditText
+	    android:id="@+id/starterOffEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/starterTextView1"
+	    android:ems="10"
+	    android:inputType="number"
+	    android:text="@string/units_zero" />
+
+	<TextView
+	    android:id="@+id/starterTextView2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/starterOffEditText"
+	    android:text="@string/starter_map_abandon_title"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<EditText
+	    android:id="@+id/starterMapAbandonEditText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/starterTextView2"
+	    android:ems="10"
+	    android:inputType="number"
+	    android:text="@string/units_zero" />
+
+	<TextView
+	    android:id="@+id/starterTextView3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/starterOffEditText"
+	    android:layout_toRightOf="@+id/starterOffEditText"
+	    android:text="@string/units_rpm"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<TextView
+	    android:id="@+id/starterTextView4"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/starterMapAbandonEditText"
+	    android:layout_toRightOf="@+id/starterMapAbandonEditText"
+	    android:text="@string/units_rpm"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	</RelativeLayout>
+
+</ScrollView>

@@ -23,8 +23,10 @@
  *            email: mmlevin@mail.ru
 */
 
-package org.secu3.android.api.utils;
+package org.secu3.android.parameters.items;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 
 import org.secu3.android.R;
@@ -34,10 +36,10 @@ import android.view.View;
 import android.widget.TextView;
 
 public class ParamItemInteger extends BaseParamItem {
-	private int value;
-	private int minValue;		
-	private int maxValue;
-	private int stepValue;
+	private int value = 0;
+	private int minValue = 0;		
+	private int maxValue = 0;
+	private int stepValue = 0;
 	private String format = "%d";
 	
 	public ParamItemInteger(Context context, String name, String summary, String units, int value, int minValue, int maxValue, int stepValue) {
@@ -50,6 +52,20 @@ public class ParamItemInteger extends BaseParamItem {
 		this.maxValue = maxValue;
 		this.stepValue = stepValue;
 	}
+	
+	public ParamItemInteger(Context context, String name, String summary, String units, String value, String minValue, String maxValue, String stepValue) throws ParseException {
+		NumberFormat format = NumberFormat.getInstance(Locale.US);
+		
+		this.setContext(context);
+		this.setName(name);
+		this.setSummary(summary);
+		this.setUnits(units);
+			
+		if (value != null) this.value = format.parse(value).intValue();
+		if (minValue != null) this.minValue = format.parse(minValue).intValue();
+		if (maxValue != null) this.maxValue = format.parse(maxValue).intValue();
+		if (stepValue != null) this.stepValue = format.parse(stepValue).intValue();
+	}	
 	
 	public ParamItemInteger(Context context, int nameID, int summaryID, int unitsID, int value, int minValue, int maxValue, int stepValue) {
 		this.setContext(context);

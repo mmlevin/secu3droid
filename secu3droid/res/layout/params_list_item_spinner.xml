@@ -34,25 +34,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/param_value_boolean"
+        android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearance" />
 
 	<TextView
 	    android:id="@+id/param_summary"
 	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"	    
-	    android:layout_below="@+id/param_name"
-        android:layout_alignParentLeft="true"	    
-        android:layout_toLeftOf="@+id/param_value_boolean"	    
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/param_spinner"
 	    android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <CheckBox
-        android:id="@+id/param_value_boolean"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/param_value_horizontal_margin" />
+	<Spinner
+	    android:id="@+id/param_spinner"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/param_name"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentRight="true"
+	    android:spinnerMode="dialog"
+	     />
 
 </RelativeLayout>

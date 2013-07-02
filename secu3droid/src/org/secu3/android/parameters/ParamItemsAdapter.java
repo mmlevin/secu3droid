@@ -23,12 +23,17 @@
  *            email: mmlevin@mail.ru
 */
 
-package org.secu3.android.api.utils;
+package org.secu3.android.parameters;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import org.secu3.android.parameters.items.BaseParamItem;
+import org.secu3.android.parameters.items.ParamItemBoolean;
+import org.secu3.android.parameters.items.ParamItemFloat;
+import org.secu3.android.parameters.items.ParamItemInteger;
 
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -46,7 +51,9 @@ public class ParamItemsAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return items.size();
+		if (items != null)
+			return items.size();
+		else return 0;
 	}
 
 	@Override
