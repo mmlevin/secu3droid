@@ -48,7 +48,6 @@ public class ParamItemsAdapter extends BaseAdapter {
 		this.items = items;        
 	}
 	
-
 	@Override
 	public int getCount() {
 		if (items != null)

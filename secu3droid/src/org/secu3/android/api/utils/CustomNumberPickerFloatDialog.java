@@ -34,18 +34,25 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 	private float minValue = 0;
 	private float maxValue = 0;
 	private float stepValue = 0;
+	private String format = "%.02f";
 	
 	protected void setNumberPickerDisplayedValues(NumberPicker numberPicker) {
 		if (numberPicker != null) {
 			int count = Math.round((maxValue - minValue) / stepValue);	
 			int index = Math.round((value - minValue) / stepValue);
+			
+			float mMinValue = value;
+			while ((mMinValue - stepValue) >=  minValue) {
+				mMinValue -= stepValue;
+			}			
+			
 			numberPicker.setMinValue(0);
 			numberPicker.setMaxValue(count);
 			numberPicker.setValue(index);
 			
 			String values[] = new String[count+1];
 			for (int i = 0; i != count+1; i++) {					
-				String value = String.format(Locale.US, "%.02f", minValue + stepValue * i);
+				String value = String.format(Locale.US, getFormat(), mMinValue + stepValue * i);
 				values[i] = value;
 			}
 			
@@ -60,7 +67,6 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 			maxValue = value;
 			stepValue = 1;
 		} else {
-			if ((value / stepValue) > Float.MIN_VALUE) throw new IllegalArgumentException("value should be a miltiple of stepValue");
 			if (value < minValue) throw new IllegalArgumentException("value counld not be less than minValue");
 			if (value > maxValue) throw new IllegalArgumentException("value counld not be greater than minValue");
 		}
@@ -69,5 +75,13 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		this.maxValue = maxValue;
 		this.stepValue = stepValue;
 		return this;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}	
 }

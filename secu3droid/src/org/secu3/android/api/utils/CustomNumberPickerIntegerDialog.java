@@ -41,8 +41,15 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 	protected void setNumberPickerDisplayedValues(NumberPicker numberPicker) {
 		if (numberPicker != null) {
 			int count = (maxValue - minValue) / stepValue;	
-			int index = (value - minValue) / stepValue;
-			int currentValue = minValue;
+			int index = (value - minValue) / stepValue;			
+			
+			int mMinValue = value;
+			while ((mMinValue - stepValue) >=  minValue) {
+				mMinValue -= stepValue;
+			}
+			
+			int currentValue = mMinValue;			
+			
 			numberPicker.setMinValue(0);
 			numberPicker.setMaxValue(count);
 			numberPicker.setValue(index);
@@ -64,7 +71,6 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 			maxValue = value;
 			stepValue = 1;
 		} else {
-			if ((value % stepValue) != 0) throw new IllegalArgumentException("value should be a miltiple of stepValue");
 			if (value < minValue) throw new IllegalArgumentException("value counld not be less than minValue");
 			if (value > maxValue) throw new IllegalArgumentException("value counld not be greater than minValue");
 		};

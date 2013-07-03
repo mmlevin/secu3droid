@@ -26,6 +26,9 @@
 package org.secu3.android.parameters;
 
 import java.util.ArrayList;
+
+import org.secu3.android.parameters.items.BaseParamItem;
+
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -33,17 +36,32 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class ParamPagerAdapter extends FragmentPagerAdapter{
 	private ArrayList<ParamsPage> pages = null;
 	private Context context;
+	
+	public BaseParamItem findItemByNameId (int Id) {
+		if (pages != null) {
+			int size = pages.size();
+			for (int i = 0; i != size; i++) {
+				ParamsPage page = pages.get(i);
+				ArrayList<BaseParamItem> items = page.getItems();
+				int size2 = page.getItems().size();
+				for (int j = 0; j != size2; j++) {
+					if (items.get(j).getNameId() == Id) return items.get(j); 
+				}
+			}
+		}
+		return null;
+	}	
 			
 	public ParamPagerAdapter(FragmentManager fm, Context context, ArrayList<ParamsPage> pages) {
-		super(fm);
+		super(fm);		
 		this.pages = pages;
 		this.context = context;
-	}
-	
+	}	
+		
 	@Override
-	public ParamsPageFragment getItem (int position) {
-		ParamsPageFragment fragment = ParamsPageFragment.newInstance(pages.get(position).getItems());
-		return fragment;
+	public ParamsPageFragment getItem (int position) {		
+		ParamsPageFragment fragment = ParamsPageFragment.newInstance(position);
+		return fragment;					
 	}	
 	
 	@Override

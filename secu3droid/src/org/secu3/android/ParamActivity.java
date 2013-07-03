@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.secu3.android.api.io.*;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
@@ -44,6 +45,7 @@ import org.secu3.android.parameters.ParamItemToggleButton;
 import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.ParamPagerAdapter;
 import org.secu3.android.parameters.ParamsPage;
+import org.secu3.android.parameters.ParamsPageFragment;
 import org.secu3.android.parameters.items.BaseParamItem;
 import org.secu3.android.parameters.items.ParamItemBoolean;
 import org.secu3.android.parameters.items.ParamItemButton;
@@ -80,14 +82,6 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 	
 	public static final int PARAMS_NUMBER = 9;
 	
-	StarterFragment starterParPage = null;
-	AnglesFragment anglesParPage = null;
-	IdlRegFragment idlRegParPage = null;
-	FunsetFragment funsetParPage = null;
-	TemperFragment temperParPage = null;
-	CarburFragment carburParPage = null;
-	ADCCorFragment adcCorParPage = null;
-	CKPSFragment ckpsParPage = null;
 	MiscelFragment miscelParPage = null;
 	ChokeFragment chokeParPage = null;
 	
@@ -160,6 +154,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		String parameterMaxValue = null;
 		String parameterStepValue = null;
 		String parameterIndex = null;
+		String parameterMasFormat = null;
 		String attr = null;
 		String attrValue = null;		
 		
@@ -209,6 +204,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 						parameterMaxValue = null;
 						parameterStepValue = null;
 						parameterIndex = null;
+						parameterMasFormat = null;
 						if (count > 0) {
 							for (int i = 0; i != count; i++) {
 								attr  = xpp.getAttributeName(i);
@@ -242,7 +238,10 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 								} else 
 								if (attr.equalsIgnoreCase("stepValue")) {
 									parameterStepValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} 
+								} else 
+								if (attr.equalsIgnoreCase("format")) {
+									parameterMasFormat = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								}
 								else 
 								if (attr.equalsIgnoreCase("index")) {
 									parameterIndex = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
@@ -281,7 +280,8 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 								try {
 									item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
 											parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
+									item.setNameId(ResourcesUtils.referenceToInt(parameterName));	
+									((ParamItemFloat) item).setFormat (parameterMasFormat);
 								} catch (ParseException e) {
 									throw new InvalidAlgorithmParameterException("Wrong integer parameter attributes");
 								}								
@@ -331,8 +331,16 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 	}
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);		
+	public void onAttachFragment(Fragment fragment) {
+		super.onAttachFragment(fragment);
+		if (fragment instanceof ParamsPageFragment) {
+			((ParamsPageFragment) fragment).setListAdapter(new ParamItemsAdapter(pages.get(((ParamsPageFragment) fragment).getNum()).getItems()));
+			((ParamsPageFragment) fragment).setOnItemClickListener(this);
+		}
+	}	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {		
 		Log.d(LOG_TAG, "onCreate");
 		
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -353,6 +361,8 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
 		pager = (ViewPager)findViewById(R.id.paramsPager);
 		pager.setAdapter(paramAdapter);
+		
+		super.onCreate(savedInstanceState);		
 	}
 
 	@Override
@@ -360,7 +370,6 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		getMenuInflater().inflate(R.menu.activity_param, menu);
 		return true;
 	}
-	
 	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -371,7 +380,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			readParams();
 			return true;
 		case R.id.menu_params_upload:
-			//if (isValid()) {
+			/*if (isValid()) {
 			if (false) {
 				try {
 			    	progressBar.setIndeterminate(true);
@@ -390,7 +399,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 				} catch (Exception e) {
 					Log.d (LOG_TAG, e.toString());
 				}
-			}
+			}*/
 			return true;
 		case R.id.menu_params_save_eeprom:
 			try {
@@ -455,6 +464,7 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			} else if (i instanceof ParamItemFloat) {
 				dialog = new CustomNumberPickerFloatDialog();
 				((CustomNumberPickerFloatDialog) dialog).setRange(((ParamItemFloat) i).getValue(), ((ParamItemFloat) i).getMinValue(), ((ParamItemFloat) i).getMaxValue(), ((ParamItemFloat) i).getStepValue());
+				((CustomNumberPickerFloatDialog) dialog).setFormat (((ParamItemFloat) i).getFormat());
 				dialog.setOnCustomNumberPickerAcceprListener(this);
 		        dialog.show(getSupportFragmentManager(), i.getName());				
 			} else if (i instanceof ParamItemBoolean) {
@@ -473,6 +483,31 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		return dialog;
 	}	
 	
+	void setIntegerItem (int id, int value) {
+		BaseParamItem item;
+		if ((item = paramAdapter.findItemByNameId(id)) != null ) ((ParamItemInteger)item).setValue (value);
+	}
+	
+	void setFloatItem (int id, float value) {
+		BaseParamItem item;
+		if ((item = paramAdapter.findItemByNameId(id)) != null ) ((ParamItemFloat)item).setValue (value);
+	}
+	
+	void setBooleanItem (int id, boolean value) {
+		BaseParamItem item;
+		if ((item = paramAdapter.findItemByNameId(id)) != null ) ((ParamItemBoolean)item).setValue (value);
+	}
+	
+	void setSpinnerItemIndex (int id, int index) {
+		BaseParamItem item;
+		if ((item = paramAdapter.findItemByNameId(id)) != null ) ((ParamItemSpinner)item).setIndex(index);
+	}
+
+	void setSpinnerItemValue (int id, String value) {
+		BaseParamItem item;
+		if ((item = paramAdapter.findItemByNameId(id)) != null ) ((ParamItemSpinner)item).setValue(value);
+	}	
+
 	void update (Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
@@ -483,59 +518,100 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 			textViewStatus.setText(isOnline?R.string.status_online:R.string.status_offline);
 		} else if (Secu3Dat.RECEIVE_STARTER_PAR.equals(intent.getAction())) {
 			StartrPar packet = intent.getParcelableExtra(StartrPar.class.getCanonicalName());
-			StarterFragment page = starterParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
-		} else if (Secu3Dat.RECEIVE_ANGLES_PAR.equals(intent.getAction())) {
+			setIntegerItem(R.string.starter_off_title, packet.starter_off);
+			setIntegerItem(R.string.starter_map_abandon_title, packet.smap_abandon);
+		} else if (Secu3Dat.RECEIVE_ANGLES_PAR.equals(intent.getAction())) {			
 			AnglesPar packet = intent.getParcelableExtra(AnglesPar.class.getCanonicalName());
-			AnglesFragment page = anglesParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			setFloatItem (R.string.angles_min_angle_title,packet.min_angle);
+			setFloatItem (R.string.angles_max_angle_title,packet.max_angle);
+			setFloatItem (R.string.angles_angle_decrement_step_title,packet.dec_spead);
+			setFloatItem (R.string.angles_angle_increment_step_title,packet.inc_spead);
+			setBooleanItem(R.string.angles_zero_angle_title,packet.zero_adv_ang == 1);
+			setFloatItem (R.string.angles_octane_correction_title,packet.angle_corr);
 		} else if (Secu3Dat.RECEIVE_IDLREG_PAR.equals(intent.getAction())) {
 			IdlRegPar packet = intent.getParcelableExtra(IdlRegPar.class.getCanonicalName());
-			IdlRegFragment page = idlRegParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			setFloatItem (R.string.idlreg_ifac1_title,packet.ifac1);
+			setFloatItem (R.string.idlreg_ifac2_title,packet.ifac2);
+			setFloatItem (R.string.idlreg_minimal_angle_title,packet.min_angle);
+			setFloatItem (R.string.idlreg_maximal_angle_title,packet.max_angle);
+			setIntegerItem (R.string.idlreg_target_rpm_title,packet.idling_rpm);
+			setIntegerItem (R.string.idlreg_rpm_sensitivity_title,packet.MINEFR);
+			setFloatItem (R.string.idlreg_turn_on_temp_title,packet.turn_on_temp);
+			setBooleanItem(R.string.idlreg_use_idle_regulator_title,packet.idl_regul == 1);
 		} else if (Secu3Dat.RECEIVE_FNNAME_DAT.equals(intent.getAction())) {
 			FnNameDat packet = intent.getParcelableExtra(FnNameDat.class.getCanonicalName());
-			FunsetFragment page = funsetParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			if (packet.names_available()) {
+				String[] tableNames = Arrays.copyOf(packet.names,packet.names.length);
+				String data = "";
+				for (int i=0; i != tableNames.length-1; i++) {
+					data += tableNames[i] + "|";
+				}
+				data += tableNames[tableNames.length - 1];
+				setSpinnerItemValue(R.string.funset_maps_set_gasoline_title, data);
+				setSpinnerItemValue(R.string.funset_maps_set_gas_title, data);
+			}			
 		}else if (Secu3Dat.RECEIVE_FUNSET_PAR.equals(intent.getAction())) {
 			FunSetPar packet = intent.getParcelableExtra(FunSetPar.class.getCanonicalName());
-			FunsetFragment page = funsetParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			setSpinnerItemIndex(R.string.funset_maps_set_gasoline_title, packet.fn_benzin);
+			setSpinnerItemIndex(R.string.funset_maps_set_gas_title, packet.fn_gas);
+			setFloatItem(R.string.funset_lower_pressure_title, packet.map_lower_pressure);
+			setFloatItem(R.string.funset_upper_pressure_title, packet.map_upper_pressure);
+			setFloatItem(R.string.funset_map_sensor_offset_title, packet.map_curve_offset);
+			setFloatItem(R.string.funset_map_sensor_gradient_title, packet.map_curve_gradient);
+			setFloatItem(R.string.funset_tps_curve_offset_title, packet.tps_curve_offset);
+			setFloatItem(R.string.funset_tps_curve_gradient_title, packet.tps_curve_gradient);
 		} else if (Secu3Dat.RECEIVE_TEMPER_PAR.equals(intent.getAction())) {
 			TemperPar packet = intent.getParcelableExtra(TemperPar.class.getCanonicalName());
-			TemperFragment page = temperParPage;
-			page.setData(packet);			
-			if (page.isVisible()) page.updateData();
+			setFloatItem(R.string.temper_fan_on_title, packet.vent_on);
+			setFloatItem(R.string.temper_fan_off_title, packet.vent_off);
+			setBooleanItem(R.string.temper_use_temp_sensor_title, packet.tmp_use == 1);
+			setBooleanItem(R.string.temper_use_pwm_title, packet.vent_pwm == 1);
+			setBooleanItem(R.string.temper_use_table, packet.cts_use_map == 1);
 		} else if (Secu3Dat.RECEIVE_CARBUR_PAR.equals(intent.getAction())) {
 			CarburPar packet = intent.getParcelableExtra(CarburPar.class.getCanonicalName());
-			CarburFragment page = carburParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			setIntegerItem(R.string.carbur_overrun_lower_threshold_gasoline_title, packet.ephh_lot);
+			setIntegerItem(R.string.carbur_overrun_upper_threshold_gasoline_title, packet.ephh_hit);
+			setIntegerItem(R.string.carbur_overrun_lower_threshold_gas_title, packet.ephh_lot_g);
+			setIntegerItem(R.string.carbur_overrun_upper_threshold_gas_title, packet.ephh_hit_g);
+			setFloatItem(R.string.carbur_overrun_valve_delay, packet.shutoff_delay);
+			setBooleanItem(R.string.carbur_sensor_inverse_title, packet.carb_invers == 1);
+			setFloatItem(R.string.carbur_epm_valve_on_pressure_title, packet.epm_ont);
+			setFloatItem(R.string.carbur_tps_threshold_title, packet.tps_threshold);
 		} else if (Secu3Dat.RECEIVE_ADCCOR_PAR.equals(intent.getAction())) {
 			ADCCorPar packet = intent.getParcelableExtra(ADCCorPar.class.getCanonicalName());
-			ADCCorFragment page = adcCorParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			setFloatItem(R.string.adccor_map_sensor_factor_title, packet.map_adc_factor);
+			setFloatItem(R.string.adccor_map_sensor_correction_title, packet.map_adc_correction);
+			setFloatItem(R.string.adccor_voltage_sensor_factor_title, packet.ubat_adc_factor);
+			setFloatItem(R.string.adccor_voltage_sensor_correction_title, packet.ubat_adc_correction);
+			setFloatItem(R.string.adccor_temper_sensor_factor_title, packet.temp_adc_factor);
+			setFloatItem(R.string.adccor_temper_sensor_correction, packet.temp_adc_correction);
+			setFloatItem(R.string.adccor_tps_sensor_factor_title, packet.tps_adc_factor);
+			setFloatItem(R.string.adccor_tps_sensor_correction_title, packet.tps_adc_correction);
+			setFloatItem(R.string.adccor_addi1_sensor_factor_title, packet.add_i1_factor);
+			setFloatItem(R.string.adccor_addi1_sensor_correction_title, packet.add_i1_correction);
+			setFloatItem(R.string.adccor_addi2_sensor_factor_title, packet.add_i2_factor);
+			setFloatItem(R.string.adccor_addi2_sensor_correction_title, packet.add_i2_correction);
 		} else if (Secu3Dat.RECEIVE_CKPS_PAR.equals(intent.getAction())) {
 			CKPSPar packet = intent.getParcelableExtra(CKPSPar.class.getCanonicalName());
-			CKPSFragment page = ckpsParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			setSpinnerItemIndex(R.string.ckps_ckp_edge_title, packet.ckps_edge_type);
+			setSpinnerItemIndex(R.string.ckps_ref_s_edge_title, packet.ref_s_edge_type);
+			setBooleanItem(R.string.ckps_merge_outputs, packet.ckps_merge_ign_outs == 1);
+			setIntegerItem(R.string.ckps_cogs_number_title, packet.ckps_cogs_num);
+			setIntegerItem(R.string.ckps_missing_cogs_number_title, packet.ckps_miss_num);
+			setIntegerItem(R.string.ckps_cogs_before_tdc_title, packet.ckps_cogs_btdc);
+			setIntegerItem(R.string.ckps_engine_cylynders_title, packet.ckps_engine_cyl);
+			setIntegerItem(R.string.ckps_ignition_pulse_delay_title, packet.ckps_ignit_cogs);
 		} else if (Secu3Dat.RECEIVE_MISCEL_PAR.equals(intent.getAction())) {
 			MiscelPar packet = intent.getParcelableExtra(MiscelPar.class.getCanonicalName());
-			MiscelFragment page = miscelParPage;
-			page.setData(packet);			
-			if (page.isVisible()) page.updateData();
+			setSpinnerItemIndex(R.string.miscel_baudrate_title, Secu3Dat.indexOf (Secu3Dat.BAUD_RATE_INDEX,((MiscelPar)packet).baud_rate_index));
+			setIntegerItem(R.string.miscel_period_title, packet.period_ms);
+			setBooleanItem(R.string.miscel_ignition_cutoff_title, packet.ign_cutoff == 1);
+			setIntegerItem(R.string.miscel_ignition_cutoff_rpm_title, packet.ign_cutoff_thrd);
+			setIntegerItem(R.string.miscel_hall_output_start_title, packet.hop_start_cogs);
+			setIntegerItem(R.string.miscel_hall_output_delay_title, packet.hop_durat_cogs);
 		} else if (Secu3Dat.RECEIVE_CHOKE_PAR.equals(intent.getAction())) {
 			ChokePar packet = intent.getParcelableExtra(ChokePar.class.getCanonicalName());
-			ChokeFragment page = chokeParPage;
-			page.setData(packet);
-			if (page.isVisible()) page.updateData();
+			setIntegerItem(R.string.choke_steps_title, packet.steps);
 		}
 		else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
@@ -560,5 +636,11 @@ public class ParamActivity extends FragmentActivity implements OnDataChangedList
 		if ((packet != null) && (uploadImmediatelly || (fragment == chokeParPage))) {
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 		}
+	}
+	
+	@Override
+	// This is bugfix of http://stackoverflow.com/questions/13910826/viewpager-fragmentstatepageradapter-orientation-change
+	protected void onSaveInstanceState(Bundle outState) {
+	//	super.onSaveInstanceState(outState);
 	}
 }

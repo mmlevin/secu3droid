@@ -25,63 +25,37 @@
 
 package org.secu3.android.parameters;
 
-import java.util.ArrayList;
-
-import org.secu3.android.R;
-import org.secu3.android.parameters.items.BaseParamItem;
-
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class ParamsPageFragment extends Fragment {
-	private OnItemClickListener listener = null;	
-	ListView lv = null;
+public class ParamsPageFragment extends ListFragment {
+	OnItemClickListener listener = null;
 	
-	ArrayList<BaseParamItem> items;
-	
-    static ParamsPageFragment newInstance(ArrayList<BaseParamItem> items) {
+    static ParamsPageFragment newInstance(int num) {
     	ParamsPageFragment f = new ParamsPageFragment();
 
-        // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putSerializable("items", items);
+        args.putInt("number", num);
         f.setArguments(args);
 
         return f;
-    }	
-    
-    @SuppressWarnings("unchecked")
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	items = (ArrayList<BaseParamItem>) (getArguments() != null ? getArguments().getSerializable("items") : 1);    	
-    }
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		if (container == null) return null;
-		return inflater.inflate(R.layout.params_page, null);
+    }    	
+    	
+	public int getNum() {
+		return getArguments().getInt("number", 0);
 	}
 	
 	@Override
-	public void onAttach(Activity activity) {		
-		super.onAttach(activity);
-		listener = (OnItemClickListener) activity;
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		lv = (ListView) getView().findViewById(R.id.params_page_listview);
-		if (items != null) {
-			lv.setAdapter(new ParamItemsAdapter(items));
-			lv.setOnItemClickListener(listener);
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		if (listener != null) {
+			listener.onItemClick(l, v, position, id);
 		}
-	}					
+	}
+	
+	public void setOnItemClickListener (OnItemClickListener listener) {
+		this.listener = listener;
+	}
 }
