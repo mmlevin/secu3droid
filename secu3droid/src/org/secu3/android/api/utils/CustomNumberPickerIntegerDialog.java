@@ -66,13 +66,13 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 	
 	public CustomNumberPickerIntegerDialog setRange (int value, int minValue, int maxValue, int stepValue) {
 		if (stepValue < 0) throw new IllegalArgumentException("stepValue cannot be less to zero");
-		else if (stepValue == 0) {
+		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value == 0) && (stepValue != 0) && (minValue != maxValue))) {
 			minValue = value;
 			maxValue = value;
 			stepValue = 1;
 		} else {
-			if (value < minValue) throw new IllegalArgumentException("value counld not be less than minValue");
-			if (value > maxValue) throw new IllegalArgumentException("value counld not be greater than minValue");
+			if (value < minValue) throw new IllegalArgumentException("value could not be less than minValue");
+			if (value > maxValue) throw new IllegalArgumentException("value could not be greater than minValue");
 		};
 		this.value = value;
 		this.minValue = minValue;

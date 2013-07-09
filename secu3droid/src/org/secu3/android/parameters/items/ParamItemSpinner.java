@@ -84,6 +84,7 @@ public class ParamItemSpinner extends BaseParamItem {
 		return value;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setValue(String value) {
 		if (paramSpinner != null) {
 			if (value == null) {

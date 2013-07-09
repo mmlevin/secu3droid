@@ -60,9 +60,7 @@ public class MainActivity extends Activity {
 		
 		public ReceiveMessages() {
 			intentFilter = new IntentFilter();
-			intentFilter.addAction(Secu3Dat.RECEIVE_SENSOR_DAT);
-			intentFilter.addAction(Secu3Dat.RECEIVE_ADCRAW_DAT);
-			intentFilter.addAction(Secu3Dat.RECEIVE_FWINFO_DAT);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);			
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 		}
 		
@@ -242,32 +240,36 @@ public class MainActivity extends Activity {
 				this.isOnline = true;						
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_FW_INFO.ordinal()));
 				setMode(checkBox.isChecked());				
-			}				
-		} else if (Secu3Dat.RECEIVE_SENSOR_DAT.equals(intent.getAction())) {
-			SensorDat sd = (SensorDat)intent.getParcelableExtra(SensorDat.class.getCanonicalName());
-			boolean errors = sd.ce_errors != 0;
-			if (errors != this.errors) {
-				this.errors = errors;
-				ActivityCompat.invalidateOptionsMenu(this);
+			}						
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
+		{
+			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet instanceof SensorDat) {
+				SensorDat sd = (SensorDat)packet;
+				boolean errors = sd.ce_errors != 0;
+				if (errors != this.errors) {
+					this.errors = errors;
+					ActivityCompat.invalidateOptionsMenu(this);
+				}
+				if (!checkBox.isChecked() && (sd != null)) {
+					textViewData.setText(String.format(Locale.US,sensorsFormat,
+							sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
+							sd.knock_k, sd.knock_retard, sd.air_flow, sd.ephh_valve,
+							sd.carb, sd.gas, sd.epm_valve, sd.cool_fan,sd.st_block,sd.add_i1,sd.add_i2,sd.tps,sd.choke_pos));
+				}			
+			} else if (packet instanceof ADCRawDat) {
+				ADCRawDat ad = (ADCRawDat)packet;
+				if (checkBox.isChecked() && (ad != null)) {
+					textViewData.setText(String.format(Locale.US,sensorsRawFormat,
+									ad.map_value, ad.ubat_value, ad.temp_value,
+									ad.knock_value,ad.tps_value,ad.add_i1_value,ad.add_i2_value));
+				}			
+			} else if (packet instanceof FWInfoDat) {
+				fwInfoDat = (FWInfoDat) packet;
+				if (fwInfoDat != null) {
+					textFWInfo.setText(fwInfoDat.info);
+				}			
 			}
-			if (!checkBox.isChecked() && (sd != null)) {
-				textViewData.setText(String.format(Locale.US,sensorsFormat,
-						sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
-						sd.knock_k, sd.knock_retard, sd.air_flow, sd.ephh_valve,
-						sd.carb, sd.gas, sd.epm_valve, sd.cool_fan,sd.st_block,sd.add_i1,sd.add_i2,sd.tps,sd.choke_pos));
-			}			
-		} else if (Secu3Dat.RECEIVE_ADCRAW_DAT.equals(intent.getAction())) {
-			ADCRawDat ad = (ADCRawDat)intent.getParcelableExtra(ADCRawDat.class.getCanonicalName());
-			if (checkBox.isChecked() && (ad != null)) {
-				textViewData.setText(String.format(Locale.US,sensorsRawFormat,
-								ad.map_value, ad.ubat_value, ad.temp_value,
-								ad.knock_value,ad.tps_value,ad.add_i1_value,ad.add_i2_value));
-			}			
-		} else if (Secu3Dat.RECEIVE_FWINFO_DAT.equals(intent.getAction())) {
-			fwInfoDat = (FWInfoDat) intent.getParcelableExtra(FWInfoDat.class.getCanonicalName());
-			if (fwInfoDat != null) {
-				textFWInfo.setText(fwInfoDat.info);
-			}			
-		}
+		}		
 	}
 }

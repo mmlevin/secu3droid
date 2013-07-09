@@ -39,16 +39,17 @@ import android.view.View;
 public abstract class CustomNumberPickerDialog extends DialogFragment {			
 
 		public interface OnCustomNumberPickerAcceptListener {
-			void setValue (String value, int position);
+			void onItemChange (int itemId);
 		}		
 		
 		private NumberPicker numberPicker = null;
-		private int position = 0;
 		private int numberPickerIndex = Integer.MAX_VALUE;
+		private int itemId = 0;
 		private OnCustomNumberPickerAcceptListener listener = null;
 			
-		public void setOnCustomNumberPickerAcceprListener (OnCustomNumberPickerAcceptListener listener) {
-			this.listener = listener; 				
+		public CustomNumberPickerDialog setOnCustomNumberPickerAcceptListener (OnCustomNumberPickerAcceptListener listener) {
+			this.listener = listener;
+			return this;
 		}
 		
 		@Override
@@ -75,7 +76,7 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 		               @Override
 		               public void onClick(DialogInterface dialog, int id) {
-		            	   if (listener != null) listener.setValue(numberPicker.getDisplayedValues()[numberPicker.getValue()], position);
+		            	   if (listener != null) listener.onItemChange(itemId);
 		               }
 		           })
 		           .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -85,6 +86,11 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		           });    
 		    return builder.create();
 		}			
+		
+		public CustomNumberPickerDialog setItemId (int itemId) {
+			this.itemId = itemId;
+			return this;
+		}
 		
 		// http://code.google.com/p/android/issues/detail?id=17423
 		@Override
@@ -101,6 +107,11 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 				numberPickerIndex = numberPicker.getValue();
 			}
 			super.onSaveInstanceState(arg0);
+		}
+		
+		public String getValue() 
+		{
+			return numberPicker.getDisplayedValues()[numberPicker.getValue()];			
 		}
 		protected abstract void setNumberPickerDisplayedValues(NumberPicker numberPicker);
 	}

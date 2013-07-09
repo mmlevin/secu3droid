@@ -23,10 +23,9 @@
  *            email: mmlevin@mail.ru
 */
 
-package org.secu3.android.parameters;
+package org.secu3.android.parameters.items;
 
 import org.secu3.android.R;
-import org.secu3.android.parameters.items.BaseParamItem;
 
 import android.content.Context;
 import android.view.View;

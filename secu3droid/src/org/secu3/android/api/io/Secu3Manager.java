@@ -42,6 +42,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.secu3.android.R;
+import org.secu3.android.api.io.Secu3Dat.FnNameDat;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.EncodingCP866;
 import android.app.Service;
@@ -91,8 +92,7 @@ public class Secu3Manager {
 		
 		private final BluetoothSocket socket;
 		private final InputStream in;
-		private final OutputStream out;			
-		private FnNameDat fnNameDat = null;		
+		private final OutputStream out;					
 		private Timer timer = new Timer();
 
 		SECU3_STATE secu3State = SECU3_STATE.SECU3_NORMAL;
@@ -195,7 +195,7 @@ public class Secu3Manager {
 							progressCurrent = 0;
 							progressTotal = PROGRESS_TOTAL_PARAMS;
 							subprogress = 0;
-							if (fnNameDat != null) fnNameDat.clear();
+							parser.init();
 							writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
 							writer.flush();					
 							break;
@@ -245,13 +245,9 @@ public class Secu3Manager {
 							break;
 						case Secu3Dat.FNNAME_DAT:
 							updateProgress(4 + subprogress);
+							FnNameDat fnNameDat = (FnNameDat) parser.getLastPacket();
 							subprogress = (fnNameDat == null)?0:fnNameDat.names_count();
-							if (fnNameDat == null) {
-								fnNameDat = new FnNameDat();
-							}
-							fnNameDat.parse(packet);
 							if (fnNameDat.names_available()) {
-								appContext.sendBroadcast(fnNameDat.getIntent());
 								writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
 								writer.flush();
 							}
@@ -344,6 +340,7 @@ public class Secu3Manager {
 						try {
 							Secu3Dat packet =sendPackets.poll(); 
 							writer.append(packet.pack() + "\r\n");
+							Log.d(LOG_TAG, "Send packet");
 							updateProgress(++progressCurrent);
 							Thread.sleep(200);							
 						} catch (Exception e) {

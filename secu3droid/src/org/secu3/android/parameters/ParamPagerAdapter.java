@@ -28,6 +28,10 @@ package org.secu3.android.parameters;
 import java.util.ArrayList;
 
 import org.secu3.android.parameters.items.BaseParamItem;
+import org.secu3.android.parameters.items.ParamItemBoolean;
+import org.secu3.android.parameters.items.ParamItemFloat;
+import org.secu3.android.parameters.items.ParamItemInteger;
+import org.secu3.android.parameters.items.ParamItemSpinner;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -72,5 +76,30 @@ public class ParamPagerAdapter extends FragmentPagerAdapter{
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return context.getString(pages.get(position).getNameId());
-	}			
+	}	
+	
+	public void setIntegerItem (int id, int value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemInteger)item).setValue (value);
+	}
+	
+	public void setFloatItem (int id, float value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemFloat)item).setValue (value);
+	}
+	
+	public void setBooleanItem (int id, boolean value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemBoolean)item).setValue (value);
+	}
+	
+	public void setSpinnerItemIndex (int id, int index) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemSpinner)item).setIndex(index);
+	}
+
+	public void setSpinnerItemValue (int id, String value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemSpinner)item).setValue(value);
+	}		
 }
