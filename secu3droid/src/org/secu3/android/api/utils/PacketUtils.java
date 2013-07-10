@@ -112,7 +112,7 @@ public class PacketUtils {
 		case R.string.carbur_overrun_upper_threshold_gasoline_title:
 		case R.string.carbur_overrun_lower_threshold_gas_title:
 		case R.string.carbur_overrun_upper_threshold_gas_title:
-		case R.string.carbur_overrun_valve_delay:
+		case R.string.carbur_overrun_valve_delay_title:
 		case R.string.carbur_sensor_inverse_title:
 		case R.string.carbur_epm_valve_on_pressure_title:
 		case R.string.carbur_tps_threshold_title:
@@ -122,7 +122,7 @@ public class PacketUtils {
 		case R.string.adccor_voltage_sensor_factor_title:
 		case R.string.adccor_voltage_sensor_correction_title:
 		case R.string.adccor_temper_sensor_factor_title:
-		case R.string.adccor_temper_sensor_correction:
+		case R.string.adccor_temper_sensor_correction_title:
 		case R.string.adccor_tps_sensor_factor_title:
 		case R.string.adccor_tps_sensor_correction_title:
 		case R.string.adccor_addi1_sensor_factor_title:
@@ -130,9 +130,9 @@ public class PacketUtils {
 		case R.string.adccor_addi2_sensor_factor_title:
 		case R.string.adccor_addi2_sensor_correction_title:
 			return buildAdcCorPar (paramAdapter);
-		case R.string.ckps_ckp_edge_title:
+		case R.string.ckps_ckps_edge_title:
 		case R.string.ckps_ref_s_edge_title:
-		case R.string.ckps_merge_outputs:
+		case R.string.ckps_merge_outputs_title:
 		case R.string.ckps_cogs_number_title:
 		case R.string.ckps_missing_cogs_number_title:
 		case R.string.ckps_cogs_before_tdc_title:
@@ -147,8 +147,8 @@ public class PacketUtils {
 		case R.string.miscel_hall_output_delay_title:
 			return buildMiscelPar (paramAdapter);
 		case R.string.choke_steps_title:
-		case R.string.choke_manual_step_down:
-		case R.string.choke_manual_step_up:
+		case R.string.choke_manual_step_down_title:
+		case R.string.choke_manual_step_up_title:
 		case R.string.choke_testing_title:
 			return buildChokePar (paramAdapter);
 		default: throw new IllegalArgumentException("Wrong item ID");
@@ -196,7 +196,7 @@ public class PacketUtils {
 		case R.string.carbur_overrun_upper_threshold_gasoline_title:
 		case R.string.carbur_overrun_lower_threshold_gas_title:
 		case R.string.carbur_overrun_upper_threshold_gas_title:
-		case R.string.carbur_overrun_valve_delay:
+		case R.string.carbur_overrun_valve_delay_title:
 		case R.string.carbur_sensor_inverse_title:
 		case R.string.carbur_epm_valve_on_pressure_title:
 		case R.string.carbur_tps_threshold_title:
@@ -206,7 +206,7 @@ public class PacketUtils {
 		case R.string.adccor_voltage_sensor_factor_title:
 		case R.string.adccor_voltage_sensor_correction_title:
 		case R.string.adccor_temper_sensor_factor_title:
-		case R.string.adccor_temper_sensor_correction:
+		case R.string.adccor_temper_sensor_correction_title:
 		case R.string.adccor_tps_sensor_factor_title:
 		case R.string.adccor_tps_sensor_correction_title:
 		case R.string.adccor_addi1_sensor_factor_title:
@@ -214,9 +214,9 @@ public class PacketUtils {
 		case R.string.adccor_addi2_sensor_factor_title:
 		case R.string.adccor_addi2_sensor_correction_title:
 			return (pageId == R.string.adc_errors_title);
-		case R.string.ckps_ckp_edge_title:
+		case R.string.ckps_ckps_edge_title:
 		case R.string.ckps_ref_s_edge_title:
-		case R.string.ckps_merge_outputs:
+		case R.string.ckps_merge_outputs_title:
 		case R.string.ckps_cogs_number_title:
 		case R.string.ckps_missing_cogs_number_title:
 		case R.string.ckps_cogs_before_tdc_title:
@@ -231,8 +231,8 @@ public class PacketUtils {
 		case R.string.miscel_hall_output_delay_title:
 			return (pageId == R.string.miscellaneous_title);
 		case R.string.choke_steps_title:
-		case R.string.choke_manual_step_down:
-		case R.string.choke_manual_step_up:
+		case R.string.choke_manual_step_down_title:
+		case R.string.choke_manual_step_up_title:
 		case R.string.choke_testing_title:
 			return (pageId == R.string.choke_control_title);
 		default: throw new IllegalArgumentException("Wrong item ID");
@@ -280,9 +280,9 @@ public class PacketUtils {
 	}
 
 	public static void setCkpsPar(ParamPagerAdapter paramAdapter, CKPSPar packet) {
-		paramAdapter.setSpinnerItemIndex(R.string.ckps_ckp_edge_title, packet.ckps_edge_type);
+		paramAdapter.setSpinnerItemIndex(R.string.ckps_ckps_edge_title, packet.ckps_edge_type);
 		paramAdapter.setSpinnerItemIndex(R.string.ckps_ref_s_edge_title, packet.ref_s_edge_type);
-		paramAdapter.setBooleanItem(R.string.ckps_merge_outputs, packet.ckps_merge_ign_outs == 1);
+		paramAdapter.setBooleanItem(R.string.ckps_merge_outputs_title, packet.ckps_merge_ign_outs == 1);
 		paramAdapter.setIntegerItem(R.string.ckps_cogs_number_title, packet.ckps_cogs_num);
 		paramAdapter.setIntegerItem(R.string.ckps_missing_cogs_number_title, packet.ckps_miss_num);
 		paramAdapter.setIntegerItem(R.string.ckps_cogs_before_tdc_title, packet.ckps_cogs_btdc);
@@ -296,7 +296,7 @@ public class PacketUtils {
 		paramAdapter.setFloatItem(R.string.adccor_voltage_sensor_factor_title, packet.ubat_adc_factor);
 		paramAdapter.setFloatItem(R.string.adccor_voltage_sensor_correction_title, packet.ubat_adc_correction);
 		paramAdapter.setFloatItem(R.string.adccor_temper_sensor_factor_title, packet.temp_adc_factor);
-		paramAdapter.setFloatItem(R.string.adccor_temper_sensor_correction, packet.temp_adc_correction);
+		paramAdapter.setFloatItem(R.string.adccor_temper_sensor_correction_title, packet.temp_adc_correction);
 		paramAdapter.setFloatItem(R.string.adccor_tps_sensor_factor_title, packet.tps_adc_factor);
 		paramAdapter.setFloatItem(R.string.adccor_tps_sensor_correction_title, packet.tps_adc_correction);
 		paramAdapter.setFloatItem(R.string.adccor_addi1_sensor_factor_title, packet.add_i1_factor);
@@ -310,7 +310,7 @@ public class PacketUtils {
 		paramAdapter.setIntegerItem(R.string.carbur_overrun_upper_threshold_gasoline_title, packet.ephh_hit);
 		paramAdapter.setIntegerItem(R.string.carbur_overrun_lower_threshold_gas_title, packet.ephh_lot_g);
 		paramAdapter.setIntegerItem(R.string.carbur_overrun_upper_threshold_gas_title, packet.ephh_hit_g);
-		paramAdapter.setFloatItem(R.string.carbur_overrun_valve_delay, packet.shutoff_delay);
+		paramAdapter.setFloatItem(R.string.carbur_overrun_valve_delay_title, packet.shutoff_delay);
 		paramAdapter.setBooleanItem(R.string.carbur_sensor_inverse_title, packet.carb_invers == 1);
 		paramAdapter.setFloatItem(R.string.carbur_epm_valve_on_pressure_title, packet.epm_ont);
 		paramAdapter.setFloatItem(R.string.carbur_tps_threshold_title, packet.tps_threshold);
@@ -432,9 +432,9 @@ public class PacketUtils {
 
 	public static Secu3Dat buildCkpsPar(ParamPagerAdapter paramAdapter) {
 		CKPSPar packet = new CKPSPar();
-		packet.ckps_edge_type = ((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.ckps_ckp_edge_title)).getIndex();
+		packet.ckps_edge_type = ((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.ckps_ckps_edge_title)).getIndex();
 		packet.ref_s_edge_type = ((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.ckps_ref_s_edge_title)).getIndex();
-		packet.ckps_merge_ign_outs = ((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.ckps_merge_outputs)).getValue()?1:0;
+		packet.ckps_merge_ign_outs = ((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.ckps_merge_outputs_title)).getValue()?1:0;
 		packet.ckps_cogs_num = ((ParamItemInteger) paramAdapter.findItemByNameId(R.string.ckps_cogs_number_title)).getValue();
 		packet.ckps_miss_num = ((ParamItemInteger) paramAdapter.findItemByNameId(R.string.ckps_missing_cogs_number_title)).getValue();
 		packet.ckps_cogs_btdc = ((ParamItemInteger) paramAdapter.findItemByNameId(R.string.ckps_cogs_before_tdc_title)).getValue();
@@ -457,7 +457,7 @@ public class PacketUtils {
 		packet.ephh_hit = ((ParamItemInteger) paramAdapter.findItemByNameId(R.string.carbur_overrun_upper_threshold_gasoline_title)).getValue();
 		packet.ephh_lot_g = ((ParamItemInteger) paramAdapter.findItemByNameId(R.string.carbur_overrun_lower_threshold_gas_title)).getValue();
 		packet.ephh_hit_g = ((ParamItemInteger) paramAdapter.findItemByNameId(R.string.carbur_overrun_upper_threshold_gas_title)).getValue();
-		packet.shutoff_delay = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.carbur_overrun_valve_delay)).getValue();
+		packet.shutoff_delay = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.carbur_overrun_valve_delay_title)).getValue();
 		packet.carb_invers = ((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.carbur_sensor_inverse_title)).getValue()?1:0;
 		packet.epm_ont = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.carbur_epm_valve_on_pressure_title)).getValue();
 		packet.tps_threshold = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.carbur_tps_threshold_title)).getValue();
@@ -482,7 +482,7 @@ public class PacketUtils {
 		packet.ubat_adc_factor = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_voltage_sensor_factor_title)).getValue();
 		packet.ubat_adc_correction = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_voltage_sensor_correction_title)).getValue();
 		packet.temp_adc_factor = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_temper_sensor_factor_title)).getValue();
-		packet.temp_adc_correction = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_temper_sensor_correction)).getValue();
+		packet.temp_adc_correction = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_temper_sensor_correction_title)).getValue();
 		packet.tps_adc_factor = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_tps_sensor_factor_title)).getValue();
 		packet.tps_adc_correction = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_tps_sensor_correction_title)).getValue();
 		packet.add_i1_factor = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_addi1_sensor_factor_title)).getValue();

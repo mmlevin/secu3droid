@@ -29,6 +29,7 @@
     <Page app:name="@string/starter_title">
         <Parameter
             app:name="@string/starter_off_title"
+            app:summary="@string/starter_off_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="40"
@@ -36,6 +37,7 @@
             stepValue="10"/>
         <Parameter
             app:name="@string/starter_map_abandon_title"
+            app:summary="@string/starter_map_abandon_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="40"
@@ -46,6 +48,7 @@
     <Page app:name="@string/angles_title">
         <Parameter
             app:name="@string/angles_min_angle_title"
+            app:summary="@string/angles_min_angle_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degree"
             minValue="-15.0"
@@ -53,6 +56,7 @@
             stepValue="0.25"/>
         <Parameter
             app:name="@string/angles_max_angle_title"
+            app:summary="@string/angles_max_angle_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degree"
             minValue="-15.0"
@@ -60,6 +64,7 @@
             stepValue="0.25"/>
         <Parameter
             app:name="@string/angles_angle_decrement_step_title"
+            app:summary="@string/angles_angle_decrement_step_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degree"
             minValue="0.0"
@@ -67,6 +72,7 @@
             stepValue="0.03"/>
         <Parameter
             app:name="@string/angles_angle_increment_step_title"
+            app:summary="@string/angles_angle_increment_step_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degree"
             minValue="0.0"
@@ -74,9 +80,11 @@
             stepValue="0.03"/>
 		<Parameter
             app:name="@string/angles_zero_angle_title"
+            app:summary="@string/angles_zero_angle_summary"
             app:type="@id/parameter_type_boolean"/>        
         <Parameter
             app:name="@string/angles_octane_correction_title"
+            app:summary="@string/angles_octane_correction_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degree"
             minValue="-30.0"
@@ -87,18 +95,21 @@
     <Page app:name="@string/idling_title">
 		<Parameter
             app:name="@string/idlreg_ifac1_title"
+            app:summary="@string/idlreg_ifac1_summary"
             app:type="@id/parameter_type_float"
             minValue="0.0"
             maxValue="10.0"
             stepValue="0.01"/>
 		<Parameter
             app:name="@string/idlreg_ifac2_title"
+            app:summary="@string/idlreg_ifac2_summary"
             app:type="@id/parameter_type_float"
             minValue="0.0"
             maxValue="10.0"
             stepValue="0.01"/>
 		<Parameter
             app:name="@string/idlreg_minimal_angle_title"
+            app:summary="@string/idlreg_minimal_angle_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degree"
             minValue="-15.0"
@@ -106,6 +117,7 @@
             stepValue="0.02"/>		
          <Parameter
             app:name="@string/idlreg_maximal_angle_title"
+            app:summary="@string/idlreg_maximal_angle_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degree"
             minValue="-15.0"
@@ -113,6 +125,7 @@
             stepValue="0.02"/>
          <Parameter
             app:name="@string/idlreg_target_rpm_title"
+            app:summary="@string/idlreg_target_rpm_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="250"
@@ -120,6 +133,7 @@
             stepValue="5"/>
        	 <Parameter
             app:name="@string/idlreg_rpm_sensitivity_title"
+            app:summary="@string/idlreg_rpm_sensitivity_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="0"
@@ -127,6 +141,7 @@
             stepValue="1"/>
 		<Parameter
             app:name="@string/idlreg_turn_on_temp_title"
+            app:summary="@string/idlreg_turn_on_temp_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degrees_celcius"
             minValue="0.0"
@@ -134,12 +149,14 @@
             stepValue="0.2"/>
 		<Parameter
             app:name="@string/idlreg_use_idle_regulator_title"
+            app:summary="@string/idlreg_use_idle_regulator_summary"
             app:type="@id/parameter_type_boolean"/>
     </Page>
     
 	<Page app:name="@string/functions_title">
 		<Parameter
             app:name="@string/funset_lower_pressure_title"
+            app:summary="@string/funset_lower_pressure_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_pressure_kpa"
             minValue="0.25"
@@ -147,6 +164,7 @@
             stepValue="0.25"/>
 		<Parameter
             app:name="@string/funset_upper_pressure_title"
+            app:summary="@string/funset_upper_pressure_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_pressure_kpa"
             minValue="0.25"
@@ -154,6 +172,7 @@
             stepValue="0.25"/>
 		<Parameter
             app:name="@string/funset_map_sensor_offset_title"
+            app:summary="@string/funset_map_sensor_offset_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_volts"
             format="%.3f"
@@ -162,20 +181,24 @@
             stepValue="0.003"/>
 		<Parameter
             app:name="@string/funset_map_sensor_gradient_title"
+            app:summary="@string/funset_map_sensor_gradient_summary"
             app:type="@id/parameter_type_float"
-            app:units="@string/units_volts_per_kpa"
+            app:units="@string/units_kpa_per_volt"
             format="%.3f"
             minValue="-150.0"
             maxValue="150.0"
             stepValue="0.01"/>
 		<Parameter
-            app:name="@string/funset_maps_set_gas_title"
-            app:type="@id/parameter_type_spinner"/>
-		<Parameter
             app:name="@string/funset_maps_set_gasoline_title"
-            app:type="@id/parameter_type_spinner"/>
+            app:summary="@string/funset_maps_set_gasoline_summary"
+            app:type="@id/parameter_type_spinner"/>		
+		<Parameter
+            app:name="@string/funset_maps_set_gas_title"
+            app:summary="@string/funset_maps_set_gas_summary"
+            app:type="@id/parameter_type_spinner"/>		
 		<Parameter
             app:name="@string/funset_tps_curve_offset_title"
+            app:summary="@string/funset_tps_curve_offset_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_volts"
             format="%.3f"
@@ -184,6 +207,7 @@
             stepValue="0.003"/>
 		<Parameter
             app:name="@string/funset_tps_curve_gradient_title"
+            app:summary="@string/funset_tps_curve_gradient_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_percent_per_volts"
             format="%.3f"
@@ -195,6 +219,7 @@
 	<Page app:name="@string/temperature_title">
 		<Parameter
             app:name="@string/temper_fan_on_title"
+            app:summary="@string/temper_fan_on_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degrees_celcius"
             minValue="-10.0"
@@ -202,6 +227,7 @@
             stepValue="0.2"/>
 		<Parameter
             app:name="@string/temper_fan_off_title"
+            app:summary="@string/temper_fan_off_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_degrees_celcius"
             minValue="-10.0"
@@ -209,18 +235,22 @@
             stepValue="0.2"/>
 		<Parameter
             app:name="@string/temper_use_temp_sensor_title"
+            app:summary="@string/temper_use_temp_sensor_summary"
             app:type="@id/parameter_type_boolean"/>
 		<Parameter
             app:name="@string/temper_use_pwm_title"
+            app:summary="@string/temper_use_pwm_summary"
             app:type="@id/parameter_type_boolean"/>
 		<Parameter
             app:name="@string/temper_use_table"
+            app:summary="@string/temper_use_summary"
             app:type="@id/parameter_type_boolean"/>						    	    
 	</Page>
 	
 	<Page app:name="@string/carburetor_title">
        	<Parameter
             app:name="@string/carbur_overrun_lower_threshold_gasoline_title"
+            app:summary="@string/carbur_overrun_lower_threshold_gasoline_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="250"
@@ -228,6 +258,7 @@
             stepValue="10"/>
        	<Parameter
             app:name="@string/carbur_overrun_upper_threshold_gasoline_title"
+            app:summary="@string/carbur_overrun_upper_threshold_gasoline_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="250"
@@ -235,6 +266,7 @@
             stepValue="10"/>			    	    	    
 		<Parameter
             app:name="@string/carbur_overrun_lower_threshold_gas_title"
+            app:summary="@string/carbur_overrun_lower_threshold_gas_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="250"
@@ -242,13 +274,15 @@
             stepValue="10"/>            
         <Parameter
             app:name="@string/carbur_overrun_upper_threshold_gas_title"
+            app:summary="@string/carbur_overrun_upper_threshold_gas_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="250"
             maxValue="7500"
             stepValue="10"/>
 		<Parameter
-            app:name="@string/carbur_overrun_valve_delay"
+            app:name="@string/carbur_overrun_valve_delay_title"
+            app:summary="@string/carbur_overrun_valve_delay_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_sec"
             minValue="0.0"
@@ -256,9 +290,11 @@
             stepValue="0.01"/>   
         <Parameter
             app:name="@string/carbur_sensor_inverse_title"
+            app:summary="@string/carbur_sensor_inverse_summary"
             app:type="@id/parameter_type_boolean"/>
 		<Parameter
             app:name="@string/carbur_epm_valve_on_pressure_title"
+            app:summary="@string/carbur_epm_valve_on_pressure_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_pressure_kpa"
             minValue="0.0"
@@ -266,6 +302,7 @@
             stepValue="0.10"/>
 		<Parameter
             app:name="@string/carbur_tps_threshold_title"
+            app:summary="@string/carbur_tps_threshold_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_percents"
             minValue="0.0"
@@ -276,6 +313,7 @@
 	<Page app:name="@string/adc_errors_title">
 		<Parameter
             app:name="@string/adccor_map_sensor_factor_title"
+            app:summary="@string/adccor_map_sensor_factor_summary"
             app:type="@id/parameter_type_float"
             format="%.3f"
             minValue="-2.0"
@@ -283,6 +321,7 @@
             stepValue="0.001"/>	    
         <Parameter
             app:name="@string/adccor_map_sensor_correction_title"
+            app:summary="@string/adccor_map_sensor_correction_summary"
             app:type="@id/parameter_type_float"
             format="%.4f"
             minValue="-2.0"
@@ -290,6 +329,7 @@
             stepValue="0.0025"/>
 		<Parameter
             app:name="@string/adccor_voltage_sensor_factor_title"
+            app:summary="@string/adccor_voltage_sensor_factor_summary"
             app:type="@id/parameter_type_float"
             format="%.3f"
             minValue="-2.0"
@@ -297,6 +337,7 @@
             stepValue="0.001"/>	    
         <Parameter
             app:name="@string/adccor_voltage_sensor_correction_title"
+            app:summary="@string/adccor_voltage_sensor_correction_summary"
             app:type="@id/parameter_type_float"
             format="%.4f"
             minValue="-2.0"
@@ -304,13 +345,15 @@
             stepValue="0.025"/>        
         <Parameter
             app:name="@string/adccor_temper_sensor_factor_title"
+            app:summary="@string/adccor_temper_sensor_factor_summary"
             app:type="@id/parameter_type_float"
             format="%.3f"
             minValue="-2.0"
             maxValue="2.0"
             stepValue="0.001"/>	    
         <Parameter
-            app:name="@string/adccor_temper_sensor_correction"
+            app:name="@string/adccor_temper_sensor_correction_title"
+            app:summary="@string/adccor_temper_sensor_correction_summary"
             app:type="@id/parameter_type_float"
             format="%.4f"
             minValue="-2.0"
@@ -318,6 +361,7 @@
             stepValue="0.025"/>
         <Parameter
             app:name="@string/adccor_tps_sensor_factor_title"
+            app:summary="@string/adccor_tps_sensor_factor_summary"
             app:type="@id/parameter_type_float"
             format="%.3f"
             minValue="-2.0"
@@ -325,6 +369,7 @@
             stepValue="0.001"/>	    
         <Parameter
             app:name="@string/adccor_tps_sensor_correction_title"
+            app:summary="@string/adccor_tps_sensor_correction_summary"
             app:type="@id/parameter_type_float"
             format="%.4f"
             minValue="-2.0"
@@ -332,6 +377,7 @@
             stepValue="0.025"/>
 		<Parameter
             app:name="@string/adccor_addi1_sensor_factor_title"
+            app:summary="@string/adccor_addi1_sensor_factor_summary"
             app:type="@id/parameter_type_float"
             format="%.3f"
             minValue="-2.0"
@@ -339,6 +385,7 @@
             stepValue="0.001"/>	    
         <Parameter
             app:name="@string/adccor_addi1_sensor_correction_title"
+            app:summary="@string/adccor_addi1_sensor_correction_summary"
             app:type="@id/parameter_type_float"
             format="%.4f"
             minValue="-2.0"
@@ -346,6 +393,7 @@
             stepValue="0.025"/>
         <Parameter
             app:name="@string/adccor_addi2_sensor_factor_title"
+            app:summary="@string/adccor_addi2_sensor_factor_summary"
             app:type="@id/parameter_type_float"
             format="%.3f"
             minValue="-2.0"
@@ -353,6 +401,7 @@
             stepValue="0.001"/>	    
         <Parameter
             app:name="@string/adccor_addi2_sensor_correction_title"
+            app:summary="@string/adccor_addi2_sensor_correction_summary"
             app:type="@id/parameter_type_float"
             format="%.4f"
             minValue="-2.0"
@@ -362,42 +411,50 @@
 	
 	<Page app:name="@string/ckps_title">
 		<Parameter
-            app:name="@string/ckps_ckp_edge_title"
+            app:name="@string/ckps_ckps_edge_title"
+            app:summary="@string/ckps_ckps_edge_summary"
             app:type="@id/parameter_type_spinner"
             app:str_value="@string/ckps_edge"/>
 	    <Parameter
             app:name="@string/ckps_ref_s_edge_title"
+            app:summary="@string/ckps_ref_s_edge_summary"
             app:type="@id/parameter_type_spinner"
             app:str_value="@string/ckps_edge"/>		
 	    <Parameter
-            app:name="@string/ckps_merge_outputs"
+            app:name="@string/ckps_merge_outputs_title"
+            app:summary="@string/ckps_merge_outputs_summary"
             app:type="@id/parameter_type_boolean"/>	    
         <Parameter
             app:name="@string/ckps_cogs_number_title"
+            app:summary="@string/ckps_cogs_number_summary"
             app:type="@id/parameter_type_integer"
             minValue="16"
             maxValue="200"
             stepValue="1"/>
         <Parameter
             app:name="@string/ckps_missing_cogs_number_title"
+            app:summary="@string/ckps_missing_cogs_number_summary"
             app:type="@id/parameter_type_integer"
             minValue="0"
             maxValue="2"
             stepValue="1"/>        
         <Parameter
             app:name="@string/ckps_cogs_before_tdc_title"
+            app:summary="@string/ckps_cogs_before_tdc_summary"
             app:type="@id/parameter_type_integer"
             minValue="4"
             maxValue="89"
             stepValue="1"/>
 		<Parameter
             app:name="@string/ckps_engine_cylynders_title"
+            app:summary="@string/ckps_engine_cylynders_summary"
             app:type="@id/parameter_type_integer"
             minValue="2"
             maxValue="8"
             stepValue="2"/>      
         <Parameter
             app:name="@string/ckps_ignition_pulse_delay_title"
+            app:summary="@string/ckps_ignition_pulse_delay_summary"
             app:type="@id/parameter_type_integer"
             minValue="1"
             maxValue="200"
@@ -407,10 +464,12 @@
 	<Page app:name="@string/miscellaneous_title">
 		<Parameter
             app:name="@string/miscel_baudrate_title"
+            app:summary="@string/miscel_baudrate_summary"
             app:type="@id/parameter_type_spinner"
             app:str_value="2400|4800|9600|14400|19200|28800|38400|57600"/>
 		<Parameter
             app:name="@string/miscel_period_title"
+            app:summary="@string/miscel_period_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_ms"
             minValue="0"
@@ -418,9 +477,11 @@
             stepValue="10"/>
 		<Parameter
             app:name="@string/miscel_ignition_cutoff_title"
+            app:summary="@string/miscel_ignition_cutoff_summary"
             app:type="@id/parameter_type_boolean"/>
 		<Parameter
             app:name="@string/miscel_ignition_cutoff_rpm_title"
+            app:summary="@string/miscel_ignition_cutoff_rpm_summary"
             app:type="@id/parameter_type_integer"
             app:units="@string/units_rpm"
             minValue="1000"
@@ -428,12 +489,14 @@
             stepValue="10"/>		
 		<Parameter
             app:name="@string/miscel_hall_output_start_title"
+            app:summary="@string/miscel_hall_output_start_summary"
             app:type="@id/parameter_type_integer"
             minValue="-6"
             maxValue="12"
             stepValue="1"/>		
         <Parameter
             app:name="@string/miscel_hall_output_delay_title"
+            app:summary="@string/miscel_hall_output_delay_summary"
             app:type="@id/parameter_type_integer"
             minValue="1"
             maxValue="30"
@@ -443,19 +506,21 @@
 	<Page app:name="@string/choke_control_title">
     	<Parameter
             app:name="@string/choke_steps_title"
+            app:summary="@string/choke_steps_summary"
             app:type="@id/parameter_type_integer"
             minValue="50"
             maxValue="1000"/>
         <Parameter
             app:name="@string/choke_testing_title"
+            app:summary="@string/choke_testing_summary"
             app:type="@id/parameter_type_toggle_button"/>	   
         <Parameter
-            app:name="@string/choke_manual_step_up"
+            app:name="@string/choke_manual_step_up_title"
             app:summary="@string/choke_manual_step_up_summary"
             app:units="@string/choke_manual_step_up_units"
             app:type="@id/parameter_type_button"/>
 		<Parameter
-            app:name="@string/choke_manual_step_down"
+            app:name="@string/choke_manual_step_down_title"
             app:summary="@string/choke_manual_step_down_summary"
             app:units="@string/choke_manual_step_down_units"
             app:type="@id/parameter_type_button"

@@ -432,6 +432,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			BaseParamItem i = (BaseParamItem) adapter.getItem(position);
 			if (i instanceof ParamItemInteger) {
 				dialog = new CustomNumberPickerIntegerDialog();
+				dialog.setValid(isValid);
 		        ((CustomNumberPickerIntegerDialog) dialog
 		        .setId(i.getNameId()))
 		        .setRange(((ParamItemInteger) i).getValue(), ((ParamItemInteger) i).getMinValue(), ((ParamItemInteger) i).getMaxValue(), ((ParamItemInteger) i).getStepValue())
@@ -439,6 +440,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		        .show(getSupportFragmentManager(), i.getName());			        
 			} else if (i instanceof ParamItemFloat) {
 				dialog = new CustomNumberPickerFloatDialog();
+				dialog.setValid(isValid);
 				((CustomNumberPickerFloatDialog) dialog
 				.setId(i.getNameId()))
 				.setRange(((ParamItemFloat) i).getValue(), ((ParamItemFloat) i).getMinValue(), ((ParamItemFloat) i).getMaxValue(), ((ParamItemFloat) i).getStepValue())
@@ -462,10 +464,10 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		if (PacketUtils.isParamFromPage(itemId, R.string.choke_control_title)) {
 			ChokePar packet = (ChokePar) PacketUtils.build(paramAdapter, Secu3Dat.CHOKE_PAR);
 			switch (itemId) {
-			case R.string.choke_manual_step_down:
+			case R.string.choke_manual_step_down_title:
 				packet.manual_delta = -127;
 				break;
-			case R.string.choke_manual_step_up:
+			case R.string.choke_manual_step_up_title:
 				packet.manual_delta = 127;
 				break;
 			case R.string.choke_testing_title:
@@ -491,6 +493,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;
 				paramsRead();
+			}
+			if (!isOnline) {
+				isValid = false;
 			}
 			textViewStatus.setText(isOnline?R.string.status_online:R.string.status_offline);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {

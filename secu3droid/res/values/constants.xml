@@ -26,15 +26,15 @@
 -->
 
 <resources>       
-    <string name="pref_connection_retries_key">connectionRetries</string>
-    <string name="pref_bluetooth_device_key">bluetoothDevice</string>
-    <string name="pref_upload_immediately">uploadImmediately</string>
-    <string name="pref_write_log">writeLog</string>
-    <string name="pref_write_log_path">writeLogPath</string>
-    <string name="pref_about_key">about</string>
-    <string name="defaultConnectionRetries">5</string>    
+    <string name="pref_connection_retries_key" translatable="false">connectionRetries</string>
+    <string name="pref_bluetooth_device_key" translatable="false">bluetoothDevice</string>
+    <string name="pref_upload_immediately" translatable="false">uploadImmediately</string>
+    <string name="pref_write_log" translatable="false">writeLog</string>
+    <string name="pref_write_log_path" translatable="false">writeLogPath</string>
+    <string name="pref_about_key" translatable="false">about</string>
+    <string name="defaultConnectionRetries" translatable="false">5</string>    
     
-    <string-array name="errors_ecu_errors_blink_codes">
+    <string-array name="errors_ecu_errors_blink_codes" translatable="false">
         <item>21</item>
         <item>13</item>
         <item>14</item>
@@ -48,7 +48,7 @@
         <item>26</item>
     </string-array>
     
-    <string-array name="diagnostics_output_names">
+    <string-array name="diagnostics_output_names" translatable="false">
         <item>IGN_OUT1</item>
         <item>IGN_OUT2</item>
         <item>IGN_OUT3</item>

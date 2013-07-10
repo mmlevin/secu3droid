@@ -64,7 +64,7 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 	
 	public CustomNumberPickerIntegerDialog setRange (int value, int minValue, int maxValue, int stepValue) {
 		if (stepValue < 0) throw new IllegalArgumentException("stepValue cannot be less to zero");
-		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value < minValue) && (stepValue != 0) && (minValue != maxValue))) {
+		else if (!isValid()) {
 			minValue = value;
 			maxValue = value;
 			stepValue = 1;

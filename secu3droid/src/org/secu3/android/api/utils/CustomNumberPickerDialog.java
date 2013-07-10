@@ -49,6 +49,7 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		private int numberPickerId = 0;
 		private OnNumberPickerDialogAcceptListener listener = null;
 		private boolean shortMode = true;
+		private boolean valid = false;
 			
 		public CustomNumberPickerDialog setOnCustomNumberPickerAcceptListener (OnNumberPickerDialogAcceptListener listener) {
 			this.listener = listener;
@@ -135,5 +136,13 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 			this.shortMode = shortMode;
 			if (numberPickerAdditional != null)
 				numberPickerAdditional.setVisibility(shortMode?View.GONE:View.VISIBLE);
+		}
+
+		public boolean isValid() {
+			return valid;
+		}
+
+		public void setValid(boolean valid) {
+			this.valid = valid;
 		}
 	}
