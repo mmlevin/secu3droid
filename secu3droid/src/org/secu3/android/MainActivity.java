@@ -141,7 +141,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_settings:
+		case R.id.menu_preferences:
 			startActivity(new Intent(this,SettingsActivity.class));
 			return true;
 		case R.id.menu_params:			

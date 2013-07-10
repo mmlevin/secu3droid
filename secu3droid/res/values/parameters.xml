@@ -26,14 +26,12 @@
 -->
 
 <resources>
-    <string name="parameters_title">Parameters</string>
 	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>    
     
     <string name="starter_title">Starter</string> 
     <string name="starter_off_title">RPM when starter will be turned off</string>
     <string name="starter_map_abandon_title">RPM when switching from start map</string>
     
-
     <string name="angles_title">Angles</string>
     <string name="angles_min_angle_title">Minimal advance angle</string>
     <string name="angles_max_angle_title">Maximal advance angle</string>
@@ -96,8 +94,6 @@
     <string name="ckps_title">CKPS</string>
 	<string name="ckps_ckp_edge_title">CKPS edge</string>
 	<string name="ckps_edge">Negatige edge|Positive edge</string>
-    <string name="ckps_negative_edge">Negative edge</string>
-    <string name="ckps_positive_edge_title">Positive edge</string>
     <string name="ckps_merge_outputs">Merge signals to single output</string>
     <string name="ckps_cogs_number_title">Number of wheel\'s teeth</string>
     <string name="ckps_missing_cogs_number_title">Number of missing teeth</string>
@@ -126,8 +122,6 @@
     
     
     <string name="units_rpm">min-1</string>
-    <string name="units_zero">0</string>
-    <string name="units_zero_float">0.0</string>
     <string name="units_degree">°</string>
     <string name="units_sec">sec</string>
     <string name="units_pressure_kpa">kPa</string>

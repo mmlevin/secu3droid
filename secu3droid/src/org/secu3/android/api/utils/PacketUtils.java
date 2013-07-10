@@ -338,8 +338,9 @@ public class PacketUtils {
 	}
 
 	public static void setFnNameDat(ParamPagerAdapter paramAdapter, FnNameDat packet) {
-		if (packet.names_available()) {
-			String[] tableNames = Arrays.copyOf(packet.names,packet.names.length);
+		if (packet.names_available()) {			
+			String[] tableNames = new String [packet.names.length];
+			System.arraycopy(packet.names, 0, tableNames, 0, packet.names.length);
 			String data = "";
 			for (int i=0; i != tableNames.length-1; i++) {
 				data += tableNames[i] + "|";

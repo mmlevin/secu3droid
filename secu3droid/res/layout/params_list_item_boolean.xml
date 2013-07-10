@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/param_value_boolean"
+        android:textIsSelectable="false"
         android:textAppearance="?android:attr/textAppearance" />
 
 	<TextView
@@ -43,7 +44,8 @@
 	    android:layout_height="wrap_content"	    
 	    android:layout_below="@+id/param_name"
         android:layout_alignParentLeft="true"	    
-        android:layout_toLeftOf="@+id/param_value_boolean"	    
+        android:layout_toLeftOf="@+id/param_value_boolean"	   
+        android:textIsSelectable="false" 
 	    android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <CheckBox
@@ -52,7 +54,7 @@
         android:focusableInTouchMode="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentRight="true"        
         android:layout_marginLeft="@dimen/param_value_horizontal_margin" />
 
 </RelativeLayout>

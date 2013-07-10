@@ -63,7 +63,7 @@ public class Secu3Logger {
 		if (started && (packet != null) && (packet.packet_id == Secu3Dat.SENSOR_DAT)) {				
 			long t = System.currentTimeMillis();
 			time.set(t);
-			String time = String.format(CSVMillisTemplateString,this.time.format(cCSVTimeTemplateString), (t%1000)/10);
+			String time = String.format(Locale.US,CSVMillisTemplateString,this.time.format(cCSVTimeTemplateString), (t%1000)/10);
 			char x = CSV_DELIMETER;
 			String formatString = String.format(Locale.US,cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 			String out = String.format (Locale.US,formatString, ((SensorDat)packet).frequen,

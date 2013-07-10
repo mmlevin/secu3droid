@@ -31,10 +31,9 @@
     <string name="sensors_raw_format">MAP Sensor data: %1$.2f V\r\nVoltage Sensor data: %2$.2f V\r\nTemperature Sensor data: %3$.2f V\r\nKnock Sensor data: %4$.2f V\r\nTPS Sensor data: %5$.2f V\r\nADD_IO1 Sensor data: %6$.2f V\r\nADD_IO2 data: %7$.2f V</string>
     <string name="diagnostics_input">Voltage: %1$.3f V\r\nMAP_S: %2$.3f V\r\nTEMP: %3$.3f V\r\nADD_IO1: %4$.3f V\r\nADD_IO2: %5$.3f V\r\nCARB: %6$d\r\nGAS_V: %7$d\r\nCKPS: %8$d\r\nREF_S: %9$d\r\nPS: %10$d\r\nBL: %11$d\r\nDE: %12$d\r\nKS_1: %13$.3f V\r\nKS_2: %14$.3f V\r\n</string>
     <string name="title_activity_param">Parameters</string>
-    <string name="menu_settings">Settings</string>
     <string name="menu_param">Parameters</string>    
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
-    <string name="service_closed_because_connection_problem_notification">"Reason: %s"</string>
+    <string name="service_closed_because_connection_problem_notification">"Reason: %1$s"</string>
     <string name="connection_problem_notification_title">Secu3: connection problem</string>
 
     <plurals name="connection_problem_notification">
@@ -73,20 +72,7 @@
     <string name="about_app_desc">Secu3Droid is an application for managing Secu-3 ignition system. Secu-3 is an open source, free engine control unit, see <a href="http://secu-3.org"><b>http://secu-3.org</b></a>"</string>
     <string name="about_license">It is open source software distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
     <string name="about_sources">The source code is available from Git repository on the project website: https://github.com/mmlevin/secu3droid</string>
-
-    <string-array name="params_fragments_titles">
-        <item>Start</item>
-        <item>Angles</item>
-        <item>Idling</item>
-        <item>Functions</item>
-        <item>Temperature</item>
-        <item>Carburetor</item>
-        <item>ADC Errors Corr.</item>
-        <item>CKPS</item>
-        <item>Miscellaneous</item>
-        <item>Choke control</item>
-    </string-array>
-    
+   
     <string-array name="diagnostics_fragments_title">
         <item>Inputs</item>
         <item>Outputs</item>

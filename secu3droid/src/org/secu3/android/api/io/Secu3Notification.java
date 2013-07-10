@@ -49,7 +49,7 @@ public class Secu3Notification {
 		notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);			
 		
 		secu3Notification = new NotificationCompat.Builder(ctx)
-			.setContentTitle(ctx.getString(R.string.foreground_service_started_notification))
+			.setContentTitle(ctx.getString(R.string.foreground_service_started_notification_title))
 			.setSmallIcon(R.drawable.ic_launcher)											
 			.setWhen(System.currentTimeMillis())
 			.setOngoing(true)
@@ -83,9 +83,10 @@ public class Secu3Notification {
 	}
 	
 	public void notifyServiceStopped (int disableReason) {
+		String strDisableReason = ctx.getString(disableReason);
 		serviceStoppedNotification = new NotificationCompat.Builder(ctx)
 				.setContentTitle(ctx.getString(R.string.service_closed_because_connection_problem_notification_title))
-				.setContentText(ctx.getString(R.string.service_closed_because_connection_problem_notification, ctx.getString(disableReason)))
+				.setContentText(ctx.getString(R.string.service_closed_because_connection_problem_notification, strDisableReason))
 				.setWhen(System.currentTimeMillis())
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setOngoing(true)

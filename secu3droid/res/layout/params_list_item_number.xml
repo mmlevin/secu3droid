@@ -36,6 +36,7 @@
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_marginLeft="@dimen/param_value_horizontal_margin"
+      android:textIsSelectable="false"
       android:textAppearance="?android:attr/textAppearanceLarge" />
 
   <TextView
@@ -44,6 +45,7 @@
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
       android:layout_toLeftOf="@+id/param_value_number"
+      android:textIsSelectable="false"
       android:textAppearance="?android:attr/textAppearance" />
 
    <TextView
@@ -52,7 +54,8 @@
        android:layout_height="wrap_content"
        android:layout_alignParentLeft="true"
        android:layout_below="@id/param_name"
-       android:layout_toLeftOf="@+id/param_value_number"    
+       android:layout_toLeftOf="@+id/param_value_number"
+       android:textIsSelectable="false"    
        android:textAppearance="?android:attr/textAppearanceSmall"
        />
   
@@ -62,6 +65,7 @@
        android:layout_height="wrap_content"
        android:layout_alignParentRight="true"
        android:layout_below="@id/param_value_number"
+       android:textIsSelectable="false"
        android:textAppearance="?android:attr/textAppearanceSmall" />
       
 </RelativeLayout>  
