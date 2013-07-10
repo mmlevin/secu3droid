@@ -120,7 +120,7 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 	
 	public CustomNumberPickerFloatDialog setRange (float value, float minValue, float maxValue, float stepValue) {				
 		if (stepValue < 0) throw new IllegalArgumentException("stepValue cannot be less to zero");
-		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value <= minValue) && (stepValue != 0) && (minValue != maxValue))) {
+		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value < minValue) && (stepValue != 0) && (minValue != maxValue))) {
 			minValue = value;
 			maxValue = value;
 			stepValue = 1;
