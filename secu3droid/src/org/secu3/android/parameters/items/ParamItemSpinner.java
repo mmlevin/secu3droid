@@ -33,6 +33,8 @@ import org.secu3.android.R;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,6 +43,27 @@ public class ParamItemSpinner extends BaseParamItem {
 	private String value;
 	private int index;
 	Spinner paramSpinner;
+	
+	class CustomOnItemSelectedListener implements OnItemSelectedListener {
+		ParamItemSpinner item;
+		
+		public CustomOnItemSelectedListener(ParamItemSpinner item) {
+			this.item = item;
+		}
+		
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			if (item.getIndex() != position) {
+				item.setIndex(position);
+				if (listener != null) listener.onParamItemChange(item);
+			}
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {			
+		}
+		
+	}
 	
 	public ParamItemSpinner(Context context, String name, String summary, String value, String index) throws ParseException {
 		NumberFormat format = NumberFormat.getInstance(Locale.US);
@@ -70,7 +93,8 @@ public class ParamItemSpinner extends BaseParamItem {
 		
 		TextView paramName = (TextView) v.findViewById(R.id.param_name);
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
-		paramSpinner = (Spinner) v.findViewById(R.id.param_spinner);			
+		paramSpinner = (Spinner) v.findViewById(R.id.param_spinner);
+		paramSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener(this));
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());			
@@ -100,8 +124,8 @@ public class ParamItemSpinner extends BaseParamItem {
 	}
 
 	public int getIndex() {
-		if (paramSpinner != null)
-			index = paramSpinner.getSelectedItemPosition();
+		/*if (paramSpinner != null)
+			index = paramSpinner.getSelectedItemPosition();*/
 		return index;
 	}
 

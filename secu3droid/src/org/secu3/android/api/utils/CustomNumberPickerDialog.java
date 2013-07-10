@@ -38,16 +38,16 @@ import android.view.View;
 
 public abstract class CustomNumberPickerDialog extends DialogFragment {			
 
-		public interface OnCustomNumberPickerAcceptListener {
-			void onItemChange (int itemId);
+		public interface OnNumberPickerDialogAcceptListener {
+			void onNumberPickerDialogAccept (int itemId);
 		}		
 		
 		private NumberPicker numberPicker = null;
 		private int numberPickerIndex = Integer.MAX_VALUE;
-		private int itemId = 0;
-		private OnCustomNumberPickerAcceptListener listener = null;
+		private int numberPickerId = 0;
+		private OnNumberPickerDialogAcceptListener listener = null;
 			
-		public CustomNumberPickerDialog setOnCustomNumberPickerAcceptListener (OnCustomNumberPickerAcceptListener listener) {
+		public CustomNumberPickerDialog setOnCustomNumberPickerAcceptListener (OnNumberPickerDialogAcceptListener listener) {
 			this.listener = listener;
 			return this;
 		}
@@ -76,7 +76,7 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 		               @Override
 		               public void onClick(DialogInterface dialog, int id) {
-		            	   if (listener != null) listener.onItemChange(itemId);
+		            	   if (listener != null) listener.onNumberPickerDialogAccept(numberPickerId);
 		               }
 		           })
 		           .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -87,8 +87,8 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		    return builder.create();
 		}			
 		
-		public CustomNumberPickerDialog setItemId (int itemId) {
-			this.itemId = itemId;
+		public CustomNumberPickerDialog setId (int id) {
+			this.numberPickerId = id;
 			return this;
 		}
 		

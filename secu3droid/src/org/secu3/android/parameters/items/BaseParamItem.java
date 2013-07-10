@@ -38,6 +38,12 @@ public abstract class BaseParamItem {
 	private String summary;
 	private int summaryId;
 	
+	public interface OnParamItemChangeListener {
+		void onParamItemChange (BaseParamItem item);
+	}
+	
+	protected OnParamItemChangeListener listener;
+	
 	protected LayoutInflater inflater;
 	
 	protected View getView(int resourceID) {
@@ -102,5 +108,9 @@ public abstract class BaseParamItem {
 
 	public void setSummaryId(int summaryId) {
 		this.summaryId = summaryId;
+	}
+
+	public void setOnParamItemChangeListener(OnParamItemChangeListener listener) {
+		this.listener = listener;
 	}
 }

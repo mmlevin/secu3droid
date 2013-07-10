@@ -29,10 +29,29 @@ import org.secu3.android.R;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class ParamItemToggleButton extends BaseParamItem {
 	private boolean value;
+	
+	class CustomOnCheckChangeListener implements CompoundButton.OnCheckedChangeListener {
+		ParamItemToggleButton item;
+		
+		public CustomOnCheckChangeListener(ParamItemToggleButton item) {
+			this.item = item;
+		}
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (item.value != isChecked) {
+				item.setValue(isChecked);
+				if (listener != null) listener.onParamItemChange(item);
+			}
+		}
+		
+	}
 	
 	public ParamItemToggleButton(Context context, String name, String summary) {
 		this.setContext(context);
@@ -51,10 +70,12 @@ public class ParamItemToggleButton extends BaseParamItem {
 	
 	@Override
 	public View getView() {	
-		View v = super.getView(R.layout.params_list_item_on_off_button);
+		View v = super.getView(R.layout.params_list_item_toggle_button);
 		
 		TextView paramName = (TextView) v.findViewById(R.id.param_name);
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
+		ToggleButton paramButton = (ToggleButton) v.findViewById(R.id.param_button);
+		paramButton.setOnCheckedChangeListener(new CustomOnCheckChangeListener (this));
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());			

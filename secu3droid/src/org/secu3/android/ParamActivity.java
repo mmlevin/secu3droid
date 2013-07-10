@@ -34,7 +34,7 @@ import org.secu3.android.api.io.Secu3Dat.ChokePar;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.CustomNumberPickerDialog;
-import org.secu3.android.api.utils.CustomNumberPickerDialog.OnCustomNumberPickerAcceptListener;
+import org.secu3.android.api.utils.CustomNumberPickerDialog.OnNumberPickerDialogAcceptListener;
 import org.secu3.android.api.utils.CustomNumberPickerFloatDialog;
 import org.secu3.android.api.utils.CustomNumberPickerIntegerDialog;
 import org.secu3.android.api.utils.PacketUtils;
@@ -51,6 +51,7 @@ import org.secu3.android.parameters.items.ParamItemInteger;
 import org.secu3.android.parameters.items.ParamItemLabel;
 import org.secu3.android.parameters.items.ParamItemSpinner;
 import org.secu3.android.parameters.items.ParamItemToggleButton;
+import org.secu3.android.parameters.items.BaseParamItem.OnParamItemChangeListener;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import android.net.Uri;
@@ -75,7 +76,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ParamActivity extends FragmentActivity implements OnItemClickListener,OnCustomNumberPickerAcceptListener {
+public class ParamActivity extends FragmentActivity implements OnItemClickListener,OnNumberPickerDialogAcceptListener,OnParamItemChangeListener {
 	public static final String LOG_TAG = "ParamActivity";	
 	
 	public static final int PARAMS_NUMBER = 9;	
@@ -281,7 +282,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
 								break;
 							case R.id.parameter_type_button:
-								item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+								item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterUnits);
 								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
 								break;
 							case R.id.parameter_type_toggle_button:
@@ -299,6 +300,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							default: throw new IllegalArgumentException("Unknown parameter type");
 							}
 							if (item != null) {
+								item.setOnParamItemChangeListener(this);								
 								page.addParamItem(item);
 								item = null;
 							}
@@ -431,27 +433,32 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			if (i instanceof ParamItemInteger) {
 				dialog = new CustomNumberPickerIntegerDialog();
 		        ((CustomNumberPickerIntegerDialog) dialog
-		        .setItemId(i.getNameId()))
+		        .setId(i.getNameId()))
 		        .setRange(((ParamItemInteger) i).getValue(), ((ParamItemInteger) i).getMinValue(), ((ParamItemInteger) i).getMaxValue(), ((ParamItemInteger) i).getStepValue())
 		        .setOnCustomNumberPickerAcceptListener(this)
 		        .show(getSupportFragmentManager(), i.getName());			        
 			} else if (i instanceof ParamItemFloat) {
 				dialog = new CustomNumberPickerFloatDialog();
 				((CustomNumberPickerFloatDialog) dialog
-				.setItemId(i.getNameId()))
+				.setId(i.getNameId()))
 				.setRange(((ParamItemFloat) i).getValue(), ((ParamItemFloat) i).getMinValue(), ((ParamItemFloat) i).getMaxValue(), ((ParamItemFloat) i).getStepValue())
 				.setFormat (((ParamItemFloat) i).getFormat())
 				.setOnCustomNumberPickerAcceptListener(this)				
 		        .show(getSupportFragmentManager(), i.getName());				
 			} else if (i instanceof ParamItemBoolean) {
 				adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);
+				onItemChange(i.getNameId());
 			}
 		}
 	}	
 	
 	@Override
-	public void onItemChange(int itemId) {
+	public void onNumberPickerDialogAccept(int itemId) {
 		adapter.setValue(dialog.getValue(),position);
+		onItemChange(itemId);
+	}
+
+	public void onItemChange(int itemId) {
 		if (PacketUtils.isParamFromPage(itemId, R.string.choke_control_title)) {
 			ChokePar packet = (ChokePar) PacketUtils.build(paramAdapter, Secu3Dat.CHOKE_PAR);
 			switch (itemId) {
@@ -472,6 +479,11 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, itemId)));			
 		}
 	}
+	
+	@Override
+	public void onParamItemChange(BaseParamItem item) {
+		if (item != null) onItemChange(item.getNameId());		
+	}	
 			
 	void update (Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {

@@ -30,10 +30,29 @@ import org.secu3.android.R;
 import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 public class ParamItemBoolean extends BaseParamItem {
 	private boolean value = false;
+	private CheckBox paramValueBoolean;
+	
+	class CustomOnCheckChangeListener implements CompoundButton.OnCheckedChangeListener {
+		ParamItemBoolean item;
+		
+		public CustomOnCheckChangeListener(ParamItemBoolean item) {
+			this.item = item;
+		}
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (item.value != isChecked) {
+				item.setValue(isChecked);
+				if (listener != null) listener.onParamItemChange(item);
+			}
+		}
+		
+	}
 	
 	public ParamItemBoolean(Context context, String name, String summary, boolean value) {
 		this.setContext(context);
@@ -65,7 +84,9 @@ public class ParamItemBoolean extends BaseParamItem {
 		
 		TextView paramName = (TextView) v.findViewById(R.id.param_name);
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
-		CheckBox paramValueBoolean = (CheckBox) v.findViewById(R.id.param_value_boolean);
+		paramValueBoolean = (CheckBox) v.findViewById(R.id.param_value_boolean);
+		
+		paramValueBoolean.setOnCheckedChangeListener(new CustomOnCheckChangeListener(this));
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());

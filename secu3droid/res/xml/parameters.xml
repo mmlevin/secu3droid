@@ -450,12 +450,14 @@
             app:name="@string/choke_testing_title"
             app:type="@id/parameter_type_toggle_button"/>	   
         <Parameter
-            app:name="@string/choke_manual_title"
-            app:summary="@string/choke_manual_step_up"
+            app:name="@string/choke_manual_step_up"
+            app:summary="@string/choke_manual_step_up_summary"
+            app:units="@string/choke_manual_step_up_units"
             app:type="@id/parameter_type_button"/>
 		<Parameter
-            app:name="@string/choke_manual_title"
-            app:summary="@string/choke_manual_step_down"
+            app:name="@string/choke_manual_step_down"
+            app:summary="@string/choke_manual_step_down_summary"
+            app:units="@string/choke_manual_step_down_units"
             app:type="@id/parameter_type_button"
             stepValue="1"/>         
 	</Page>

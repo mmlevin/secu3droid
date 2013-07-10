@@ -117,9 +117,12 @@
     <string name="choke_control_title">Choke control</string>
     <string name="choke_steps_title">Number of SM steps</string>
     <string name="choke_testing_title">Enable choke testing</string>
-    <string name="choke_manual_title">Manual choke control</string>
-    <string name="choke_manual_step_down">Open choke</string>
-    <string name="choke_manual_step_up">Close choke</string>
+    <string name="choke_manual_step_down">Manual choke control</string>
+    <string name="choke_manual_step_down_summary">Open choke</string>
+    <string name="choke_manual_step_down_units">Open</string>
+    <string name="choke_manual_step_up">Manual choke control</string>
+    <string name="choke_manual_step_up_summary">Close choke</string>
+    <string name="choke_manual_step_up_units">Close</string>
     
     
     <string name="units_rpm">min-1</string>
