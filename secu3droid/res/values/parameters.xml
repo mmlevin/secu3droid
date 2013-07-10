@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Secu3Droid - An open source, free manager for SECU-3 engine
+  control unit
+  Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
+  
+  SECU-3  - An open source, free engine control unit
+  Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+  contacts:
+             http://secu-3.org
+             email: mmlevin@mail.ru
+-->
+
+<resources>
+    <string name="parameters_title">Parameters</string>
+	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>    
+    
+    <string name="starter_title">Starter</string> 
+    <string name="starter_off_title">RPM when starter will be turned off</string>
+    <string name="starter_map_abandon_title">RPM when switching from start map</string>
+    
+
+    <string name="angles_title">Angles</string>
+    <string name="angles_min_angle_title">Minimal advance angle</string>
+    <string name="angles_max_angle_title">Maximal advance angle</string>
+    <string name="angles_angle_decrement_step_title">Angle decrement step</string>
+    <string name="angles_angle_increment_step_title">Angle increment step</string>
+    <string name="angles_zero_angle_title">Zero advance angle</string>
+    <string name="angles_octane_correction_title">Octane correction</string>
+    
+    <string name="idling_title">Idling</string>
+    <string name="idlreg_ifac1_title">Positive regulator\'s factor</string>
+    <string name="idlreg_ifac2_title">Negative regulator\'s factor</string>
+    <string name="idlreg_minimal_angle_title">Minimal regulation limit</string>
+    <string name="idlreg_maximal_angle_title">Maximal regulation limit</string>
+    <string name="idlreg_target_rpm_title">Goal RPM</string>
+    <string name="idlreg_rpm_sensitivity_title">Dead band of RPM</string>
+    <string name="idlreg_use_idle_regulator_title">Use regulator</string>
+    <string name="idlreg_turn_on_temp_title">Regulator turn on temperature</string>    
+    
+    <string name="functions_title">Functions</string>
+    <string name="funset_lower_pressure_title">Lower pressure value</string>
+    <string name="funset_upper_pressure_title">Upper pressure value</string>
+    <string name="funset_map_sensor_offset_title">MAP Sensor Curve offset</string>
+    <string name="funset_map_sensor_gradient_title">MAP sensor curve gradient</string>
+    <string name="funset_maps_set_gasoline_title">Maps set for gasoline</string>
+    <string name="funset_maps_set_gas_title">Maps set for gas</string>
+	<string name="funset_tps_curve_offset_title">TPS curve offset</string>
+    <string name="funset_tps_curve_gradient_title">TPS curve gradient</string>    
+    
+    <string name="temperature_title">Temperature</string>
+    <string name="temper_fan_on_title">Fan turn on threshold</string>
+    <string name="temper_fan_off_title">Fan turn off threshold</string>
+    <string name="temper_use_temp_sensor_title">Use coolant temperature sensor</string>
+    <string name="temper_use_pwm_title">Control cooling fan using PWM</string>
+    <string name="temper_use_table">Use table to define sensor\'s curve</string>
+    
+    <string name="carburetor_title">Carburetor</string>
+    <string name="carbur_tps_threshold_title">TPS threshold</string>   
+    <string name="carbur_overrun_lower_threshold_gasoline_title">Idle cut-off valve lower threshold for gasoline</string>
+    <string name="carbur_overrun_upper_threshold_gasoline_title">Idle cut-off valve upper threshold for gasoline</string>
+    <string name="carbur_overrun_lower_threshold_gas_title">Idle cut-off valve lower threshold for gas</string>
+    <string name="carbur_overrun_upper_threshold_gas_title">Idle cut-off valve upper threshold for gas</string>
+    <string name="carbur_overrun_valve_delay">Valve turn off delay</string>
+    <string name="carbur_epm_valve_on_pressure_title">PVS turn on threshold</string>
+    <string name="carbur_sensor_inverse_title">Inversion of throttle position switch</string>
+    
+    <string name="adc_errors_title">ADC Errors Corr.</string>
+    <string name="adccor_map_sensor_factor_title">MAP Sensor factor</string>
+    <string name="adccor_map_sensor_correction_title">MAP Sensor correction</string>
+    <string name="adccor_voltage_sensor_factor_title">Voltage Sensor factor</string>
+    <string name="adccor_voltage_sensor_correction_title">Voltage Sensor correction</string>
+    <string name="adccor_temper_sensor_factor_title">Temperature Sensor factor</string>
+    <string name="adccor_temper_sensor_correction">Temperature Sensor correction</string>
+    <string name="adccor_tps_sensor_factor_title">TPS Sensor factor</string>
+    <string name="adccor_tps_sensor_correction_title">TPS Sensor correction</string>
+    <string name="adccor_addi1_sensor_factor_title">ADD_IO1 Sensor factor</string>
+    <string name="adccor_addi1_sensor_correction_title">ADD_IO1 Sensor correction</string>
+    <string name="adccor_addi2_sensor_factor_title">ADD_IO2 Sensor factor</string>
+    <string name="adccor_addi2_sensor_correction_title">ADD_IO2 Sensor correction</string>
+    
+    <string name="ckps_title">CKPS</string>
+	<string name="ckps_ckp_edge_title">CKPS edge</string>
+	<string name="ckps_edge">Negatige edge|Positive edge</string>
+    <string name="ckps_negative_edge">Negative edge</string>
+    <string name="ckps_positive_edge_title">Positive edge</string>
+    <string name="ckps_merge_outputs">Merge signals to single output</string>
+    <string name="ckps_cogs_number_title">Number of wheel\'s teeth</string>
+    <string name="ckps_missing_cogs_number_title">Number of missing teeth</string>
+    <string name="ckps_ref_s_edge_title">REF_S edge</string>
+    <string name="ckps_cogs_before_tdc_title">Number of teeth before TDC</string>
+    <string name="ckps_engine_cylynders_title">Number of engine cylynders</string>
+    <string name="ckps_ignition_pulse_delay_title">Duration of igniter\'s pulse driver in teeth of wheel</string>
+        
+    <string name="miscellaneous_title">Miscellaneous</string>
+    <string name="miscel_baudrate_title">Data transmission baudrate</string>
+    <string name="miscel_period_title">Data packets transmission period</string>
+    <string name="miscel_ignition_cutoff_title">Enable ignition cutoff</string>
+    <string name="miscel_ignition_cutoff_rpm_title">Ignition cutoff RPM</string>
+    <string name="miscel_hall_output_start_title">Hall output pulse start relative to TDC (in wheel teeth)</string>
+    <string name="miscel_hall_output_delay_title">Hall output pulse duration (in wheel teeth)</string>
+    
+    <string name="choke_control_title">Choke control</string>
+    <string name="choke_steps_title">Number of SM steps</string>
+    <string name="choke_testing_title">Enable choke testing</string>
+    <string name="choke_manual_step_down">Manual choke control</string>
+    <string name="choke_manual_step_down_summary">Open choke</string>
+    <string name="choke_manual_step_down_units">Open</string>
+    <string name="choke_manual_step_up">Manual choke control</string>
+    <string name="choke_manual_step_up_summary">Close choke</string>
+    <string name="choke_manual_step_up_units">Close</string>
+    
+    
+    <string name="units_rpm">min-1</string>
+    <string name="units_zero">0</string>
+    <string name="units_zero_float">0.0</string>
+    <string name="units_degree">°</string>
+    <string name="units_sec">sec</string>
+    <string name="units_pressure_kpa">kPa</string>
+    <string name="units_volts">V</string>
+    <string name="units_volts_per_kpa">V/kPa</string>
+    <string name="units_ms">ms</string>
+    <string name="units_degrees_celcius">°C</string>
+    <string name="units_percents">%</string>
+    <string name="units_percent_per_volts">%/V</string>                        
+</resources>

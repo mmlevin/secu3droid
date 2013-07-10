@@ -25,10 +25,12 @@
              email: mmlevin@mail.ru
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-</menu>
+<resources>
+    <item type = "id" name="parameter_type_integer">integer</item>
+    <item type = "id" name="parameter_type_float">float</item>
+    <item type = "id" name="parameter_type_boolean">boolean</item>
+    <item type = "id" name="parameter_type_label">label</item>               
+    <item type = "id" name="parameter_type_button">button</item>
+    <item type = "id" name="parameter_type_toggle_button">togglebutton</item>
+    <item type = "id" name="parameter_type_spinner">spinner</item>
+</resources>

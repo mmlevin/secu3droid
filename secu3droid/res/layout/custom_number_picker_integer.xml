@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
+<!-- 
   Secu3Droid - An open source, free manager for SECU-3 engine
   control unit
   Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
@@ -25,10 +25,17 @@
              email: mmlevin@mail.ru
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-</menu>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+    <net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/numberPickerMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/numberPickerAdditional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />    
+</LinearLayout>

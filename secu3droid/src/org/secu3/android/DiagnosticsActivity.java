@@ -74,7 +74,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnDataChang
 		
 		public ReceiveMessages() {
 			intentFilter = new IntentFilter();
-			intentFilter.addAction(Secu3Dat.RECEIVE_DIAGINP_DAT);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 		}
 		
@@ -153,20 +153,22 @@ public class DiagnosticsActivity extends FragmentActivity implements OnDataChang
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Dat.OPCODE_DIAGNOST_ENTER,0)));
 			}
 			textViewStatus.setText(isOnline?"Online":"Offline");
-		} else if (Secu3Dat.RECEIVE_DIAGINP_DAT.equals(intent.getAction())) {
-			DiagInpDat packet = intent.getParcelableExtra(DiagInpDat.class.getCanonicalName());
-			DiagnosticsInputsFragment page = inputFragment;
-			if (page != null) {
-				page.setData(packet);
-				if (page.isVisible()) page.updateData();
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
+		{
+			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);			
+			if (packet instanceof DiagInpDat) {
+				DiagnosticsInputsFragment page = inputFragment;
+				if (page != null) {
+					page.setData(packet);
+					if (page.isVisible()) page.updateData();
+				}
+				
+				DiagnosticsChartFragment page1 = chartFragment;
+				if (page1 != null) {
+					page1.setData(packet);
+					if (page1.isVisible()) page1.updateData();
+				}				
 			}
-			
-			DiagnosticsChartFragment page1 = chartFragment;
-			if (page1 != null) {
-				page1.setData(packet);
-				if (page1.isVisible()) page1.updateData();
-			}
-			
-		}
+		}				
 	}
 }

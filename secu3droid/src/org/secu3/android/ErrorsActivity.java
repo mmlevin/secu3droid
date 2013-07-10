@@ -77,8 +77,7 @@ public class ErrorsActivity extends Activity {
 		
 		public ReceiveMessages() {
 			intentFilter = new IntentFilter();
-			intentFilter.addAction(Secu3Dat.RECEIVE_CE_ERR_CODES);
-			intentFilter.addAction(Secu3Dat.RECEIVE_CE_SAVED_ERR);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 		}
 		
@@ -201,20 +200,21 @@ public class ErrorsActivity extends Activity {
 	}
 	
 	void update (Intent intent) {		
-		if (Secu3Dat.RECEIVE_CE_SAVED_ERR.equals(intent.getAction())) {
-			CESavedErr packet = intent.getParcelableExtra(CESavedErr.class.getCanonicalName());
-			updateFlags(packet.flags);		
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
-		} else if (Secu3Dat.RECEIVE_CE_ERR_CODES.equals(intent.getAction())) {
-			CEErrCodes packet = intent.getParcelableExtra(CEErrCodes.class.getCanonicalName());
-			updateFlags(packet.flags);									
-		} else if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
+		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;
 				setRealtime(RealtimeError.isChecked());
 			}			
 			errorsTextViewStatus.setText(isOnline?"Online":"Offline");
-		}
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
+			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet instanceof CESavedErr) {
+				updateFlags(((CESavedErr)packet).flags);		
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
+			} else if (packet instanceof CEErrCodes) {				
+				updateFlags(((CEErrCodes)packet).flags);
+			}
+		} 
 	}		
 }

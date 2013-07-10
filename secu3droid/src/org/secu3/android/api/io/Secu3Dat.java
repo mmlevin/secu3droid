@@ -45,49 +45,6 @@ public class Secu3Dat implements Parcelable {
      
      static final float ANGLE_MULTIPLIER = 32.0f;
      static final float ADC_DISCRETE = 0.0025f;
-     
-     public final static String RECEIVE_SECU_3DAT 		= "org.secu3.android.intent.action.RECEIVE_SECU3_DAT";
-     public final static String RECEIVE_CHANGEMODE 		= "org.secu3.android.intent.action.RECEIVE_CHANGEMODE";
-     public final static String RECEIVE_BOOTLOADER 		= "org.secu3.android.intent.action.RECEIVE_BOOTLOADER";
-	 public final static String RECEIVE_TEMPER_PAR 		= "org.secu3.android.intent.action.RECEIVE_TEMPER_PAR";
-	 public final static String RECEIVE_CARBUR_PAR 		= "org.secu3.android.intent.action.RECEIVE_CARBUR_PAR";
-	 public final static String RECEIVE_IDLREG_PAR 		= "org.secu3.android.intent.action.RECEIVE_IDLREG_PAR";
-	 public final static String RECEIVE_ANGLES_PAR 		= "org.secu3.android.intent.action.RECEIVE_ANGLES_PAR";
-	 public final static String RECEIVE_FUNSET_PAR 		= "org.secu3.android.intent.action.RECEIVE_FUNSET_PAR";
-	 public final static String RECEIVE_STARTER_PAR 	= "org.secu3.android.intent.action.RECEIVE_STARTER_PAR"; 
-	 public final static String RECEIVE_FNNAME_DAT 		= "org.secu3.android.intent.action.RECEIVE_FNNAME_DAT";
-	 public final static String RECEIVE_SENSOR_DAT 		= "org.secu3.android.intent.action.RECEIVE_SENSOR_DAT";
-	 public final static String RECEIVE_ADCCOR_PAR 		= "org.secu3.android.intent.action.RECEIVE_ADCCOR_PAR";
-	 public final static String RECEIVE_ADCRAW_DAT 		= "org.secu3.android.intent.action.RECEIVE_ADCRAW_DAT";
-	 public final static String RECEIVE_CKPS_PAR 		= "org.secu3.android.intent.action.RECEIVE_CKPS_PAR";
-	 public final static String RECEIVE_OP_COMP_NC 		= "org.secu3.android.intent.action.RECEIVE_OP_COMP_NC";
-	 public final static String RECEIVE_CE_ERR_CODES 	= "org.secu3.android.intent.action.RECEIVE_CE_ERR_CODES";
-	 public final static String RECEIVE_KNOCK_PAR	  	= "org.secu3.android.intent.action.RECEIVE_KNOCK_PAR";
-	 public final static String RECEIVE_CE_SAVED_ERR 	= "org.secu3.android.intent.action.RECEIVE_CE_SAVED_ERR";
-	 public final static String RECEIVE_FWINFO_DAT 		= "org.secu3.android.intent.action.RECEIVE_FWINFO_DAT";
-	 public final static String RECEIVE_MISCEL_PAR 		= "org.secu3.android.intent.action.RECEIVE_MISCEL_PAR";
-	 public final static String RECEIVE_EDITAB_PAR 		= "org.secu3.android.intent.action.RECEIVE_EDITTAB_PAR";
-	 public final static String RECEIVE_ATTTAB_PAR 		= "org.secu3.android.intent.action.RECEIVE_ATTTAB_PAR";
-	 public final static String RECEIVE_DBGVAR_DAT 		= "org.secu3.android.intent.action.RECEIVE_DBGVAR_DAT";
-	 public final static String RECEIVE_DIAGINP_DAT 	= "org.secu3.android.intent.action.RECEIVE_DIAGINP_DAT";
-	 public final static String RECEIVE_CHOKE_PAR 		= "org.secu3.android.intent.action.RECEIVE_CHOKE_PAR";
-	 
-	 
-	 public final static String SEND_STARTR_PAR 		= "org.secu3.android.intent.action.SEND_STARTR_PAR";
-	 public final static String SEND_ANGLES_PAR 		= "org.secu3.android.intent.action.SEND_ANGLES_PAR";
-	 public final static String SEND_IDLREG_PAR 		= "org.secu3.android.intent.action.SEND_IDLREG_PAR";
-	 public final static String SEND_KNOCK_PAR 			= "org.secu3.android.intent.action.SEND_KNOCK_PAR";
-	 public final static String SEND_FUNSET_PAR 		= "org.secu3.android.intent.action.SEND_FUNSET_PAR";
-	 public final static String SEND_TEMPER_PAR 		= "org.secu3.android.intent.action.SEND_TEMPER_PAR";
-	 public final static String SEND_CARBUR_PAR 		= "org.secu3.android.intent.action.SEND_CARBUR_PAR";
-	 public final static String SEND_ADCCOR_PAR 		= "org.secu3.android.intent.action.SEND_ADCCOR_PAR";
-	 public final static String SEND_CKPS_PAR 			= "org.secu3.android.intent.action.SEND_CKPS_PAR";
-	 public final static String SEND_MISCEL_PAR 		= "org.secu3.android.intent.action.SEND_MISCEL_PAR";
-	 public final static String SEND_CE_SAVED_ERR 		= "org.secu3.android.intent.action.SEND_CE_SAVED_ERR";
-	 public final static String SEND_DIAGOUT_DAT 		= "org.secu3.android.intent.action.SEND_DIAGOUT_DAT";	
-	 public final static String SEND_EDITAB_PAR 		= "org.secu3.android.intent.action.SEND_EDITTAB_PAR";
-	 public final static String SEND_OP_COMP_NC 		= "org.secu3.android.intent.action.SEND_OP_COMP_NC";
-	 public final static String SEND_CHOKE_PAR 			= "org.secu3.android.intent.action.SEND_CHOKE_PAR";
 	 
 	 public final static int OPCODE_EEPROM_PARAM_SAVE    = 1;
 	 public final static int OPCODE_CE_SAVE_ERRORS       = 2;
@@ -176,7 +133,6 @@ public class Secu3Dat implements Parcelable {
 	 protected char packet_id;
 	 protected int packet_size;
 	 String data;	// Строковое представление пакета	 
-	 String intent_action;
 	 
 	 /** Вычисляет индекс элемента в масиве **/
 	 public static int indexOf (int array[], int search)
@@ -225,7 +181,6 @@ public class Secu3Dat implements Parcelable {
 		 dest.writeInt(packet_id);
 		 dest.writeInt(packet_size);
 		 dest.writeString(data);
-		 dest.writeString(intent_action);
 	 }
 	 
 	 public static final Parcelable.Creator<Secu3Dat> CREATOR = new Parcelable.Creator<Secu3Dat>() {
@@ -237,10 +192,11 @@ public class Secu3Dat implements Parcelable {
 		 public Secu3Dat[] newArray(int size) {
 			 return new Secu3Dat[size];
 		 }
-	};
+	};	
 	
-	public Secu3Dat () {		
-		intent_action = RECEIVE_SECU_3DAT;
+	
+	public Secu3Dat() {
+		
 	}
 	
 	public Secu3Dat (Parcel in) {		
@@ -248,7 +204,6 @@ public class Secu3Dat implements Parcelable {
 		this.packet_id = (char) in.readInt();
 		this.packet_size = in.readInt();
 		this.data = in.readString();
-		this.intent_action = in.readString();
 	}	 
 	
 	@Override
@@ -265,8 +220,8 @@ public class Secu3Dat implements Parcelable {
 	
 	public Intent getIntent ()
 	{
-		Intent intent = new Intent (intent_action);
-		intent.putExtra (this.getClass().getCanonicalName(),this);
+		Intent intent = new Intent (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
+		intent.putExtra (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET,this);
 		return intent;
 	}
 	 
@@ -307,7 +262,6 @@ public class Secu3Dat implements Parcelable {
 		public ADCCorPar() {
 			packet_id = ADCCOR_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_ADCCOR_PAR;
 		}		
 		
 		public ADCCorPar (Parcel in) {
@@ -449,7 +403,6 @@ public class Secu3Dat implements Parcelable {
 		public ADCRawDat() {
 			packet_id = ADCRAW_DAT;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_ADCRAW_DAT;
 		}
 		
 		public ADCRawDat(Parcel in) {
@@ -555,7 +508,6 @@ public class Secu3Dat implements Parcelable {
 		{
 			packet_id = ANGLES_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_ANGLES_PAR;
 		}	
 		
 		public AnglesPar(Parcel in) {
@@ -664,7 +616,6 @@ public class Secu3Dat implements Parcelable {
 		public CarburPar() {
 			packet_id = CARBUR_PAR;
 			packet_size = PACKET_SIZE;	
-			intent_action = RECEIVE_CARBUR_PAR;
 		}  
 			  
 		public CarburPar(Parcel in) {
@@ -768,8 +719,7 @@ public class Secu3Dat implements Parcelable {
 		
 		public CEErrCodes() {
 			packet_id = CE_ERR_CODES;
-			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_CE_ERR_CODES;
+			packet_size = PACKET_SIZE;		
 		}
 		
 		public CEErrCodes (Parcel in) {
@@ -833,7 +783,6 @@ public class Secu3Dat implements Parcelable {
 		public CESavedErr() {
 			packet_id = CE_SAVED_ERR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_CE_SAVED_ERR;
 		}
 		
 		public CESavedErr(Parcel in) {
@@ -906,7 +855,6 @@ public class Secu3Dat implements Parcelable {
 		public ChokePar() {
 			packet_id = CHOKE_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_CHOKE_PAR;
 		}
 		
 		public ChokePar(Parcel in) {
@@ -996,7 +944,6 @@ public class Secu3Dat implements Parcelable {
 		public CKPSPar() {
 			packet_id = CKPS_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_CKPS_PAR;
 		}
 
 		public CKPSPar (Parcel in){
@@ -1103,7 +1050,6 @@ public class Secu3Dat implements Parcelable {
 		public FnNameDat() {
 			packet_id = FNNAME_DAT;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_FNNAME_DAT;
 			names = null;
 			collected = null;
 			all_collected = false;
@@ -1240,7 +1186,6 @@ public class Secu3Dat implements Parcelable {
 		public FunSetPar() {
 			packet_id = FUNSET_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_FUNSET_PAR;
 		}
 		
 		public FunSetPar(Parcel in) {
@@ -1379,7 +1324,6 @@ public class Secu3Dat implements Parcelable {
 		public IdlRegPar() {
 			packet_id = IDLREG_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_IDLREG_PAR;
 		}
 		
 		public IdlRegPar (Parcel in) {
@@ -1511,7 +1455,6 @@ public class Secu3Dat implements Parcelable {
 		public KnockPar() {
 			packet_id = KNOCK_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_KNOCK_PAR;
 		}
 		
 		public KnockPar (Parcel in) {
@@ -1669,7 +1612,6 @@ public class Secu3Dat implements Parcelable {
 		public MiscelPar() {
 			packet_id = MISCEL_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_MISCEL_PAR;
 		}
 		
 		public MiscelPar (Parcel in) {
@@ -1805,7 +1747,6 @@ public class Secu3Dat implements Parcelable {
 		public SensorDat() {
 			packet_id = SENSOR_DAT;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_SENSOR_DAT;
 		}		
 		@Override
 		public void writeToParcel(Parcel dest, int flags) {
@@ -1958,7 +1899,6 @@ public class Secu3Dat implements Parcelable {
 		public StartrPar() {
 			packet_id = STARTR_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = Secu3Dat.RECEIVE_STARTER_PAR;
 		}
 		
 		public StartrPar (Parcel in) {
@@ -2045,7 +1985,6 @@ public class Secu3Dat implements Parcelable {
 		public TemperPar() {
 			packet_id = TEMPER_PAR;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_TEMPER_PAR;
 		}
 		
 		public TemperPar(Parcel in) {
@@ -2138,13 +2077,11 @@ public class Secu3Dat implements Parcelable {
 		public OpCompNc() {
 			packet_id = OP_COMP_NC;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_OP_COMP_NC;
 		}
 		
 		public OpCompNc (int opcode, int opdata) {
 			packet_id = OP_COMP_NC;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_OP_COMP_NC;
 			this.opcode = opcode;
 			this.opdata = opdata;
 		}
@@ -2223,7 +2160,6 @@ public class Secu3Dat implements Parcelable {
 		public ChangeMode() {
 			packet_id = CHANGEMODE;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_CHANGEMODE;
 		}
 		
 		public ChangeMode (Parcel in) {
@@ -2341,7 +2277,6 @@ public class Secu3Dat implements Parcelable {
 		public FWInfoDat () {
 			packet_id = FWINFO_DAT;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_FWINFO_DAT;
 		}
 		
 		public FWInfoDat (Parcel in) {
@@ -2420,7 +2355,6 @@ public class Secu3Dat implements Parcelable {
 		public DiagInpDat() {
 			packet_id = DIAGINP_DAT;
 			packet_size = PACKET_SIZE;
-			intent_action = RECEIVE_DIAGINP_DAT;
 		}
 		
 		public DiagInpDat (Parcel in) {
