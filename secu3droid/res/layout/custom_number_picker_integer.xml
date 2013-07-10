@@ -26,12 +26,16 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:gravity="center"
     android:layout_height="wrap_content">
     <net.simonvt.numberpicker.NumberPicker
-        android:id="@+id/numberPicker"
+        android:id="@+id/numberPickerMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/numberPickerAdditional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />    
 </LinearLayout>

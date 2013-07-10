@@ -42,10 +42,13 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 			void onNumberPickerDialogAccept (int itemId);
 		}		
 		
-		private NumberPicker numberPicker = null;
-		private int numberPickerIndex = Integer.MAX_VALUE;
+		protected NumberPicker numberPickerMain = null;
+		protected NumberPicker numberPickerAdditional = null;
+		private int numberPickerIndexMain = Integer.MAX_VALUE;
+		private int numberPickerIndexAdditional = Integer.MAX_VALUE;
 		private int numberPickerId = 0;
 		private OnNumberPickerDialogAcceptListener listener = null;
+		private boolean shortMode = true;
 			
 		public CustomNumberPickerDialog setOnCustomNumberPickerAcceptListener (OnNumberPickerDialogAcceptListener listener) {
 			this.listener = listener;
@@ -62,15 +65,26 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		    LayoutInflater inflater = this.getActivity().getLayoutInflater();
 
 		    View v = inflater.inflate(R.layout.custom_number_picker_integer,null);
-		    numberPicker = (NumberPicker) v.findViewById(R.id.numberPicker);
+		    numberPickerMain = (NumberPicker) v.findViewById(R.id.numberPickerMain);
+		    numberPickerAdditional = (NumberPicker) v.findViewById(R.id.numberPickerAdditional);
 		    		
-		    if (numberPicker != null) {		    	
-		    	setNumberPickerDisplayedValues(numberPicker);
-		    	if (numberPickerIndex != Integer.MAX_VALUE)
-		    		numberPicker.setValue(numberPickerIndex);		    	
-		    	numberPicker.setFocusable(true);
-		    	numberPicker.setFocusableInTouchMode(true);
+		    if (numberPickerMain != null) {		    	
+		    	setMainNumberPickerDisplayedValues(numberPickerMain);
+		    	if (numberPickerIndexMain != Integer.MAX_VALUE)
+		    		numberPickerMain.setValue(numberPickerIndexMain);		    	
+		    	numberPickerMain.setFocusable(true);
+		    	numberPickerMain.setFocusableInTouchMode(true);
 		    }		    		
+		    
+		    if (numberPickerAdditional != null) {		    	
+		    	setAdditionalNumberPickerDisplayedValues(numberPickerAdditional);
+		    	if (numberPickerIndexAdditional != Integer.MAX_VALUE)
+		    		numberPickerAdditional.setValue(numberPickerIndexAdditional);		    	
+		    	numberPickerAdditional.setFocusable(true);
+		    	numberPickerAdditional.setFocusableInTouchMode(true);
+		    }			    
+		    
+		    setShortMode(shortMode);
 		    
 		    builder.setView(v)
 		           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -103,15 +117,23 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 
 		@Override
 		public void onSaveInstanceState(Bundle arg0) {
-			if (numberPicker != null) {
-				numberPickerIndex = numberPicker.getValue();
+			if (numberPickerMain != null) {
+				numberPickerIndexMain = numberPickerMain.getValue();
 			}
 			super.onSaveInstanceState(arg0);
 		}
 		
-		public String getValue() 
-		{
-			return numberPicker.getDisplayedValues()[numberPicker.getValue()];			
+		protected abstract void setMainNumberPickerDisplayedValues(NumberPicker numberPicker);
+		protected abstract void setAdditionalNumberPickerDisplayedValues(NumberPicker numberPicker);
+		public abstract String getValue();
+
+		public boolean isShortMode() {
+			return shortMode;
 		}
-		protected abstract void setNumberPickerDisplayedValues(NumberPicker numberPicker);
+
+		public void setShortMode(boolean shortMode) {
+			this.shortMode = shortMode;
+			if (numberPickerAdditional != null)
+				numberPickerAdditional.setVisibility(shortMode?View.GONE:View.VISIBLE);
+		}
 	}

@@ -29,16 +29,14 @@ import java.util.Locale;
 
 import net.simonvt.numberpicker.NumberPicker;
 
-public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {	
-	NumberPicker numberPicker = null;
-	
+public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {		
 	int value = 0;
 	int minValue = 0;
 	int maxValue = 0;
 	int stepValue = 0;			
 	
 	@Override		
-	protected void setNumberPickerDisplayedValues(NumberPicker numberPicker) {
+	protected void setMainNumberPickerDisplayedValues(NumberPicker numberPicker) {
 		if (numberPicker != null) {
 			int count = (maxValue - minValue) / stepValue;	
 			int index = (value - minValue) / stepValue;			
@@ -66,7 +64,7 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 	
 	public CustomNumberPickerIntegerDialog setRange (int value, int minValue, int maxValue, int stepValue) {
 		if (stepValue < 0) throw new IllegalArgumentException("stepValue cannot be less to zero");
-		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value == 0) && (stepValue != 0) && (minValue != maxValue))) {
+		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value < minValue) && (stepValue != 0) && (minValue != maxValue))) {
 			minValue = value;
 			maxValue = value;
 			stepValue = 1;
@@ -79,5 +77,14 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 		this.maxValue = maxValue;
 		this.stepValue = stepValue;
 		return this;
+	}
+
+	@Override
+	protected void setAdditionalNumberPickerDisplayedValues(NumberPicker numberPicker) {		
+	}
+
+	@Override
+	public String getValue() {
+		return numberPickerMain.getDisplayedValues()[numberPickerMain.getValue()];
 	}
 }

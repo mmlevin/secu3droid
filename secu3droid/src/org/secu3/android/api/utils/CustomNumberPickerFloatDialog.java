@@ -30,39 +30,97 @@ import net.simonvt.numberpicker.NumberPicker;
 
 public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 
+	private static final int SHORT_STYLE_THRESHOLD = 1000;
 	private float value = 0;
 	private float minValue = 0;
 	private float maxValue = 0;
 	private float stepValue = 0;
 	private String format = "%.02f";
+	private int stepsCount;	
 	
-	protected void setNumberPickerDisplayedValues(NumberPicker numberPicker) {
-		if (numberPicker != null) {
-			int count = Math.round((maxValue - minValue) / stepValue);	
-			int index = Math.round((value - minValue) / stepValue);
-			
-			float mMinValue = value;
-			while ((mMinValue - stepValue) >=  minValue) {
-				mMinValue -= stepValue;
-			}			
-			
-			numberPicker.setMinValue(0);
-			numberPicker.setMaxValue(count);
-			numberPicker.setValue(index);
-			
-			String values[] = new String[count+1];
-			for (int i = 0; i != count+1; i++) {					
-				String value = String.format(Locale.US, getFormat(), mMinValue + stepValue * i);
-				values[i] = value;
+	@Override
+	protected void setMainNumberPickerDisplayedValues(NumberPicker numberPicker) {
+		if (numberPicker != null) {	
+			if (isShortMode()) {
+				int stepsCount = Math.round((maxValue - minValue) / stepValue);
+				int index = Math.round((value - minValue) / stepValue);
+				
+				float mMinValue = value;
+				while ((mMinValue - stepValue) >=  minValue) {
+					mMinValue -= stepValue;
+				}			
+				
+				numberPicker.setMinValue(0);
+				numberPicker.setMaxValue(stepsCount);
+				numberPicker.setValue(index);
+				
+				String values[] = new String[stepsCount+1];
+				for (int i = 0; i != stepsCount+1; i++) {					
+					String value = String.format(Locale.US, getFormat(), mMinValue + stepValue * i);
+					values[i] = value;
+				}
+				
+				numberPicker.setDisplayedValues(values);
 			}
-			
-			numberPicker.setDisplayedValues(values);
+			else {
+				int stepsCount = Math.round(maxValue - minValue);
+				int index = Math.round(value - minValue);
+				
+				int mMinValue = Math.round(minValue);		
+				
+				numberPicker.setMinValue(0);
+				numberPicker.setMaxValue(stepsCount);
+				numberPicker.setValue(index);
+				
+				String values[] = new String[stepsCount+1];
+				for (int i = 0; i != stepsCount+1; i++) {					
+					String value = String.format(Locale.US, "%d", mMinValue + i);
+					values[i] = value;
+				}
+				
+				numberPicker.setDisplayedValues(values);				
+			}
 		}
 	}
+		
+	int truncLength (float d) {
+		return String.format(Locale.US, getFormat(),d).length()-2;
+	}
 	
-	public CustomNumberPickerFloatDialog setRange (float value, float minValue, float maxValue, float stepValue) {
+	int multiplier (float d) {
+		return (int) Math.round(Math.pow(10, truncLength(d)));		
+	}
+	
+	@Override
+	protected void setAdditionalNumberPickerDisplayedValues(NumberPicker numberPicker) {		
+		if (numberPicker != null) {	
+			if (!isShortMode()) {
+				int stepsCount = Math.round(1 / stepValue);
+				int index = (int) Math.round((value-Math.floor(value)) / stepValue);		
+				
+				float mMinValue = (float) (value - Math.floor(value));
+				while ((mMinValue - stepValue) >=  0) {
+					mMinValue -= stepValue;
+				}				
+				
+				numberPicker.setMinValue(0);
+				numberPicker.setMaxValue(stepsCount-1);
+				numberPicker.setValue(index);				
+				
+				String values[] = new String[stepsCount];
+				for (int i = 0; i != stepsCount; i++) {					
+					String value = String.format(Locale.US, getFormat(), mMinValue + stepValue * i);					
+					values[i] = value.substring(value.indexOf('.'));;
+				}
+				
+				numberPicker.setDisplayedValues(values);				
+			}
+		}
+	}	
+	
+	public CustomNumberPickerFloatDialog setRange (float value, float minValue, float maxValue, float stepValue) {				
 		if (stepValue < 0) throw new IllegalArgumentException("stepValue cannot be less to zero");
-		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value == 0) && (stepValue != 0) && (minValue != maxValue))) {
+		else if (((stepValue == 0) && (minValue == 0) && (maxValue == 0))||((value <= minValue) && (stepValue != 0) && (minValue != maxValue))) {
 			minValue = value;
 			maxValue = value;
 			stepValue = 1;
@@ -74,6 +132,10 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.stepValue = stepValue;
+		
+		stepsCount = Math.round((maxValue - minValue) / stepValue);
+		
+		setShortMode(stepsCount <= SHORT_STYLE_THRESHOLD);
 		return this;
 	}
 
@@ -84,5 +146,16 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 	public CustomNumberPickerFloatDialog setFormat(String format) {
 		this.format = format;
 		return this;
+	}
+
+	@Override
+	public String getValue() {
+		if (isShortMode()) {
+			return numberPickerMain.getDisplayedValues()[numberPickerMain.getValue()];
+		} else {
+			float whole = Float.valueOf(numberPickerMain.getDisplayedValues()[numberPickerMain.getValue()]);
+			float trunc = Float.valueOf("0"+numberPickerAdditional.getDisplayedValues()[numberPickerAdditional.getValue()]);
+			return String.format(Locale.US,getFormat(),whole+Math.signum(whole)*trunc);
+		}
 	}	
 }
