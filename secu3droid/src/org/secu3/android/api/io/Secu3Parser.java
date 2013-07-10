@@ -73,6 +73,11 @@ public class Secu3Parser extends Secu3Dat {
 		}
 	}
 	
+	public void init()
+	{
+		((FnNameDat)parsers.get(String.valueOf(Secu3Dat.FNNAME_DAT))).clear();
+	}
+	
 	public char getLastPackedId () {
 		return lastPackedId;
 	}

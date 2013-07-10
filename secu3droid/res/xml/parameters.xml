@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Secu3Droid - An open source, free manager for SECU-3 engine
+  control unit
+  Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
+  
+  SECU-3  - An open source, free engine control unit
+  Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+  contacts:
+             http://secu-3.org
+             email: mmlevin@mail.ru
+-->
+
+<Parameters xmlns:app="http://schemas.android.com/apk/res/org.secu3.android">
+    <Page app:name="@string/starter_title">
+        <Parameter
+            app:name="@string/starter_off_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="40"
+            maxValue="1000"
+            stepValue="10"/>
+        <Parameter
+            app:name="@string/starter_map_abandon_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="40"
+            maxValue="1000"
+            stepValue="10"/>
+    </Page>         
+    
+    <Page app:name="@string/angles_title">
+        <Parameter
+            app:name="@string/angles_min_angle_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="-15.0"
+            maxValue="60.0"
+            stepValue="0.25"/>
+        <Parameter
+            app:name="@string/angles_max_angle_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="-15.0"
+            maxValue="60.0"
+            stepValue="0.25"/>
+        <Parameter
+            app:name="@string/angles_angle_decrement_step_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="0.0"
+            maxValue="10.0"
+            stepValue="0.03"/>
+        <Parameter
+            app:name="@string/angles_angle_increment_step_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="0.0"
+            maxValue="10.0"
+            stepValue="0.03"/>
+		<Parameter
+            app:name="@string/angles_zero_angle_title"
+            app:type="@id/parameter_type_boolean"/>        
+        <Parameter
+            app:name="@string/angles_octane_correction_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="-30.0"
+            maxValue="30.0"
+            stepValue="0.25"/>            
+    </Page>
+    
+    <Page app:name="@string/idling_title">
+		<Parameter
+            app:name="@string/idlreg_ifac1_title"
+            app:type="@id/parameter_type_float"
+            minValue="0.0"
+            maxValue="10.0"
+            stepValue="0.01"/>
+		<Parameter
+            app:name="@string/idlreg_ifac2_title"
+            app:type="@id/parameter_type_float"
+            minValue="0.0"
+            maxValue="10.0"
+            stepValue="0.01"/>
+		<Parameter
+            app:name="@string/idlreg_minimal_angle_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="-15.0"
+            maxValue="30.0"
+            stepValue="0.02"/>		
+         <Parameter
+            app:name="@string/idlreg_maximal_angle_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="-15.0"
+            maxValue="30.0"
+            stepValue="0.02"/>
+         <Parameter
+            app:name="@string/idlreg_target_rpm_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="250"
+            maxValue="1800"
+            stepValue="5"/>
+       	 <Parameter
+            app:name="@string/idlreg_rpm_sensitivity_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="0"
+            maxValue="500"
+            stepValue="1"/>
+		<Parameter
+            app:name="@string/idlreg_turn_on_temp_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degrees_celcius"
+            minValue="0.0"
+            maxValue="100.0"
+            stepValue="0.2"/>
+		<Parameter
+            app:name="@string/idlreg_use_idle_regulator_title"
+            app:type="@id/parameter_type_boolean"/>
+    </Page>
+    
+	<Page app:name="@string/functions_title">
+		<Parameter
+            app:name="@string/funset_lower_pressure_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_pressure_kpa"
+            minValue="0.25"
+            maxValue="105.0"
+            stepValue="0.25"/>
+		<Parameter
+            app:name="@string/funset_upper_pressure_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_pressure_kpa"
+            minValue="0.25"
+            maxValue="500.0"
+            stepValue="0.25"/>
+		<Parameter
+            app:name="@string/funset_map_sensor_offset_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_volts"
+            format="%.3f"
+            minValue="-5.0"
+            maxValue="5.0"
+            stepValue="0.003"/>
+		<Parameter
+            app:name="@string/funset_map_sensor_gradient_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_volts_per_kpa"
+            format="%.3f"
+            minValue="-150.0"
+            maxValue="150.0"
+            stepValue="0.01"/>
+		<Parameter
+            app:name="@string/funset_maps_set_gas_title"
+            app:type="@id/parameter_type_spinner"/>
+		<Parameter
+            app:name="@string/funset_maps_set_gasoline_title"
+            app:type="@id/parameter_type_spinner"/>
+		<Parameter
+            app:name="@string/funset_tps_curve_offset_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_volts"
+            format="%.3f"
+            minValue="-5.0"
+            maxValue="5.0"
+            stepValue="0.003"/>
+		<Parameter
+            app:name="@string/funset_tps_curve_gradient_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_percent_per_volts"
+            format="%.3f"
+            minValue="0.0"
+            maxValue="100.0"
+            stepValue="0.01"/>			
+	</Page>
+	
+	<Page app:name="@string/temperature_title">
+		<Parameter
+            app:name="@string/temper_fan_on_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degrees_celcius"
+            minValue="-10.0"
+            maxValue="125.0"
+            stepValue="0.2"/>
+		<Parameter
+            app:name="@string/temper_fan_off_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degrees_celcius"
+            minValue="-10.0"
+            maxValue="125.0"
+            stepValue="0.2"/>
+		<Parameter
+            app:name="@string/temper_use_temp_sensor_title"
+            app:type="@id/parameter_type_boolean"/>
+		<Parameter
+            app:name="@string/temper_use_pwm_title"
+            app:type="@id/parameter_type_boolean"/>
+		<Parameter
+            app:name="@string/temper_use_table"
+            app:type="@id/parameter_type_boolean"/>						    	    
+	</Page>
+	
+	<Page app:name="@string/carburetor_title">
+       	<Parameter
+            app:name="@string/carbur_overrun_lower_threshold_gasoline_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="250"
+            maxValue="7500"
+            stepValue="10"/>
+       	<Parameter
+            app:name="@string/carbur_overrun_upper_threshold_gasoline_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="250"
+            maxValue="7500"
+            stepValue="10"/>			    	    	    
+		<Parameter
+            app:name="@string/carbur_overrun_lower_threshold_gas_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="250"
+            maxValue="7500"
+            stepValue="10"/>            
+        <Parameter
+            app:name="@string/carbur_overrun_upper_threshold_gas_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="250"
+            maxValue="7500"
+            stepValue="10"/>
+		<Parameter
+            app:name="@string/carbur_overrun_valve_delay"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_sec"
+            minValue="0.0"
+            maxValue="2.5"
+            stepValue="0.01"/>   
+        <Parameter
+            app:name="@string/carbur_sensor_inverse_title"
+            app:type="@id/parameter_type_boolean"/>
+		<Parameter
+            app:name="@string/carbur_epm_valve_on_pressure_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_pressure_kpa"
+            minValue="0.0"
+            maxValue="50.0"
+            stepValue="0.10"/>
+		<Parameter
+            app:name="@string/carbur_tps_threshold_title"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_percents"
+            minValue="0.0"
+            maxValue="100.0"
+            stepValue="0.5"/>        
+	</Page>
+	
+	<Page app:name="@string/adc_errors_title">
+		<Parameter
+            app:name="@string/adccor_map_sensor_factor_title"
+            app:type="@id/parameter_type_float"
+            format="%.3f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.001"/>	    
+        <Parameter
+            app:name="@string/adccor_map_sensor_correction_title"
+            app:type="@id/parameter_type_float"
+            format="%.4f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.0025"/>
+		<Parameter
+            app:name="@string/adccor_voltage_sensor_factor_title"
+            app:type="@id/parameter_type_float"
+            format="%.3f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.001"/>	    
+        <Parameter
+            app:name="@string/adccor_voltage_sensor_correction_title"
+            app:type="@id/parameter_type_float"
+            format="%.4f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.025"/>        
+        <Parameter
+            app:name="@string/adccor_temper_sensor_factor_title"
+            app:type="@id/parameter_type_float"
+            format="%.3f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.001"/>	    
+        <Parameter
+            app:name="@string/adccor_temper_sensor_correction"
+            app:type="@id/parameter_type_float"
+            format="%.4f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.025"/>
+        <Parameter
+            app:name="@string/adccor_tps_sensor_factor_title"
+            app:type="@id/parameter_type_float"
+            format="%.3f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.001"/>	    
+        <Parameter
+            app:name="@string/adccor_tps_sensor_correction_title"
+            app:type="@id/parameter_type_float"
+            format="%.4f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.025"/>
+		<Parameter
+            app:name="@string/adccor_addi1_sensor_factor_title"
+            app:type="@id/parameter_type_float"
+            format="%.3f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.001"/>	    
+        <Parameter
+            app:name="@string/adccor_addi1_sensor_correction_title"
+            app:type="@id/parameter_type_float"
+            format="%.4f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.025"/>
+        <Parameter
+            app:name="@string/adccor_addi2_sensor_factor_title"
+            app:type="@id/parameter_type_float"
+            format="%.3f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.001"/>	    
+        <Parameter
+            app:name="@string/adccor_addi2_sensor_correction_title"
+            app:type="@id/parameter_type_float"
+            format="%.4f"
+            minValue="-2.0"
+            maxValue="2.0"
+            stepValue="0.025"/>                
+	</Page>
+	
+	<Page app:name="@string/ckps_title">
+		<Parameter
+            app:name="@string/ckps_ckp_edge_title"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/ckps_edge"/>
+	    <Parameter
+            app:name="@string/ckps_ref_s_edge_title"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/ckps_edge"/>		
+	    <Parameter
+            app:name="@string/ckps_merge_outputs"
+            app:type="@id/parameter_type_boolean"/>	    
+        <Parameter
+            app:name="@string/ckps_cogs_number_title"
+            app:type="@id/parameter_type_integer"
+            minValue="16"
+            maxValue="200"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/ckps_missing_cogs_number_title"
+            app:type="@id/parameter_type_integer"
+            minValue="0"
+            maxValue="2"
+            stepValue="1"/>        
+        <Parameter
+            app:name="@string/ckps_cogs_before_tdc_title"
+            app:type="@id/parameter_type_integer"
+            minValue="4"
+            maxValue="89"
+            stepValue="1"/>
+		<Parameter
+            app:name="@string/ckps_engine_cylynders_title"
+            app:type="@id/parameter_type_integer"
+            minValue="2"
+            maxValue="8"
+            stepValue="2"/>      
+        <Parameter
+            app:name="@string/ckps_ignition_pulse_delay_title"
+            app:type="@id/parameter_type_integer"
+            minValue="1"
+            maxValue="200"
+            stepValue="1"/>
+	</Page>
+        
+	<Page app:name="@string/miscellaneous_title">
+		<Parameter
+            app:name="@string/miscel_baudrate_title"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="2400|4800|9600|14400|19200|28800|38400|57600"/>
+		<Parameter
+            app:name="@string/miscel_period_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_ms"
+            minValue="0"
+            maxValue="500"
+            stepValue="10"/>
+		<Parameter
+            app:name="@string/miscel_ignition_cutoff_title"
+            app:type="@id/parameter_type_boolean"/>
+		<Parameter
+            app:name="@string/miscel_ignition_cutoff_rpm_title"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="1000"
+            maxValue="12000"
+            stepValue="10"/>		
+		<Parameter
+            app:name="@string/miscel_hall_output_start_title"
+            app:type="@id/parameter_type_integer"
+            minValue="-6"
+            maxValue="12"
+            stepValue="1"/>		
+        <Parameter
+            app:name="@string/miscel_hall_output_delay_title"
+            app:type="@id/parameter_type_integer"
+            minValue="1"
+            maxValue="30"
+            stepValue="1"/>		            
+	</Page>
+	
+	<Page app:name="@string/choke_control_title">
+    	<Parameter
+            app:name="@string/choke_steps_title"
+            app:type="@id/parameter_type_integer"
+            minValue="50"
+            maxValue="1000"/>
+        <Parameter
+            app:name="@string/choke_testing_title"
+            app:type="@id/parameter_type_toggle_button"/>	   
+        <Parameter
+            app:name="@string/choke_manual_step_up"
+            app:summary="@string/choke_manual_step_up_summary"
+            app:units="@string/choke_manual_step_up_units"
+            app:type="@id/parameter_type_button"/>
+		<Parameter
+            app:name="@string/choke_manual_step_down"
+            app:summary="@string/choke_manual_step_down_summary"
+            app:units="@string/choke_manual_step_down_units"
+            app:type="@id/parameter_type_button"
+            stepValue="1"/>         
+	</Page>
+</Parameters>

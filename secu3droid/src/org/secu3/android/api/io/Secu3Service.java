@@ -45,7 +45,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	public static final String ACTION_SECU3_SERVICE_STOP = "org.secu3.android.intent.action.SECU3_SERVICE_STOP";
 	public static final String ACTION_SECU3_SERVICE_SET_TASK = "org.secu3.android.intent.action.SECU3_SERVICE_SET_TASK";
 	public static final String ACTION_SECU3_SERVICE_SET_TASK_PARAM = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SET_TASK_PARAM";
-	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";	
+	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";
 	public static final String ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_SEND_PACKET_PARAM_PACKET";	
 	public static final String ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS";
 	
@@ -53,7 +53,10 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	public static final String EVENT_SECU3_SERVICE_STATUS = "org.secu3.android.intent.action.extra.STATUS";
 	public static final String EVENT_SECU3_SERVICE_PROGRESS = "org.secu3.android.intent.action.SECU3_SERVICE_PROGRESS";
 	public static final String EVENT_SECU3_SERVICE_PROGRESS_CURRENT = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_CURRENT";
-	public static final String EVENT_SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";		
+	public static final String EVENT_SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_RECEIVE_PACKET";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_RECEIVE_PARAM_PACKET";
+	
 	
 	NotificationManager notificationManager;
 	private Secu3Manager secu3Manager = null;
