@@ -41,7 +41,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/status_offline"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearance" />
 
     <CheckBox
         android:id="@+id/errorsRealtimeErrorsCheckBox"
@@ -50,7 +50,7 @@
         android:layout_above="@+id/errorsStatusTextView"
         android:layout_alignParentLeft="true"
         android:text="@string/errors_realtime_errors_title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearance" />
 
     <CheckBox
         android:id="@+id/errorsInertionCheckBox"
@@ -59,21 +59,16 @@
         android:layout_above="@+id/errorsRealtimeErrorsCheckBox"
         android:layout_alignParentLeft="true"
         android:text="@string/errors_inertion_title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearance" />
 
-    <ScrollView
-        android:id="@+id/errorsScrollView"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/errorsInertionCheckBox" >
+    <ListView
+        android:id="@+id/errorsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/errorsInertionCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
 
-        <LinearLayout
-            android:id="@+id/errorsLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-        </LinearLayout>
-    </ScrollView>
+    </ListView>
 
 </RelativeLayout>

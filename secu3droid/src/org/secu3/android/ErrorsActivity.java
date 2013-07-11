@@ -25,11 +25,16 @@
 
 package org.secu3.android;
 
+import java.util.ArrayList;
+
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.CEErrCodes;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.io.Secu3Dat.CESavedErr;
+import org.secu3.android.parameters.ParamItemsAdapter;
+import org.secu3.android.parameters.items.BaseParamItem;
+import org.secu3.android.parameters.items.ParamItemBoolean;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,33 +49,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class ErrorsActivity extends Activity {
 	public final String LOG_TAG = "ErrorsActivity";
+	public final int INERTNESS_COUNT = 10;
 	
 	boolean isOnline = false;
+	boolean realtime;
+	private boolean inertness;
 	
+	ParamItemsAdapter adapter;
 	TextView errorsTextViewStatus = null;	
 	CheckBox RealtimeError = null;
 	CheckBox ReadingInertion = null;
 		
-	private CheckBox errors[] = null;
+	private ArrayList<BaseParamItem> errors = null;
+	private int errorsInertness[] = null;
+	
 
 	private void setRealtime (boolean realtime) {
+		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; i++) {
+			errors.get(i).setEnabled(!realtime);
+		}		
+		adapter.notifyDataSetChanged();
+		ReadingInertion.setEnabled (realtime);
+		ActivityCompat.invalidateOptionsMenu(ErrorsActivity.this);		
 		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SAVED_ERRORS;
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));		
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));	
 	}
 	
-	private int getErrors () {
-		int res = 0;
-		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
-			if (errors [i].isChecked()) res |= 0x01 << i; 
-		}
-		return res;
+	public boolean getInertness() {
+		return inertness;
 	}
-	
+
+	public void setInertness(boolean inertness) {
+		this.inertness = inertness;
+	}			
+		
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
 		public IntentFilter intentFilter = null;
@@ -100,37 +118,41 @@ public class ErrorsActivity extends Activity {
 		
 		setContentView(R.layout.activity_errors);
 		
-		receiver = new ReceiveMessages();
-		
-		errors = new CheckBox[Secu3Dat.SECU3_ECU_ERRORS_COUNT];
-		String errorNames[] = getResources().getStringArray(R.array.errors_ecu_errors_names);
-		String errorBCs[] = getResources().getStringArray(R.array.errors_ecu_errors_blink_codes);
-		LinearLayout l = (LinearLayout)findViewById(R.id.errorsLinearLayout);
-		
-		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
-			errors[i] = new CheckBox(this);
-			errors[i].setText(String.format("(%s) - %s",errorBCs[i],errorNames[i]));
-			errors[i].setTextAppearance(this, R.style.secu3TextAppearance);
-			l.addView(errors[i]);			
-		}		
-		
+		receiver = new ReceiveMessages();				
+				
 		errorsTextViewStatus = (TextView)findViewById(R.id.errorsStatusTextView);
 		RealtimeError = (CheckBox)findViewById(R.id.errorsRealtimeErrorsCheckBox);
 		ReadingInertion = (CheckBox)findViewById(R.id.errorsInertionCheckBox);
 		
-		RealtimeError.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			
+		boolean realtime = RealtimeError.isChecked();
+		errors = new ArrayList<BaseParamItem>();
+		errorsInertness = new int [INERTNESS_COUNT]; 
+		String errorNames[] = getResources().getStringArray(R.array.errors_ecu_errors_names);
+		String errorBCs[] = getResources().getStringArray(R.array.errors_ecu_errors_blink_codes);
+		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; i++) {
+			errors.add(new ParamItemBoolean(this, errorNames[i], getString (R.string.errors_code,errorBCs[i]), false));
+			errors.get(i).setEnabled(!realtime);
+		}
+		adapter = new ParamItemsAdapter(errors);		
+		
+		RealtimeError.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (buttonView == RealtimeError) {
 					setRealtime(RealtimeError.isChecked());
-					ReadingInertion.setEnabled (RealtimeError.isChecked());
-					ActivityCompat.invalidateOptionsMenu(ErrorsActivity.this);
 				}				
 			}
 		});
+		ReadingInertion.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (buttonView == ReadingInertion) {
+					setInertness (ReadingInertion.isChecked());
+				}
+			}
+		});
 		RealtimeError.setChecked(false);
-		ReadingInertion.setEnabled(false);
+		ReadingInertion.setEnabled(false);		
 	}
 
 	@Override
@@ -165,39 +187,45 @@ public class ErrorsActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		Log.d(LOG_TAG, "onResume");
-		
-		isOnline = false;
-		
-		try {
-			registerReceiver(receiver, receiver.intentFilter);			
-		} catch (Exception e) {
-		}
-		finally {
-			
-		}
+		isOnline = false;		
+		ListView l = (ListView)findViewById(R.id.errorsListView);
+		l.setAdapter(adapter);
+		registerReceiver(receiver, receiver.intentFilter);			
 	}
 	
 	@Override
 	protected void onPause() {
-		super.onPause();
-		
-		Log.d(LOG_TAG, "onPause");
-		
-		try {
-			unregisterReceiver(receiver);
-		}
-		catch (Exception e) {		
-		}
+		super.onPause();			
+		unregisterReceiver(receiver);
 	}
 	
 	void updateFlags (int flags) {
+		for (int i = 0; i != INERTNESS_COUNT-1; i++) {
+			errorsInertness[i] = errorsInertness[i+1];
+		}
+		errorsInertness [INERTNESS_COUNT - 1] = flags;
+		
+		if (getInertness()) {
+			flags = 0;
+			for (int i = 0; i != INERTNESS_COUNT; i++) {
+				flags |= errorsInertness[i];
+			}
+		}
+		
 		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
-			errors[i].setChecked(((flags & 0x01) != 0)?true:false);
+			((ParamItemBoolean) errors.get(i)).setValue(((flags & 0x01) != 0)?true:false);
 			flags >>= 1; 
 		}
+		adapter.notifyDataSetChanged();
 	}
+	
+	private int getErrors () {
+		int res = 0;
+		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+			if (((ParamItemBoolean) errors.get(i)).getValue()) res |= 0x01 << i; 
+		}
+		return res;
+	}	
 	
 	void update (Intent intent) {		
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
@@ -216,5 +244,5 @@ public class ErrorsActivity extends Activity {
 				updateFlags(((CEErrCodes)packet).flags);
 			}
 		} 
-	}		
+	}
 }

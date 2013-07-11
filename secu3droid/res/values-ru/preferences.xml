@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Secu3Droid - An open source, free manager for SECU-3 engine
+  control unit
+  Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
+  
+  SECU-3  - An open source, free engine control unit
+  Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+  contacts:
+             http://secu-3.org
+             email: mmlevin@mail.ru
+-->
+
+<resources>
+    <string name="pref_bluetooth_device_title">Выбор устройства Bluetooth</string>
+    <string name="pref_bluetooth_device_summary">Текущее устройство: %s</string>
+    <string name="pref_connection_retries_title">Количество попыток повтора соединения</string>
+    <string name="pref_connection_retries_summary">Число попыток до выхода: %s</string>
+    <string name="pref_about_title">О программе</string>
+    <string name="pref_about_summary"></string>
+    <string name="pref_upload_immediately_title">Загружать изменения немедленно</string>
+    <string name="pref_upload_immediately_summary">При изменении значения пользователем</string>
+    <string name="pref_write_log_title">Запись лога</string>
+    <string name="pref_write_log_summary">Записывать информацию с сенсоров в лог</string>
+    <string name="pref_write_log_path_title">Путь для сохранения логов</string>
+    <string name="pref_write_log_path_summary">Если ничего не введено, лог будет сохраняться в %1$s</string>
+</resources>

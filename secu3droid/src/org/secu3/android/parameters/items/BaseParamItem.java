@@ -30,13 +30,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 public abstract class BaseParamItem {
-	private Context context;
-	private String name;
-	private int nameId;
-	private String units;
-	private int unitsId;
-	private String summary;
-	private int summaryId;
+	private Context context = null;
+	private String name = null;
+	private int nameId = 0;
+	private String units = null;
+	private int unitsId = 0;
+	private String summary = null;
+	private int summaryId = 0;
+	private boolean enabled = true;
 	
 	public interface OnParamItemChangeListener {
 		void onParamItemChange (BaseParamItem item);
@@ -112,5 +113,13 @@ public abstract class BaseParamItem {
 
 	public void setOnParamItemChangeListener(OnParamItemChangeListener listener) {
 		this.listener = listener;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

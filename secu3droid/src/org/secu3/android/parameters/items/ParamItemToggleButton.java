@@ -34,7 +34,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class ParamItemToggleButton extends BaseParamItem {
-	private boolean value;
+	private boolean value = false;
 	
 	class CustomOnCheckChangeListener implements CompoundButton.OnCheckedChangeListener {
 		ParamItemToggleButton item;

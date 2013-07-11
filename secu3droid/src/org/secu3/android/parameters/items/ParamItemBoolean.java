@@ -87,6 +87,7 @@ public class ParamItemBoolean extends BaseParamItem {
 		paramValueBoolean = (CheckBox) v.findViewById(R.id.param_value_boolean);
 		
 		paramValueBoolean.setOnCheckedChangeListener(new CustomOnCheckChangeListener(this));
+		paramValueBoolean.setClickable(isEnabled());
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());
@@ -101,4 +102,5 @@ public class ParamItemBoolean extends BaseParamItem {
 	public void setValue(boolean value) {
 		this.value = value;
 	}
+	
 }
