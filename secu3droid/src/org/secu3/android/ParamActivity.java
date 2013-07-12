@@ -99,7 +99,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	}
 
     private void paramsRead() {
-    	progressBar.setVisibility(ProgressBar.GONE);
+    	progressBar.setVisibility(ProgressBar.VISIBLE);
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
     }
@@ -471,15 +471,18 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			if (!isOnline) {
 				isValid = false;
 			}
-			textViewStatus.setText(isOnline?R.string.status_online:R.string.status_offline);
+			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
+			textViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
 			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
 			if (packet instanceof OpCompNc) {
 				if (((OpCompNc)packet).opcode == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE) {
 					progressBar.setVisibility(ProgressBar.GONE);				
-					Toast.makeText(this, String.format("Params saved: error code %d", ((OpCompNc)packet).opdata), Toast.LENGTH_LONG).show();
+					Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((OpCompNc)packet).opdata), Toast.LENGTH_LONG).show();
 				}
-			} else PacketUtils.setParamFromPacket(paramAdapter, packet);
+			} else {
+				PacketUtils.setParamFromPacket(paramAdapter, packet);
+			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);
@@ -488,6 +491,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			progressBar.setProgress(current);
 			if (current == total) {
 				progressBar.setVisibility(ProgressBar.GONE);
+				paramAdapter.notifyDataSetChanged();
 				isValid = true;
 			}			
 		}

@@ -45,7 +45,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,7 +60,6 @@ public class ErrorsActivity extends Activity {
 	private static final String INERTNESS = "inertness";
 	private static final String REALTIME = "realtime";
 	private static final String ERRORS = "errors";
-	public final String LOG_TAG = "ErrorsActivity";
 	public final int INERTNESS_COUNT = 10;
 	
 	boolean isOnline = false;
@@ -109,8 +107,6 @@ public class ErrorsActivity extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) 
 		{    
-			String action = intent.getAction();
-			Log.d(LOG_TAG, action);
 			update(intent);
 		}
 	}
@@ -120,9 +116,8 @@ public class ErrorsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
-		super.onCreate(savedInstanceState);		
 		
-		Log.d(LOG_TAG, "onCreate");
+		
 		
 		setContentView(R.layout.activity_errors);
 		
@@ -179,6 +174,7 @@ public class ErrorsActivity extends Activity {
 			RealtimeError.setChecked(savedInstanceState.getBoolean(REALTIME));
 			ReadingInertion.setChecked(savedInstanceState.getBoolean(INERTNESS));
 		}
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -219,16 +215,15 @@ public class ErrorsActivity extends Activity {
 	}
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
-		isOnline = false;		
-		registerReceiver(receiver, receiver.intentFilter);			
+	protected void onResume() {		
+		registerReceiver(receiver, receiver.intentFilter);
+		super.onResume();		
 	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();			
+	protected void onPause() {		
 		unregisterReceiver(receiver);
+		super.onPause();			
 	}
 	
 	void updateFlags (int flags) {
@@ -273,7 +268,8 @@ public class ErrorsActivity extends Activity {
 				this.isOnline = true;
 				setRealtime(RealtimeError.isChecked());
 			}			
-			errorsTextViewStatus.setText(isOnline?"Online":"Offline");
+			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
+			errorsTextViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
 			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
 			if (packet instanceof CESavedErr) {

@@ -198,7 +198,7 @@ public class MainActivity extends Activity {
 	void update(Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {			
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false); 
-			String s = isOnline?"Online":"Offline";
+			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
 			textViewStatus.setText(s);		
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;						

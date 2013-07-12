@@ -61,7 +61,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		public void onListItemClick(ListView l, View v, int position, long id) {
 			if (listener != null) listener.onItemClick(l, v, position, id);
 			super.onListItemClick(l, v, position, id);
-		}
+		}		
 	}
 		
 	private class DiagnosticsPagerAdapter extends FragmentPagerAdapter{
@@ -194,6 +194,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	@Override
 	protected void onResume() {							
 		registerReceiver(receiver, receiver.intentFilter);
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Dat.OPCODE_DIAGNOST_ENTER,0)));		
 		super.onResume();		
 	}
 	
@@ -208,14 +209,15 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Dat.OPCODE_DIAGNOST_ENTER,0)));
 			}
-			textViewStatus.setText(isOnline?"Online":"Offline");
+			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
+			textViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
 		{
 			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);			
 			if (packet instanceof DiagInpDat) {	
 				PacketUtils.setDiagInpFromPacket((ParamItemsAdapter) inputFragment.getListAdapter(), packet);
+				((ParamItemsAdapter) inputFragment.getListAdapter()).notifyDataSetChanged();
 			}
 		}				
 	}

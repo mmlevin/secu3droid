@@ -68,6 +68,9 @@ public class ParamItemFloat extends BaseParamItem {
 	}	
 	
 	public ParamItemFloat(Context context, int nameID, int summaryID, int unitsID, float value, float minValue, float maxValue, float stepValue) {
+		this.setNameId(nameID);
+		this.setSummaryId(summaryID);
+		this.setUnitsId(summaryID);		
 		this.setContext(context);
 		if (nameID != 0) this.setName(context.getString(nameID));
 		if (summaryID != 0) this.setSummary(context.getString(summaryID));
@@ -79,6 +82,9 @@ public class ParamItemFloat extends BaseParamItem {
 	}
 	
 	public ParamItemFloat(Context context, int nameID, int summaryID, int unitsID, float value) {
+		this.setNameId(nameID);
+		this.setSummaryId(summaryID);
+		this.setUnitsId(summaryID);
 		this.setContext(context);
 		if (nameID != 0) this.setName(context.getString(nameID));
 		if (summaryID != 0) this.setSummary(context.getString(summaryID));

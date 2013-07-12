@@ -115,4 +115,5 @@
     <string name="diag_input_de" translatable="false">DE</string>
     <string name="diag_input_ks1" translatable="false">KS_1</string>
     <string name="diag_input_ks2" translatable="false">KS_2</string>
+    <string name="params_saved_error_code">Parameters saved</string>
 </resources>

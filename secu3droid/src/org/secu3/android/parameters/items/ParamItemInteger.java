@@ -68,6 +68,9 @@ public class ParamItemInteger extends BaseParamItem {
 	}	
 	
 	public ParamItemInteger(Context context, int nameID, int summaryID, int unitsID, int value, int minValue, int maxValue, int stepValue) {
+		this.setNameId(nameID);
+		this.setSummaryId(summaryID);
+		this.setUnitsId(summaryID);
 		this.setContext(context);
 		if (nameID != 0) this.setName(context.getString(nameID));
 		if (summaryID != 0) this.setSummary(context.getString(summaryID));
