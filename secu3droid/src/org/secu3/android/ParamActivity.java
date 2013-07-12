@@ -30,27 +30,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.secu3.android.api.io.*;
-import org.secu3.android.api.io.Secu3Dat.ChokePar;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Dat.*;
-import org.secu3.android.api.utils.CustomNumberPickerDialog;
+import org.secu3.android.api.utils.*;
 import org.secu3.android.api.utils.CustomNumberPickerDialog.OnNumberPickerDialogAcceptListener;
-import org.secu3.android.api.utils.CustomNumberPickerFloatDialog;
-import org.secu3.android.api.utils.CustomNumberPickerIntegerDialog;
-import org.secu3.android.api.utils.PacketUtils;
-import org.secu3.android.api.utils.ResourcesUtils;
-import org.secu3.android.parameters.ParamItemsAdapter;
-import org.secu3.android.parameters.ParamPagerAdapter;
-import org.secu3.android.parameters.ParamsPage;
-import org.secu3.android.parameters.ParamsPageFragment;
-import org.secu3.android.parameters.items.BaseParamItem;
-import org.secu3.android.parameters.items.ParamItemBoolean;
-import org.secu3.android.parameters.items.ParamItemButton;
-import org.secu3.android.parameters.items.ParamItemFloat;
-import org.secu3.android.parameters.items.ParamItemInteger;
-import org.secu3.android.parameters.items.ParamItemLabel;
-import org.secu3.android.parameters.items.ParamItemSpinner;
-import org.secu3.android.parameters.items.ParamItemToggleButton;
+import org.secu3.android.parameters.*;
+import org.secu3.android.parameters.items.*;
 import org.secu3.android.parameters.items.BaseParamItem.OnParamItemChangeListener;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -66,7 +51,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,38 +61,25 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ParamActivity extends FragmentActivity implements OnItemClickListener,OnNumberPickerDialogAcceptListener,OnParamItemChangeListener {
-	public static final String LOG_TAG = "ParamActivity";	
+	public static final int PARAMS_NUMBER = 9;
 	
-	public static final int PARAMS_NUMBER = 9;	
+	private static final String PAGE = "page";
 	
-	ProgressBar progressBar = null;
-		
-	ArrayList<ParamsPage> pages;
-	TextView textViewStatus = null;
-	TextView textView = null;
-	ViewPager pager = null;
-    ParamPagerAdapter paramAdapter = null;
-	ParamItemsAdapter adapter = null;
-    int position = Integer.MAX_VALUE;
-	CustomNumberPickerDialog dialog = null;
-	boolean isValid = false;
-
-    SharedPreferences sharedPref = null;
+    private int position = Integer.MAX_VALUE;    
 	private boolean isOnline = false;
-	private boolean uploadImmediatelly;
-		
-	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		return dialog;
-	}		
-	    
-    private void paramsRead() {
-    	isValid = false;
-    	progressBar.setVisibility(ProgressBar.GONE);
-    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
-    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
-    }
-    
+	private boolean uploadImmediatelly = false;
+	private boolean isValid = false;
+	
+	private SharedPreferences sharedPref = null;
+	private ArrayList<ParamsPage> pages = null;
+	private ProgressBar progressBar = null;	
+	private TextView textViewStatus = null;
+	private ViewPager pager = null;
+    private ParamPagerAdapter paramAdapter = null;
+	private ParamItemsAdapter adapter = null;
+	private CustomNumberPickerDialog dialog = null;	
+	private ReceiveMessages receiver = null;
+		    
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
 		public IntentFilter intentFilter = null;
@@ -123,14 +94,21 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		@Override
 		public void onReceive(Context context, Intent intent) 
 		{    
-			String action = intent.getAction();
-			Log.d(LOG_TAG, action);
 			update(intent);	   	    
 		}
 	}
-	
-	ReceiveMessages receiver;
 
+    private void paramsRead() {
+    	progressBar.setVisibility(ProgressBar.GONE);
+    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
+    	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
+    }
+    
+	@Override
+	public Object onRetainCustomNonConfigurationInstance() {
+		return dialog;
+	}	
+	
 	public void createFormFromXml (int id){
 		String name;
 		ParamsPage page = null;
@@ -324,17 +302,15 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	
 	@Override
 	public void onAttachFragment(Fragment fragment) {
-		super.onAttachFragment(fragment);
 		if (fragment instanceof ParamsPageFragment) {
 			((ParamsPageFragment) fragment).setListAdapter(new ParamItemsAdapter(pages.get(((ParamsPageFragment) fragment).getNum()).getItems()));
 			((ParamsPageFragment) fragment).setOnItemClickListener(this);
 		}
+		super.onAttachFragment(fragment);		
 	}	
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {		
-		Log.d(LOG_TAG, "onCreate");
-		
+	protected void onCreate(Bundle savedInstanceState) {				
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		uploadImmediatelly = sharedPref.getBoolean(getString(R.string.pref_upload_immediately_key), false);
 		setTheme(sharedPref.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
@@ -350,6 +326,12 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
 		pager = (ViewPager)findViewById(R.id.paramsPager);
 		pager.setAdapter(paramAdapter);
+		
+		if (savedInstanceState != null) {
+			pager.setCurrentItem(savedInstanceState.getInt(PAGE));
+		}
+		
+    	isValid = false;
 		
 		super.onCreate(savedInstanceState);		
 	}
@@ -387,42 +369,32 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		progressBar.setIndeterminate(true);
 		progressBar.setVisibility(ProgressBar.VISIBLE);					
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, PARAMS_NUMBER));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.STARTR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.ANGLES_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.IDLREG_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.FUNSET_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.TEMPER_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.CARBUR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.ADCCOR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.CKPS_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.MISCEL_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, Secu3Dat.CHOKE_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.STARTR_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.ANGLES_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.IDLREG_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.FUNSET_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.TEMPER_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CARBUR_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.ADCCOR_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CKPS_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.MISCEL_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CHOKE_PAR)));
 	}
 
 	@Override
 	protected void onPause() {
-		super.onPause();		
 		unregisterReceiver(receiver);
+		super.onPause();				
 	}
 		
 	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		Log.d(LOG_TAG, "onResume");
-		
-		pager = (ViewPager)findViewById(R.id.paramsPager);
-		pager.setAdapter(paramAdapter);
-		paramAdapter.notifyDataSetChanged();
-		
+	protected void onResume() {					
 		dialog = (CustomNumberPickerDialog)getLastCustomNonConfigurationInstance();
 		if (dialog != null) {
 			dialog.setOnCustomNumberPickerAcceptListener(this);
-		}			
-		
-		isOnline = false;
-		
+		}							
 		registerReceiver(receiver, receiver.intentFilter);
+		super.onResume();		
 	}	
 	
 	
@@ -464,7 +436,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 
 	public void onItemChange(int itemId) {
 		if (PacketUtils.isParamFromPage(itemId, R.string.choke_control_title)) {
-			ChokePar packet = (ChokePar) PacketUtils.build(paramAdapter, Secu3Dat.CHOKE_PAR);
+			ChokePar packet = (ChokePar) PacketUtils.buildPacket(paramAdapter, Secu3Dat.CHOKE_PAR);
 			switch (itemId) {
 			case R.string.choke_manual_step_down_title:
 				packet.manual_delta = -127;
@@ -480,7 +452,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			}
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));			
 		} else if (uploadImmediatelly) {
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.build(paramAdapter, itemId)));			
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, itemId)));			
 		}
 	}
 	
@@ -507,7 +479,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 					progressBar.setVisibility(ProgressBar.GONE);				
 					Toast.makeText(this, String.format("Params saved: error code %d", ((OpCompNc)packet).opdata), Toast.LENGTH_LONG).show();
 				}
-			} else PacketUtils.setDataFromPacket(paramAdapter, packet);
+			} else PacketUtils.setParamFromPacket(paramAdapter, packet);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);
@@ -525,6 +497,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	@Override
 	// This is bugfix of http://stackoverflow.com/questions/13910826/viewpager-fragmentstatepageradapter-orientation-change
 	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt(PAGE, pager.getCurrentItem());
 	//	super.onSaveInstanceState(outState);
 	}
 }

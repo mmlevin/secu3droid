@@ -44,16 +44,30 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-	final static String LOG_TAG = "MainActivity";	
+	private static final String CHECKBOX = "checkbox";
+	private static final String STATUS = "status";
+	private static final String DATA = "data";	
+
+	private String sensorsFormat = "";
+	private String sensorsRawFormat = "";
+	private boolean isOnline;
+	private boolean errors = false;
+	
+	ReceiveMessages receiver = null;
+	TextView textViewData = null;
+	TextView textViewStatus = null;
+	TextView textFWInfo = null;
+	CheckBox checkBox = null;	
+	FWInfoDat fwInfoDat = null;
 	
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
@@ -68,66 +82,48 @@ public class MainActivity extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) 
 		{    
-			String action = intent.getAction();
-			Log.d(LOG_TAG, action);
 			update (intent); 
 		}
 	}
 	
-	String sensorsFormat = "";
-	String sensorsRawFormat = "";
-	ReceiveMessages receiver = null;
-	TextView textViewData = null;
-	TextView textViewStatus = null;
-	TextView textFWInfo = null;
-	CheckBox checkBox = null;
-	boolean isOnline;
-	boolean errors = false;
-	
-	FWInfoDat fwInfoDat = null;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
-		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);		
-		super.onCreate(savedInstanceState);
-
-		Log.d(LOG_TAG, "onCreate");		
-		setContentView(R.layout.activity_main);
-		
+		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);	
+		setContentView(R.layout.activity_main);		
 
 		sensorsFormat = getString(R.string.sensors_format);
 		sensorsRawFormat = getString(R.string.sensors_raw_format);
 		textViewData = (TextView)findViewById(R.id.textViewData);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		textFWInfo = (TextView)findViewById(R.id.mainTextFWInfo);
-		checkBox = (CheckBox)findViewById(R.id.mainShowRawDataCheckBox);		
+		checkBox = (CheckBox)findViewById(R.id.mainShowRawDataCheckBox);	
+		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (buttonView == checkBox) setRawMode(isChecked);				
+			}
+		});
 		
 		receiver = new ReceiveMessages();		
 		
 		if (savedInstanceState != null) {
-			textViewData.setText(savedInstanceState.getString("data"));
-			textViewStatus.setText(savedInstanceState.getString("status"));
-			checkBox.setChecked(savedInstanceState.getBoolean("checkbox"));
+			textViewData.setText(savedInstanceState.getString(DATA));
+			textViewStatus.setText(savedInstanceState.getString(STATUS));
+			checkBox.setChecked(savedInstanceState.getBoolean(CHECKBOX));
 		}
+		super.onCreate(savedInstanceState);		
 	}
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(Bundle outState) {						
+		outState.putString(DATA, textViewData.getText().toString());
+		outState.putString(STATUS, textViewStatus.getText().toString());
+		outState.putBoolean(STATUS, checkBox.isChecked());
 		super.onSaveInstanceState(outState);		
-		
-		Log.d(LOG_TAG, "onSaveInstanceState");
-		
-		outState.putString("data", textViewData.getText().toString());
-		outState.putString("status", textViewStatus.getText().toString());
-		outState.putBoolean("status", checkBox.isChecked());
 	}
-	
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		Log.d(LOG_TAG, "onRestoreInstanceState");
-	}
-	
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
@@ -182,54 +178,19 @@ public class MainActivity extends Activity {
 	
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		Log.d(LOG_TAG, "onResume");
-
-		this.isOnline = false;
-		
-		try {
-			registerReceiver(receiver, receiver.intentFilter);
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));			
-		} catch (Exception e) {
-		}
+	protected void onResume() {				
+		registerReceiver(receiver, receiver.intentFilter);
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
+		super.onResume();		
 	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		Log.d(LOG_TAG, "onPause");
-		
-		try {
-			unregisterReceiver(receiver);
-		} catch (Exception e) {
-			
-		}
-
+	protected void onPause() {				
+		unregisterReceiver(receiver);
+		super.onPause();		
 	}
 	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		
-		Log.d(LOG_TAG, "onDestroy");
-		
-		try {
-				unregisterReceiver(receiver);
-		} catch (Exception e) {
-			
-		}		
-	}
-
-	public void onClick (View v) {
-		if (v == checkBox) {
-			setMode(checkBox.isChecked());			
-		}
-	}
-
-	private void setMode(boolean raw) {
+	private void setRawMode(boolean raw) {
 		SECU3_TASK task = raw?SECU3_TASK.SECU3_RAW_SENSORS:SECU3_TASK.SECU3_READ_SENSORS;
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));
 	}
@@ -242,7 +203,7 @@ public class MainActivity extends Activity {
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;						
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_FW_INFO.ordinal()));
-				setMode(checkBox.isChecked());				
+				setRawMode(checkBox.isChecked());				
 			}						
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
 		{

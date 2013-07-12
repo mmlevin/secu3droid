@@ -27,10 +27,10 @@ package org.secu3.android;
 
 import java.util.ArrayList;
 
+import org.secu3.android.api.io.Secu3Service;
+import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.CEErrCodes;
-import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
-import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.io.Secu3Dat.CESavedErr;
 import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.items.BaseParamItem;
@@ -48,6 +48,9 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -55,6 +58,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ErrorsActivity extends Activity {
+	private static final String INERTNESS = "inertness";
+	private static final String REALTIME = "realtime";
+	private static final String ERRORS = "errors";
 	public final String LOG_TAG = "ErrorsActivity";
 	public final int INERTNESS_COUNT = 10;
 	
@@ -154,9 +160,35 @@ public class ErrorsActivity extends Activity {
 			}
 		});
 		RealtimeError.setChecked(false);
-		ReadingInertion.setEnabled(false);		
+		ReadingInertion.setEnabled(false);
+		
+		ListView l = (ListView)findViewById(R.id.errorsListView);
+		l.setAdapter(adapter);
+		l.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+				adapter = (ParamItemsAdapter) parent.getAdapter();
+				BaseParamItem i = (BaseParamItem) adapter.getItem(position);
+				adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);				
+			}
+			
+		});
+		
+		if (savedInstanceState != null) {
+			setErrors(savedInstanceState.getInt(ERRORS));
+			RealtimeError.setChecked(savedInstanceState.getBoolean(REALTIME));
+			ReadingInertion.setChecked(savedInstanceState.getBoolean(INERTNESS));
+		}
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt(ERRORS, getErrors());
+		outState.putBoolean(REALTIME, RealtimeError.isChecked());
+		outState.putBoolean(INERTNESS, ReadingInertion.isChecked());
+		super.onSaveInstanceState(outState);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_errors, menu);
@@ -190,8 +222,6 @@ public class ErrorsActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		isOnline = false;		
-		ListView l = (ListView)findViewById(R.id.errorsListView);
-		l.setAdapter(adapter);
 		registerReceiver(receiver, receiver.intentFilter);			
 	}
 	
@@ -228,6 +258,13 @@ public class ErrorsActivity extends Activity {
 		}
 		return res;
 	}	
+	
+	private void setErrors(int errors) {
+		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+			((ParamItemBoolean) this.errors.get(i)).setValue(((errors & 0x01)!=0)?true:false);
+			errors >>= 1;
+		}		
+	}
 	
 	void update (Intent intent) {		
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {

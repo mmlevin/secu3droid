@@ -39,7 +39,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class ParamPagerAdapter extends FragmentPagerAdapter{
 	private ArrayList<ParamsPage> pages = null;
-	private Context context;
+	private Context context = null;
 	
 	public BaseParamItem findItemByNameId (int Id) {
 		if (pages != null) {

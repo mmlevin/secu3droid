@@ -60,8 +60,9 @@ public class ParamItemButton extends BaseParamItem {
 		this.setSummaryId(summaryID);
 		this.setUnitsId(unitsID);
 		this.setContext(context);
-		this.setName(context.getString(nameID));
-		this.setSummary(context.getString(summaryID));
+		if (nameID != 0) this.setName(context.getString(nameID));
+		if (summaryID!= 0) this.setSummary(context.getString(summaryID));
+		if (unitsID!= 0) this.setSummary(context.getString(unitsID));
 	}
 	
 	@Override

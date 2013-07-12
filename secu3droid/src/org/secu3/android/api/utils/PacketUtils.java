@@ -32,17 +32,19 @@ import org.secu3.android.api.io.Secu3Dat.AnglesPar;
 import org.secu3.android.api.io.Secu3Dat.CKPSPar;
 import org.secu3.android.api.io.Secu3Dat.CarburPar;
 import org.secu3.android.api.io.Secu3Dat.ChokePar;
+import org.secu3.android.api.io.Secu3Dat.DiagInpDat;
 import org.secu3.android.api.io.Secu3Dat.FnNameDat;
 import org.secu3.android.api.io.Secu3Dat.FunSetPar;
 import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
 import org.secu3.android.api.io.Secu3Dat.MiscelPar;
 import org.secu3.android.api.io.Secu3Dat.StartrPar;
 import org.secu3.android.api.io.Secu3Dat.TemperPar;
+import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.ParamPagerAdapter;
 import org.secu3.android.parameters.items.*;
 
 public class PacketUtils {
-	public static Secu3Dat build (ParamPagerAdapter paramAdapter, char packetType) {
+	public static Secu3Dat buildPacket (ParamPagerAdapter paramAdapter, char packetType) {
 		if (paramAdapter != null) {
 			switch (packetType) {
 			case Secu3Dat.ADCCOR_PAR:
@@ -71,7 +73,7 @@ public class PacketUtils {
 		return null;
 	}
 	
-	public static Secu3Dat build (ParamPagerAdapter paramAdapter, int itemId)
+	public static Secu3Dat buildPacket (ParamPagerAdapter paramAdapter, int itemId)
 	{
 		switch (itemId) {
 		case R.string.starter_off_title:
@@ -239,7 +241,7 @@ public class PacketUtils {
 		}	
 	}
 	
-	public static void setDataFromPacket (ParamPagerAdapter paramAdapter, Secu3Dat packet)
+	public static void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Dat packet)
 	{
 		if (packet instanceof StartrPar) {
 			setStartrPar(paramAdapter, (StartrPar) packet);
@@ -490,5 +492,22 @@ public class PacketUtils {
 		packet.add_i2_factor = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_addi2_sensor_factor_title)).getValue();
 		packet.add_i1_correction = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.adccor_addi2_sensor_correction_title)).getValue();
 		return packet;
+	}
+	
+	public static void setDiagInpFromPacket (ParamItemsAdapter adapter, Secu3Dat packet) {
+		if (packet != null) {
+			if (packet instanceof DiagInpDat) {
+				if (adapter != null) {
+					adapter.setFloatItem(R.string.diag_input_voltage, ((DiagInpDat) packet).voltage);
+					adapter.setFloatItem(R.string.diag_input_map_s, ((DiagInpDat) packet).map);
+					adapter.setFloatItem(R.string.diag_input_temp, ((DiagInpDat) packet).temp);
+					adapter.setFloatItem(R.string.diag_input_add_io1, ((DiagInpDat) packet).add_io1);
+					adapter.setFloatItem(R.string.diag_input_add_io1, ((DiagInpDat) packet).add_io2);
+					adapter.setFloatItem(R.string.diag_input_ks1, ((DiagInpDat) packet).ks_1);
+					adapter.setFloatItem(R.string.diag_input_ks2, ((DiagInpDat) packet).ks_2);
+				}
+			}
+		}
+		
 	}
 }

@@ -29,7 +29,6 @@
     <string name="app_name">Secu3Droid</string>
     <string name="sensors_format">RPM: %1$d min-1\r\nPressure: %2$.2f kPa\r\nVoltage: %3$.2f V\r\nTemperature: %4$.2f °C\r\nAdvance angle: %5$+.2f °\r\nKnock level: %6$.2f V\r\nKnock retard: %7$+.2f °\r\nAir flow: %8$d\r\nFI valve: %9$d\r\nThrottle sensor: %10$d\r\nGas valve: %11$d\r\nPower Valve: %12$d\r\nCooling fan: %13$d\r\nStarter blocked: %14$d\r\nADD_IO1: %15$.2f\r\nADD_IO2: %16$.2f\r\nThrottle Position Sensor:%17$.2f\r\nChoke position: %18$.2f</string>
     <string name="sensors_raw_format">MAP Sensor data: %1$.2f V\r\nVoltage Sensor data: %2$.2f V\r\nTemperature Sensor data: %3$.2f V\r\nKnock Sensor data: %4$.2f V\r\nTPS Sensor data: %5$.2f V\r\nADD_IO1 Sensor data: %6$.2f V\r\nADD_IO2 data: %7$.2f V</string>
-    <string name="diagnostics_input">Voltage: %1$.3f V\r\nMAP_S: %2$.3f V\r\nTEMP: %3$.3f V\r\nADD_IO1: %4$.3f V\r\nADD_IO2: %5$.3f V\r\nCARB: %6$d\r\nGAS_V: %7$d\r\nCKPS: %8$d\r\nREF_S: %9$d\r\nPS: %10$d\r\nBL: %11$d\r\nDE: %12$d\r\nKS_1: %13$.3f V\r\nKS_2: %14$.3f V\r\n</string>
     <string name="title_activity_param">Parameters</string>
     <string name="menu_param">Parameters</string>    
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid stopped</string>
@@ -102,4 +101,18 @@
     <string name="action_settings">Settings</string>
     <string name="diagnostics_not_supported_title">Diagnostics option disabled in your firmware or Secu-3 device not connected</string>
     <string name="errors_code">Error code %s</string>
+    <string name="diag_input_voltage" translatable="false">Voltage</string>
+    <string name="diag_input_map_s" translatable="false">MAP_S</string>
+    <string name="diag_input_temp" translatable="false">TEMP</string>
+    <string name="diag_input_add_io1" translatable="false">ADD_IO1</string>
+    <string name="diag_input_add_io2" translatable="false">ADD_IO2</string>
+    <string name="diag_input_carb" translatable="false">CARB</string>
+    <string name="diag_input_gas_v" translatable="false">GAS_V</string>
+    <string name="diag_input_ckps" translatable="false">CKPS</string>
+    <string name="diag_input_ref_s" translatable="false">REF_S</string>
+    <string name="diag_input_ps" translatable="false">PS</string>
+    <string name="diag_input_bl" translatable="false">BL</string>
+    <string name="diag_input_de" translatable="false">DE</string>
+    <string name="diag_input_ks1" translatable="false">KS_1</string>
+    <string name="diag_input_ks2" translatable="false">KS_2</string>
 </resources>

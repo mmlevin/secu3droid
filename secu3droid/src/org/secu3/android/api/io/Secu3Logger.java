@@ -35,11 +35,8 @@ import org.secu3.android.api.io.Secu3Dat.SensorDat;
 
 import android.os.Environment;
 import android.text.format.Time;
-import android.util.Log;
 
-public class Secu3Logger {		
-	private final String LOG_TAG = "Secu3Logger";
-	
+public class Secu3Logger {			
 	private BufferedWriter logWriter = null;	
 	private boolean started = false;
 	private Time time = null;
@@ -90,13 +87,12 @@ public class Secu3Logger {
 				logWriter.write(time);
 				logWriter.write(out);
 				logWriter.flush();
-				Log.d(LOG_TAG, out);
 			} catch (IOException e) {				
 			}
 		}
 	}
 	
-	public boolean BeginLogging () {
+	public boolean beginLogging () {
 		if (started) return true; 
 		else {
 			time = new Time();
@@ -104,17 +100,15 @@ public class Secu3Logger {
 			String fname = time.format(cCSVFileNameTemplateString);
 			try {
 				logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path+File.separator+fname),"ISO-8859-1"));
-				Log.d(LOG_TAG, path+fname);
 				started = true;
 				return true;
 			} catch (IOException e) {	
-				Log.d(LOG_TAG,e.getMessage());
 				return false;
 			}
 		}
 	}
 	
-	public boolean EndLogging() {
+	public boolean endLogging() {
 		if (!started) return true;
 		try {
 			logWriter.flush();
@@ -122,7 +116,6 @@ public class Secu3Logger {
 			started = false;
 			return true;
 		} catch (IOException e) {
-			Log.d(LOG_TAG,e.getMessage());
 			return false;
 		}
 	}

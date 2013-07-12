@@ -30,10 +30,10 @@ import java.util.Locale;
 import net.simonvt.numberpicker.NumberPicker;
 
 public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {		
-	int value = 0;
-	int minValue = 0;
-	int maxValue = 0;
-	int stepValue = 0;			
+	private int value = 0;
+	private int minValue = 0;
+	private int maxValue = 0;
+	private int stepValue = 0;			
 	
 	@Override		
 	protected void setMainNumberPickerDisplayedValues(NumberPicker numberPicker) {

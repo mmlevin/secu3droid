@@ -30,9 +30,9 @@ import java.util.Map;
 import android.content.Intent;
 
 public class Secu3Parser extends Secu3Dat {
-	public Map <String,Secu3Dat> parsers;
-	public Secu3Dat lastParser;
-	char lastPackedId;
+	private Map <String,Secu3Dat> parsers;
+	private Secu3Dat lastParser = null;
+	private char lastPackedId = 0;
 	
 	public Secu3Parser() {
 		parsers = new HashMap <String,Secu3Dat> ();

@@ -30,23 +30,27 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.secu3.android.parameters.items.BaseParamItem;
-import org.secu3.android.parameters.items.ParamItemBoolean;
-import org.secu3.android.parameters.items.ParamItemFloat;
-import org.secu3.android.parameters.items.ParamItemInteger;
-
-import android.support.v4.app.FragmentManager;
+import org.secu3.android.parameters.items.*;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public class ParamItemsAdapter extends BaseAdapter {	
-	ArrayList <BaseParamItem> items = null;
-	FragmentManager fragmentManager;
+	private ArrayList <BaseParamItem> items = null;
 
 	public ParamItemsAdapter(ArrayList<BaseParamItem> items) {
 		this.items = items;        
 	}
+	
+	public BaseParamItem findItemByNameId (int Id) {
+		if (items != null) {
+			int size = items.size();
+			for (int i = 0; i != size; i++) {
+				if (items.get(i).getNameId() == Id) return items.get(i); 
+			}
+		}
+		return null;
+	}	
 	
 	@Override
 	public int getCount() {
@@ -96,4 +100,29 @@ public class ParamItemsAdapter extends BaseAdapter {
 		}
 		notifyDataSetChanged();
 	}
+	
+	public void setIntegerItem (int id, int value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemInteger)item).setValue (value);
+	}
+	
+	public void setFloatItem (int id, float value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemFloat)item).setValue (value);
+	}
+	
+	public void setBooleanItem (int id, boolean value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemBoolean)item).setValue (value);
+	}
+	
+	public void setSpinnerItemIndex (int id, int index) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemSpinner)item).setIndex(index);
+	}
+
+	public void setSpinnerItemValue (int id, String value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemSpinner)item).setValue(value);
+	}		
 }

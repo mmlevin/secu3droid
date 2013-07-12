@@ -38,7 +38,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import java.util.HashSet;
@@ -49,7 +48,6 @@ import org.secu3.android.api.io.Secu3Logger;
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	private SharedPreferences sharedPref ;
 	private BluetoothAdapter bluetoothAdapter = null;
-	private String LOG_TAG = "Settings activity";
 		
 	@SuppressWarnings("deprecation")
 	private void updateDevicePreferenceSummary(){
@@ -78,8 +76,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         int i = 0;
     	    // Loop through paired devices
         for (BluetoothDevice device : pairedDevices) {
-        	// Add the name and address to the ListPreference enties and entyValues
-        	Log.v(LOG_TAG, "device: "+device.getName() + " -- " + device.getAddress());
+
         	entryValues[i] = device.getAddress();
             entries[i] = device.getName();
             i++;

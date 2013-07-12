@@ -55,34 +55,37 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class Secu3Manager {
-	
+public class Secu3Manager {	
 	private static final String LOG_TAG = "Secu3Manager";		
+	private final static int PROGRESS_TOTAL_PARAMS = 19;
 	
 	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
 	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
 	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS,SECU3_READ_FW_INFO,SECU3_START_LOGGING,SECU3_STOP_LOGGING};
 	
-	private Service callingService;
-	private BluetoothSocket secu3Socket;
-	private String deviceAddress;
-	private boolean enabled = false;
-	private ExecutorService notificationPool;
-	private ScheduledExecutorService connectionAndReadingPool; 
-	private ConnectedSecu3 connectedSecu3;
-	private int disableReason = 0;
-	private Context appContext;
-	private int maxConnectionRetries;
-	private int nbRetriesRemaining;
-	private boolean connected = false;
-	private SECU3_TASK secu3Task = SECU3_TASK.SECU3_NONE;
-	private SECU3_TASK prevSecu3Task = SECU3_TASK.SECU3_NONE;
-	private Secu3Logger logger = new Secu3Logger();	
-	
 	private int progressCurrent = 0;
 	private int progressTotal = 0;
 	private int subprogress = 0;
-	private final static int PROGRESS_TOTAL_PARAMS = 19;
+	private int disableReason = 0;
+	private int maxConnectionRetries = 0;
+	private int nbRetriesRemaining = 0;
+	
+	private SECU3_TASK secu3Task = SECU3_TASK.SECU3_NONE;
+	private SECU3_TASK prevSecu3Task = SECU3_TASK.SECU3_NONE;
+	
+	private boolean enabled = false;
+	private boolean connected = false;
+
+	private Service callingService = null;
+	private BluetoothSocket secu3Socket = null;
+	private String deviceAddress = null;
+	
+	private ExecutorService notificationPool = null;
+	private ScheduledExecutorService connectionAndReadingPool = null; 
+	private ConnectedSecu3 connectedSecu3 = null;	
+	private Context appContext = null;
+	private Secu3Logger logger = new Secu3Logger();	
+	
 	
 	private class ConnectedSecu3 extends Thread {
 		public static final int STATUS_TIMEOUT = 10;
@@ -176,10 +179,10 @@ public class Secu3Manager {
 							break;
 						case SECU3_START_LOGGING:
 							logger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path), ""));
-							logger.BeginLogging();
+							logger.beginLogging();
 							break;
 						case SECU3_STOP_LOGGING:
-							logger.EndLogging();
+							logger.endLogging();
 							break;							
 						// Task to read sensors
 						case SECU3_READ_SENSORS:					
@@ -570,7 +573,7 @@ public class Secu3Manager {
 		if (enabled){
         	Log.d(LOG_TAG, "disabling Secu3 manager");
 			enabled = false;
-			logger.EndLogging();
+			logger.endLogging();
 			connectionAndReadingPool.shutdown();
 			Runnable closeAndShutdown = new Runnable() {				
 				@Override

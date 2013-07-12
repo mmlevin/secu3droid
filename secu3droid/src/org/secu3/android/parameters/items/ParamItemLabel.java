@@ -43,8 +43,8 @@ public class ParamItemLabel extends BaseParamItem {
 		this.setSummaryId(summaryID);
 		this.setUnitsId(summaryID);
 		this.setContext(context);
-		this.setName(context.getString(nameID));
-		this.setSummary(context.getString(summaryID));
+		if (nameID != 0) this.setName(context.getString(nameID));
+		if (summaryID != 0) this.setSummary(context.getString(summaryID));
 	}
 	
 	@Override

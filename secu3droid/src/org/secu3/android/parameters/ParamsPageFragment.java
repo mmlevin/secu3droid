@@ -32,7 +32,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class ParamsPageFragment extends ListFragment {
-	OnItemClickListener listener = null;
+	private OnItemClickListener listener = null;
 	
     static ParamsPageFragment newInstance(int num) {
     	ParamsPageFragment f = new ParamsPageFragment();

@@ -69,14 +69,22 @@ public class ParamItemFloat extends BaseParamItem {
 	
 	public ParamItemFloat(Context context, int nameID, int summaryID, int unitsID, float value, float minValue, float maxValue, float stepValue) {
 		this.setContext(context);
-		this.setName(context.getString(nameID));
-		this.setSummary(context.getString(summaryID));
-		this.setUnits(context.getString(unitsID));
+		if (nameID != 0) this.setName(context.getString(nameID));
+		if (summaryID != 0) this.setSummary(context.getString(summaryID));
+		if (unitsID != 0) this.setUnits(context.getString(unitsID));
 		this.value = value;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.stepValue = stepValue;
-	}		
+	}
+	
+	public ParamItemFloat(Context context, int nameID, int summaryID, int unitsID, float value) {
+		this.setContext(context);
+		if (nameID != 0) this.setName(context.getString(nameID));
+		if (summaryID != 0) this.setSummary(context.getString(summaryID));
+		if (unitsID != 0) this.setUnits(context.getString(unitsID));
+		this.value = value;
+	}	
 	
 	@Override
 	public View getView() {

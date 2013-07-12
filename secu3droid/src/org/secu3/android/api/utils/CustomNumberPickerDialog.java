@@ -75,7 +75,7 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		    
 		    LayoutInflater inflater = this.getActivity().getLayoutInflater();
 
-		    View v = inflater.inflate(R.layout.custom_number_picker_integer,null);
+		    View v = inflater.inflate(R.layout.custom_number_picker,null);
 		    numberPickerMain = (NumberPicker) v.findViewById(R.id.numberPickerMain);
 		    numberPickerAdditional = (NumberPicker) v.findViewById(R.id.numberPickerAdditional);
 		    		

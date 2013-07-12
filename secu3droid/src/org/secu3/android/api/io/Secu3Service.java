@@ -60,13 +60,13 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	
 	NotificationManager notificationManager;
 	private Secu3Manager secu3Manager = null;
-	public static Secu3Notification secu3Notification;
+	public static Secu3Notification secu3Notification = null;
 
 	@Override
 	public void onCreate() {
-		super.onCreate();
 		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 		secu3Notification = new Secu3Notification(this);
+		super.onCreate();		
 	}
 	
 	@Override

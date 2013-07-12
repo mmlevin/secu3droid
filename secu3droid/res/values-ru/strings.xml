@@ -29,7 +29,6 @@
     <string name="app_name">Secu3Droid</string>
     <string name="sensors_format">Обороты: %1$d мин-1\r\nАбсолютное давление: %2$.2f кПа\r\nНапряжение: %3$.2f В\r\nТемпература: %4$.2f °C\r\nУгол опережения: %5$+.2f °\r\nСигнал детонации: %6$.2f В\r\nПоправка на детонацию: %7$+.2f °\r\nРасход воздуха: %8$d\r\nКлапан ЭПХХ: %9$d\r\nДроссельная заслонка: %10$d\r\nГазовый клапан: %11$d\r\nКлапан ЭМР: %12$d\r\nВентилятор: %13$d\r\nСтартер заблокирован: %14$d\r\nADD_IO1: %15$.2f\r\nADD_IO2: %16$.2f\r\nДПДЗ:%17$.2f\r\nВоздушная заслонка: %18$.2f</string>
     <string name="sensors_raw_format">Датчик абсолютного давления: %1$.2f В\r\nНапряжение бортовой сети: %2$.2f В\r\nДатчик температуры: %3$.2f В\r\nДатчик детонации: %4$.2f В\r\nДПДЗ: %5$.2f В\r\nADD_IO1: %6$.2f В\r\nADD_IO2: %7$.2f В</string>
-    <string name="diagnostics_input">Voltage: %1$.3f В\r\nMAP_S: %2$.3f В\r\nTEMP: %3$.3f В\r\nADD_IO1: %4$.3f В\r\nADD_IO2: %5$.3f В\r\nCARB: %6$d\r\nGAS_V: %7$d\r\nCKPS: %8$d\r\nREF_S: %9$d\r\nPS: %10$d\r\nBL: %11$d\r\nDE: %12$d\r\nKS_1: %13$.3f В\r\nKS_2: %14$.3f В\r\n</string>
     <string name="title_activity_param">Параметры</string>
     <string name="menu_param">Параметры</string>    
     <string name="service_closed_because_connection_problem_notification_title">Secu3Droid остановлен</string>

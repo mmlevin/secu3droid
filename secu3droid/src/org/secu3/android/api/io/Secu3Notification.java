@@ -42,7 +42,7 @@ public class Secu3Notification {
 	public Notification serviceStoppedNotification;
 	public NotificationManager notificationManager;
 	
-	private Context ctx;
+	private Context ctx = null;
 	
 	public Secu3Notification(Context ctx) {
 		this.ctx = ctx;
