@@ -150,7 +150,7 @@
     <string name="ckps_cogs_number_summary"></string>
     <string name="ckps_missing_cogs_number_title">Number of missing teeth</string>
     <string name="ckps_missing_cogs_number_summary"></string>
-    <string name="ckps_ref_s_edge_title">Phase sensor edge</string>
+    <string name="ckps_ref_s_edge_title">REF_S edge</string>
     <string name="ckps_ref_s_edge_summary"></string>
     <string name="ckps_cogs_before_tdc_title">Number of teeth before TDC</string>
     <string name="ckps_cogs_before_tdc_summary"></string>

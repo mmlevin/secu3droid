@@ -31,7 +31,9 @@ import net.simonvt.numberpicker.NumberPicker;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +65,14 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		    builder.setTitle(getTag());
 		    builder.setCancelable(true);
+		    
+		    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+		    	if (!PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(getString(R.string.pref_night_mode_key), false))
+		    	{
+		    		builder.setInverseBackgroundForced(true);
+		    	}
+		    }
+		    
 		    LayoutInflater inflater = this.getActivity().getLayoutInflater();
 
 		    View v = inflater.inflate(R.layout.custom_number_picker_integer,null);

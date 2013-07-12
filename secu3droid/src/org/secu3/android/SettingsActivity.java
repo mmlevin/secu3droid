@@ -31,6 +31,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -95,6 +96,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);		
 		super.onCreate(savedInstanceState);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		addPreferencesFromResource(R.xml.preferences);							
@@ -126,8 +128,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (getString(R.string.pref_bluetooth_device_key).equals(key))	updateDevicePreferenceSummary();	
-		updateDevicePreferenceList();
+		if (getString(R.string.pref_bluetooth_device_key).equals(key)) {
+			updateDevicePreferenceSummary();
+			updateDevicePreferenceList();			
+		}
+		if (getString(R.string.pref_night_mode_key).equals(key)) {
+			getApplicationContext().setTheme(sharedPreferences.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme);
+		}
 	}
 	
 	private void displayAboutDialog(){
@@ -150,6 +157,12 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         }
        
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+	    	if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false))
+	    	{
+	    		builder.setInverseBackgroundForced(true);
+	    	}
+	    }
 		builder.setTitle(R.string.about_title);
 		builder.setIcon(R.drawable.gplv3_icon);
         builder.setView(messageView);

@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -89,6 +90,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnDataChang
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_diagnostics);
 		

@@ -38,6 +38,7 @@ import org.secu3.android.parameters.items.ParamItemBoolean;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -112,6 +113,7 @@ public class ErrorsActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
 		super.onCreate(savedInstanceState);		
 		
 		Log.d(LOG_TAG, "onCreate");

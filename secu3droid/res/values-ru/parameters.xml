@@ -150,7 +150,7 @@
     <string name="ckps_cogs_number_summary"></string>
     <string name="ckps_missing_cogs_number_title">Количество отсутствующих зубов</string>
     <string name="ckps_missing_cogs_number_summary"></string>
-    <string name="ckps_ref_s_edge_title">Фронт ДФ</string>
+    <string name="ckps_ref_s_edge_title">Фронт ДНО</string>
     <string name="ckps_ref_s_edge_summary"></string>
     <string name="ckps_cogs_before_tdc_title">Количество зубьев до В.М.Т.</string>
     <string name="ckps_cogs_before_tdc_summary"></string>

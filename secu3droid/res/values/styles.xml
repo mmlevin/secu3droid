@@ -25,12 +25,16 @@
              email: mmlevin@mail.ru
 -->
 
-<resources>
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">     
+
+    <style name="AppBaseTheme.Light" parent="android:Theme.Light">    
+        <item name="numberPickerStyle">@style/NPWidget.Holo.NumberPicker</item>
+    </style>
+    <style name="AppBaseTheme" parent="android:Theme">
+        <item name="numberPickerStyle">@style/NPWidget.Holo.NumberPicker</item>        
     </style>
 
-    <style name="AppTheme" parent="AppBaseTheme">
-        <item name="numberPickerStyle">@style/NPWidget.Holo.NumberPicker</item>        
+    <style name="AppTheme" parent="AppBaseTheme">                
     </style>
     <style name = "secu3TextAppearance" parent="@android:style/TextAppearance.Large"></style>
 </resources>

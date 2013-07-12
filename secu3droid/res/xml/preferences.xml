@@ -38,12 +38,12 @@
 		android:inputType="numberDecimal"
 		android:summary="@string/pref_connection_retries_summary" />
 	<CheckBoxPreference
-	    android:key="@string/pref_upload_immediately"
+	    android:key="@string/pref_upload_immediately_key"
 	    android:title="@string/pref_upload_immediately_title"
 	    android:defaultValue="false"
 	    android:summary="@string/pref_upload_immediately_summary"/>	
 	<CheckBoxPreference
-	    android:key="@string/pref_write_log"
+	    android:key="@string/pref_write_log_key"
 	    android:title="@string/pref_write_log_title"
 	    android:defaultValue="false" 
 	    android:summary="@string/pref_write_log_summary"/>  
@@ -51,6 +51,10 @@
 	    android:key="@string/pref_write_log_path"
 	    android:title="@string/pref_write_log_path_title"
 	    android:summary="@string/pref_write_log_path_summary"/>  
+	<CheckBoxPreference 
+	    android:key="@string/pref_night_mode_key"
+	    android:title="@string/pref_night_mode_title"
+	    android:summary="@string/pref_night_mode_summary"/>
 	<Preference
 		android:key="@string/pref_about_key"
 		android:persistent="false"

@@ -104,6 +104,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	    
     private void paramsRead() {
     	isValid = false;
+    	progressBar.setVisibility(ProgressBar.GONE);
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_PARAMS.ordinal()));
     	startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
     }
@@ -335,7 +336,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		Log.d(LOG_TAG, "onCreate");
 		
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		uploadImmediatelly = sharedPref.getBoolean(getString(R.string.pref_upload_immediately), false);
+		uploadImmediatelly = sharedPref.getBoolean(getString(R.string.pref_upload_immediately_key), false);
+		setTheme(sharedPref.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
 		setContentView(R.layout.activity_param);
 		
 		createFormFromXml(R.xml.parameters);

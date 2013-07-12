@@ -73,7 +73,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		String deviceAddress = sharedPref.getString(getString(R.string.pref_bluetooth_device_key), null);
-		onSharedPreferenceChanged (sharedPref,getString(R.string.pref_write_log));
+		onSharedPreferenceChanged (sharedPref,getString(R.string.pref_write_log_key));
 		int maxConRetries = Integer.parseInt(sharedPref.getString(getString(R.string.pref_connection_retries_key), this.getString(R.string.defaultConnectionRetries)));
 		Log.d(LOG_TAG, "prefs device addr: "+deviceAddress);
 		if (ACTION_SECU3_SERVICE_START.equals(intent.getAction())){
@@ -141,7 +141,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (getString(R.string.pref_write_log).equals(key)) {
+		if (getString(R.string.pref_write_log_key).equals(key)) {
 			boolean writeLog = sharedPreferences.getBoolean(key, false);
 			if (secu3Manager != null) {
 				secu3Manager.setTask(writeLog?SECU3_TASK.SECU3_START_LOGGING:SECU3_TASK.SECU3_STOP_LOGGING);

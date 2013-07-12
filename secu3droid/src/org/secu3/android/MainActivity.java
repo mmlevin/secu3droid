@@ -35,6 +35,7 @@ import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Service;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -87,10 +88,12 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
+		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);		
 		super.onCreate(savedInstanceState);
 
 		Log.d(LOG_TAG, "onCreate");		
 		setContentView(R.layout.activity_main);
+		
 
 		sensorsFormat = getString(R.string.sensors_format);
 		sensorsRawFormat = getString(R.string.sensors_raw_format);
