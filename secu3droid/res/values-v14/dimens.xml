@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
+<!-- 
   Secu3Droid - An open source, free manager for SECU-3 engine
   control unit
   Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
@@ -25,28 +25,10 @@
              email: mmlevin@mail.ru
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingRight="@dimen/param_value_scroll_padding">
-
-    <TextView
-        android:id="@+id/param_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:textIsSelectable="false"
-        android:textAppearance="?android:attr/textAppearance" />
-
-	<TextView
-	    android:id="@+id/param_summary"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentRight="true"
-	    android:layout_below="@+id/param_name"
-	    android:textIsSelectable="false"
-	    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-</RelativeLayout>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="param_value_horizontal_margin">10dp</dimen>
+    <dimen name="param_value_scroll_padding">0dp</dimen>
+</resources>

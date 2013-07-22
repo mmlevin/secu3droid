@@ -505,6 +505,13 @@ public class PacketUtils {
 					adapter.setFloatItem(R.string.diag_input_add_io1, ((DiagInpDat) packet).add_io2);
 					adapter.setFloatItem(R.string.diag_input_ks1, ((DiagInpDat) packet).ks_1);
 					adapter.setFloatItem(R.string.diag_input_ks2, ((DiagInpDat) packet).ks_2);
+					adapter.setBooleanItem(R.string.diag_input_carb, (((DiagInpDat) packet).carb==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_gas_v, (((DiagInpDat) packet).gas==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_ckps, (((DiagInpDat) packet).ckps==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_ref_s, (((DiagInpDat) packet).ref_s==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_ps, (((DiagInpDat) packet).ps==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_bl, (((DiagInpDat) packet).bl==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_de, (((DiagInpDat) packet).de==1)?true:false);
 				}
 			}
 		}
