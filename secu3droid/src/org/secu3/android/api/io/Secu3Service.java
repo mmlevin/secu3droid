@@ -123,7 +123,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 			}
 		} else if (ACTION_SECU3_SERVICE_SEND_PACKET.equals(intent.getAction())) {
 			if (secu3Manager != null) {
-				Secu3Dat packet = intent.getParcelableExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET);
+				Secu3Packet packet = intent.getParcelableExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET);
 				int packets_counter = intent.getIntExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, 0); 
 				secu3Manager.appendPacket (packet, packets_counter);
 				sendBroadcast(intent);

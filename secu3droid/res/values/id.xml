@@ -33,4 +33,14 @@
     <item type = "id" name="parameter_type_button">button</item>
     <item type = "id" name="parameter_type_toggle_button">togglebutton</item>
     <item type = "id" name="parameter_type_spinner">spinner</item>
+    
+    <item type = "id" name="field_type_int4">int4</item>
+    <item type = "id" name="field_type_int8">int8</item>
+    <item type = "id" name="field_type_int16">int16</item>
+    <item type = "id" name="field_type_int32">int32</item>
+    <item type = "id" name="field_type_float4">float4</item>
+    <item type = "id" name="field_type_float8">float8</item>
+    <item type = "id" name="field_type_float16">float16</item>
+    <item type = "id" name="field_type_float32">float32</item>
+	<item type = "id" name="field_type_string">string</item>    
 </resources>

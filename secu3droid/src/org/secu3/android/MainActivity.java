@@ -27,11 +27,11 @@ package org.secu3.android;
 
 import java.util.Locale;
 
-import org.secu3.android.api.io.Secu3Dat;
-import org.secu3.android.api.io.Secu3Dat.ADCRawDat;
+import org.secu3.android.api.io.ProtoFieldInteger;
+import org.secu3.android.api.io.ProtoFieldString;
 import org.secu3.android.api.io.Secu3Dat.FWInfoDat;
-import org.secu3.android.api.io.Secu3Dat.SensorDat;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
+import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.api.io.Secu3Service;
 import android.net.Uri;
 import android.os.Bundle;
@@ -113,6 +113,7 @@ public class MainActivity extends Activity {
 			textViewStatus.setText(savedInstanceState.getString(STATUS));
 			checkBox.setChecked(savedInstanceState.getBoolean(CHECKBOX));
 		}
+		
 		super.onCreate(savedInstanceState);		
 	}
 	
@@ -207,32 +208,56 @@ public class MainActivity extends Activity {
 			}						
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
 		{
-			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
-			if (packet instanceof SensorDat) {
-				SensorDat sd = (SensorDat)packet;
-				boolean errors = sd.ce_errors != 0;
-				if (errors != this.errors) {
-					this.errors = errors;
-					ActivityCompat.invalidateOptionsMenu(this);
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet != null) {
+				switch (packet.getPacketIdResId()) {
+				case R.string.packet_type_sendor_dat:
+					boolean errors = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue() != 0;
+					if (errors != this.errors) {
+						this.errors = errors;
+						ActivityCompat.invalidateOptionsMenu(this);
+					}
+					if (!checkBox.isChecked()) {
+						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
+						textViewData.setText(String.format(Locale.US,sensorsFormat,
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_map_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_voltage_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_temperature_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_knock_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_air_flow_title)).getValue(),
+								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE),
+								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB),
+								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_GAS),
+								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE),
+								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN),
+								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));
+					}			
+					break;
+				case R.string.packet_type_adcraw_dat:
+					if (checkBox.isChecked()) {
+						textViewData.setText(String.format(Locale.US,sensorsRawFormat,
+								((ProtoFieldInteger) packet.getField(R.string.adcraw_map_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.adcraw_voltage_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.adcraw_temperature_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.adcraw_knock_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.adcraw_tps_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.adcraw_addi1_title)).getValue(),
+								((ProtoFieldInteger) packet.getField(R.string.adcraw_addi2_title)).getValue()));
+					}
+					break;
+				case R.string.packet_type_fwinfo_dat:
+					textFWInfo.setText(((ProtoFieldString) packet.findField(R.string.fwinfo_dat_data_title)).getValue());
+					break;
+				default:
+					break;
 				}
-				if (!checkBox.isChecked() && (sd != null)) {
-					textViewData.setText(String.format(Locale.US,sensorsFormat,
-							sd.frequen, sd.pressure, sd.voltage, sd.temperat, sd.adv_angle,
-							sd.knock_k, sd.knock_retard, sd.air_flow, sd.ephh_valve,
-							sd.carb, sd.gas, sd.epm_valve, sd.cool_fan,sd.st_block,sd.add_i1,sd.add_i2,sd.tps,sd.choke_pos));
-				}			
-			} else if (packet instanceof ADCRawDat) {
-				ADCRawDat ad = (ADCRawDat)packet;
-				if (checkBox.isChecked() && (ad != null)) {
-					textViewData.setText(String.format(Locale.US,sensorsRawFormat,
-									ad.map_value, ad.ubat_value, ad.temp_value,
-									ad.knock_value,ad.tps_value,ad.add_i1_value,ad.add_i2_value));
-				}			
-			} else if (packet instanceof FWInfoDat) {
-				fwInfoDat = (FWInfoDat) packet;
-				if (fwInfoDat != null) {
-					textFWInfo.setText(fwInfoDat.info);
-				}			
 			}
 		}		
 	}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="packet_type_change_mode" translatable="false">h</string>
+	<string name="packet_type_bootloader" translatable="false">i</string>    
+    
+    <string name="packet_type_temper_par" translatable="false">j</string>
+    <string name="packet_type_carbur_par" translatable="false">k</string>
+	<string name="packet_type_idlreg_par" translatable="false">l</string>
+	<string name="packet_type_angles_par" translatable="false">m</string>
+	<string name="packet_type_funset_par" translatable="false">n</string>
+	<string name="packet_type_startr_par" translatable="false">o</string>
+	
+	<string name="packet_type_fnname_dat" translatable="false">p</string>
+	<string name="packet_type_sendor_dat" translatable="false">q</string>
+	
+	<string name="packet_type_adccor_par" translatable="false">r</string>
+	<string name="packet_type_adcraw_dat" translatable="false">s</string>
+	
+	<string name="packet_type_ckps_par" translatable="false">t</string>
+	<string name="packet_type_op_comp_nc" translatable="false">u</string>
+	
+	<string name="packet_type_ce_err_codes" translatable="false">v</string>
+
+	<string name="packet_type_knock_par" translatable="false">w</string>
+		
+	<string name="packet_type_ce_saved_err" translatable="false">x</string>
+	<string name="packet_type_fwinfo_dat" translatable="false">y</string>
+	<string name="packet_type_miscel_par" translatable="false">z</string>	
+	<string name="packet_type_edittab_par" translatable="false">{</string>
+	<string name="packet_type_atttab_par" translatable="false">}</string>
+	<string name="packet_type_dbgvar_dat" translatable="false">:</string>
+	
+	<string name="packet_type_diaginp_dat" translatable="false">=</string>
+	<string name="packet_type_diagout_dat" translatable="false">^</string>
+	
+	<string name="packet_type_choke_par" translatable="false">%</string>
+	<string name="packet_type_secur_par" translatable="false">#</string>
+
+    <string name="ce_saved_err_title" translatable="false">Saved errors</string>
+    <string name="ce_saved_err_data_title" translatable="false">Saved errors data</string>
+    <string name="ce_err_codes_title" translatable="false">CE errors</string>
+    <string name="ce_err_codes_data_title" translatable="false">CE errors data</string>
+    <string name="op_comp_nc_title" translatable="false">Operation complete</string>
+    <string name="op_comp_nc_operation_title" translatable="false">Operation type</string>
+    <string name="op_comp_nc_operation_code_title" translatable="false">Operation code</string>
+    <string name="adcraw_dat_title" translatable="false">Raw ADC data</string>
+    <string name="adcraw_map_title" translatable="false">MAP</string>
+    <string name="adcraw_voltage_title" translatable="false">Voltage</string>
+    <string name="adcraw_temperature_title" translatable="false">Temperature</string>
+    <string name="adcraw_knock_title" translatable="false">Knock</string>
+    <string name="adcraw_tps_title" translatable="false">TPS</string>
+    <string name="adcraw_addi1_title" translatable="false">ADD_IO1</string>
+    <string name="adcraw_addi2_title" translatable="false">ADD_IO2</string>
+    <string name="fnname_dat_title" translatable="false">Function names</string>
+    <string name="fnname_dat_quantity_title" translatable="false">Total quantity</string>
+    <string name="fnname_dat_index_title" translatable="false">Current index</string>
+    <string name="fnname_dat_data_title" translatable="false">Function name</string>
+    <string name="fwinfo_dat_title" translatable="false">Firmware info</string>
+    <string name="fwinfo_dat_data_title" translatable="false">Firmware tag</string>
+    <string name="fwinfo_dat_options_title" translatable="false">Firmware options</string>
+    <string name="sensor_dat_title" translatable="false">Sensors data</string>
+    <string name="sensor_dat_rpm_title" translatable="false">RPM</string>
+    <string name="sensor_dat_map_title" translatable="false">MAP</string>
+    <string name="sensor_dat_voltage_title" translatable="false">Voltage</string>
+    <string name="sensor_dat_temperature_title" translatable="false">Temperature</string>
+    <string name="sensor_dat_angle_correction_title" translatable="false">Angle correction</string>
+    <string name="sensor_dat_knock_title" translatable="false">Knock</string>
+    <string name="sensor_dat_knock_retard_title" translatable="false">Knock retard</string>
+    <string name="sensor_dat_air_flow_title" translatable="false">Air flow</string>
+    <string name="sensor_dat_bitfield_title" translatable="false">Sensors bitfield</string>
+    <string name="sensor_dat_tps_title" translatable="false">TPS</string>
+    <string name="sensor_dat_addi1_voltage_title" translatable="false">ADD_IO1</string>
+    <string name="sensor_dat_addi2_voltage_title" translatable="false">ADD_IO2</string>
+    <string name="sensor_dat_errors_title" translatable="false">Errors</string>
+    <string name="sensor_dat_choke_position_title" translatable="false">Choke position</string>
+    <string name="change_mode_title" translatable="false">Change mode</string>
+    <string name="change_mode_data_title" translatable="false">Data</string>
+    <string name="diaginp_dat_title" translatable="false">Inputs diagnostics</string>
+    <string name="diag_input_bitfield" translatable="false">Inputs bitfield</string>
+    <string name="diagout_dat_title" translatable="false">Output diagnostics</string>
+    <string name="diagout_dat_bitfield_title" translatable="false">Outputs bitfield</string>
+    <string name="choke_manual_steps" translatable="false">Steps</string>	
+    
+    <integer name="protocol_temp_phusical_magnitude_divider">1</integer>
+</resources>
