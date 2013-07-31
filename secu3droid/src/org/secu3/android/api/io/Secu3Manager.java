@@ -169,8 +169,8 @@ public class Secu3Manager {
 			
 			switch (secu3State) {
 			case SECU3_NORMAL:
-					wrapper.parse(packet);
-					appContext.sendBroadcast(wrapper.getLastPacketIntent());
+					getProtoWrapper().parse(packet);
+					appContext.sendBroadcast(getProtoWrapper().getLastPacketIntent());
 					
 					if (secu3Task != prevSecu3Task) { // If task changed
 						prevSecu3Task = secu3Task;
@@ -199,7 +199,7 @@ public class Secu3Manager {
 							progressCurrent = 0;
 							progressTotal = PROGRESS_TOTAL_PARAMS;
 							subprogress = 0;
-							wrapper.init();
+							getProtoWrapper().init();
 							writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
 							writer.flush();					
 							break;
@@ -218,7 +218,7 @@ public class Secu3Manager {
 						}
 					}
 
-					logger.OnPacketReceived(wrapper.getLastPacket());
+					logger.OnPacketReceived(getProtoWrapper().getLastPacket());
 					
 					switch (secu3Task) {
 					case SECU3_NONE:
@@ -231,7 +231,7 @@ public class Secu3Manager {
 						updateTask();
 						break;
 					case SECU3_READ_PARAMS:
-						switch (wrapper.getLastPacket().getPacketIdResId()) {
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_startr_par:
 							updateProgress(1 + subprogress);
 							writer.write(ChangeMode.pack(Secu3Dat.ANGLES_PAR));
@@ -248,13 +248,13 @@ public class Secu3Manager {
 							writer.flush();
 							break;
 						case R.string.packet_type_fnname_dat:
-							updateProgress(4 + subprogress);
-							/*FnNameDat fnNameDat = (FnNameDat) wrapper.getLastPacket();
-							subprogress = (fnNameDat == null)?0:fnNameDat.names_count();
-							if (fnNameDat.names_available()) {
+							//updateProgress(4 + subprogress);
+							//FnNameDat fnNameDat = (FnNameDat) wrapper.getLastPacket();
+							//subprogress = (fnNameDat == null)?0:fnNameDat.names_count();
+							//if (fnNameDat.names_available()) {
 								writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
 								writer.flush();
-							}*/
+							//}
 							// TODO
 							break;								
 						case R.string.packet_type_funset_par:
@@ -294,37 +294,37 @@ public class Secu3Manager {
 						}			
 						break;
 					case SECU3_READ_ERRORS:
-						switch (wrapper.getLastPacket().getPacketIdResId()) {
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_ce_err_codes:	
 							updateTask();						
 						}				
 						break;						
 					case SECU3_READ_SAVED_ERRORS:
-						switch (wrapper.getLastPacket().getPacketIdResId()) {
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_ce_saved_err:
 							updateTask();
 						}
 						break;
 					case SECU3_READ_FW_INFO:
-						switch (wrapper.getLastPacket().getPacketIdResId()) {
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_fwinfo_dat:
 							updateTask();						
 						}				
 						break;						
 					case SECU3_RAW_SENSORS:
-						switch (wrapper.getLastPacket().getPacketIdResId()) {
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_adcraw_dat:
 							updateTask();
 						}
 						break;
 					case SECU3_READ_SENSORS:
-						switch (wrapper.getLastPacket().getPacketIdResId()) {
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_sendor_dat:
 							updateTask();
 						}
 						break;						
 					}
-					Log.d(LOG_TAG,wrapper.getLogString());							
+					Log.d(LOG_TAG,getProtoWrapper().getLogString());							
 				break;
 			default:
 				break;
@@ -418,7 +418,7 @@ public class Secu3Manager {
 		appContext = callingService.getApplicationContext();	
 		wrapper = new Secu3ProtoWrapper(appContext);
 		try {
-			wrapper.instantiateFromXml(R.xml.protocol);
+			getProtoWrapper().instantiateFromXml(R.xml.protocol);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -607,5 +607,9 @@ public class Secu3Manager {
 			callingService.stopSelf();
         	Log.d(LOG_TAG, "Bluetooth Secu3 manager disabled");
 		}
-	}	
+	}
+
+	public Secu3ProtoWrapper getProtoWrapper() {
+		return wrapper;
+	}
 }

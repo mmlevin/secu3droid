@@ -89,5 +89,6 @@
     <integer name="protocol_tps_physical_magnitude_divider">2</integer>
     <integer name="protocol_voltage_physical_magnitude_divider">400</integer>
     <integer name="protocol_adc_discrete">400</integer>
+    <integer name="protocol_adccor_factor_divider">16384</integer>
     <integer name="protocol_choke_position_divider">2</integer>    
 </resources>

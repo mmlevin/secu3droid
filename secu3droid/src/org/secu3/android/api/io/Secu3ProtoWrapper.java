@@ -172,7 +172,6 @@ public class Secu3ProtoWrapper {
 								field = new ProtoFieldFloat(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), div, format.parse(fieldMinVersion).intValue(), isBinary());
 								if (fieldMultiplier != null)
 									((ProtoFieldFloat) field).setIntMultiplier ((ResourcesUtils.isResource(fieldMultiplier))?ResourcesUtils.getReferenceInt(getContext(), fieldMultiplier):Integer.valueOf(fieldDivider));
-								else ((ProtoFieldFloat) field).setIntMultiplier (1);
 								break;															
 							case R.id.field_type_string:
 								field = new ProtoFieldString(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, format.parse(fieldLength).intValue(), format.parse(fieldMinVersion).intValue(), isBinary());
@@ -243,6 +242,20 @@ public class Secu3ProtoWrapper {
 		}
 	}
 
+	public synchronized Secu3Packet obtainPacketSkeleton (int packetNameId) {
+		String s = context.getString(packetNameId);
+		if (s != null) {
+			Secu3Packet packet = new Secu3Packet(packets.get(s));
+			if ((packet != null) && (packet.getFields() != null)) {
+				for (int i = 0; i != packet.getFields().size(); i++) {
+					packet.getFields().get(i).reset();
+				}
+			}
+			return packet;
+		}
+		return null;
+	}
+	
 	public Secu3Packet getLastPacket() {
 		return lastPacket;
 	}

@@ -39,6 +39,13 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 		value = in.readString();
 	}
 	
+	public ProtoFieldString(ProtoFieldString field) {
+		super (field);
+		if (field != null) {
+			this.value = field.value;
+		}
+	}
+	
 	@Override
 	public void setData(String data) {
 		super.setData(data);
@@ -51,5 +58,11 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+		this.value = null;
 	}
 }

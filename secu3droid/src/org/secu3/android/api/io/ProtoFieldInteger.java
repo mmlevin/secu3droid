@@ -33,6 +33,14 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		signed = (in.readInt()==0)?false:true;
 	}
 	
+	public ProtoFieldInteger(ProtoFieldInteger field) {
+		super(field);
+		if (field != null) {
+			this.value = field.value;
+			this.signed = field.signed;			
+		}
+	}
+	
 	public ProtoFieldInteger(Context context, int nameId, int type, boolean signed, int minVersion, boolean binary) {
 		value = 0;
 		setData(null);
@@ -102,5 +110,11 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 				setValue(Integer.parseInt(data, 16));			
 			}
 		}
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+		this.value = 0;
 	}
 }

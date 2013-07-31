@@ -27,11 +27,10 @@ package org.secu3.android;
 
 import java.util.ArrayList;
 
+import org.secu3.android.api.io.ProtoFieldInteger;
+import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
-import org.secu3.android.api.io.Secu3Dat;
-import org.secu3.android.api.io.Secu3Dat.CEErrCodes;
-import org.secu3.android.api.io.Secu3Dat.CESavedErr;
 import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.items.BaseParamItem;
 import org.secu3.android.parameters.items.ParamItemBoolean;
@@ -76,7 +75,7 @@ public class ErrorsActivity extends Activity {
 	
 
 	private void setRealtime (boolean realtime) {
-		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; i++) {
+		for (int i = 0; i != Secu3Packet.SECU3_ECU_ERRORS_COUNT; i++) {
 			errors.get(i).setEnabled(!realtime);
 		}		
 		adapter.notifyDataSetChanged();
@@ -132,7 +131,7 @@ public class ErrorsActivity extends Activity {
 		errorsInertness = new int [INERTNESS_COUNT]; 
 		String errorNames[] = getResources().getStringArray(R.array.errors_ecu_errors_names);
 		String errorBCs[] = getResources().getStringArray(R.array.errors_ecu_errors_blink_codes);
-		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; i++) {
+		for (int i = 0; i != Secu3Packet.SECU3_ECU_ERRORS_COUNT; i++) {
 			errors.add(new ParamItemBoolean(this, errorNames[i], getString (R.string.errors_code,errorBCs[i]), false));
 			errors.get(i).setEnabled(!realtime);
 		}
@@ -195,9 +194,10 @@ public class ErrorsActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_errors_write:
-			CESavedErr err = new CESavedErr();
-			err.flags = getErrors();
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, err));			
+			// TODO
+			//CESavedErr err = new CESavedErr();
+			//err.flags = getErrors();
+			//startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, err));			
 			return true;
 		case R.id.menu_errors_read:
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SAVED_ERRORS.ordinal()));
@@ -239,7 +239,7 @@ public class ErrorsActivity extends Activity {
 			}
 		}
 		
-		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+		for (int i = 0; i != Secu3Packet.SECU3_ECU_ERRORS_COUNT; ++i) {
 			((ParamItemBoolean) errors.get(i)).setValue(((flags & 0x01) != 0)?true:false);
 			flags >>= 1; 
 		}
@@ -248,14 +248,14 @@ public class ErrorsActivity extends Activity {
 	
 	private int getErrors () {
 		int res = 0;
-		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+		for (int i = 0; i != Secu3Packet.SECU3_ECU_ERRORS_COUNT; ++i) {
 			if (((ParamItemBoolean) errors.get(i)).getValue()) res |= 0x01 << i; 
 		}
 		return res;
 	}	
 	
 	private void setErrors(int errors) {
-		for (int i = 0; i != Secu3Dat.SECU3_ECU_ERRORS_COUNT; ++i) {
+		for (int i = 0; i != Secu3Packet.SECU3_ECU_ERRORS_COUNT; ++i) {
 			((ParamItemBoolean) this.errors.get(i)).setValue(((errors & 0x01)!=0)?true:false);
 			errors >>= 1;
 		}		
@@ -271,12 +271,13 @@ public class ErrorsActivity extends Activity {
 			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
 			errorsTextViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
-			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
-			if (packet instanceof CESavedErr) {
-				updateFlags(((CESavedErr)packet).flags);		
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet.getNameId() == R.string.ce_saved_err_title) {
+				updateFlags(((ProtoFieldInteger) packet.getField(R.string.ce_saved_err_data_title)).getValue());		
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
-			} else if (packet instanceof CEErrCodes) {				
-				updateFlags(((CEErrCodes)packet).flags);
+			} else
+			if (packet.getNameId() == R.string.ce_err_codes_title) {				
+				updateFlags(((ProtoFieldInteger) packet.getField(R.string.ce_err_codes_data_title)).getValue());
 			}
 		} 
 	}

@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Secu3Packet implements Parcelable {
+public class Secu3Packet implements Parcelable{
 	public final static char INPUT_PACKET = '@';
 	public final static char OUTPUT_PACKET = '!';
 	public final static int INPUT_OUTPUT_POS = 0;
@@ -23,6 +23,63 @@ public class Secu3Packet implements Parcelable {
 	public final static int BITNUMBER_COOL_FAN = 5;
 	public final static int BITNUMBER_ST_BLOCK = 6;
 	
+	public static final int COPT_ATMEGA16 = 0;
+	public static final int COPT_ATMEGA32 = 1;
+	public static final int COPT_ATMEGA64 = 2;
+	public static final int COPT_ATMEGA128 = 3;
+	public static final int COPT_VPSEM = 4;
+	public static final int COPT_WHEEL_36_1 = 5;          /*Obsolete! Left for compatibility reasons*/
+	public static final int COPT_INVERSE_IGN_OUTPUTS = 6; /*Obsolete! Left for compatibility reasons*/
+	public static final int COPT_DWELL_CONTROL = 7;
+	public static final int COPT_COOLINGFAN_PWM = 8;
+	public static final int COPT_REALTIME_TABLES = 9;
+	public static final int COPT_ICCAVR_COMPILER = 10;
+	public static final int COPT_AVRGCC_COMPILER = 11;
+	public static final int COPT_DEBUG_VARIABLES = 12;
+	public static final int COPT_PHASE_SENSOR = 13;
+	public static final int COPT_PHASED_IGNITION = 14;
+	public static final int COPT_FUEL_PUMP = 15;
+	public static final int COPT_THERMISTOR_CS = 16;
+	public static final int COPT_SECU3T = 17;
+	public static final int COPT_DIAGNOSTICS = 18;
+	public static final int COPT_HALL_OUTPUT = 19;
+	public static final int COPT_REV9_BOARD = 20;
+	public static final int COPT_STROBOSCOPE = 21;
+	
+	public final static int SECU3_ECU_ERRORS_COUNT		  = 11;
+	
+	public static final String COPT[] = {
+		"COPT_ATMEGA16",
+		"COPT_ATMEGA32",
+		"COPT_ATMEGA64",
+		"COPT_ATMEGA128",
+		"COPT_VPSEM",
+		"COPT_WHEEL_36_1",          /*Obsolete! Left for compatibility reasons*/
+		"COPT_INVERSE_IGN_OUTPUTS", /*Obsolete! Left for compatibility reasons*/
+		"COPT_DWELL_CONTROL",
+		"COPT_COOLINGFAN_PWM",
+		"COPT_REALTIME_TABLES",
+		"COPT_ICCAVR_COMPILER",
+		"COPT_AVRGCC_COMPILER",
+		"COPT_DEBUG_VARIABLES",
+		"COPT_PHASE_SENSOR",
+		"COPT_PHASED_IGNITION",
+		"COPT_FUEL_PUMP",
+		"COPT_THERMISTOR_CS",
+		"COPT_SECU3T",
+		"COPT_DIAGNOSTICS",
+		"COPT_HALL_OUTPUT",
+		"COPT_REV9_BOARD",
+		"COPT_STROBOSCOPE"};	
+	
+	 public final static int OPCODE_EEPROM_PARAM_SAVE    = 1;
+	 public final static int OPCODE_CE_SAVE_ERRORS       = 2;
+	 public final static int OPCODE_READ_FW_SIG_INFO     = 3;
+	 public final static int OPCODE_LOAD_TABLSET         = 4;  //realtime tables
+	 public final static int OPCODE_SAVE_TABLSET         = 5;  //realtime tables
+	 public final static int OPCODE_DIAGNOST_ENTER       = 6;  //enter diagnostic mode
+	 public final static int OPCODE_DIAGNOST_LEAVE       = 7;  //leave diagnostic mode
+	 
 	public static int bitTest (int value, int bitNumber) {
 		value >>= bitNumber;
 		return (value & 0x01);
@@ -114,6 +171,31 @@ public class Secu3Packet implements Parcelable {
 		if (packetIdResId != 0) {
 			this.setPacketId(context.getString(packetIdResId));
 			if (packetId.length() > 1) throw new IllegalArgumentException("Packet ID lenght cannot be greater than 1");			
+		}
+	}
+	
+	public Secu3Packet(Secu3Packet packet) {
+		if (packet != null) {
+			this.name = packet.name;
+			this.nameId = packet.nameId;
+			this.minVersion = packet.minVersion;
+			this.binary = packet.binary;
+			this.data = packet.data;
+			this.packetId = packet.packetId;
+			this.packetIdResId = packet.packetIdResId;
+			this.fields = null;
+			if (packet.fields != null) {
+				this.fields = new ArrayList<BaseProtoField>();
+				BaseProtoField field = null;
+				for (int i =0; i != packet.fields.size(); ++i) {
+					field = packet.fields.get(i);
+					if (field instanceof ProtoFieldString) addField(new ProtoFieldString((ProtoFieldString)field));
+					else
+					if (field instanceof ProtoFieldInteger) addField(new ProtoFieldInteger((ProtoFieldInteger)field));
+					else
+					if (field instanceof ProtoFieldFloat) addField(new ProtoFieldFloat((ProtoFieldFloat)field));
+				}
+			}
 		}
 	}
 
@@ -236,6 +318,13 @@ public class Secu3Packet implements Parcelable {
 	{
 		Intent intent = new Intent (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
 		intent.putExtra (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET,this);
+		return intent;
+	}
+	
+	public Intent getSkeletonIntent ()
+	{
+		Intent intent = new Intent (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET);
+		intent.putExtra (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET,this);
 		return intent;
 	}
 

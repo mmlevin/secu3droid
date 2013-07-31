@@ -25,6 +25,18 @@ public class BaseProtoField implements Parcelable {
 		this.length = in.readInt();
 	}
 	
+	public BaseProtoField (BaseProtoField field) {
+		if(field != null) {
+			this.name = field.name;
+			this.nameId = field.nameId;
+			this.type = field.type;
+			this.minVersion = field.minVersion;
+			this.binary = field.binary;
+			this.data = field.data;
+			this.length = field.length;			
+		}
+	}
+	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(name);
@@ -109,5 +121,9 @@ public class BaseProtoField implements Parcelable {
 	@Override
 	public int describeContents() {
 		return 0;
+	}
+
+	public void reset() {
+		this.data = null;		
 	}
 }

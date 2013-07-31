@@ -31,7 +31,6 @@ import java.util.ArrayList;
 
 import org.secu3.android.api.io.*;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
-import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.*;
 import org.secu3.android.api.utils.CustomNumberPickerDialog.OnNumberPickerDialogAcceptListener;
 import org.secu3.android.parameters.*;
@@ -79,6 +78,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private ParamItemsAdapter adapter = null;
 	private CustomNumberPickerDialog dialog = null;	
 	private ReceiveMessages receiver = null;
+	
+	private Secu3Packet OpCompNcSkeleton = null;
+	private Secu3Packet ChokeControlSkeleton = null;
 		    
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
@@ -109,7 +111,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		return dialog;
 	}	
 	
-	public void createFormFromXml (int id){
+	public void createFormFromXml (int xmlId){
 		String name;
 		ParamsPage page = null;
 		BaseParamItem item = null;
@@ -129,7 +131,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		String attrValue = null;		
 		
 		try {
-			XmlPullParser xpp = getResources().getXml(id);
+			XmlPullParser xpp = getResources().getXml(xmlId);
 			pages = new ArrayList<ParamsPage>();
 			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
 				switch (xpp.getEventType()) {
@@ -357,8 +359,11 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			return true;
 		case R.id.menu_params_save_eeprom:
 	    	progressBar.setIndeterminate(true);
-	    	progressBar.setVisibility(ProgressBar.VISIBLE);				
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Dat.OPCODE_EEPROM_PARAM_SAVE,0)));
+	    	progressBar.setVisibility(ProgressBar.VISIBLE);			
+	    	Secu3Packet packet = new Secu3Packet(OpCompNcSkeleton);
+	    	((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_title)).setValue (Secu3Packet.OPCODE_EEPROM_PARAM_SAVE);
+	    	((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_title)).setValue (0);
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -388,7 +393,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	}
 		
 	@Override
-	protected void onResume() {					
+	protected void onResume() {
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.op_comp_nc_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.choke_control_title));
 		dialog = (CustomNumberPickerDialog)getLastCustomNonConfigurationInstance();
 		if (dialog != null) {
 			dialog.setOnCustomNumberPickerAcceptListener(this);
@@ -436,23 +443,24 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 
 	public void onItemChange(int itemId) {
 		if (PacketUtils.isParamFromPage(itemId, R.string.choke_control_title)) {
-			ChokePar packet = (ChokePar) PacketUtils.buildPacket(paramAdapter, Secu3Dat.CHOKE_PAR);
+			Secu3Packet packet = new Secu3Packet (ChokeControlSkeleton); 
 			switch (itemId) {
 			case R.string.choke_manual_step_down_title:
-				packet.manual_delta = -127;
+				((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (-127);
 				break;
 			case R.string.choke_manual_step_up_title:
-				packet.manual_delta = 127;
+				((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (127);
 				break;
 			case R.string.choke_testing_title:
-				packet.testing = ((ParamItemToggleButton) paramAdapter.findItemByNameId(itemId)).getValue()?1:0;
+				((ProtoFieldInteger) packet.findField(R.string.choke_testing_title)).setValue (((ParamItemToggleButton) paramAdapter.findItemByNameId(itemId)).getValue()?1:0);
 				break;				
 			default:
 				break;
 			}
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));			
 		} else if (uploadImmediatelly) {
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, itemId)));			
+			//startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, itemId)));
+			// TODO
 		}
 	}
 	
@@ -474,15 +482,19 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
 			textViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
-			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
-			if (packet instanceof OpCompNc) {
-				if (((OpCompNc)packet).opcode == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE) {
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet.getNameId() == R.string.op_comp_nc_title) {
+				if (((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_title)).getValue() == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE) {
 					progressBar.setVisibility(ProgressBar.GONE);				
-					Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((OpCompNc)packet).opdata), Toast.LENGTH_LONG).show();
+					Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
 				}
 			} else {
 				PacketUtils.setParamFromPacket(paramAdapter, packet);
 			}
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET.equals(intent.getAction())) {
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet.getNameId() == R.string.op_comp_nc_title) OpCompNcSkeleton = packet;
+			else if (packet.getNameId() == R.string.choke_control_title) ChokeControlSkeleton = packet;
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);

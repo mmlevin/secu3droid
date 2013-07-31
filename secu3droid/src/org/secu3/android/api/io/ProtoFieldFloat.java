@@ -16,10 +16,11 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		super.writeToParcel(dest, flags);
+		dest.writeInt(signed?1:0);		
 		dest.writeInt(intValue);
 		dest.writeInt(intDivider);
+		dest.writeInt(intMultiplier);
 		dest.writeFloat(floatValue);
-		dest.writeInt(signed?1:0);
 	}	
 	
 	public static final Parcelable.Creator<ProtoFieldFloat> CREATOR = new Parcelable.Creator<ProtoFieldFloat>() {
@@ -34,10 +35,22 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 	
 	public ProtoFieldFloat(Parcel in) {
 		super(in);
+		signed = (in.readInt()==0)?false:true;		
 		intValue = in.readInt();
 		intDivider = in.readInt();
+		intMultiplier = in.readInt();
 		floatValue = in.readFloat();
-		signed = (in.readInt()==0)?false:true;
+	}
+	
+	public ProtoFieldFloat(ProtoFieldFloat field) {
+		super(field);
+		if (field != null) {
+			this.intValue = field.intValue;
+			this.intDivider = field.intDivider;
+			this.intMultiplier = field.intMultiplier;
+			this.floatValue = field.floatValue;
+			this.signed = field.signed;
+		}
 	}
 	
 	public ProtoFieldFloat(Context context, int nameId, int type, boolean signed, int divider, int minVersion, boolean binary) {
@@ -48,6 +61,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		setType(type);
 		setSigned(signed);
 		setMinVersion(minVersion);
+		setIntMultiplier(1);
 		setIntDivider(divider);
 		setBinary(binary);
 		if (nameId != 0) this.setName(context.getString(nameId));
@@ -136,5 +150,12 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 			}
 			setValue((float)intValue*intMultiplier/intDivider);
 		}		
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+		this.intValue = 0;
+		this.floatValue = 0;
 	}
 }

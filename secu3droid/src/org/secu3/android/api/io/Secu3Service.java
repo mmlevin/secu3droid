@@ -56,6 +56,11 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	public static final String EVENT_SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";
 	public static final String EVENT_SECU3_SERVICE_RECEIVE_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_RECEIVE_PACKET";
 	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_RECEIVE_PARAM_PACKET";
+
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON = "org.secu3.android.intent.action.SECU3_SERVICE_OBTAIN_PACKET_SKELETON";
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM = "org.secu3.android.intent.action.extra.SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET = "org.secu3.android.intent.action.SECU3_SERVICE_RECEIVE_SKELETON_PACKET";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET = "org.secu3.android.intent.action.extra.SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET";
 	
 	
 	NotificationManager notificationManager;
@@ -128,7 +133,18 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 				secu3Manager.appendPacket (packet, packets_counter);
 				sendBroadcast(intent);
 			}
+		} else if (ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				Secu3ProtoWrapper wrapper = secu3Manager.getProtoWrapper();
+				if (wrapper != null) {
+					Secu3Packet packet = wrapper.obtainPacketSkeleton(intent.getIntExtra(ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, 0));
+					if (packet != null) {
+						sendBroadcast(packet.getSkeletonIntent());
+					}
+				}
+			}
 		}
+			
 				
 		return super.onStartCommand(intent, flags, startId);	
 	}

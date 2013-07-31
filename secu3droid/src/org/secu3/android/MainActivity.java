@@ -30,7 +30,6 @@ import java.util.Locale;
 import org.secu3.android.api.io.ProtoFieldFloat;
 import org.secu3.android.api.io.ProtoFieldInteger;
 import org.secu3.android.api.io.ProtoFieldString;
-import org.secu3.android.api.io.Secu3Dat.FWInfoDat;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.api.io.Secu3Service;
@@ -68,7 +67,7 @@ public class MainActivity extends Activity {
 	TextView textViewStatus = null;
 	TextView textFWInfo = null;
 	CheckBox checkBox = null;	
-	FWInfoDat fwInfoDat = null;
+	int fwOptions = Integer.MIN_VALUE;
 	
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
@@ -163,7 +162,7 @@ public class MainActivity extends Activity {
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
-						if ((fwInfoDat == null) || ((fwInfoDat.options & FWInfoDat.COPT_DIAGNOSTICS) == 0)) {
+						if ((fwOptions != Integer.MIN_VALUE) || ((fwOptions & Secu3Packet.COPT_DIAGNOSTICS) == 0)) {
 							Toast.makeText(getApplicationContext(), R.string.diagnostics_not_supported_title, Toast.LENGTH_LONG).show();
 						}
 						startActivity(new Intent (getApplicationContext(),DiagnosticsActivity.class));
@@ -255,6 +254,7 @@ public class MainActivity extends Activity {
 					break;
 				case R.string.packet_type_fwinfo_dat:
 					textFWInfo.setText(((ProtoFieldString) packet.findField(R.string.fwinfo_dat_data_title)).getValue());
+					fwOptions = ((ProtoFieldInteger) packet.findField(R.string.fwinfo_dat_options_title)).getValue();
 					break;
 				default:
 					break;

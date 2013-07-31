@@ -26,19 +26,22 @@
 package org.secu3.android.api.utils;
 
 import org.secu3.android.R;
+import org.secu3.android.api.io.BaseProtoField;
+import org.secu3.android.api.io.ProtoFieldFloat;
+import org.secu3.android.api.io.ProtoFieldInteger;
 import org.secu3.android.api.io.Secu3Dat;
 import org.secu3.android.api.io.Secu3Dat.ADCCorPar;
 import org.secu3.android.api.io.Secu3Dat.AnglesPar;
 import org.secu3.android.api.io.Secu3Dat.CKPSPar;
 import org.secu3.android.api.io.Secu3Dat.CarburPar;
 import org.secu3.android.api.io.Secu3Dat.ChokePar;
-import org.secu3.android.api.io.Secu3Dat.DiagInpDat;
 import org.secu3.android.api.io.Secu3Dat.FnNameDat;
 import org.secu3.android.api.io.Secu3Dat.FunSetPar;
 import org.secu3.android.api.io.Secu3Dat.IdlRegPar;
 import org.secu3.android.api.io.Secu3Dat.MiscelPar;
 import org.secu3.android.api.io.Secu3Dat.StartrPar;
 import org.secu3.android.api.io.Secu3Dat.TemperPar;
+import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.ParamPagerAdapter;
 import org.secu3.android.parameters.items.*;
@@ -241,35 +244,21 @@ public class PacketUtils {
 		}	
 	}
 	
-	public static void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Dat packet)
+	public static void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Packet packet)
 	{
-		if (packet instanceof StartrPar) {
-			setStartrPar(paramAdapter, (StartrPar) packet);
-		} else if (packet instanceof AnglesPar) {			
-			setAnglesPar(paramAdapter, (AnglesPar) packet);
-		} else if (packet instanceof IdlRegPar) {
-			setIdlRegPar(paramAdapter, (IdlRegPar) packet);
-		} else if (packet instanceof FnNameDat) {
-			setFnNameDat(paramAdapter, (FnNameDat) packet);			
-		}else if (packet instanceof FunSetPar) {
-			setFunSetPar(paramAdapter, (FunSetPar) packet);
-		} else if (packet instanceof TemperPar) {
-			setTemperPar(paramAdapter, (TemperPar) packet);
-		} else if (packet instanceof CarburPar) {
-			setCarburPar(paramAdapter, (CarburPar) packet);
-		} else if (packet instanceof ADCCorPar) {
-			setAdcCorPar(paramAdapter, (ADCCorPar) packet);
-		} else if (packet instanceof CKPSPar) {
-			setCkpsPar(paramAdapter, (CKPSPar) packet);
-		} else if (packet instanceof MiscelPar) {
-			setMiscelPar(paramAdapter, (MiscelPar) packet);
-		} else if (packet instanceof ChokePar) {
-			setChokePar(paramAdapter, (ChokePar) packet);
+		if ((packet != null) && (packet.getFields() != null) && (packet.getFields().size() > 0)) {						
+			BaseProtoField field = null;
+			for (int i = 0; i != packet.getFields().size(); i++) {
+				field = packet.getFields().get(i);
+				BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId());
+				if (item != null) {
+					if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
+					else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
+					else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue((((ProtoFieldInteger) field).getValue()==1)?true:false);
+					else if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
+				}				
+			}						
 		}
-	}
-
-	public static void setChokePar(ParamPagerAdapter paramAdapter, ChokePar packet) {
-		paramAdapter.setIntegerItem(R.string.choke_steps_title, packet.steps);
 	}
 
 	public static void setMiscelPar(ParamPagerAdapter paramAdapter, MiscelPar packet) {
@@ -290,40 +279,6 @@ public class PacketUtils {
 		paramAdapter.setIntegerItem(R.string.ckps_cogs_before_tdc_title, packet.ckps_cogs_btdc);
 		paramAdapter.setIntegerItem(R.string.ckps_engine_cylynders_title, packet.ckps_engine_cyl);
 		paramAdapter.setIntegerItem(R.string.ckps_ignition_pulse_delay_title, packet.ckps_ignit_cogs);
-	}
-
-	public static void setAdcCorPar(ParamPagerAdapter paramAdapter, ADCCorPar packet) {
-		paramAdapter.setFloatItem(R.string.adccor_map_sensor_factor_title, packet.map_adc_factor);
-		paramAdapter.setFloatItem(R.string.adccor_map_sensor_correction_title, packet.map_adc_correction);
-		paramAdapter.setFloatItem(R.string.adccor_voltage_sensor_factor_title, packet.ubat_adc_factor);
-		paramAdapter.setFloatItem(R.string.adccor_voltage_sensor_correction_title, packet.ubat_adc_correction);
-		paramAdapter.setFloatItem(R.string.adccor_temper_sensor_factor_title, packet.temp_adc_factor);
-		paramAdapter.setFloatItem(R.string.adccor_temper_sensor_correction_title, packet.temp_adc_correction);
-		paramAdapter.setFloatItem(R.string.adccor_tps_sensor_factor_title, packet.tps_adc_factor);
-		paramAdapter.setFloatItem(R.string.adccor_tps_sensor_correction_title, packet.tps_adc_correction);
-		paramAdapter.setFloatItem(R.string.adccor_addi1_sensor_factor_title, packet.add_i1_factor);
-		paramAdapter.setFloatItem(R.string.adccor_addi1_sensor_correction_title, packet.add_i1_correction);
-		paramAdapter.setFloatItem(R.string.adccor_addi2_sensor_factor_title, packet.add_i2_factor);
-		paramAdapter.setFloatItem(R.string.adccor_addi2_sensor_correction_title, packet.add_i2_correction);
-	}
-
-	public static void setCarburPar(ParamPagerAdapter paramAdapter, CarburPar packet) {
-		paramAdapter.setIntegerItem(R.string.carbur_overrun_lower_threshold_gasoline_title, packet.ephh_lot);
-		paramAdapter.setIntegerItem(R.string.carbur_overrun_upper_threshold_gasoline_title, packet.ephh_hit);
-		paramAdapter.setIntegerItem(R.string.carbur_overrun_lower_threshold_gas_title, packet.ephh_lot_g);
-		paramAdapter.setIntegerItem(R.string.carbur_overrun_upper_threshold_gas_title, packet.ephh_hit_g);
-		paramAdapter.setFloatItem(R.string.carbur_overrun_valve_delay_title, packet.shutoff_delay);
-		paramAdapter.setBooleanItem(R.string.carbur_sensor_inverse_title, packet.carb_invers == 1);
-		paramAdapter.setFloatItem(R.string.carbur_epm_valve_on_pressure_title, packet.epm_ont);
-		paramAdapter.setFloatItem(R.string.carbur_tps_threshold_title, packet.tps_threshold);
-	}
-
-	public static void setTemperPar(ParamPagerAdapter paramAdapter, TemperPar packet) {
-		paramAdapter.setFloatItem(R.string.temper_fan_on_title, packet.vent_on);
-		paramAdapter.setFloatItem(R.string.temper_fan_off_title, packet.vent_off);
-		paramAdapter.setBooleanItem(R.string.temper_use_temp_sensor_title, packet.tmp_use == 1);
-		paramAdapter.setBooleanItem(R.string.temper_use_pwm_title, packet.vent_pwm == 1);
-		paramAdapter.setBooleanItem(R.string.temper_use_table, packet.cts_use_map == 1);
 	}
 
 	public static void setFunSetPar(ParamPagerAdapter paramAdapter, FunSetPar packet) {
@@ -351,31 +306,6 @@ public class PacketUtils {
 		}
 	}
 
-	public static void setIdlRegPar(ParamPagerAdapter paramAdapter, IdlRegPar packet) {
-		paramAdapter.setFloatItem (R.string.idlreg_ifac1_title,packet.ifac1);
-		paramAdapter.setFloatItem (R.string.idlreg_ifac2_title,packet.ifac2);
-		paramAdapter.setFloatItem (R.string.idlreg_minimal_angle_title,packet.min_angle);
-		paramAdapter.setFloatItem (R.string.idlreg_maximal_angle_title,packet.max_angle);
-		paramAdapter.setIntegerItem (R.string.idlreg_target_rpm_title,packet.idling_rpm);
-		paramAdapter.setIntegerItem (R.string.idlreg_rpm_sensitivity_title,packet.MINEFR);
-		paramAdapter.setFloatItem (R.string.idlreg_turn_on_temp_title,packet.turn_on_temp);
-		paramAdapter.setBooleanItem(R.string.idlreg_use_idle_regulator_title,packet.idl_regul == 1);
-	}
-
-	public static void setAnglesPar(ParamPagerAdapter paramAdapter, AnglesPar packet) {
-		paramAdapter.setFloatItem (R.string.angles_min_angle_title,packet.min_angle);
-		paramAdapter.setFloatItem (R.string.angles_max_angle_title,packet.max_angle);
-		paramAdapter.setFloatItem (R.string.angles_angle_decrement_step_title,packet.dec_spead);
-		paramAdapter.setFloatItem (R.string.angles_angle_increment_step_title,packet.inc_spead);
-		paramAdapter.setBooleanItem(R.string.angles_zero_angle_title,packet.zero_adv_ang == 1);
-		paramAdapter.setFloatItem (R.string.angles_octane_correction_title,packet.angle_corr);
-	}
-
-	public static void setStartrPar(ParamPagerAdapter paramAdapter, StartrPar packet) {
-		paramAdapter.setIntegerItem(R.string.starter_off_title, packet.starter_off);
-		paramAdapter.setIntegerItem(R.string.starter_map_abandon_title, packet.smap_abandon);
-	}
-	
 	public static Secu3Dat buildTemperPar(ParamPagerAdapter paramAdapter) {
 		TemperPar packet = new TemperPar();
 		packet.vent_on = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.temper_fan_on_title)).getValue();
@@ -494,24 +424,24 @@ public class PacketUtils {
 		return packet;
 	}
 	
-	public static void setDiagInpFromPacket (ParamItemsAdapter adapter, Secu3Dat packet) {
+	public static void setDiagInpFromPacket (ParamItemsAdapter adapter, Secu3Packet packet) {
 		if (packet != null) {
-			if (packet instanceof DiagInpDat) {
+			if (packet.getNameId() ==R.string.diaginp_dat_title) {
 				if (adapter != null) {
-					adapter.setFloatItem(R.string.diag_input_voltage, ((DiagInpDat) packet).voltage);
-					adapter.setFloatItem(R.string.diag_input_map_s, ((DiagInpDat) packet).map);
-					adapter.setFloatItem(R.string.diag_input_temp, ((DiagInpDat) packet).temp);
-					adapter.setFloatItem(R.string.diag_input_add_io1, ((DiagInpDat) packet).add_io1);
-					adapter.setFloatItem(R.string.diag_input_add_io1, ((DiagInpDat) packet).add_io2);
-					adapter.setFloatItem(R.string.diag_input_ks1, ((DiagInpDat) packet).ks_1);
-					adapter.setFloatItem(R.string.diag_input_ks2, ((DiagInpDat) packet).ks_2);
-					adapter.setBooleanItem(R.string.diag_input_carb, (((DiagInpDat) packet).carb==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_gas_v, (((DiagInpDat) packet).gas==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_ckps, (((DiagInpDat) packet).ckps==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_ref_s, (((DiagInpDat) packet).ref_s==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_ps, (((DiagInpDat) packet).ps==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_bl, (((DiagInpDat) packet).bl==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_de, (((DiagInpDat) packet).de==1)?true:false);
+					adapter.setFloatItem(R.string.diag_input_voltage, (((ProtoFieldFloat) packet.findField(R.string.diag_input_voltage)).getValue()));
+					adapter.setFloatItem(R.string.diag_input_map_s, (((ProtoFieldFloat) packet.findField(R.string.diag_input_map_s)).getValue()));
+					adapter.setFloatItem(R.string.diag_input_temp, (((ProtoFieldFloat) packet.findField(R.string.diag_input_temp)).getValue()));
+					adapter.setFloatItem(R.string.diag_input_add_io1, (((ProtoFieldFloat) packet.findField(R.string.diag_input_add_io1)).getValue()));
+					adapter.setFloatItem(R.string.diag_input_add_io2, (((ProtoFieldFloat) packet.findField(R.string.diag_input_add_io2)).getValue()));
+					adapter.setFloatItem(R.string.diag_input_ks1, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks1)).getValue()));
+					adapter.setFloatItem(R.string.diag_input_ks2, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks2)).getValue()));
+					adapter.setBooleanItem(R.string.diag_input_carb, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_carb)).getValue())==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_gas_v, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_gas_v)).getValue())==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_ckps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_ckps)).getValue())==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_ref_s, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_ref_s)).getValue())==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_ps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_ps)).getValue())==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_bl, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bl)).getValue())==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_de, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_carb)).getValue())==1)?true:false);
 				}
 			}
 		}
