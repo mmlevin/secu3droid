@@ -22,6 +22,7 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 		
 		setNameId(nameId);
 		setType(type);
+		setLength(length);
 		setMinVersion(minVersion);
 		setBinary(binary);
 		if (nameId != 0) this.setName(context.getString(nameId));		
@@ -36,6 +37,12 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 	public ProtoFieldString(Parcel in) {
 		super(in);
 		value = in.readString();
+	}
+	
+	@Override
+	public void setData(String data) {
+		super.setData(data);
+		setValue(data);
 	}
 
 	public String getValue() {

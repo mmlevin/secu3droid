@@ -77,4 +77,30 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 	public void setSigned(boolean signed) {
 		this.signed = signed;
 	}
+	
+	@Override
+	public void setData(String data) {
+		super.setData(data);
+		if (data != null) {
+			if (signed) {
+				switch (getType()) {
+				case R.id.field_type_int4:
+					throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
+				case R.id.field_type_int8:
+					setValue(Integer.valueOf(data,16).byteValue());
+					break;
+				case R.id.field_type_int16:
+					setValue(Integer.valueOf(data,16).shortValue());
+					break;
+				case R.id.field_type_int32:				
+					setValue(Long.valueOf(data,16).intValue());
+					break;
+				default:
+					break;
+				}
+			} else {
+				setValue(Integer.parseInt(data, 16));			
+			}
+		}
+	}
 }

@@ -27,6 +27,7 @@ package org.secu3.android;
 
 import java.util.Locale;
 
+import org.secu3.android.api.io.ProtoFieldFloat;
 import org.secu3.android.api.io.ProtoFieldInteger;
 import org.secu3.android.api.io.ProtoFieldString;
 import org.secu3.android.api.io.Secu3Dat.FWInfoDat;
@@ -221,12 +222,12 @@ public class MainActivity extends Activity {
 						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
 						textViewData.setText(String.format(Locale.US,sensorsFormat,
 								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_map_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_voltage_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_temperature_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_knock_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_voltage_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_temperature_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(),
 								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_air_flow_title)).getValue(),
 								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE),
 								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB),
@@ -234,10 +235,10 @@ public class MainActivity extends Activity {
 								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE),
 								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN),
 								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));
 					}			
 					break;
 				case R.string.packet_type_adcraw_dat:

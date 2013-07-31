@@ -165,7 +165,7 @@ public class Secu3Manager {
 			};
 		}
 		
-		void parsePacket(String packet, BufferedReader reader, BufferedWriter writer) throws Exception {
+		void parsePacket(String packet, BufferedReader reader, BufferedWriter writer) throws IOException {
 			
 			switch (secu3State) {
 			case SECU3_NORMAL:
@@ -342,17 +342,15 @@ public class Secu3Manager {
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out,"ISO-8859-1"));				
 				while (enabled) {
 					if (!sendPackets.isEmpty()) {				
-						try {
 							Secu3Packet packet = sendPackets.poll(); 
 							writer.append(packet.pack() + "\r\n");
 							Log.d(LOG_TAG, "Send packet");
 							updateProgress(++progressCurrent);
-							Thread.sleep(200);							
-						} catch (Exception e) {
-							e.printStackTrace();
-						} finally {
+							try {
+								Thread.sleep(200);
+							} catch (InterruptedException e) {
+							}							
 							writer.flush();
-						}
 					}					
 					if (reader.ready()) {
 						ready = true;												
@@ -373,11 +371,7 @@ public class Secu3Manager {
 								EncodingCP866.Cp866ToUtf16(packetBuffer);
 								line = new String(packetBuffer,0,idx-1);
 								Log.d(LOG_TAG, "Recieved: " + line);
-								try {
-									parsePacket(line,reader,writer);
-								} catch (Exception e) {
-									Log.d(LOG_TAG, e.getMessage());
-								}
+								parsePacket(line,reader,writer);
 								onlineTask.reset();					
 								appContext.sendBroadcast(new Intent(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS, true));
 							}
@@ -387,8 +381,9 @@ public class Secu3Manager {
 						SystemClock.sleep(100);
 					}
 				}
-			} catch (IOException e) {
-				Log.d(LOG_TAG, "Error while getting data "+e.toString());				
+			} catch (Exception e) {
+				Log.d(LOG_TAG, "Error while getting data "+e.toString());		
+				e.printStackTrace();
 			} finally {
 				this.close();
 			}

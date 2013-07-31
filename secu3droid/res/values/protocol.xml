@@ -81,5 +81,13 @@
     <string name="diagout_dat_bitfield_title" translatable="false">Outputs bitfield</string>
     <string name="choke_manual_steps" translatable="false">Steps</string>	
     
-    <integer name="protocol_temp_phusical_magnitude_divider">1</integer>
+    <integer name="protocol_temp_physical_magnitude_divider">4</integer>
+    <integer name="protocol_map_physical_magnitude_divider">64</integer>
+    <integer name="protocol_angle_divider">32</integer>
+    <integer name="protocol_map_physical_magnitude_curve_divider">1</integer>
+    <integer name="protocol_map_physical_magnitude_curve_multiplier">1</integer>
+    <integer name="protocol_tps_physical_magnitude_divider">2</integer>
+    <integer name="protocol_voltage_physical_magnitude_divider">400</integer>
+    <integer name="protocol_adc_discrete">400</integer>
+    <integer name="protocol_choke_position_divider">2</integer>    
 </resources>

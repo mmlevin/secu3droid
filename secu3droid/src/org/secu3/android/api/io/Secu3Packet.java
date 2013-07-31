@@ -66,10 +66,16 @@ public class Secu3Packet implements Parcelable {
 			case R.id.field_type_int8:
 			case R.id.field_type_int16:
 			case R.id.field_type_int32:
-				fields.add((BaseProtoField) in.readParcelable(ProtoFieldInteger.class.getClassLoader()));
+				this.fields.add((BaseProtoField) in.readParcelable(ProtoFieldInteger.class.getClassLoader()));
+				break;
+			case R.id.field_type_float4:
+			case R.id.field_type_float8:
+			case R.id.field_type_float16:
+			case R.id.field_type_float32:
+				this.fields.add((BaseProtoField) in.readParcelable(ProtoFieldFloat.class.getClassLoader()));
 				break;
 			case R.id.field_type_string:
-				fields.add((BaseProtoField) in.readParcelable(ProtoFieldString.class.getClassLoader()));				
+				this.fields.add((BaseProtoField) in.readParcelable(ProtoFieldString.class.getClassLoader()));				
 				break;
 			default:
 				break;
@@ -83,8 +89,10 @@ public class Secu3Packet implements Parcelable {
 		dest.writeString(packetId);
 		dest.writeInt(packetIdResId);
 		dest.writeInt(nameId);
-		dest.writeInt(minVersion);
-		dest.writeInt(binary?1:0);
+		dest.writeInt(minVersion);	
+		int bin = 0;
+		if (binary) bin = 1;	
+		dest.writeInt(bin);		// Do not know why, but in my case dest.writeInt(binary?1:0) interrupts routine
 		dest.writeString(data);
 		int counter = (fields == null)?0:fields.size();
 		dest.writeInt(counter);

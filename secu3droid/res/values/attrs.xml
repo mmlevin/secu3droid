@@ -27,13 +27,14 @@
 
 <resources>
 	<attr name="units" format="string" />
-	<attr name="name" format="reference" />
+	<attr name="name" format="string" />
 	<attr name="type" format="reference" />
 	<attr name="summary" format="string" />
 	<attr name="str_value" format="string" />
 	<attr name="minVersion" format="integer"/>
 	<attr name="divider" format="integer"/>
+	<attr name="multiplier" format="integer"/>
 	<attr name="length" format="integer"/>	
-	<attr name="packet_id" format="reference"/>
+	<attr name="packet_id" format="string"/>
 	<attr name="signed" format="boolean"/>
 </resources>

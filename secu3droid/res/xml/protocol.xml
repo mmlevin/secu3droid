@@ -14,11 +14,11 @@
                app:minVersion="1"/>  
         <Field app:name="@string/temper_fan_on_title"               
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_temp_phusical_magnitude_divider"
+               app:divider="@integer/protocol_temp_physical_magnitude_divider"
                app:minVersion="1"/>
         <Field app:name="@string/temper_fan_off_title"
                app:type="@+id/field_type_float16"
-               app:divider="@integer/protocol_temp_phusical_magnitude_divider"
+               app:divider="@integer/protocol_temp_physical_magnitude_divider"
                app:minVersion="1"/>            		      
     </Packet>
     
@@ -35,7 +35,8 @@
                app:type="@id/field_type_int4"
                app:minVersion="1"/>
         <Field app:name="@string/carbur_epm_valve_on_pressure_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_map_physical_magnitude_divider"
                app:minVersion="1"/>
         <Field app:name="@string/carbur_overrun_lower_threshold_gas_title"
                app:type="@id/field_type_int16"
@@ -47,7 +48,8 @@
                app:type="@id/field_type_int8"
                app:minVersion="1"/>
 		<Field app:name="@string/carbur_tps_threshold_title"
-               app:type="@id/field_type_int8"
+               app:type="@id/field_type_float8"
+               app:divider="2"
                app:minVersion="1"/>        
     </Packet>
     
@@ -58,10 +60,12 @@
                app:type="@id/field_type_int4"
                app:minVersion="1"/>
 		<Field app:name="@string/idlreg_ifac1_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>         
 		<Field app:name="@string/idlreg_ifac2_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>         
         <Field app:name="@string/idlreg_rpm_sensitivity_title"
                app:type="@id/field_type_int16"
@@ -70,13 +74,16 @@
                app:type="@id/field_type_int16"
                app:minVersion="1"/>         
         <Field app:name="@string/idlreg_minimal_angle_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>   
         <Field app:name="@string/idlreg_maximal_angle_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>        
 		<Field app:name="@string/idlreg_turn_on_temp_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_temp_physical_magnitude_divider"
                app:minVersion="1"/>                       
     </Packet>        	
     
@@ -84,19 +91,24 @@
         	app:packet_id="@string/packet_type_angles_par"
         	app:minVersion="1">
 		<Field app:name="@string/angles_max_angle_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>                
 		<Field app:name="@string/angles_min_angle_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>      
         <Field app:name="@string/angles_octane_correction_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>
         <Field app:name="@string/angles_angle_decrement_step_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>
 		<Field app:name="@string/angles_angle_increment_step_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>        
 		<Field app:name="@string/angles_zero_angle_summary"
                app:type="@id/field_type_int4"
@@ -113,22 +125,27 @@
                app:type="@id/field_type_int8"
                app:minVersion="1"/>
         <Field app:name="@string/funset_lower_pressure_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_map_physical_magnitude_divider"
                app:minVersion="1"/>
 		<Field app:name="@string/funset_upper_pressure_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_map_physical_magnitude_divider"
                app:minVersion="1"/>        
 		<Field app:name="@string/funset_map_sensor_offset_title"
                app:type="@id/field_type_int16"
                app:minVersion="1"/>                        
 		<Field app:name="@string/funset_map_sensor_gradient_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_map_physical_magnitude_curve_divider"
+               app:multiplier="@integer/protocol_map_physical_magnitude_curve_multiplier"
                app:minVersion="1"/>
 		<Field app:name="@string/funset_tps_curve_offset_title"
                app:type="@id/field_type_int16"
                app:minVersion="1"/>		
 		<Field app:name="@string/funset_tps_curve_gradient_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_tps_physical_magnitude_divider"
                app:minVersion="1"/>               
     </Packet>
     
@@ -309,7 +326,7 @@
 	    	app:minVersion="1">
 		<Field app:name="@string/fwinfo_dat_data_title"
                app:type="@id/field_type_string"
-               app:length="32"
+               app:length="48"
                app:minVersion="1"/>
 		<Field app:name="@string/fwinfo_dat_options_title"
                app:type="@id/field_type_int32"
@@ -323,22 +340,28 @@
                app:type="@id/field_type_int16"
                app:minVersion="1"/>
 		<Field app:name="@string/sensor_dat_map_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_map_physical_magnitude_divider"
                app:minVersion="1"/>
 		<Field app:name="@string/sensor_dat_voltage_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_voltage_physical_magnitude_divider"
                app:minVersion="1"/>	    
 		<Field app:name="@string/sensor_dat_temperature_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_temp_physical_magnitude_divider"
                app:minVersion="1"/>
 		<Field app:name="@string/sensor_dat_angle_correction_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>
 		<Field app:name="@string/sensor_dat_knock_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_adc_discrete"
                app:minVersion="1"/>
 		<Field app:name="@string/sensor_dat_knock_retard_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_angle_divider"
                app:minVersion="1"/>	 
 		<Field app:name="@string/sensor_dat_air_flow_title"
                app:type="@id/field_type_int8"
@@ -347,19 +370,23 @@
                app:type="@id/field_type_int8"
                app:minVersion="1"/>	    
         <Field app:name="@string/sensor_dat_tps_title"
-               app:type="@id/field_type_int8"
+               app:type="@id/field_type_float8"
+               app:divider="@integer/protocol_tps_physical_magnitude_divider"
                app:minVersion="1"/>
        	<Field app:name="@string/sensor_dat_addi1_voltage_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_adc_discrete"
                app:minVersion="1"/>
        	<Field app:name="@string/sensor_dat_addi2_voltage_title"
-               app:type="@id/field_type_int16"
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_adc_discrete"
                app:minVersion="1"/>	
         <Field app:name="@string/sensor_dat_errors_title"
                app:type="@id/field_type_int16"
                app:minVersion="1"/>	    
 		<Field app:name="@string/sensor_dat_choke_position_title"
-               app:type="@id/field_type_int8"
+               app:type="@id/field_type_float8"
+               app:divider="@integer/protocol_choke_position_divider"
                app:minVersion="1"/>	                   
 	</Packet>
 	

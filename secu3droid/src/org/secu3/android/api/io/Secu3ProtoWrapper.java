@@ -47,6 +47,8 @@ public class Secu3ProtoWrapper {
 		int fieldType = 0;
 		String fieldMinVersion = null;
 		String fieldSigned = null;
+		String fieldDivider = null;
+		String fieldMultiplier = null;
 		String fieldLength = null;
 
 		String attr = null;
@@ -106,8 +108,10 @@ public class Secu3ProtoWrapper {
 						fieldName = null; 
 						fieldType = 0;
 						fieldMinVersion = null;
+						fieldDivider = null;
 						fieldSigned = null;		
 						fieldLength = null;
+						fieldMultiplier = null;
 						int count = xpp.getAttributeCount(); 
 						if (count > 0) {
 							for (int i = 0; i != count; i++) {
@@ -124,6 +128,12 @@ public class Secu3ProtoWrapper {
 								} else 
 								if (attr.equalsIgnoreCase("minVersion")) {
 									fieldMinVersion = attrValue;
+								} else
+								if (attr.equalsIgnoreCase("divider")) {
+									fieldDivider = attrValue;
+								} else
+								if (attr.equalsIgnoreCase("multiplier")) {
+									fieldMultiplier = attrValue;
 								} else
 								if (attr.equalsIgnoreCase("length")) {
 									fieldLength = attrValue;
@@ -153,7 +163,17 @@ public class Secu3ProtoWrapper {
 							case R.id.field_type_int16:
 							case R.id.field_type_int32:
 								field = new ProtoFieldInteger(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), format.parse(fieldMinVersion).intValue(), isBinary());
-								break;							
+								break;
+							case R.id.field_type_float4:
+							case R.id.field_type_float8:
+							case R.id.field_type_float16:
+							case R.id.field_type_float32:
+								int div = (ResourcesUtils.isResource(fieldDivider))?ResourcesUtils.getReferenceInt(getContext(), fieldDivider):format.parse(fieldDivider).intValue();								
+								field = new ProtoFieldFloat(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), div, format.parse(fieldMinVersion).intValue(), isBinary());
+								if (fieldMultiplier != null)
+									((ProtoFieldFloat) field).setIntMultiplier ((ResourcesUtils.isResource(fieldMultiplier))?ResourcesUtils.getReferenceInt(getContext(), fieldMultiplier):Integer.valueOf(fieldDivider));
+								else ((ProtoFieldFloat) field).setIntMultiplier (1);
+								break;															
 							case R.id.field_type_string:
 								field = new ProtoFieldString(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, format.parse(fieldLength).intValue(), format.parse(fieldMinVersion).intValue(), isBinary());
 								break;
@@ -201,17 +221,23 @@ public class Secu3ProtoWrapper {
 		if (packets != null) {
 			boolean result = false;
 			Secu3Packet packet = null;
-			for (int i = 0; i != packets.size(); i++) {
-				try {
-					packet = packets.get(i);
-					packet.parse(data);
-					result = true;
-					break;
-				} catch (IllegalArgumentException e) {					
+			Secu3Packet packets[] = new Secu3Packet[this.packets.values().size()]; 
+			this.packets.values().toArray(packets);
+			if (packets != null) {
+				for (int i = 0; i != packets.length; i++) {
+					try {
+						packet = packets[i];
+						if (packet != null) {
+							packet.parse(data);
+							lastPacket = packet; 							
+							result = true;
+							break;
+						}
+					} catch (IllegalArgumentException e) {						
+					}
 				}
 			}
 			if (!result) {
-				lastPacket = packet;
 				throw new IllegalArgumentException("No valid parser for packet");
 			}
 		}
@@ -231,6 +257,6 @@ public class Secu3ProtoWrapper {
 
 	public String getLogString() {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 }
