@@ -34,6 +34,7 @@
 	<attr name="minVersion" format="integer"/>
 	<attr name="divider" format="integer"/>
 	<attr name="multiplier" format="integer"/>
+	<attr name="offset" format="integer"/>
 	<attr name="length" format="integer"/>	
 	<attr name="packet_id" format="string"/>
 	<attr name="signed" format="boolean"/>

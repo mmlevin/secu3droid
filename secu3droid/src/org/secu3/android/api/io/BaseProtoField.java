@@ -126,4 +126,7 @@ public class BaseProtoField implements Parcelable {
 	public void reset() {
 		this.data = null;		
 	}
+
+	public void pack() {		
+	}
 }

@@ -81,6 +81,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	
 	private Secu3Packet OpCompNcSkeleton = null;
 	private Secu3Packet ChokeControlSkeleton = null;
+	private PacketUtils packetUtils = null;
 		    
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
@@ -91,6 +92,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
 		}
 		
 		@Override
@@ -281,6 +284,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							default: throw new IllegalArgumentException("Unknown parameter type");
 							}
 							if (item != null) {
+								item.setPageId(page.getNameId());
 								item.setOnParamItemChangeListener(this);								
 								page.addParamItem(item);
 								item = null;
@@ -320,6 +324,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		
 		createFormFromXml(R.xml.parameters);
 				
+		packetUtils = new PacketUtils();
 		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),this,pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
 		paramsRead();
@@ -374,16 +379,16 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		progressBar.setIndeterminate(true);
 		progressBar.setVisibility(ProgressBar.VISIBLE);					
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, PARAMS_NUMBER));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.STARTR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.ANGLES_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.IDLREG_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.FUNSET_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.TEMPER_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CARBUR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.ADCCOR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CKPS_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.MISCEL_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CHOKE_PAR)));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.starter_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.angles_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.idling_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.functions_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.temperature_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.carburetor_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.adc_errors_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.ckps_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.miscellaneous_title))));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(R.string.choke_control_title))));
 	}
 
 	@Override
@@ -442,7 +447,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	}
 
 	public void onItemChange(int itemId) {
-		if (PacketUtils.isParamFromPage(itemId, R.string.choke_control_title)) {
+		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
+		if ((item != null) && (item.getPageId() == R.string.choke_control_title)) {
 			Secu3Packet packet = new Secu3Packet (ChokeControlSkeleton); 
 			switch (itemId) {
 			case R.string.choke_manual_step_down_title:
@@ -452,15 +458,14 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 				((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (127);
 				break;
 			case R.string.choke_testing_title:
-				((ProtoFieldInteger) packet.findField(R.string.choke_testing_title)).setValue (((ParamItemToggleButton) paramAdapter.findItemByNameId(itemId)).getValue()?1:0);
+				((ProtoFieldInteger) packet.findField(R.string.choke_testing_title)).setValue (((ParamItemToggleButton) item).getValue()?1:0);
 				break;				
 			default:
 				break;
 			}
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));			
 		} else if (uploadImmediatelly) {
-			//startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, itemId)));
-			// TODO
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, getString(item.getPageId()))));
 		}
 	}
 	
@@ -484,12 +489,12 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
 			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
 			if (packet.getNameId() == R.string.op_comp_nc_title) {
-				if (((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_title)).getValue() == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE) {
+				if (((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_title)).getValue() == Secu3Packet.OPCODE_EEPROM_PARAM_SAVE) {
 					progressBar.setVisibility(ProgressBar.GONE);				
 					Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
 				}
 			} else {
-				PacketUtils.setParamFromPacket(paramAdapter, packet);
+				packetUtils.setParamFromPacket(paramAdapter, packet);
 			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET.equals(intent.getAction())) {
 			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
@@ -502,10 +507,16 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			progressBar.setMax(total);
 			progressBar.setProgress(current);
 			if (current == total) {
-				progressBar.setVisibility(ProgressBar.GONE);
-				paramAdapter.notifyDataSetChanged();
-				isValid = true;
+				startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PARAMETER,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_ID, Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_FUNSET_NAMES));
 			}			
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER.equals(intent.getAction())) {
+			String funsetNames[] = intent.getStringArrayExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER_FUNSET_NAMES);
+			if (funsetNames != null) {
+				progressBar.setVisibility(ProgressBar.GONE);				
+				PacketUtils.setFunsetNames(paramAdapter, funsetNames);
+				paramAdapter.notifyDataSetChanged();				
+				isValid = true;				
+			}
 		}
 	}
 

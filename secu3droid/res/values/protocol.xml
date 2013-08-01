@@ -84,11 +84,16 @@
     <integer name="protocol_temp_physical_magnitude_divider">4</integer>
     <integer name="protocol_map_physical_magnitude_divider">64</integer>
     <integer name="protocol_angle_divider">32</integer>
-    <integer name="protocol_map_physical_magnitude_curve_divider">1</integer>
-    <integer name="protocol_map_physical_magnitude_curve_multiplier">1</integer>
-    <integer name="protocol_tps_physical_magnitude_divider">2</integer>
+    <integer name="protocol_map_physical_magnitude_curve_divider">2048</integer>
+    <integer name="protocol_map_physical_magnitude_curve_multiplier">100</integer>
+    <integer name="protocol_tps_physical_magnitude_divider">4096</integer>
+    <integer name="protocol_tps_physical_magnitude_multiplier">100</integer>
     <integer name="protocol_voltage_physical_magnitude_divider">400</integer>
     <integer name="protocol_adc_discrete">400</integer>
     <integer name="protocol_adccor_factor_divider">16384</integer>
-    <integer name="protocol_choke_position_divider">2</integer>    
+    <integer name="protocol_adccor_correction_divider">16384</integer>
+    <integer name="protocol_adccor_correction_offset">-8192</integer>
+    <integer name="protocol_choke_position_divider">2</integer>
+    <integer name="protocol_overrun_valve_delay_divider">100</integer>
+    <integer name="protocol_miscel_period_multiplier">10</integer>    
 </resources>

@@ -43,7 +43,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.secu3.android.R;
-import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.EncodingCP866;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -88,6 +87,8 @@ public class Secu3Manager {
 	
 	private Secu3ProtoWrapper wrapper = null;
 	
+	private Secu3Packet ChMode = null;
+	
 	
 	private class ConnectedSecu3 extends Thread {
 		public static final int STATUS_TIMEOUT = 10;
@@ -107,7 +108,7 @@ public class Secu3Manager {
 	
 		private boolean ready = false;
 		
-		int packetBuffer[] = new int [Secu3Dat.MAX_PACKET_SIZE];		
+		int packetBuffer[] = new int [Secu3Packet.MAX_PACKET_SIZE];		
 		
 		public ConnectedSecu3 (BluetoothSocket socket) {
 			this.socket = socket;
@@ -166,7 +167,7 @@ public class Secu3Manager {
 		}
 		
 		void parsePacket(String packet, BufferedReader reader, BufferedWriter writer) throws IOException {
-			
+			Secu3Packet ChangeMode = new Secu3Packet(ChMode);
 			switch (secu3State) {
 			case SECU3_NORMAL:
 					getProtoWrapper().parse(packet);
@@ -186,12 +187,14 @@ public class Secu3Manager {
 							logger.endLogging();
 							break;							
 						// Task to read sensors
-						case SECU3_READ_SENSORS:					
-							writer.write(ChangeMode.pack(Secu3Dat.SENSOR_DAT));
+						case SECU3_READ_SENSORS:		
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.sensor_dat_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();					
 							break;
 						case SECU3_RAW_SENSORS:
-							writer.write(ChangeMode.pack(Secu3Dat.ADCRAW_DAT));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.adcraw_dat_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();					
 							break;							
 						// Task to read params
@@ -200,19 +203,23 @@ public class Secu3Manager {
 							progressTotal = PROGRESS_TOTAL_PARAMS;
 							subprogress = 0;
 							getProtoWrapper().init();
-							writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.starter_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();					
 							break;
 						case SECU3_READ_ERRORS:
-							writer.write(ChangeMode.pack(Secu3Dat.CE_ERR_CODES));							
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.ce_err_codes_title));
+							writer.write(ChangeMode.pack());							
 							writer.flush();
 							break;
 						case SECU3_READ_SAVED_ERRORS:
-							writer.write(ChangeMode.pack(Secu3Dat.CE_SAVED_ERR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.ce_saved_err_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case SECU3_READ_FW_INFO:
-							writer.write(ChangeMode.pack(Secu3Dat.FWINFO_DAT));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.fwinfo_dat_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						}
@@ -234,57 +241,65 @@ public class Secu3Manager {
 						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_startr_par:
 							updateProgress(1 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.ANGLES_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.angles_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case R.string.packet_type_angles_par:
 							updateProgress(2 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.IDLREG_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.idling_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;					
 						case R.string.packet_type_idlreg_par:
 							updateProgress(3 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.FNNAME_DAT));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.fnname_dat_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case R.string.packet_type_fnname_dat:
-							//updateProgress(4 + subprogress);
-							//FnNameDat fnNameDat = (FnNameDat) wrapper.getLastPacket();
-							//subprogress = (fnNameDat == null)?0:fnNameDat.names_count();
-							//if (fnNameDat.names_available()) {
-								writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
+							updateProgress(4 + subprogress);
+							subprogress = wrapper.getFunsetNames().length;
+							if (wrapper.funsetNamesValid()) {
+								((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.functions_title));
+								writer.write(ChangeMode.pack());
 								writer.flush();
-							//}
-							// TODO
+							}
 							break;								
 						case R.string.packet_type_funset_par:
 							updateProgress(5 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.TEMPER_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.temperature_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case R.string.packet_type_temper_par:
 							updateProgress(6 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.CARBUR_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.carburetor_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case R.string.packet_type_carbur_par:
 							updateProgress(7 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.ADCCOR_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.adc_errors_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case R.string.packet_type_adccor_par:
 							updateProgress(8 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.CKPS_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.ckps_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case R.string.packet_type_ckps_par:
 							updateProgress(9 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.MISCEL_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.miscellaneous_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						case R.string.packet_type_miscel_par:
 							updateProgress(10 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.CHOKE_PAR));
+							((ProtoFieldString) ChMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.choke_control_title));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;	
 						case R.string.packet_type_choke_par:
@@ -356,13 +371,13 @@ public class Secu3Manager {
 						ready = true;												
 						if ((ch = (char)reader.read()) != -1) {							
 							if (secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_START) {							
-								if (ch == Secu3Dat.INPUT_PACKET) {
+								if (ch == Secu3Packet.INPUT_PACKET) {
 									secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_END;								
 									idx = 0;
 								}
 							}
 							packetBuffer [idx++] = ch;
-							if (idx >= Secu3Dat.MAX_PACKET_SIZE) {
+							if (idx >= Secu3Packet.MAX_PACKET_SIZE) {
 								secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
 								idx = 0;
 							}												
@@ -417,6 +432,7 @@ public class Secu3Manager {
 		nbRetriesRemaining = maxRetries + 1;
 		appContext = callingService.getApplicationContext();	
 		wrapper = new Secu3ProtoWrapper(appContext);
+		ChMode = wrapper.obtainPacketSkeleton(R.string.change_mode_title);
 		try {
 			getProtoWrapper().instantiateFromXml(R.xml.protocol);
 		} catch (ParseException e) {

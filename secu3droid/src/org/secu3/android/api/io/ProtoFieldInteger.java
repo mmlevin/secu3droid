@@ -8,12 +8,14 @@ import android.os.Parcelable;
 
 public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 	private int value;
+	private int multiplier;
 	private boolean signed;
 	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		super.writeToParcel(dest, flags);
 		dest.writeInt(value);
+		dest.writeInt(multiplier);
 		dest.writeInt(signed?1:0);
 	}	
 	
@@ -30,6 +32,7 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 	public ProtoFieldInteger(Parcel in) {
 		super(in);
 		value = in.readInt();
+		multiplier = in.readInt();
 		signed = (in.readInt()==0)?false:true;
 	}
 	
@@ -37,6 +40,7 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		super(field);
 		if (field != null) {
 			this.value = field.value;
+			this.multiplier = field.multiplier;
 			this.signed = field.signed;			
 		}
 	}
@@ -48,6 +52,7 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		setNameId(nameId);
 		setType(type);
 		setSigned(signed);
+		setMultiplier(1);
 		setMinVersion(minVersion);
 		setBinary(binary);
 		if (nameId != 0) this.setName(context.getString(nameId));
@@ -109,12 +114,58 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 			} else {
 				setValue(Integer.parseInt(data, 16));			
 			}
+			setValue(value*multiplier);
 		}
+	}
+	
+	@Override
+	public void pack() {
+		if (signed) {
+			switch (getType()) {
+			case R.id.field_type_int4:
+				throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
+			case R.id.field_type_int8:
+				setData(String.format("%02X", Integer.valueOf(value).byteValue()));
+				break;
+			case R.id.field_type_int16:
+				setData(String.format("%04X", Integer.valueOf(value).shortValue()));
+				break;
+			case R.id.field_type_int32:				
+				setData(String.format("%08X", Long.valueOf(value).intValue()));
+				break;
+			default:
+				break;
+			}
+		} else {	
+			switch (getType()) {
+			case R.id.field_type_int4:
+				setData(String.format("%01X", value));
+			case R.id.field_type_int8:
+				setData(String.format("%02X", value));
+				break;
+			case R.id.field_type_int16:
+				setData(String.format("%04X", value));
+				break;
+			case R.id.field_type_int32:				
+				setData(String.format("%08X", value));
+				break;
+			default:
+				break;
+			}
+		}		
 	}
 	
 	@Override
 	public void reset() {
 		super.reset();
 		this.value = 0;
+	}
+
+	public int getMultiplier() {
+		return multiplier;
+	}
+
+	public void setMultiplier(int multiplier) {
+		this.multiplier = multiplier;
 	}
 }

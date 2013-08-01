@@ -10,6 +10,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 	private int intValue;
 	private int intDivider;
 	private int intMultiplier;
+	private int intOffset;
 	private float floatValue;
 	private boolean signed;
 	
@@ -20,6 +21,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		dest.writeInt(intValue);
 		dest.writeInt(intDivider);
 		dest.writeInt(intMultiplier);
+		dest.writeInt(intOffset);
 		dest.writeFloat(floatValue);
 	}	
 	
@@ -39,6 +41,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		intValue = in.readInt();
 		intDivider = in.readInt();
 		intMultiplier = in.readInt();
+		intOffset = in.readInt();
 		floatValue = in.readFloat();
 	}
 	
@@ -48,12 +51,13 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 			this.intValue = field.intValue;
 			this.intDivider = field.intDivider;
 			this.intMultiplier = field.intMultiplier;
+			this.intOffset = field.intOffset;
 			this.floatValue = field.floatValue;
 			this.signed = field.signed;
 		}
 	}
 	
-	public ProtoFieldFloat(Context context, int nameId, int type, boolean signed, int divider, int minVersion, boolean binary) {
+	public ProtoFieldFloat(Context context, int nameId, int type, boolean signed, int minVersion, boolean binary) {
 		intValue = 0;
 		setData(null);
 		
@@ -62,7 +66,8 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		setSigned(signed);
 		setMinVersion(minVersion);
 		setIntMultiplier(1);
-		setIntDivider(divider);
+		setIntOffset(0);
+		setIntDivider(1);
 		setBinary(binary);
 		if (nameId != 0) this.setName(context.getString(nameId));
 		
@@ -148,7 +153,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 			} else {
 				setIntValue(Integer.parseInt(data, 16));			
 			}
-			setValue((float)intValue*intMultiplier/intDivider);
+			setValue((float)(intValue+intOffset)*intMultiplier/intDivider);
 		}		
 	}
 	
@@ -157,5 +162,13 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		super.reset();
 		this.intValue = 0;
 		this.floatValue = 0;
+	}
+
+	public int getIntOffset() {
+		return intOffset;
+	}
+
+	public void setIntOffset(int intOffset) {
+		this.intOffset = intOffset;
 	}
 }
