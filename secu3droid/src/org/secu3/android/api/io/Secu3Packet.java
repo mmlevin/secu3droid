@@ -382,13 +382,13 @@ public class Secu3Packet implements Parcelable {
 
 	public String pack() {
 		if (fields != null) {
-			String pack = String.format("%s%2", OUTPUT_PACKET, getPacketId());
+			String pack = String.format("%s%s", OUTPUT_PACKET, getPacketId());
 			for (int i = 0; i != fields.size(); i++) {
 				BaseProtoField field = fields.get(i);
 				field.pack();
 				pack += field.getData();
 			}
-			return pack;
+			return pack+"\r\n";
 		}
 		return null;
 	}

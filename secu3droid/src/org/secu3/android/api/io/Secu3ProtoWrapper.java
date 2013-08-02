@@ -260,9 +260,12 @@ public class Secu3ProtoWrapper {
 	}
 
 	public synchronized Secu3Packet obtainPacketSkeleton (int packetNameId) {
-		Secu3Packet packet = new Secu3Packet(packets.get(packetNameId));
-		packet.reset();
-		return packet;
+		if (packets != null) {
+			Secu3Packet packet = new Secu3Packet(packets.get(packetNameId));
+			packet.reset();
+			return packet;
+		}
+		return null;
 	}
 	
 	public Secu3Packet getLastPacket() {
