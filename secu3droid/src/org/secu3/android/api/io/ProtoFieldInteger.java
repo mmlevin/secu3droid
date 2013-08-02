@@ -125,13 +125,13 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 			case R.id.field_type_int4:
 				throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
 			case R.id.field_type_int8:
-				setData(String.format("%02X", Integer.valueOf(value).byteValue()));
+				setData(String.format("%02X", Integer.valueOf(value/multiplier).byteValue()));
 				break;
 			case R.id.field_type_int16:
-				setData(String.format("%04X", Integer.valueOf(value).shortValue()));
+				setData(String.format("%04X", Integer.valueOf(value/multiplier).shortValue()));
 				break;
 			case R.id.field_type_int32:				
-				setData(String.format("%08X", Long.valueOf(value).intValue()));
+				setData(String.format("%08X", Long.valueOf(value/multiplier).intValue()));
 				break;
 			default:
 				break;
@@ -139,12 +139,13 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		} else {	
 			switch (getType()) {
 			case R.id.field_type_int4:
-				setData(String.format("%01X", value));
+				setData(String.format("%01X", value/multiplier));
+				break;
 			case R.id.field_type_int8:
-				setData(String.format("%02X", value));
+				setData(String.format("%02X", value/multiplier));
 				break;
 			case R.id.field_type_int16:
-				setData(String.format("%04X", value));
+				setData(String.format("%04X", value/multiplier));
 				break;
 			case R.id.field_type_int32:				
 				setData(String.format("%08X", value));

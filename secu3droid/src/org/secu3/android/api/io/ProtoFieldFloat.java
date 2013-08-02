@@ -158,6 +158,44 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 	}
 	
 	@Override
+	public void pack() {
+		if (signed) {
+			switch (getType()) {
+			case R.id.field_type_float4:
+				throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
+			case R.id.field_type_float8:
+				setData(String.format("%02X", Integer.valueOf(Math.round(floatValue*intDivider/intMultiplier-intOffset)).byteValue()));
+				break;
+			case R.id.field_type_float16:
+				setData(String.format("%04X", Integer.valueOf(Math.round(floatValue*intDivider/intMultiplier-intOffset)).shortValue()));
+				break;
+			case R.id.field_type_float32:				
+				setData(String.format("%08X", Long.valueOf(Math.round(floatValue*intDivider/intMultiplier-intOffset)).intValue()));
+				break;
+			default:
+				break;
+			}
+		} else {	
+			switch (getType()) {
+			case R.id.field_type_float4:
+				setData(String.format("%01X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
+				break;
+			case R.id.field_type_float8:
+				setData(String.format("%02X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
+				break;
+			case R.id.field_type_float16:
+				setData(String.format("%04X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
+				break;
+			case R.id.field_type_float32:				
+				setData(String.format("%08X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
+				break;
+			default:
+				break;
+			}
+		}		
+	}	
+	
+	@Override
 	public void reset() {
 		super.reset();
 		this.intValue = 0;

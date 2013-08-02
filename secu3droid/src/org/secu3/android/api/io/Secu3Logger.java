@@ -57,7 +57,7 @@ public class Secu3Logger {
 	}
 
 	public void OnPacketReceived (Secu3Packet secu3Packet) {
-		if (started && (secu3Packet != null) && (secu3Packet.getPacketIdResId() == R.string.packet_type_sendor_dat)) {				
+		if (started && (secu3Packet != null) && (secu3Packet.getNameId() == R.string.sensor_dat_title)) {				
 			long t = System.currentTimeMillis();
 			time.set(t);
 			String time = String.format(Locale.US,CSVMillisTemplateString,this.time.format(cCSVTimeTemplateString), (t%1000)/10);

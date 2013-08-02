@@ -99,7 +99,7 @@ public class Secu3ProtoWrapper {
 							throw new IllegalArgumentException("Packet element is invalid");							
 						} else {
 							packet = new Secu3Packet(getContext(), ResourcesUtils.referenceToInt(packetName), ResourcesUtils.referenceToInt(packetId), format.parse(packetMinVersion).intValue(), isBinary());
-							packets.put(packet.getPacketIdResId(),packet);
+							packets.put(packet.getNameId(),packet);
 						}						
 					} else
 					// Found new field element
@@ -285,13 +285,17 @@ public class Secu3ProtoWrapper {
 		return "";
 	}
 
-	public boolean funsetNamesValid() {
-		if (funsetNames == null) return false;
+	public int funsetNamesCounter() {
+		if (funsetNames == null) return 0;
 		int counter = 0;
 		for (int i = 0; i != funsetNames.length; i++) {
 			if (funsetNames[i] != null) counter ++;
 		}
-		return counter == funsetNames.length;
+		return counter;
+	}
+	
+	public boolean funsetNamesValid() {
+		return funsetNamesCounter() == funsetNames.length;
 	}
 	
 	public synchronized String[] getFunsetNames() {

@@ -264,7 +264,7 @@ public class Secu3Manager {
 							break;
 						case R.string.packet_type_fnname_dat:
 							updateProgress(4 + subprogress);
-							subprogress = wrapper.getFunsetNames().length;
+							subprogress = wrapper.funsetNamesCounter();
 							if (wrapper.funsetNamesValid()) {
 								((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_funset_par));
 								writer.write(ChangeMode.pack());
@@ -363,8 +363,9 @@ public class Secu3Manager {
 				while (enabled) {
 					if (!sendPackets.isEmpty()) {				
 							Secu3Packet packet = sendPackets.poll(); 
-							writer.append(packet.pack());
-							Log.d(LOG_TAG, "Send packet");
+							String p = packet.pack();
+							writer.append(p);
+							Log.d(LOG_TAG, "Send packet:" + p);
 							updateProgress(++progressCurrent);
 							try {
 								Thread.sleep(200);
@@ -439,7 +440,7 @@ public class Secu3Manager {
 		wrapper = new Secu3ProtoWrapper(appContext);		
 		try {
 			getProtoWrapper().instantiateFromXml(R.xml.protocol);
-			ChMode = wrapper.obtainPacketSkeleton(R.string.packet_type_change_mode);
+			ChMode = wrapper.obtainPacketSkeleton(R.string.change_mode_title);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -580,7 +581,7 @@ public class Secu3Manager {
 	}
 	
 	public synchronized void appendPacket (Secu3Packet packet, int packets_counter) {
-		if ((connectedSecu3 != null) && (connectedSecu3.sendPackets != null)) {
+		if ((connectedSecu3 != null) && (connectedSecu3.sendPackets != null) && (packet != null)) {
 			connectedSecu3.sendPackets.add(packet);
 		}
 		if (packets_counter != 0) {

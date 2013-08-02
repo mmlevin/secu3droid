@@ -25,8 +25,6 @@
 
 package org.secu3.android.api.utils;
 
-import java.util.HashMap;
-
 import org.secu3.android.R;
 import org.secu3.android.api.io.BaseProtoField;
 import org.secu3.android.api.io.ProtoFieldFloat;
@@ -36,14 +34,16 @@ import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.ParamPagerAdapter;
 import org.secu3.android.parameters.items.*;
 
+import android.util.SparseArray;
+
 public class PacketUtils {
-	HashMap<String, Secu3Packet> packetSkeletons = null;
+	SparseArray<Secu3Packet> packetSkeletons = null;
 	
 	public PacketUtils() {
-		packetSkeletons = new HashMap<String, Secu3Packet>();
+		packetSkeletons = new SparseArray<Secu3Packet>();
 	}
 	
-	public Secu3Packet buildPacket (ParamPagerAdapter paramAdapter, String packetId) {
+	public Secu3Packet buildPacket (ParamPagerAdapter paramAdapter, int packetId) {
 		Secu3Packet packet = packetSkeletons.get(packetId);
 		if ((packet != null) && (packet.getFields() != null) && (packet.getFields().size() > 0)) {
 			BaseProtoField field = null;
@@ -51,10 +51,15 @@ public class PacketUtils {
 				field = packet.getFields().get(i);
 				BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId()); 
 				if (item != null) {
-					if (item instanceof ParamItemInteger) ((ProtoFieldInteger) field).setValue (((ParamItemInteger) item).getValue());
-					else if (item instanceof ParamItemFloat) ((ProtoFieldFloat) field).setValue (((ParamItemFloat) item).getValue());
-					else if (item instanceof ParamItemBoolean) ((ProtoFieldInteger) field).setValue (((ParamItemBoolean) item).getValue()?1:0);
-					else if (item instanceof ParamItemSpinner) ((ProtoFieldInteger) field).setValue (((ParamItemSpinner) item).getIndex());
+					if (item.getNameId() == R.string.miscel_baudrate_title) {
+						int baud_rate = Secu3Packet.BAUD_RATE_INDEX[((ParamItemSpinner) item).getIndex()];
+						((ProtoFieldInteger) field).setValue (baud_rate);
+					} else {
+						if (item instanceof ParamItemInteger) ((ProtoFieldInteger) field).setValue (((ParamItemInteger) item).getValue());
+						else if (item instanceof ParamItemFloat) ((ProtoFieldFloat) field).setValue (((ParamItemFloat) item).getValue());
+						else if (item instanceof ParamItemBoolean) ((ProtoFieldInteger) field).setValue (((ParamItemBoolean) item).getValue()?1:0);
+						else if (item instanceof ParamItemSpinner) ((ProtoFieldInteger) field).setValue (((ParamItemSpinner) item).getIndex());
+					}
 				}
 			} 
 			return packet;
@@ -65,10 +70,10 @@ public class PacketUtils {
 	public void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Packet packet)
 	{
 		if ((packet != null) && (packet.getFields() != null) && (packet.getFields().size() > 0)) {
-			if (!packetSkeletons.containsKey(packet.getPacketId())) {
+			if (packetSkeletons.indexOfKey(packet.getNameId()) < 0) {
 				Secu3Packet packetSkeleton = new Secu3Packet(packet);
 				packetSkeleton.reset();
-				packetSkeletons.put(packet.getPacketId(), packetSkeleton);
+				packetSkeletons.put(packet.getNameId(), packetSkeleton);
 			}
 			BaseProtoField field = null;
 			for (int i = 0; i != packet.getFields().size(); i++) {
