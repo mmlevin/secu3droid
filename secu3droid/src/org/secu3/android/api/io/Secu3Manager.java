@@ -43,6 +43,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.secu3.android.R;
+import org.secu3.android.SettingsActivity;
 import org.secu3.android.api.utils.EncodingCP866;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -428,7 +429,7 @@ public class Secu3Manager {
 		appContext = callingService.getApplicationContext();	
 		wrapper = new Secu3ProtoWrapper(appContext);		
 		try {
-			getProtoWrapper().instantiateFromXml(R.xml.protocol);
+			getProtoWrapper().instantiateFromXml(R.xml.protocol,SettingsActivity.getProtocolVersion(appContext));
 			ChMode = wrapper.obtainPacketSkeleton(R.string.change_mode_title);
 		} catch (ParseException e) {
 			e.printStackTrace();

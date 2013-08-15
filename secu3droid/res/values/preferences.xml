@@ -28,6 +28,8 @@
 <resources>
     <string name="pref_bluetooth_device_title">Choose Bluetooth Device</string>
     <string name="pref_bluetooth_device_summary">"Current device: %s"</string>
+    <string name="pref_protocol_version_title">Choose protocol version</string>
+    <string name="pref_protocol_version_summary">"Current protocol version: %s"</string>
     <string name="pref_connection_retries_title">Connection retry number</string>
     <string name="pref_connection_retries_summary">Number of attempts before exiting: %s</string>
     <string name="pref_about_title">About</string>

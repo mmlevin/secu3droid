@@ -45,7 +45,7 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		}
 	}
 	
-	public ProtoFieldInteger(Context context, int nameId, int type, boolean signed, int minVersion, boolean binary) {
+	public ProtoFieldInteger(Context context, int nameId, int type, boolean signed, int minVersion, int maxVersion, boolean binary) {
 		value = 0;
 		setData(null);
 		
@@ -54,6 +54,7 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		setSigned(signed);
 		setMultiplier(1);
 		setMinVersion(minVersion);
+		setMaxVersion(maxVersion);
 		setBinary(binary);
 		if (nameId != 0) this.setName(context.getString(nameId));
 		

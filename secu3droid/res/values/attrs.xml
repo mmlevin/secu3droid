@@ -32,6 +32,7 @@
 	<attr name="summary" format="string" />
 	<attr name="str_value" format="string" />
 	<attr name="minVersion" format="integer"/>
+	<attr name="maxVersion" format="integer"/>
 	<attr name="divider" format="integer"/>
 	<attr name="multiplier" format="integer"/>
 	<attr name="offset" format="integer"/>

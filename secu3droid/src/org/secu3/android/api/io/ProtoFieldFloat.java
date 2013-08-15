@@ -57,7 +57,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		}
 	}
 	
-	public ProtoFieldFloat(Context context, int nameId, int type, boolean signed, int minVersion, boolean binary) {
+	public ProtoFieldFloat(Context context, int nameId, int type, boolean signed, int minVersion, int maxVersion, boolean binary) {
 		intValue = 0;
 		setData(null);
 		
@@ -65,6 +65,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		setType(type);
 		setSigned(signed);
 		setMinVersion(minVersion);
+		setMaxVersion(maxVersion);
 		setIntMultiplier(1);
 		setIntOffset(0);
 		setIntDivider(1);
