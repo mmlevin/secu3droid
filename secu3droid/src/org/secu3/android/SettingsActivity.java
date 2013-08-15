@@ -54,10 +54,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public static int getProtocolVersion(Context ctx) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
 		int version = 0;
-		try {
-			version = Integer.parseInt(sharedPreferences.getString(ctx.getString(R.string.pref_protocol_version_key), null));
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
+		String versionS = sharedPreferences.getString(ctx.getString(R.string.pref_protocol_version_key), null);
+		if (versionS != null) {
+			version = Integer.parseInt(versionS);
 		}
         return version+1;
 	}

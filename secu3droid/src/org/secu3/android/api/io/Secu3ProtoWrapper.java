@@ -115,7 +115,9 @@ public class Secu3ProtoWrapper {
 						if ((packetName == null) || (TextUtils.isEmpty(packetName)) || (packetMinVersion == null) || (TextUtils.isEmpty(packetMinVersion)) || (packetId == null) || (TextUtils.isEmpty(packetId))) {
 							throw new IllegalArgumentException("Packet element is invalid");							
 						} else {
-							packet = new Secu3Packet(getContext(), ResourcesUtils.referenceToInt(packetName), ResourcesUtils.referenceToInt(packetId), format.parse(packetMinVersion).intValue(), format.parse(packetMaxVersion).intValue(), isBinary());
+							int maxVersion = 0;
+							if (packetMaxVersion != null) maxVersion = format.parse(packetMaxVersion).intValue();
+							packet = new Secu3Packet(getContext(), ResourcesUtils.referenceToInt(packetName), ResourcesUtils.referenceToInt(packetId), format.parse(packetMinVersion).intValue(), maxVersion, isBinary());
 							if ((protocolVersion >= packet.getMinVersion()) && (protocolVersion <= packet.getMaxVersion())) {
 								packets.put(packet.getNameId(),packet);
 							}
@@ -184,6 +186,9 @@ public class Secu3ProtoWrapper {
 						packet = null;
 					} else
 					if (name.equalsIgnoreCase(FIELD)) {
+						int maxVersion = 0;
+						if (fieldMaxVersion != null) maxVersion = format.parse(fieldMaxVersion).intValue(); 
+						
 						if ((fieldName == null) || (fieldType == 0) || (TextUtils.isEmpty(fieldName))) throw new IllegalArgumentException("Field element is invalid");
 						else {													
 							switch (fieldType) {
@@ -191,7 +196,7 @@ public class Secu3ProtoWrapper {
 							case R.id.field_type_int8:
 							case R.id.field_type_int16:
 							case R.id.field_type_int32:
-								field = new ProtoFieldInteger(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), format.parse(fieldMinVersion).intValue(),format.parse(fieldMaxVersion).intValue(), isBinary());
+								field = new ProtoFieldInteger(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), format.parse(fieldMinVersion).intValue(), maxVersion, isBinary());
 								if (fieldMultiplier != null)
 									((ProtoFieldInteger) field).setMultiplier((ResourcesUtils.isResource(fieldMultiplier))?ResourcesUtils.getReferenceInt(getContext(), fieldMultiplier):Integer.valueOf(fieldMultiplier));
 								break;
@@ -199,7 +204,7 @@ public class Secu3ProtoWrapper {
 							case R.id.field_type_float8:
 							case R.id.field_type_float16:
 							case R.id.field_type_float32:		
-								field = new ProtoFieldFloat(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), format.parse(fieldMinVersion).intValue(), format.parse(fieldMaxVersion).intValue(), isBinary());
+								field = new ProtoFieldFloat(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), format.parse(fieldMinVersion).intValue(), maxVersion, isBinary());
 								if (fieldDivider != null)
 									((ProtoFieldFloat) field).setIntDivider((ResourcesUtils.isResource(fieldDivider))?ResourcesUtils.getReferenceInt(getContext(), fieldDivider):Integer.valueOf(fieldDivider));
 								if (fieldMultiplier != null)
@@ -208,7 +213,7 @@ public class Secu3ProtoWrapper {
 									((ProtoFieldFloat) field).setIntOffset ((ResourcesUtils.isResource(fieldOffset))?ResourcesUtils.getReferenceInt(getContext(), fieldOffset):Integer.valueOf(fieldOffset));
 								break;															
 							case R.id.field_type_string:
-								field = new ProtoFieldString(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, format.parse(fieldLength).intValue(), format.parse(fieldMinVersion).intValue(), isBinary());
+								field = new ProtoFieldString(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, format.parse(fieldLength).intValue(), format.parse(fieldMinVersion).intValue(), maxVersion, isBinary());
 								break;
 							default: throw new IllegalArgumentException("Unknown field type");
 							}
