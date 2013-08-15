@@ -115,8 +115,6 @@ public class Secu3Packet implements Parcelable {
 	private String packetId;
 	private int packetIdResId;
 	private int nameId;
-	private int minVersion;
-	private int maxVersion;
 
 	private boolean binary;
 	private String data;
@@ -137,8 +135,6 @@ public class Secu3Packet implements Parcelable {
 		this.packetId = in.readString();
 		this.packetIdResId = in.readInt();
 		this.nameId = in.readInt();
-		this.minVersion = in.readInt();
-		this.setMaxVersion(in.readInt());
 		this.binary = (in.readInt() == 0) ? false : true;
 		this.data = in.readString();
 		int counter = in.readInt();
@@ -181,8 +177,6 @@ public class Secu3Packet implements Parcelable {
 		dest.writeString(packetId);
 		dest.writeInt(packetIdResId);
 		dest.writeInt(nameId);
-		dest.writeInt(minVersion);
-		dest.writeInt(getMaxVersion());
 		int bin = 0;
 		if (binary)
 			bin = 1;
@@ -198,13 +192,10 @@ public class Secu3Packet implements Parcelable {
 		}
 	}
 
-	public Secu3Packet(Context context, int nameId, int packetIdResId,
-			int minVersion, int maxVersion, boolean binary) {
+	public Secu3Packet(Context context, int nameId, int packetIdResId, boolean binary) {
 		setFields(null);
 		setNameId(nameId);
 		setPacketIdResId(packetIdResId);
-		setMinVersion(minVersion);		
-		setMaxVersion(maxVersion);
 		setBinary(binary);
 
 		if (nameId != 0)
@@ -221,8 +212,6 @@ public class Secu3Packet implements Parcelable {
 		if (packet != null) {
 			this.name = packet.name;
 			this.nameId = packet.nameId;
-			this.minVersion = packet.minVersion;
-			this.maxVersion = packet.maxVersion;
 			this.binary = packet.binary;
 			this.data = packet.data;
 			this.packetId = packet.packetId;
@@ -339,15 +328,6 @@ public class Secu3Packet implements Parcelable {
 		this.nameId = nameId;
 	}
 
-	public int getMinVersion() {
-		return minVersion;
-	}
-
-	public void setMinVersion(int minVersion) {
-		if (minVersion <= 1) minVersion = 1;
-		this.minVersion = minVersion;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -405,14 +385,5 @@ public class Secu3Packet implements Parcelable {
 				fields.get(i).reset();
 			}
 		}
-	}
-
-	public int getMaxVersion() {
-		return maxVersion;
-	}
-
-	public void setMaxVersion(int maxVersion) {
-		if (maxVersion < minVersion) maxVersion = minVersion;
-		this.maxVersion = maxVersion;
 	}
 }

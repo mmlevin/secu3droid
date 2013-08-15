@@ -60,9 +60,23 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ParamActivity extends FragmentActivity implements OnItemClickListener,OnNumberPickerDialogAcceptListener,OnParamItemChangeListener {
+	private static final String MAX_VERSION = "maxVersion";
+	private static final String MIN_VERSION = "minVersion";
+	private static final String INDEX = "index";
+	private static final String FORMAT = "format";
+	private static final String STEP_VALUE = "stepValue";
+	private static final String MAX_VALUE = "maxValue";
+	private static final String MIN_VALUE = "minValue";
+	private static final String STR_VALUE = "str_value";
+	private static final String VALUE = "value";
+	private static final String TYPE = "type";
+	private static final String UNITS = "units";
+	private static final String SUMMARY = "summary";
+	private static final String PARAMETER = "Parameter";
+	private static final String NAME = "name";
+	private static final String PAGE = "Page";
+	private static final String PARAMETERS = "Parameters";
 	public static final int PARAMS_NUMBER = 9;
-	
-	private static final String PAGE = "page";
 	
     private int position = Integer.MAX_VALUE;    
 	private boolean isOnline = false;
@@ -114,22 +128,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		return dialog;
 	}	
 	
-	public void createFormFromXml (int xmlId){
-		String name;
+	public void createFormFromXml (int xmlId, int protocolVersion){
 		ParamsPage page = null;
 		BaseParamItem item = null;
-
-		int parameterType = 0;		
-		String parameterName = null;
-		String parameterSummary = null;
-		String parameterUnits = null;
-		String parameterStrValue = null;
-		String parameterValue = null;
-		String parameterMinValue = null;
-		String parameterMaxValue = null;
-		String parameterStepValue = null;
-		String parameterIndex = null;
-		String parameterMasFormat = null;
 		String attr = null;
 		String attrValue = null;		
 		
@@ -138,163 +139,138 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			pages = new ArrayList<ParamsPage>();
 			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
 				switch (xpp.getEventType()) {
-				case XmlPullParser.START_DOCUMENT:
-					break;
 				case XmlPullParser.START_TAG:
-					name = xpp.getName();
-					if (name.equalsIgnoreCase("Parameters")) {
+					String name = xpp.getName();
+					if (name.equals(PARAMETERS)) {
 						if (pages.size() != 0) throw new IllegalArgumentException("Pages adapter is non empty, probably nested Parameter element"); 
 					} else					
 					// Found new page element
-					if (name.equalsIgnoreCase("Page")) {
-						if (page != null) {
-							throw new IllegalArgumentException("Pages can't be nested");
-						}
+					if (name.equals(PAGE)) {
 						int count = xpp.getAttributeCount(); 
 						if (count > 0) {
+							int pageMinVersion = protocolVersion;
+							int pageMaxVersion = protocolVersion;
 							for (int i = 0; i != count; i++) {
 								attr  = xpp.getAttributeName(i);
 								attrValue = xpp.getAttributeValue(i);
-								if (attr.equals("name")) {
+								if (attr.equals(NAME)) {
 									if (ResourcesUtils.isResource(attrValue)) {
 										page = new ParamsPage(ResourcesUtils.referenceToInt(attrValue));
 									} else throw new IllegalArgumentException("Page name must be a string reference");									
-									pages.add(page);
+								} else if (attr.equals(MIN_VERSION)) {
+									pageMinVersion = Integer.parseInt(attrValue);
+								} else if (attr.equals(MAX_VERSION)) {
+									pageMaxVersion = Integer.parseInt(attrValue);
 								}
 							}
-						}						
+							if ((protocolVersion >= pageMinVersion)&&(protocolVersion <= pageMaxVersion)) {
+								pages.add(page);
+							}
+						}	
 					} else
 					// Found new parameter element
-					if (name.equalsIgnoreCase("Parameter")){
-						if (item != null) {
-							throw new IllegalArgumentException("Parameters can't be nested");
-						}
-						int count = xpp.getAttributeCount(); 
-						parameterName = null;
-						parameterSummary = null;
-						parameterUnits = null;
-						parameterStrValue = null;
-						parameterValue = null;
-						parameterMinValue = null;
-						parameterMaxValue = null;
-						parameterStepValue = null;
-						parameterIndex = null;
-						parameterMasFormat = null;
+					if (name.equals(PARAMETER)){
+						int count = xpp.getAttributeCount();
+						int parameterType = 0;
+						String parameterName = null;
+						String parameterSummary = null;
+						String parameterUnits = null;
+						String parameterStrValue = null;
+						String parameterValue = null;
+						String parameterMinValue = null;
+						String parameterMaxValue = null;
+						String parameterStepValue = null;
+						String parameterIndex = null;
+						String parameterMasFormat = null;
 						if (count > 0) {
+							int minVersion = protocolVersion;
+							int maxVersion = protocolVersion;
 							for (int i = 0; i != count; i++) {
 								attr  = xpp.getAttributeName(i);
 								attrValue = xpp.getAttributeValue(i);
-								if (attr.equalsIgnoreCase("name")) {
+								if (attr.equals(NAME)) {
 									if (ResourcesUtils.isResource(attrValue)) {
 										parameterName = attrValue;
 									} else throw new IllegalArgumentException("Parameter name must be a string reference");									
-								} else if (attr.equalsIgnoreCase("summary")) {
+								} else if (attr.equals(SUMMARY)) {
 									parameterSummary = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else									
-								if (attr.equalsIgnoreCase("units")) {
+								} else if (attr.equals(UNITS)) {
 									parameterUnits = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else
-								if (attr.equalsIgnoreCase("type")) {
+								} else if (attr.equals(TYPE)) {
 									if (ResourcesUtils.isResource(attrValue)) {
 										parameterType = ResourcesUtils.referenceToInt(attrValue);
 									} else throw new IllegalArgumentException("Parameter type must be a reference");									
-								} else 
-								if (attr.equalsIgnoreCase("value")) {
+								} else if (attr.equals(VALUE)) {
 									parameterValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else
-								if (attr.equalsIgnoreCase("str_value")) {
+								} else if (attr.equals(STR_VALUE)) {
 									parameterStrValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else	
-								if (attr.equalsIgnoreCase("minValue")) {
+								} else if (attr.equals(MIN_VALUE)) {
 									parameterMinValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else 
-								if (attr.equalsIgnoreCase("maxValue")) {
+								} else if (attr.equals(MAX_VALUE)) {
 									parameterMaxValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else 
-								if (attr.equalsIgnoreCase("stepValue")) {
+								} else if (attr.equals(STEP_VALUE)) {
 									parameterStepValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else 
-								if (attr.equalsIgnoreCase("format")) {
+								} else if (attr.equals(FORMAT)) {
 									parameterMasFormat = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								}
-								else 
-								if (attr.equalsIgnoreCase("index")) {
+								} else if (attr.equals(INDEX)) {
 									parameterIndex = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else if (attr.equals(MIN_VERSION)) {
+									minVersion = Integer.parseInt(attrValue);
+								} else if (attr.equals(MAX_VERSION)) {
+									maxVersion = Integer.parseInt(attrValue);
+								}
+							}
+							if ((parameterName == null) || (parameterType == 0) || (TextUtils.isEmpty(parameterName))) throw new IllegalArgumentException("Parameter element is invalid");
+							else {
+								switch (parameterType) {
+								case R.id.parameter_type_boolean:
+									item = new ParamItemBoolean(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterValue);
+									break;
+								case R.id.parameter_type_integer:
+									try {
+										item = new ParamItemInteger(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+												parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+									} catch (ParseException e) {
+										throw new IllegalArgumentException("Wrong integer parameter attributes");
+									}
+									break;
+								case R.id.parameter_type_float:
+									try {
+										item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+												parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+										((ParamItemFloat) item).setFormat (parameterMasFormat);
+									} catch (ParseException e) {
+										throw new IllegalArgumentException("Wrong integer parameter attributes");
+									}								
+									break;
+								case R.id.parameter_type_label:
+									item = new ParamItemLabel(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+									break;
+								case R.id.parameter_type_button:
+									item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterUnits);
+									break;
+								case R.id.parameter_type_toggle_button:
+									item = new ParamItemToggleButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+									break;
+								case R.id.parameter_type_spinner:
+									try {
+										item = new ParamItemSpinner(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterStrValue,parameterIndex);																			
+									} catch (ParseException e) {
+										throw new IllegalArgumentException("Wrong spinner parameter attributes");
+									}								
+									break;
+								default: throw new IllegalArgumentException("Unknown parameter type");
+								}
+								if ((item != null) && (protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
+									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
+									item.setPageId(page.getNameId());
+									item.setOnParamItemChangeListener(this);								
+									page.addParamItem(item);
+									item = null;
 								}
 							}
 						}											
 					}
-					break;
-				case XmlPullParser.END_TAG:
-					name = xpp.getName();
-					if (name.equalsIgnoreCase("Parameters")) {
-						if (pages.size() == 0) throw new IllegalArgumentException("Parameters closed, but not opened");
-					} else				
-					if (name.equalsIgnoreCase("Page")) {
-						if (page == null) throw new IllegalArgumentException("Page closed, but not opened");
-						else page = null;
-					} else
-					if (name.equalsIgnoreCase("Parameter")) {
-						if ((parameterName == null) || (parameterType == 0) || (TextUtils.isEmpty(parameterName))) throw new IllegalArgumentException("Parameter element is invalid");
-						else {
-							switch (parameterType) {
-							case R.id.parameter_type_boolean:
-								item = new ParamItemBoolean(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterValue);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_integer:
-								try {
-									item = new ParamItemInteger(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
-											parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
-								} catch (ParseException e) {
-									throw new IllegalArgumentException("Wrong integer parameter attributes");
-								}
-								break;
-							case R.id.parameter_type_float:
-								try {
-									item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
-											parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));	
-									((ParamItemFloat) item).setFormat (parameterMasFormat);
-								} catch (ParseException e) {
-									throw new IllegalArgumentException("Wrong integer parameter attributes");
-								}								
-								break;
-							case R.id.parameter_type_label:
-								item = new ParamItemLabel(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_button:
-								item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterUnits);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_toggle_button:
-								item = new ParamItemToggleButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_spinner:
-								try {
-									item = new ParamItemSpinner(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterStrValue,parameterIndex);
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
-								} catch (ParseException e) {
-									throw new IllegalArgumentException("Wrong spinner parameter attributes");
-								}								
-								break;
-							default: throw new IllegalArgumentException("Unknown parameter type");
-							}
-							if (item != null) {
-								item.setPageId(page.getNameId());
-								item.setOnParamItemChangeListener(this);								
-								page.addParamItem(item);
-								item = null;
-							}
-						}
-					}
-					break;
-				case XmlPullParser.TEXT:					
-					break;
-				default:
 					break;
 				}
 				xpp.next();
@@ -322,7 +298,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		setTheme(sharedPref.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
 		setContentView(R.layout.activity_param);
 		
-		createFormFromXml(R.xml.parameters);
+		createFormFromXml(R.xml.parameters, SettingsActivity.getProtocolVersion(this));
 				
 		packetUtils = new PacketUtils();
 		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),this,pages);

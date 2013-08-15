@@ -52,22 +52,7 @@ public class Secu3ProtoWrapper {
 		
 		Secu3Packet packet = null;
 		BaseProtoField field = null;
-			
-		String packetName = null;
-		String packetId = null;
-		String packetMinVersion = null;
-		String packetMaxVersion = null;
-		
-		String fieldName = null; 
-		int fieldType = 0;
-		String fieldMinVersion = null;
-		String fieldMaxVersion = null;
-		String fieldSigned = null;
-		String fieldOffset = null;
-		String fieldDivider = null;
-		String fieldMultiplier = null;
-		String fieldLength = null;
-
+				
 		String attr = null;
 		String attrValue = null;
 		
@@ -78,8 +63,6 @@ public class Secu3ProtoWrapper {
 			packets = new SparseArray<Secu3Packet> ();
 			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
 				switch (xpp.getEventType()) {
-				case XmlPullParser.START_DOCUMENT:
-					break;
 				case XmlPullParser.START_TAG:
 					name = xpp.getName();
 					if (name.equalsIgnoreCase(PROTOCOL)) {
@@ -87,12 +70,10 @@ public class Secu3ProtoWrapper {
 					} else					
 					// Found new packet element
 					if (name.equalsIgnoreCase(PACKET)) {
-						if (packet != null) {
-							throw new IllegalArgumentException("Packets cannot be nested");
-						}
-						packetId = null;
-						packetMinVersion = null;
-						packetName = null;
+						String packetId = null;
+						String packetName = null;
+						int minVersion = protocolVersion;
+						int maxVersion = protocolVersion;
 						int count = xpp.getAttributeCount(); 
 						if (count > 0) {
 							for (int i = 0; i != count; i++) {
@@ -106,37 +87,32 @@ public class Secu3ProtoWrapper {
 									packetId = attrValue;
 								} else
 								if (attr.equals(MIN_VERSION)) {
-									packetMinVersion = attrValue;
+									minVersion = Integer.parseInt(attrValue);
 								}if (attr.equals(MAX_VERSION)) {
-									packetMaxVersion = attrValue;
+									maxVersion = Integer.parseInt(attrValue);
 								}
 							}
-						}
-						if ((packetName == null) || (TextUtils.isEmpty(packetName)) || (packetMinVersion == null) || (TextUtils.isEmpty(packetMinVersion)) || (packetId == null) || (TextUtils.isEmpty(packetId))) {
-							throw new IllegalArgumentException("Packet element is invalid");							
-						} else {
-							int maxVersion = 0;
-							if (packetMaxVersion != null) maxVersion = format.parse(packetMaxVersion).intValue();
-							packet = new Secu3Packet(getContext(), ResourcesUtils.referenceToInt(packetName), ResourcesUtils.referenceToInt(packetId), format.parse(packetMinVersion).intValue(), maxVersion, isBinary());
-							if ((protocolVersion >= packet.getMinVersion()) && (protocolVersion <= packet.getMaxVersion())) {
-								packets.put(packet.getNameId(),packet);
-							}
-						}						
+							if ((packetName == null) || (TextUtils.isEmpty(packetName)) || (packetId == null) || (TextUtils.isEmpty(packetId))) {
+								throw new IllegalArgumentException("Packet element is invalid");							
+							} else {
+								packet = new Secu3Packet(getContext(), ResourcesUtils.referenceToInt(packetName), ResourcesUtils.referenceToInt(packetId), isBinary());
+								if ((protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
+									packets.put(packet.getNameId(),packet);
+								}
+							}							
+						}												
 					} else
 					// Found new field element
 					if (name.equalsIgnoreCase(FIELD)){
-						if (field != null) {
-							throw new IllegalArgumentException("Fields can't be nested");
-						}
-						fieldName = null; 
-						fieldType = 0;
-						fieldMinVersion = null;
-						fieldMaxVersion = null;
-						fieldDivider = null;
-						fieldSigned = null;		
-						fieldLength = null;
-						fieldOffset = null;
-						fieldMultiplier = null;
+						String fieldName = null; 
+						int fieldType = 0;
+						int minVersion = protocolVersion;
+						int maxVersion = protocolVersion;
+						String fieldDivider = null;
+						String fieldSigned = null;		
+						String fieldLength = null;
+						String fieldOffset = null;
+						String fieldMultiplier = null;
 						int count = xpp.getAttributeCount(); 
 						if (count > 0) {
 							for (int i = 0; i != count; i++) {
@@ -145,88 +121,63 @@ public class Secu3ProtoWrapper {
 								if (attr.equalsIgnoreCase(NAME)) {
 									if (!ResourcesUtils.isResource(attrValue)) throw new IllegalArgumentException("Field name must be a string reference");
 									fieldName = attrValue;									
-								}
-								if (attr.equalsIgnoreCase(TYPE)) {
+								} else if (attr.equalsIgnoreCase(TYPE)) {
 									if (ResourcesUtils.isResource(attrValue)) {
 										fieldType = ResourcesUtils.referenceToInt(attrValue);
 									} else throw new IllegalArgumentException("Field type must be a reference");									
-								} else 
-								if (attr.equalsIgnoreCase(MIN_VERSION)) {
-									fieldMinVersion = attrValue;
-								} else
-								if (attr.equalsIgnoreCase(MAX_VERSION)) {
-									fieldMaxVersion = attrValue;
-								} else
-								if (attr.equalsIgnoreCase(DIVIDER)) {
+								} else if (attr.equalsIgnoreCase(MIN_VERSION)) {
+									minVersion = Integer.parseInt(attrValue);
+								} else if (attr.equalsIgnoreCase(MAX_VERSION)) {
+									maxVersion = Integer.parseInt(attrValue);
+								} else if (attr.equalsIgnoreCase(DIVIDER)) {
 									fieldDivider = attrValue;
-								} else
-								if (attr.equalsIgnoreCase(MULTIPLIER)) {
+								} else if (attr.equalsIgnoreCase(MULTIPLIER)) {
 									fieldMultiplier = attrValue;
-								} else
-								if (attr.equalsIgnoreCase(OFFSET)) {
+								} else if (attr.equalsIgnoreCase(OFFSET)) {
 									fieldOffset = attrValue;
-								} else
-								if (attr.equalsIgnoreCase(LENGTH)) {
+								} else if (attr.equalsIgnoreCase(LENGTH)) {
 									fieldLength = attrValue;
 								} else
 								if (attr.equalsIgnoreCase(SIGNED)) {
 									fieldSigned = attrValue;
 								}
-							}
+							} 
+							
+							if ((fieldName == null) || (fieldType == 0) || (TextUtils.isEmpty(fieldName))) throw new IllegalArgumentException("Field element is invalid");
+							else {													
+								switch (fieldType) {
+								case R.id.field_type_int4:
+								case R.id.field_type_int8:
+								case R.id.field_type_int16:
+								case R.id.field_type_int32:
+									field = new ProtoFieldInteger(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), isBinary());
+									if (fieldMultiplier != null)
+										((ProtoFieldInteger) field).setMultiplier((ResourcesUtils.isResource(fieldMultiplier))?ResourcesUtils.getReferenceInt(getContext(), fieldMultiplier):Integer.valueOf(fieldMultiplier));
+									break;
+								case R.id.field_type_float4:
+								case R.id.field_type_float8:
+								case R.id.field_type_float16:
+								case R.id.field_type_float32:		
+									field = new ProtoFieldFloat(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), isBinary());
+									if (fieldDivider != null)
+										((ProtoFieldFloat) field).setIntDivider((ResourcesUtils.isResource(fieldDivider))?ResourcesUtils.getReferenceInt(getContext(), fieldDivider):Integer.valueOf(fieldDivider));
+									if (fieldMultiplier != null)
+										((ProtoFieldFloat) field).setIntMultiplier ((ResourcesUtils.isResource(fieldMultiplier))?ResourcesUtils.getReferenceInt(getContext(), fieldMultiplier):Integer.valueOf(fieldMultiplier));
+									if (fieldOffset != null)
+										((ProtoFieldFloat) field).setIntOffset ((ResourcesUtils.isResource(fieldOffset))?ResourcesUtils.getReferenceInt(getContext(), fieldOffset):Integer.valueOf(fieldOffset));
+									break;															
+								case R.id.field_type_string:
+									field = new ProtoFieldString(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, format.parse(fieldLength).intValue(), isBinary());
+									break;
+								default: throw new IllegalArgumentException("Unknown field type");
+								}
+								if ((protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
+									packet.addField(field);
+								}
+								field = null;
+							}							
 						}											
 					}
-					break;
-				case XmlPullParser.END_TAG:
-					name = xpp.getName();
-					if (name.equalsIgnoreCase(PROTOCOL)) {
-						if (packets.size() == 0) throw new IllegalArgumentException("Protocol closed, but not opened");
-					} else				
-					if (name.equalsIgnoreCase(PACKET)) {
-						if (packet == null) throw new IllegalArgumentException("Packet closed, but not opened");
-						packet = null;
-					} else
-					if (name.equalsIgnoreCase(FIELD)) {
-						int maxVersion = 0;
-						if (fieldMaxVersion != null) maxVersion = format.parse(fieldMaxVersion).intValue(); 
-						
-						if ((fieldName == null) || (fieldType == 0) || (TextUtils.isEmpty(fieldName))) throw new IllegalArgumentException("Field element is invalid");
-						else {													
-							switch (fieldType) {
-							case R.id.field_type_int4:
-							case R.id.field_type_int8:
-							case R.id.field_type_int16:
-							case R.id.field_type_int32:
-								field = new ProtoFieldInteger(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), format.parse(fieldMinVersion).intValue(), maxVersion, isBinary());
-								if (fieldMultiplier != null)
-									((ProtoFieldInteger) field).setMultiplier((ResourcesUtils.isResource(fieldMultiplier))?ResourcesUtils.getReferenceInt(getContext(), fieldMultiplier):Integer.valueOf(fieldMultiplier));
-								break;
-							case R.id.field_type_float4:
-							case R.id.field_type_float8:
-							case R.id.field_type_float16:
-							case R.id.field_type_float32:		
-								field = new ProtoFieldFloat(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), format.parse(fieldMinVersion).intValue(), maxVersion, isBinary());
-								if (fieldDivider != null)
-									((ProtoFieldFloat) field).setIntDivider((ResourcesUtils.isResource(fieldDivider))?ResourcesUtils.getReferenceInt(getContext(), fieldDivider):Integer.valueOf(fieldDivider));
-								if (fieldMultiplier != null)
-									((ProtoFieldFloat) field).setIntMultiplier ((ResourcesUtils.isResource(fieldMultiplier))?ResourcesUtils.getReferenceInt(getContext(), fieldMultiplier):Integer.valueOf(fieldMultiplier));
-								if (fieldOffset != null)
-									((ProtoFieldFloat) field).setIntOffset ((ResourcesUtils.isResource(fieldOffset))?ResourcesUtils.getReferenceInt(getContext(), fieldOffset):Integer.valueOf(fieldOffset));
-								break;															
-							case R.id.field_type_string:
-								field = new ProtoFieldString(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, format.parse(fieldLength).intValue(), format.parse(fieldMinVersion).intValue(), maxVersion, isBinary());
-								break;
-							default: throw new IllegalArgumentException("Unknown field type");
-							}
-							if ((protocolVersion >= field.getMinVersion()) && (protocolVersion <= field.getMaxVersion())) {
-								packet.addField(field);
-							}
-							field = null;
-						}
-					}
-					break;
-				case XmlPullParser.TEXT:					
-					break;
-				default:
 					break;
 				}
 				xpp.next();

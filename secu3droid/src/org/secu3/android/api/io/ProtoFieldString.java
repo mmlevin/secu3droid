@@ -17,14 +17,12 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 		 }
 	};
 	
-	public ProtoFieldString(Context context, int nameId, int type, int length, int minVersion, int maxVersion, boolean binary) {
+	public ProtoFieldString(Context context, int nameId, int type, int length, boolean binary) {
 		setData(null);
 		
 		setNameId(nameId);
 		setType(type);
 		setLength(length);
-		setMinVersion(minVersion);
-		setMaxVersion(maxVersion);
 		setBinary(binary);
 		if (nameId != 0) this.setName(context.getString(nameId));		
 	}

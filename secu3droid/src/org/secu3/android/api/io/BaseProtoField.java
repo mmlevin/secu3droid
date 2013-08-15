@@ -7,8 +7,6 @@ public class BaseProtoField implements Parcelable {
 	private String name;
 	private int nameId;
 	private int type;
-	private int minVersion;
-	private int maxVersion;
 	private boolean binary;
 	private String data;
 	private int length = 0;
@@ -20,8 +18,6 @@ public class BaseProtoField implements Parcelable {
 		this.name = in.readString();
 		this.nameId = in.readInt();
 		this.type = in.readInt();
-		this.minVersion = in.readInt();
-		this.maxVersion = in.readInt();
 		this.binary = (in.readInt()==1)?true:false;
 		this.data = in.readString();
 		this.length = in.readInt();
@@ -32,8 +28,6 @@ public class BaseProtoField implements Parcelable {
 			this.name = field.name;
 			this.nameId = field.nameId;
 			this.type = field.type;
-			this.minVersion = field.minVersion;
-			this.maxVersion = field.maxVersion;
 			this.binary = field.binary;
 			this.data = field.data;
 			this.length = field.length;			
@@ -45,8 +39,6 @@ public class BaseProtoField implements Parcelable {
 		dest.writeString(name);
 		dest.writeInt(nameId);
 		dest.writeInt(type);
-		dest.writeInt(minVersion);
-		dest.writeInt(maxVersion);
 		dest.writeInt(binary?1:0);
 		dest.writeString(data);
 		dest.writeInt(length);		
@@ -84,15 +76,6 @@ public class BaseProtoField implements Parcelable {
 	
 	public void setType(int type) {
 		this.type = type;
-	}
-	
-	public int getMinVersion() {
-		return minVersion;
-	}
-	
-	public void setMinVersion(int minVersion) {
-		if (minVersion <= 1) minVersion = 1;
-		this.minVersion = minVersion;
 	}
 	
 	public void parse (String data) {
@@ -133,14 +116,5 @@ public class BaseProtoField implements Parcelable {
 	}
 
 	public void pack() {		
-	}
-
-	public int getMaxVersion() {
-		return maxVersion;
-	}
-
-	public void setMaxVersion(int maxVersion) {
-		if (maxVersion < minVersion) maxVersion = minVersion;
-		this.maxVersion = maxVersion;
 	}
 }
