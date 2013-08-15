@@ -93,7 +93,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER);
-			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET);
 		}
 		
 		@Override
@@ -488,18 +488,22 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			textViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
 			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
-			if (packet.getNameId() == R.string.op_comp_nc_title) {
-				if (((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_title)).getValue() == Secu3Packet.OPCODE_EEPROM_PARAM_SAVE) {
-					progressBar.setVisibility(ProgressBar.GONE);				
-					Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
+			if (packet != null) {
+				if (packet.getNameId() == R.string.op_comp_nc_title) {
+					if (((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_title)).getValue() == Secu3Packet.OPCODE_EEPROM_PARAM_SAVE) {
+						progressBar.setVisibility(ProgressBar.GONE);				
+						Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
+					}
+				} else {
+					packetUtils.setParamFromPacket(paramAdapter, packet);
 				}
-			} else {
-				packetUtils.setParamFromPacket(paramAdapter, packet);
 			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET.equals(intent.getAction())) {
-			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
-			if (packet.getNameId() == R.string.op_comp_nc_title) OpCompNcSkeleton = packet;
-			else if (packet.getNameId() == R.string.choke_control_title) ChokeControlSkeleton = packet;
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET);
+			if (packet != null) {
+				if (packet.getNameId() == R.string.op_comp_nc_title) OpCompNcSkeleton = packet;
+				else if (packet.getNameId() == R.string.choke_control_title) ChokeControlSkeleton = packet;
+			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
 			int total = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_TOTAL,0);

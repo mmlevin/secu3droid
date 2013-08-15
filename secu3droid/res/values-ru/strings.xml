@@ -103,4 +103,5 @@
     <string name="diagnostics_not_supported_title">Режим диагностики отключен в прошивке или не установлено соединение с Secu-3</string>
     <string name="errors_code">Код ошибки %s</string>
     <string name="params_saved_error_code">Параметры сохранены</string>
+    <string name="errors_saved_error_code">Ошибки сохранены</string>
 </resources>

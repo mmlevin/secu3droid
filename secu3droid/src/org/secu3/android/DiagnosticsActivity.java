@@ -3,6 +3,7 @@ package org.secu3.android;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.secu3.android.api.io.ProtoFieldInteger;
 import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.utils.PacketUtils;
@@ -16,6 +17,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -45,6 +47,9 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	private ViewPager pager = null;
 	private ReceiveMessages receiver = null;
 	private TextView textViewStatus = null;	
+	
+	private Secu3Packet OpCompNc = null;
+	private Secu3Packet DiagOutDat = null;
 	
 	public static class OutputDiagListFragment extends ListFragment {
 		OnItemClickListener listener;		
@@ -94,6 +99,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 			intentFilter = new IntentFilter();
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET);
 		}
 		
 		@Override
@@ -173,9 +179,12 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 
 
 	@Override
-	protected void onPause() {	
-		//startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Packet.OPCODE_DIAGNOST_LEAVE,0)));
-		// TODO
+	protected void onPause() {
+		if (OpCompNc != null) {
+			((ProtoFieldInteger) OpCompNc.findField(R.string.op_comp_nc_operation_title)).setValue (Secu3Packet.OPCODE_DIAGNOST_LEAVE);
+			((ProtoFieldInteger) OpCompNc.findField(R.string.op_comp_nc_operation_code_title)).setValue (0);
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, OpCompNc));
+		}
 		unregisterReceiver(receiver);
 		super.onPause();		
 	}
@@ -191,8 +200,8 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	@Override
 	protected void onResume() {							
 		registerReceiver(receiver, receiver.intentFilter);
-		//startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Packet.OPCODE_DIAGNOST_ENTER,0)));
-		// TODO
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.op_comp_nc_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.diagout_dat_title));
 		super.onResume();		
 	}
 	
@@ -212,12 +221,24 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 			textViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
 		{
-			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);			
-			if (packet.getNameId() == R.string.diaginp_dat_title) {	
-				PacketUtils.setDiagInpFromPacket((ParamItemsAdapter) inputFragment.getListAdapter(), packet);
-				((ParamItemsAdapter) inputFragment.getListAdapter()).notifyDataSetChanged();
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet != null) {
+				if (packet.getNameId() == R.string.diaginp_dat_title) {	
+					PacketUtils.setDiagInpFromPacket((ParamItemsAdapter) inputFragment.getListAdapter(), packet);
+					((ParamItemsAdapter) inputFragment.getListAdapter()).notifyDataSetChanged();
+				}
 			}
-		}				
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET.equals(intent.getAction())) {
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET);
+			if (packet != null) {
+				if (packet.getNameId() == R.string.op_comp_nc_title) {
+					OpCompNc = packet;
+					((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_title)).setValue(Secu3Packet.OPCODE_DIAGNOST_ENTER);
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, OpCompNc));
+				}
+				else if (packet.getNameId() == R.string.diagout_dat_title) DiagOutDat = packet;
+			}
+		}		
 	}
 
 	@Override
@@ -230,9 +251,9 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 
 	@Override
 	public void onParamItemChange(BaseParamItem item) {
-		// TODO
-		//DiagOutDat packet = new DiagOutDat();
-		//packet.setOutputs(getOutputs());
-		//startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));				
+		if (DiagOutDat != null) {
+			((ProtoFieldInteger) DiagOutDat.findField(R.string.diagout_dat_bitfield_title)).setValue(getOutputs());
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, DiagOutDat));
+		}
 	}
 }

@@ -51,6 +51,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,6 +62,9 @@ public class ErrorsActivity extends Activity {
 	private static final String REALTIME = "realtime";
 	private static final String ERRORS = "errors";
 	public final int INERTNESS_COUNT = 10;
+	
+	private Secu3Packet CeSavedError = null;
+	private Secu3Packet OpCompNc = null;
 	
 	boolean isOnline = false;
 	boolean realtime;
@@ -81,7 +86,7 @@ public class ErrorsActivity extends Activity {
 		adapter.notifyDataSetChanged();
 		ReadingInertion.setEnabled (realtime);
 		ActivityCompat.invalidateOptionsMenu(ErrorsActivity.this);		
-		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SAVED_ERRORS;
+		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SENSORS;
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));	
 	}
 	
@@ -101,6 +106,7 @@ public class ErrorsActivity extends Activity {
 			intentFilter = new IntentFilter();
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET);
 		}
 		
 		@Override
@@ -194,13 +200,16 @@ public class ErrorsActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_errors_write:
-			// TODO
-			//CESavedErr err = new CESavedErr();
-			//err.flags = getErrors();
-			//startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, err));			
+			if (CeSavedError != null) {
+				((ProtoFieldInteger) CeSavedError.findField(R.string.ce_saved_err_data_title)).setValue(getErrors());
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, CeSavedError));				
+			}			
 			return true;
 		case R.id.menu_errors_read:
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SAVED_ERRORS.ordinal()));
+			if (OpCompNc != null) {
+				((ProtoFieldInteger) OpCompNc.findField(R.string.op_comp_nc_operation_title)).setValue (Secu3Packet.OPCODE_CE_SAVE_ERRORS);
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, OpCompNc));
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -216,6 +225,8 @@ public class ErrorsActivity extends Activity {
 	
 	@Override
 	protected void onResume() {		
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.ce_saved_err_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.op_comp_nc_title));
 		registerReceiver(receiver, receiver.intentFilter);
 		super.onResume();		
 	}
@@ -270,14 +281,27 @@ public class ErrorsActivity extends Activity {
 			}			
 			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
 			errorsTextViewStatus.setText(s);
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET.equals(intent.getAction())) {
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET);
+			if (packet != null) {
+				if (packet.getNameId() == R.string.ce_saved_err_title) CeSavedError = packet;
+				else if (packet.getNameId() == R.string.op_comp_nc_title) OpCompNc = packet;
+			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
 			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
-			if (packet.getNameId() == R.string.ce_saved_err_title) {
-				updateFlags(((ProtoFieldInteger) packet.getField(R.string.ce_saved_err_data_title)).getValue());		
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
-			} else
-			if (packet.getNameId() == R.string.ce_err_codes_title) {				
-				updateFlags(((ProtoFieldInteger) packet.getField(R.string.ce_err_codes_data_title)).getValue());
+			if (packet != null) {
+				if (packet.getNameId() == R.string.ce_saved_err_title) {
+					updateFlags(((ProtoFieldInteger) packet.getField(R.string.ce_saved_err_data_title)).getValue());		
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_SENSORS.ordinal()));
+				} else
+				if (packet.getNameId() == R.string.ce_err_codes_title) {				
+					updateFlags(((ProtoFieldInteger) packet.getField(R.string.ce_err_codes_data_title)).getValue());
+				}
+				if (packet.getNameId() == R.string.op_comp_nc_title) {
+					if (((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_title)).getValue() == Secu3Packet.OPCODE_CE_SAVE_ERRORS) {				
+						Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
+					}
+				}
 			}
 		} 
 	}

@@ -60,7 +60,7 @@ public class Secu3Manager {
 	
 	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
 	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
-	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS,SECU3_READ_FW_INFO,SECU3_START_LOGGING,SECU3_STOP_LOGGING};
+	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_FW_INFO,SECU3_START_LOGGING,SECU3_STOP_LOGGING};
 	
 	private int progressCurrent = 0;
 	private int progressTotal = 0;
@@ -217,11 +217,6 @@ public class Secu3Manager {
 							writer.write(ChangeMode.pack());							
 							writer.flush();
 							break;
-						case SECU3_READ_SAVED_ERRORS:
-							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_ce_saved_err));
-							writer.write(ChangeMode.pack());
-							writer.flush();
-							break;
 						case SECU3_READ_FW_INFO:
 							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_fwinfo_dat));
 							writer.write(ChangeMode.pack());
@@ -319,12 +314,6 @@ public class Secu3Manager {
 							updateTask();						
 						}				
 						break;						
-					case SECU3_READ_SAVED_ERRORS:
-						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
-						case R.string.packet_type_ce_saved_err:
-							updateTask();
-						}
-						break;
 					case SECU3_READ_FW_INFO:
 						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
 						case R.string.packet_type_fwinfo_dat:

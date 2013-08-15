@@ -162,7 +162,7 @@ public class MainActivity extends Activity {
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
-						if ((fwOptions != Integer.MIN_VALUE) || ((fwOptions & Secu3Packet.COPT_DIAGNOSTICS) == 0)) {
+						if ((fwOptions == Integer.MIN_VALUE) || ((fwOptions & (1 << Secu3Packet.COPT_DIAGNOSTICS)) == 0)) {
 							Toast.makeText(getApplicationContext(), R.string.diagnostics_not_supported_title, Toast.LENGTH_LONG).show();
 						}
 						startActivity(new Intent (getApplicationContext(),DiagnosticsActivity.class));

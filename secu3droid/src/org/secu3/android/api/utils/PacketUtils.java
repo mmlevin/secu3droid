@@ -118,12 +118,12 @@ public class PacketUtils {
 					adapter.setFloatItem(R.string.diag_input_ks1, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks1)).getValue()));
 					adapter.setFloatItem(R.string.diag_input_ks2, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks2)).getValue()));
 					adapter.setBooleanItem(R.string.diag_input_carb, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_carb)).getValue())==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_gas_v, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_gas_v)).getValue())==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_ckps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_ckps)).getValue())==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_ref_s, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_ref_s)).getValue())==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_ps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_ps)).getValue())==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_bl, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bl)).getValue())==1)?true:false);
-					adapter.setBooleanItem(R.string.diag_input_de, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_carb)).getValue())==1)?true:false);
+					adapter.setBooleanItem(R.string.diag_input_gas_v, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield)).getValue() & (1 << 0)) != 0));
+					adapter.setBooleanItem(R.string.diag_input_ckps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield)).getValue() & (1 << 1)) != 0));
+					adapter.setBooleanItem(R.string.diag_input_ref_s, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield)).getValue() & (1 << 2)) != 0));
+					adapter.setBooleanItem(R.string.diag_input_ps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield)).getValue() & (1 << 3)) != 0));
+					adapter.setBooleanItem(R.string.diag_input_bl, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield)).getValue() & (1 << 4)) != 0));
+					adapter.setBooleanItem(R.string.diag_input_de, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield)).getValue() & (1 << 5)) != 0));
 				}
 			}
 		}
