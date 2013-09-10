@@ -74,6 +74,11 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         String protocolVersion = versions[getProtocolVersion(this)-1];
         ListPreference prefVersions = (ListPreference)findPreference(getString(R.string.pref_protocol_version_key));        
         prefVersions.setSummary(protocolVersion);
+        
+		findPreference(getString(R.string.pref_write_log_path)).setSummary(String.format(getString(R.string.pref_write_log_path_summary), Secu3Logger.getDefaultPath()));
+		
+        Preference speedPulses = (Preference)findPreference(getString(R.string.pref_speed_pulse_key));
+        speedPulses.setSummary(sharedPref.getString(getString(R.string.pref_speed_pulse_key), getString(R.string.defaultSpeedPulse)));
     }   
 
 	@SuppressWarnings("deprecation")
@@ -123,7 +128,6 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		addPreferencesFromResource(R.xml.preferences);				
         versions = getResources().getStringArray(R.array.protocol_versions);
 		
-		findPreference(getString(R.string.pref_write_log_path)).setSummary(String.format(getString(R.string.pref_write_log_path_summary), Secu3Logger.getDefaultPath()));
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();	
         Preference pref = findPreference(getString(R.string.pref_about_key));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {		
@@ -132,9 +136,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				SettingsActivity.this.displayAboutDialog();
 				return true;
 			}
-		});                
-	}	
-	
+		});          
+	}		
+
 	@Override
 	protected void onResume() {
         sharedPref.registerOnSharedPreferenceChangeListener(this);
@@ -156,6 +160,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		} else if (getString(R.string.pref_protocol_version_key).equals(key)) {
 			updatePreferenceSummary();
 			updatePreferenceList();		
+		} else if (getString(R.string.pref_speed_pulse_key).equals(key))
+		{
+			updatePreferenceSummary();
 		}
 		if (getString(R.string.pref_night_mode_key).equals(key)) {
 			getApplicationContext().setTheme(sharedPreferences.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme);

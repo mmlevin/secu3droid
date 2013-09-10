@@ -47,6 +47,11 @@
 		android:defaultValue="@string/defaultConnectionRetries"
 		android:inputType="numberDecimal"
 		android:summary="@string/pref_connection_retries_summary" />
+	<EditTextPreference 
+	    android:key="@string/pref_speed_pulse_key"
+	    android:title="@string/pref_speed_pulse_title"
+	    android:defaultValue="@string/defaultSpeedPulse"	    
+	    android:inputType="numberDecimal"/>
 	<CheckBoxPreference
 	    android:key="@string/pref_upload_immediately_key"
 	    android:title="@string/pref_upload_immediately_title"

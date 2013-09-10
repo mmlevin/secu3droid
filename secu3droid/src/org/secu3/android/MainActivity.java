@@ -65,6 +65,8 @@ public class MainActivity extends Activity {
 	private boolean isOnline;
 	private boolean errors = false;
 	
+	private PacketUtils packetUtils = null;
+	
 	ReceiveMessages receiver = null;
 	TextView textViewData = null;
 	TextView textViewDataExt = null;
@@ -97,6 +99,8 @@ public class MainActivity extends Activity {
 		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);	
 		setContentView(R.layout.activity_main);		
 
+		packetUtils = new PacketUtils(this);
+		
 		sensorsFormat = getString(R.string.sensors_format);
 		speedFormat = getString(R.string.speed_format);
 		sensorsRawFormat = getString(R.string.sensors_raw_format);
@@ -246,8 +250,8 @@ public class MainActivity extends Activity {
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));						
 						
 						textViewDataExt.setText(String.format(Locale.US,speedFormat,
-								PacketUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()),
-								PacketUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));
+								packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()),
+								packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));
 					}			
 					break;
 				case R.string.packet_type_adcraw_dat:

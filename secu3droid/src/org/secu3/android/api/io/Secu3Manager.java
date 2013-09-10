@@ -193,7 +193,7 @@ public class Secu3Manager {
 							break;
 						case SECU3_START_LOGGING:
 							logger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path), ""));
-							logger.beginLogging(protocol_version);
+							logger.beginLogging(protocol_version,appContext);
 							break;
 						case SECU3_STOP_LOGGING:
 							logger.endLogging();

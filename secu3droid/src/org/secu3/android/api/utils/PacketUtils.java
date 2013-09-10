@@ -34,12 +34,20 @@ import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.ParamPagerAdapter;
 import org.secu3.android.parameters.items.*;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.SparseArray;
 
 public class PacketUtils {
 	SparseArray<Secu3Packet> packetSkeletons = null;
 	
-	public PacketUtils() {
+	float m_period_distance = 0f;
+	
+	public PacketUtils(Context context) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		String pulses = sharedPreferences.getString(context.getString(R.string.pref_speed_pulse_key), context.getString(R.string.defaultSpeedPulse));
+		m_period_distance = 1000.0f / (float)Integer.parseInt(pulses);
 		packetSkeletons = new SparseArray<Secu3Packet>();
 	}
 	
@@ -137,8 +145,7 @@ public class PacketUtils {
 		
 	}
 	
-	public static float calcSpeed (int rawSpeed) {
-		float m_period_distance = 1000.0f / 6000.0f;
+	public float calcSpeed (int rawSpeed) {
 		if ((rawSpeed != 0) && (rawSpeed != 65535)) {
 			float period_s = (float)rawSpeed/250000.0f;
 			float speed = (m_period_distance / period_s) * 3600.0f / 1000.0f;
@@ -147,8 +154,7 @@ public class PacketUtils {
 		return 0;
 	}
 	
-	public static float calcDistance (int rawDistance) {
-		float m_period_distance = 1000.0f / 6000.0f;
+	public float calcDistance (int rawDistance) {
 		float distance = m_period_distance * rawDistance / 1000.0f;
 		if (distance > 9999.99f) distance = 9999.99f;
 		return distance;

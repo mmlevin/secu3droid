@@ -303,7 +303,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		
 		createFormFromXml(R.xml.parameters, SettingsActivity.getProtocolVersion(this));
 				
-		packetUtils = new PacketUtils();
+		packetUtils = new PacketUtils(this);
 		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),this,pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
 		paramsRead();

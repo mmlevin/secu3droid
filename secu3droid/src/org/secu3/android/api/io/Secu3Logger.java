@@ -35,6 +35,7 @@ import java.util.Locale;
 import org.secu3.android.R;
 import org.secu3.android.api.utils.PacketUtils;
 
+import android.content.Context;
 import android.os.Environment;
 import android.text.format.Time;
 
@@ -44,6 +45,7 @@ public class Secu3Logger {
 	private Time time = null;
 	private String path = null;
 	private int protocol_version;
+	private PacketUtils packetUtils = null;
 
 	private static final char CSV_DELIMETER = ',';
 	private static final String cCSVTimeTemplateString = "%H:%M:%S";
@@ -83,8 +85,8 @@ public class Secu3Logger {
 		out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue(), CSV_DELIMETER);
 		
 		if (protocol_version >= 2) {
-			out += String.format(Locale.US, "%5.1f%c", PacketUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()), CSV_DELIMETER);
-			out += String.format(Locale.US, "%7.2f%c", PacketUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue()), CSV_DELIMETER);
+			out += String.format(Locale.US, "%5.1f%c", packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()), CSV_DELIMETER);
+			out += String.format(Locale.US, "%7.2f%c", packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue()), CSV_DELIMETER);
 		}	
 		
 		out += String.format(Locale.US, "%s\r\n", IntToBinaryString(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue()));
@@ -107,8 +109,9 @@ public class Secu3Logger {
 		}
 	}
 	
-	public boolean beginLogging (int protocol_version) {
+	public boolean beginLogging (int protocol_version, Context context) {
 		this.protocol_version = protocol_version;
+		this.packetUtils = new PacketUtils(context);
 		if (started) return true; 
 		else {
 			time = new Time();
