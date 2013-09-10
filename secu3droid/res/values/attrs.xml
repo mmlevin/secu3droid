@@ -38,5 +38,6 @@
 	<attr name="offset" format="integer"/>
 	<attr name="length" format="integer"/>	
 	<attr name="packet_id" format="string"/>
+	<attr name="packet_dir" format="string"/>
 	<attr name="signed" format="boolean"/>
 </resources>

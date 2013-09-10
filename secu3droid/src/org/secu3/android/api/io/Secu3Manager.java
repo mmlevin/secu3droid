@@ -57,7 +57,11 @@ import android.util.Log;
 
 public class Secu3Manager {	
 	private static final String LOG_TAG = "Secu3Manager";		
-	private final static int PROGRESS_TOTAL_PARAMS = 19;
+	private final static int PROGRESS_TOTAL_PARAMS_VERSION_1 = 19;
+	private final static int PROGRESS_TOTAL_PARAMS_VERSION_2 = 19;
+	
+	private int progress_total_params;
+	private int protocol_version;
 	
 	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
 	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
@@ -89,6 +93,8 @@ public class Secu3Manager {
 	private Secu3ProtoWrapper wrapper = null;
 	
 	private Secu3Packet ChMode = null;
+	
+	private String input_type = null; 
 	
 	
 	private class ConnectedSecu3 extends Thread {
@@ -206,7 +212,7 @@ public class Secu3Manager {
 						// Task to read params
 						case SECU3_READ_PARAMS:
 							progressCurrent = 0;
-							progressTotal = PROGRESS_TOTAL_PARAMS;
+							progressTotal = progress_total_params;
 							subprogress = 0;
 							getProtoWrapper().init();
 							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_startr_par));
@@ -305,7 +311,18 @@ public class Secu3Manager {
 							break;	
 						case R.string.packet_type_choke_par:
 							updateProgress(11 + subprogress);
-							updateTask();							
+							if (protocol_version == 1) {
+								updateTask();
+							}
+							else {
+								((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_secur_par));
+								writer.write(ChangeMode.pack());
+								writer.flush();								
+							}
+							break;
+						case R.string.packet_type_secur_par:
+							updateProgress(12 + subprogress);
+							updateTask();
 							break;
 						}			
 						break;
@@ -367,7 +384,7 @@ public class Secu3Manager {
 						ready = true;												
 						if ((ch = (char)reader.read()) != -1) {							
 							if (secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_START) {							
-								if (ch == Secu3Packet.INPUT_PACKET) {
+								if (ch == input_type.charAt(Secu3Packet.INPUT_OUTPUT_POS)) {
 									secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_END;								
 									idx = 0;
 								}
@@ -428,9 +445,18 @@ public class Secu3Manager {
 		nbRetriesRemaining = maxRetries + 1;
 		appContext = callingService.getApplicationContext();	
 		wrapper = new Secu3ProtoWrapper(appContext);		
+		input_type = appContext.getString(R.string.packet_dir_input);
 		try {
-			getProtoWrapper().instantiateFromXml(R.xml.protocol,SettingsActivity.getProtocolVersion(appContext));
-			ChMode = wrapper.obtainPacketSkeleton(R.string.change_mode_title);
+			getProtoWrapper().instantiateFromXml(R.xml.protocol,protocol_version = SettingsActivity.getProtocolVersion(appContext));
+			switch (protocol_version) {
+			case 1:
+				progress_total_params = PROGRESS_TOTAL_PARAMS_VERSION_1;
+				break;
+			default:
+				progress_total_params = PROGRESS_TOTAL_PARAMS_VERSION_2;
+				break;
+			}
+			ChMode = wrapper.obtainPacketSkeleton(R.string.change_mode_title,0);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

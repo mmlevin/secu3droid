@@ -26,10 +26,12 @@ public class Secu3ProtoWrapper {
 	private static final String MAX_VERSION = "maxVersion";
 	private static final String MIN_VERSION = "minVersion";
 	private static final String PACKET_ID = "packet_id";
+	private static final String PACKET_DIR = "packet_dir";
 	private static final String NAME = "name";
 	private static final String PACKET = "Packet";
 	private static final String PROTOCOL = "Protocol";
-	private SparseArray<Secu3Packet> packets;
+	private SparseArray<Secu3Packet> inputPackets;
+	private SparseArray<Secu3Packet> outputPackets;
 	private String funsetNames[] = null;
 	private Context context;
 	private Secu3Packet lastPacket;
@@ -39,12 +41,12 @@ public class Secu3ProtoWrapper {
 		this.setContext(context);
 	}
 	
-	public SparseArray<Secu3Packet>  getPackets() {
-		return packets;
+	public SparseArray<Secu3Packet>  getInputPackets() {
+		return inputPackets;
 	}
 
-	public void setPackets(SparseArray<Secu3Packet>  packets) {
-		this.packets = packets;
+	public void setInputPackets(SparseArray<Secu3Packet>  packets) {
+		this.inputPackets = packets;
 	}
 	
 	public boolean instantiateFromXml (int xmlId, int protocolVersion) throws ParseException {
@@ -60,18 +62,21 @@ public class Secu3ProtoWrapper {
 		
 		try {
 			XmlPullParser xpp = getContext().getResources().getXml(xmlId);
-			packets = new SparseArray<Secu3Packet> ();
+			inputPackets = new SparseArray<Secu3Packet> ();
+			outputPackets = new SparseArray<Secu3Packet> ();
 			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
 				switch (xpp.getEventType()) {
 				case XmlPullParser.START_TAG:
 					name = xpp.getName();
 					if (name.equalsIgnoreCase(PROTOCOL)) {
-						if (packets.size() != 0) throw new IllegalArgumentException("Pages adapter is non empty, probably nested Protocol element"); 
+						if (inputPackets.size() != 0) throw new IllegalArgumentException("Pages adapter is non empty, probably nested Protocol element"); 
+						if (outputPackets.size() != 0) throw new IllegalArgumentException("Pages adapter is non empty, probably nested Protocol element");
 					} else					
 					// Found new packet element
 					if (name.equalsIgnoreCase(PACKET)) {
 						String packetId = null;
 						String packetName = null;
+						String packetDir = null;
 						int minVersion = protocolVersion;
 						int maxVersion = protocolVersion;
 						int count = xpp.getAttributeCount(); 
@@ -86,18 +91,26 @@ public class Secu3ProtoWrapper {
 								if (attr.equals(PACKET_ID)) {
 									packetId = attrValue;
 								} else
-								if (attr.equals(MIN_VERSION)) {
+								 if (attr.equals(MIN_VERSION)) {
 									minVersion = Integer.parseInt(attrValue);
-								}if (attr.equals(MAX_VERSION)) {
+								} else if (attr.equals(MAX_VERSION)) {
 									maxVersion = Integer.parseInt(attrValue);
+								} else if (attr.equals(PACKET_DIR)) {
+									if (!ResourcesUtils.isResource(attrValue)) throw new IllegalArgumentException("Packet direction must be a string reference");
+									packetDir = attrValue;
 								}
 							}
 							if ((packetName == null) || (TextUtils.isEmpty(packetName)) || (packetId == null) || (TextUtils.isEmpty(packetId))) {
 								throw new IllegalArgumentException("Packet element is invalid");							
 							} else {
 								packet = new Secu3Packet(getContext(), ResourcesUtils.referenceToInt(packetName), ResourcesUtils.referenceToInt(packetId), isBinary());
+								if (packetDir == null) packet.setPacketDirResId(Secu3Packet.INPUT_TYPE);
+								else packet.setPacketDirResId(ResourcesUtils.referenceToInt(packetDir));
 								if ((protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
-									packets.put(packet.getNameId(),packet);
+									if (packet.getPacketDirResId() == R.string.packet_dir_input)
+										inputPackets.put(packet.getNameId(),packet);
+									else if (packet.getPacketDirResId() == R.string.packet_dir_output)
+										outputPackets.put(packet.getNameId(),packet);
 								}
 							}							
 						}												
@@ -211,13 +224,13 @@ public class Secu3ProtoWrapper {
 	}
 	
 	public void parse (String data) {
-		if (packets != null) {
+		if (inputPackets != null) {
 			boolean result = false;
 			Secu3Packet packet = null;
-			if (packets != null) {
-				for (int i = 0; i != packets.size(); i++) {
+			if (inputPackets != null) {
+				for (int i = 0; i != inputPackets.size(); i++) {
 					try {
-						packet = packets.valueAt(i);
+						packet = inputPackets.valueAt(i);
 						if (packet != null) {
 							packet.parse(data);
 							lastPacket = packet; 							
@@ -242,9 +255,21 @@ public class Secu3ProtoWrapper {
 		}
 	}
 
-	public synchronized Secu3Packet obtainPacketSkeleton (int packetNameId) {
-		if (packets != null) {
-			Secu3Packet packet = new Secu3Packet(packets.get(packetNameId));
+	public synchronized Secu3Packet obtainPacketSkeleton (int packetNameId, int prefferedDir) {
+		SparseArray<Secu3Packet> prefferedPackets = null;
+		SparseArray<Secu3Packet> reservePackets = null;
+		if ((prefferedDir == 0) || (prefferedDir == R.string.packet_dir_input)) {
+			prefferedPackets = inputPackets;
+			reservePackets = outputPackets;
+		} else {
+			prefferedPackets = outputPackets;
+			reservePackets = inputPackets;
+		}
+		
+		if (prefferedPackets != null) {
+			Secu3Packet samplePacket = prefferedPackets.get(packetNameId);
+			if ((samplePacket == null) && (reservePackets != null)) samplePacket = reservePackets.get(packetNameId); 
+			Secu3Packet packet = new Secu3Packet(samplePacket);
 			packet.reset();
 			return packet;
 		}

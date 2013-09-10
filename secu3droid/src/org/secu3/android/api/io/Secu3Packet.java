@@ -10,11 +10,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Secu3Packet implements Parcelable {
-	public final static char INPUT_PACKET = '@';
-	public final static char OUTPUT_PACKET = '!';
+	public final static int INPUT_TYPE = R.string.packet_dir_input;
+	public final static int OUTPUT_TYPE = R.string.packet_dir_output;
+	
 	public final static int INPUT_OUTPUT_POS = 0;
 	public final static int PACKET_ID_POS = 1;
 
+	public final static int SECUR_USE_BT_FLAG = 1;
+	public final static int SECUR_USE_IMMO_FLAG = 4;
+	
 	public final static int BITNUMBER_EPHH_VALVE = 0;
 	public final static int BITNUMBER_CARB = 1;
 	public final static int BITNUMBER_GAS = 2;
@@ -114,8 +118,11 @@ public class Secu3Packet implements Parcelable {
 	private String name;
 	private String packetId;
 	private int packetIdResId;
+	private int packetDirResId;
 	private int nameId;
 
+	private String input_type;
+	private String output_type;
 	private boolean binary;
 	private String data;
 
@@ -134,7 +141,10 @@ public class Secu3Packet implements Parcelable {
 		this.name = in.readString();
 		this.packetId = in.readString();
 		this.packetIdResId = in.readInt();
+		this.packetDirResId = in.readInt();
 		this.nameId = in.readInt();
+		this.input_type = in.readString();
+		this.output_type = in.readString();
 		this.binary = (in.readInt() == 0) ? false : true;
 		this.data = in.readString();
 		int counter = in.readInt();
@@ -178,7 +188,10 @@ public class Secu3Packet implements Parcelable {
 		dest.writeString(name);
 		dest.writeString(packetId);
 		dest.writeInt(packetIdResId);
+		dest.writeInt(packetDirResId);
 		dest.writeInt(nameId);
+		dest.writeString(input_type);
+		dest.writeString(output_type);
 		int bin = 0;
 		if (binary)
 			bin = 1;
@@ -198,6 +211,9 @@ public class Secu3Packet implements Parcelable {
 		setFields(null);
 		setNameId(nameId);
 		setPacketIdResId(packetIdResId);
+		setPacketDirResId(packetDirResId);
+		input_type = context.getString(R.string.packet_dir_input);
+		output_type = context.getString(R.string.packet_dir_output);		
 		setBinary(binary);
 
 		if (nameId != 0)
@@ -214,10 +230,13 @@ public class Secu3Packet implements Parcelable {
 		if (packet != null) {
 			this.name = packet.name;
 			this.nameId = packet.nameId;
+			this.input_type = packet.input_type;
+			this.output_type = packet.output_type;
 			this.binary = packet.binary;
 			this.data = packet.data;
 			this.packetId = packet.packetId;
 			this.packetIdResId = packet.packetIdResId;
+			this.packetDirResId = packet.packetDirResId;
 			this.fields = null;
 			if (packet.fields != null) {
 				this.fields = new ArrayList<BaseProtoField>();
@@ -285,7 +304,7 @@ public class Secu3Packet implements Parcelable {
 			if (!isBinary()) {
 				BaseProtoField field;
 
-				if (data.charAt(INPUT_OUTPUT_POS) != INPUT_PACKET)
+				if (data.charAt(INPUT_OUTPUT_POS) != input_type.charAt(INPUT_OUTPUT_POS))
 					throw new IllegalArgumentException("Not an input packet");
 				char ch = data.charAt(PACKET_ID_POS);
 				if (ch != packetId.charAt(0))
@@ -370,7 +389,7 @@ public class Secu3Packet implements Parcelable {
 
 	public String pack() {
 		if (fields != null) {
-			String pack = String.format("%s%s", OUTPUT_PACKET, getPacketId());
+			String pack = String.format("%s%s", output_type, getPacketId());
 			for (int i = 0; i != fields.size(); i++) {
 				BaseProtoField field = fields.get(i);
 				field.pack();
@@ -387,5 +406,13 @@ public class Secu3Packet implements Parcelable {
 				fields.get(i).reset();
 			}
 		}
+	}
+
+	public int getPacketDirResId() {
+		return packetDirResId;
+	}
+
+	public void setPacketDirResId(int packetDirResId) {
+		this.packetDirResId = packetDirResId;
 	}
 }

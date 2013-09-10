@@ -404,12 +404,31 @@
 	
 	<Packet app:name="@string/secur_par_title"
 	    	app:packet_id="@string/packet_type_secur_par"
+	    	app:packet_dir="@string/packet_dir_input"
 	    	app:minVersion="2">
 		<Field app:name="@string/secur_par_name_length"
-               app:type="@id/field_type_int8"/>
+               app:type="@id/field_type_int4"/>
 		<Field app:name="@string/secur_par_pass_length"
-               app:type="@id/field_type_int8"/>		
+               app:type="@id/field_type_int4"/>		
 		<Field app:name="@string/secur_par_flags"
                app:type="@id/field_type_int8"/>	    
 	</Packet>
+	
+	<Packet app:name="@string/secur_par_title"
+	    	app:packet_id="@string/packet_type_secur_par"
+	    	app:packet_dir="@string/packet_dir_output"
+	    	app:minVersion="2">
+		<Field app:name="@string/secur_par_name_length"
+               app:type="@id/field_type_int4"/>
+		<Field app:name="@string/secur_par_pass_length"
+               app:type="@id/field_type_int4"/>		
+		<Field app:name="@string/secur_par_name"
+		       app:length="10"
+               app:type="@id/field_type_string"/>
+		<Field app:name="@string/secur_par_pass"
+		       app:length="10"
+               app:type="@id/field_type_string"/>		
+		<Field app:name="@string/secur_par_flags"
+               app:type="@id/field_type_int8"/>	    
+	</Packet>	
 </Protocol>

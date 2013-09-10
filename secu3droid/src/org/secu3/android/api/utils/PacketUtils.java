@@ -78,18 +78,25 @@ public class PacketUtils {
 			BaseProtoField field = null;
 			for (int i = 0; i != packet.getFields().size(); i++) {
 				field = packet.getFields().get(i);
-				BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId());
-				if (item != null) {
-					if (item.getNameId() == R.string.miscel_baudrate_title) {
-						int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
-						((ParamItemSpinner) item).setIndex(baud_rate_index);
-					} else {
-						if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
-						else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
-						else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue((((ProtoFieldInteger) field).getValue()==1)?true:false);
-						else if (item instanceof ParamItemSpinner) ((ParamItemSpinner) item).setIndex(((ProtoFieldInteger)field).getValue());
-					}
-				}				
+				if (field.getNameId() == R.string.secur_par_flags) {
+					int flags = ((ProtoFieldInteger)field).getValue();
+					((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title)).setValue((flags & Secu3Packet.SECUR_USE_BT_FLAG) != 0);
+					((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title)).setValue((flags & Secu3Packet.SECUR_USE_IMMO_FLAG) != 0);
+				} else {
+					BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId());					
+					if (item != null) {
+						if (item.getNameId() == R.string.miscel_baudrate_title) {
+							int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
+							((ParamItemSpinner) item).setIndex(baud_rate_index);
+						}
+						else {
+							if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
+							else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
+							else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue((((ProtoFieldInteger) field).getValue()==1)?true:false);
+							else if (item instanceof ParamItemSpinner) ((ParamItemSpinner) item).setIndex(((ProtoFieldInteger)field).getValue());
+						}
+					}		
+				}
 			}						
 		}
 	}

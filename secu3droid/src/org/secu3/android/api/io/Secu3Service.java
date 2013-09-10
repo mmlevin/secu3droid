@@ -59,6 +59,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 
 	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON = "org.secu3.android.intent.action.SECU3_SERVICE_OBTAIN_PACKET_SKELETON";
 	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM = "org.secu3.android.intent.action.extra.SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM";
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR = "org.secu3.android.intent.action.extra.SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR";
 	public static final String EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET = "org.secu3.android.intent.action.SECU3_SERVICE_RECEIVE_SKELETON_PACKET";
 	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET = "org.secu3.android.intent.action.extra.SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET";
 	public static final String ACTION_SECU3_SERVICE_OBTAIN_PARAMETER = "org.secu3.android.intent.action.SECU3_SERVICE_OBTAIN_PARAMETER";
@@ -142,7 +143,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 			if (secu3Manager != null) {
 				Secu3ProtoWrapper wrapper = secu3Manager.getProtoWrapper();
 				if (wrapper != null) {
-					Secu3Packet packet = wrapper.obtainPacketSkeleton(intent.getIntExtra(ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, 0));
+					Secu3Packet packet = wrapper.obtainPacketSkeleton(intent.getIntExtra(ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, 0),intent.getIntExtra(ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR, 0));
 					if (packet != null) {
 						sendBroadcast(packet.getSkeletonIntent());
 					}
