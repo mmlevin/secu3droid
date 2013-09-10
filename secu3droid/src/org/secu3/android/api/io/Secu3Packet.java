@@ -145,6 +145,7 @@ public class Secu3Packet implements Parcelable {
 			case R.id.field_type_int4:
 			case R.id.field_type_int8:
 			case R.id.field_type_int16:
+			case R.id.field_type_int24:
 			case R.id.field_type_int32:
 				this.fields.add((BaseProtoField) in
 						.readParcelable(ProtoFieldInteger.class
@@ -153,6 +154,7 @@ public class Secu3Packet implements Parcelable {
 			case R.id.field_type_float4:
 			case R.id.field_type_float8:
 			case R.id.field_type_float16:
+			case R.id.field_type_float24:
 			case R.id.field_type_float32:
 				this.fields
 						.add((BaseProtoField) in

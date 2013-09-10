@@ -36,6 +36,11 @@
 		android:title="@string/pref_protocol_version_title" 
 		android:key="@string/pref_protocol_version_key" 	
 		android:summary="@string/pref_protocol_version_summary" />
+	<CheckBoxPreference
+	    android:key="@string/pref_binary_mode_key"
+	    android:title="@string/pref_binary_mode_title"
+	    android:defaultValue="false"
+	    android:summary="@string/pref_binary_mode_summary"/>	
 	<EditTextPreference
 		android:key="@string/pref_connection_retries_key"
 		android:title="@string/pref_connection_retries_title"

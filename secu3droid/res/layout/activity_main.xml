@@ -83,6 +83,14 @@
                 android:maxLines="20"
                 android:text="@string/data_will_appear_after_connect"
                 android:textAppearance="?android:attr/textAppearance" />
+
+            <TextView
+                android:id="@+id/textViewDataExt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="20"
+                android:textAppearance="?android:attr/textAppearance" />
+
         </LinearLayout>
     </ScrollView>
 

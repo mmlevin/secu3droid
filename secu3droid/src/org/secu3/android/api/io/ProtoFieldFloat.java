@@ -80,6 +80,9 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		case R.id.field_type_float16:
 			setLength(isBinary()?2:4);
 			break;
+		case R.id.field_type_float24:
+			setLength(isBinary()?3:6);
+			break;
 		case R.id.field_type_float32:
 			setLength(isBinary()?4:8);
 			break;
@@ -136,7 +139,8 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 			if (signed) {
 				switch (getType()) {
 				case R.id.field_type_float4:
-					throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
+				case R.id.field_type_float24:
+					throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
 				case R.id.field_type_float8:
 					setIntValue(Integer.valueOf(data,16).byteValue());					
 					break;
@@ -161,7 +165,8 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		if (signed) {
 			switch (getType()) {
 			case R.id.field_type_float4:
-				throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
+			case R.id.field_type_float24:
+				throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
 			case R.id.field_type_float8:
 				setData(String.format("%02X", Integer.valueOf(Math.round(floatValue*intDivider/intMultiplier-intOffset)).byteValue()));
 				break;
@@ -184,6 +189,9 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 				break;
 			case R.id.field_type_float16:
 				setData(String.format("%04X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
+				break;
+			case R.id.field_type_float24:
+				setData(String.format("%06X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
 				break;
 			case R.id.field_type_float32:				
 				setData(String.format("%08X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));

@@ -149,6 +149,7 @@ public class Secu3ProtoWrapper {
 								case R.id.field_type_int4:
 								case R.id.field_type_int8:
 								case R.id.field_type_int16:
+								case R.id.field_type_int24:
 								case R.id.field_type_int32:
 									field = new ProtoFieldInteger(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), isBinary());
 									if (fieldMultiplier != null)
@@ -157,6 +158,7 @@ public class Secu3ProtoWrapper {
 								case R.id.field_type_float4:
 								case R.id.field_type_float8:
 								case R.id.field_type_float16:
+								case R.id.field_type_float24:
 								case R.id.field_type_float32:		
 									field = new ProtoFieldFloat(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, Boolean.parseBoolean(fieldSigned), isBinary());
 									if (fieldDivider != null)
@@ -169,7 +171,7 @@ public class Secu3ProtoWrapper {
 								case R.id.field_type_string:
 									field = new ProtoFieldString(getContext(), ResourcesUtils.referenceToInt(fieldName), fieldType, format.parse(fieldLength).intValue(), isBinary());
 									break;
-								default: throw new IllegalArgumentException("Unknown field type");
+								default: throw new IllegalArgumentException("Unknown field type for: "+fieldName);
 								}
 								if ((protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
 									packet.addField(field);

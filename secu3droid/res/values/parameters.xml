@@ -185,7 +185,19 @@
     <string name="choke_manual_step_up_summary">Close choke</string>
     <string name="choke_manual_step_up_units">Close</string>
     
-    
+    <string name="secur_par_title">Security</string>
+    <string name="secur_par_use_bluetooth_title">Use bluetooth</string>
+    <string name="secur_par_use_bluetooth_summary">Secu-3 connected via Bluetooth</string>
+    <string name="secur_par_bluetooth_name_title">Bluetooth name</string>
+    <string name="secur_par_bluetooth_name_summary">Name of bluetooth device for pairing</string>
+    <string name="secur_par_bluetooth_pass_title">Bluetooth pin-code</string>
+    <string name="secur_par_bluetooth_pass_summary">Password for pairing</string>
+    <string name="secur_par_apply_bluetooth_title">Apply bluetooth settings</string>
+    <string name="secur_par_apply_bluetooth_summary">Apply new bluetooth name &amp; pin-code</string>
+    <string name="secur_par_apply_bluetooth_units">Apply</string>
+    <string name="secur_par_use_immobilizer_title">Use immobilizer</string>
+    <string name="secur_par_use_immobilizer_summary">Use anti-theft functions of Secu-3</string>
+        
     <string name="units_rpm">min-1</string>
     <string name="units_degree">°</string>
     <string name="units_sec">sec</string>

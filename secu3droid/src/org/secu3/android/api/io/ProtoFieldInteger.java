@@ -66,6 +66,9 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		case R.id.field_type_int16:
 			setLength(isBinary()?2:4);
 			break;
+		case R.id.field_type_int24:
+			setLength(isBinary()?3:6);
+			break;
 		case R.id.field_type_int32:
 			setLength(isBinary()?4:8);
 			break;
@@ -97,7 +100,8 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 			if (signed) {
 				switch (getType()) {
 				case R.id.field_type_int4:
-					throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
+				case R.id.field_type_int24:
+					throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
 				case R.id.field_type_int8:
 					setValue(Integer.valueOf(data,16).byteValue());
 					break;
@@ -122,7 +126,8 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 		if (signed) {
 			switch (getType()) {
 			case R.id.field_type_int4:
-				throw new IllegalArgumentException("No rules for converting 4-bit value into a signed number");
+			case R.id.field_type_int24:
+				throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
 			case R.id.field_type_int8:
 				setData(String.format("%02X", Integer.valueOf(value/multiplier).byteValue()));
 				break;
@@ -146,6 +151,9 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 			case R.id.field_type_int16:
 				setData(String.format("%04X", value/multiplier));
 				break;
+			case R.id.field_type_int24:
+				setData(String.format("%06X", value/multiplier));
+				break;				
 			case R.id.field_type_int32:				
 				setData(String.format("%08X", value));
 				break;

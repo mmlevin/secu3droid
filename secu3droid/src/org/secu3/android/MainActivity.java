@@ -58,15 +58,17 @@ public class MainActivity extends Activity {
 	private static final String DATA = "data";	
 
 	private String sensorsFormat = "";
+	private String speedFormat = "";
 	private String sensorsRawFormat = "";
 	private boolean isOnline;
 	private boolean errors = false;
 	
 	ReceiveMessages receiver = null;
 	TextView textViewData = null;
+	TextView textViewDataExt = null;
 	TextView textViewStatus = null;
 	TextView textFWInfo = null;
-	CheckBox checkBox = null;	
+	CheckBox checkBoxRawData = null;	
 	int fwOptions = Integer.MIN_VALUE;
 	
 	public class ReceiveMessages extends BroadcastReceiver 
@@ -94,15 +96,17 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);		
 
 		sensorsFormat = getString(R.string.sensors_format);
+		speedFormat = getString(R.string.speed_format);
 		sensorsRawFormat = getString(R.string.sensors_raw_format);
 		textViewData = (TextView)findViewById(R.id.textViewData);
+		textViewDataExt = (TextView)findViewById(R.id.textViewDataExt);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		textFWInfo = (TextView)findViewById(R.id.mainTextFWInfo);
-		checkBox = (CheckBox)findViewById(R.id.mainShowRawDataCheckBox);	
-		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+		checkBoxRawData = (CheckBox)findViewById(R.id.mainShowRawDataCheckBox);	
+		checkBoxRawData.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (buttonView == checkBox) setRawMode(isChecked);				
+				if (buttonView == checkBoxRawData) setRawMode(isChecked);				
 			}
 		});
 		
@@ -111,7 +115,7 @@ public class MainActivity extends Activity {
 		if (savedInstanceState != null) {
 			textViewData.setText(savedInstanceState.getString(DATA));
 			textViewStatus.setText(savedInstanceState.getString(STATUS));
-			checkBox.setChecked(savedInstanceState.getBoolean(CHECKBOX));
+			checkBoxRawData.setChecked(savedInstanceState.getBoolean(CHECKBOX));
 		}
 		
 		super.onCreate(savedInstanceState);		
@@ -121,7 +125,7 @@ public class MainActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {						
 		outState.putString(DATA, textViewData.getText().toString());
 		outState.putString(STATUS, textViewStatus.getText().toString());
-		outState.putBoolean(STATUS, checkBox.isChecked());
+		outState.putBoolean(STATUS, checkBoxRawData.isChecked());
 		super.onSaveInstanceState(outState);		
 	}
 		
@@ -204,7 +208,7 @@ public class MainActivity extends Activity {
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;						
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_FW_INFO.ordinal()));
-				setRawMode(checkBox.isChecked());				
+				setRawMode(checkBoxRawData.isChecked());				
 			}						
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
 		{
@@ -217,7 +221,7 @@ public class MainActivity extends Activity {
 						this.errors = errors;
 						ActivityCompat.invalidateOptionsMenu(this);
 					}
-					if (!checkBox.isChecked()) {
+					if (!checkBoxRawData.isChecked()) {
 						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
 						textViewData.setText(String.format(Locale.US,sensorsFormat,
 								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
@@ -238,10 +242,25 @@ public class MainActivity extends Activity {
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));
+						
+						float speedF = 0;
+						int speed = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue();
+						if ((speed != 0) && (speed != 65535)) {
+							speedF = (0.1f / (speed / 250000.0f)) * 3.6f;
+						}
+						if (speedF > 999.9f) speedF = 999.9f;
+						
+						float distanceF = 0;
+						long distance = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue();
+						distanceF = 0.1f * distance / 1000.0f;
+						if (distanceF > 9999.99f) distanceF = 9999.99f;
+						
+						textViewDataExt.setText(String.format(Locale.US, speedFormat, speedF, distanceF));
 					}			
 					break;
 				case R.string.packet_type_adcraw_dat:
-					if (checkBox.isChecked()) {
+					if (checkBoxRawData.isChecked()) {
+						textViewDataExt.setText(null);
 						textViewData.setText(String.format(Locale.US,sensorsRawFormat,
 								((ProtoFieldInteger) packet.getField(R.string.adcraw_map_title)).getValue(),
 								((ProtoFieldInteger) packet.getField(R.string.adcraw_voltage_title)).getValue(),

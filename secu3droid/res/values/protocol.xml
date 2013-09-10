@@ -38,11 +38,14 @@
 
     <string name="ce_saved_err_title" translatable="false">Saved errors</string>
     <string name="ce_saved_err_data_title" translatable="false">Saved errors data</string>
+    
     <string name="ce_err_codes_title" translatable="false">CE errors</string>
     <string name="ce_err_codes_data_title" translatable="false">CE errors data</string>
+    
     <string name="op_comp_nc_title" translatable="false">Operation complete</string>
     <string name="op_comp_nc_operation_title" translatable="false">Operation type</string>
     <string name="op_comp_nc_operation_code_title" translatable="false">Operation code</string>
+    
     <string name="adcraw_dat_title" translatable="false">Raw ADC data</string>
     <string name="adcraw_map_title" translatable="false">MAP</string>
     <string name="adcraw_voltage_title" translatable="false">Voltage</string>
@@ -51,13 +54,16 @@
     <string name="adcraw_tps_title" translatable="false">TPS</string>
     <string name="adcraw_addi1_title" translatable="false">ADD_IO1</string>
     <string name="adcraw_addi2_title" translatable="false">ADD_IO2</string>
+    
     <string name="fnname_dat_title" translatable="false">Function names</string>
     <string name="fnname_dat_quantity_title" translatable="false">Total quantity</string>
     <string name="fnname_dat_index_title" translatable="false">Current index</string>
     <string name="fnname_dat_data_title" translatable="false">Function name</string>
+    
     <string name="fwinfo_dat_title" translatable="false">Firmware info</string>
     <string name="fwinfo_dat_data_title" translatable="false">Firmware tag</string>
     <string name="fwinfo_dat_options_title" translatable="false">Firmware options</string>
+    
     <string name="sensor_dat_title" translatable="false">Sensors data</string>
     <string name="sensor_dat_rpm_title" translatable="false">RPM</string>
     <string name="sensor_dat_map_title" translatable="false">MAP</string>
@@ -73,12 +79,22 @@
     <string name="sensor_dat_addi2_voltage_title" translatable="false">ADD_IO2</string>
     <string name="sensor_dat_errors_title" translatable="false">Errors</string>
     <string name="sensor_dat_choke_position_title" translatable="false">Choke position</string>
+    <string name="sensor_dat_speed_title">Speed</string>
+    <string name="sensor_dat_distance_title">Distance</string>    
+    
     <string name="change_mode_title" translatable="false">Change mode</string>
     <string name="change_mode_data_title" translatable="false">Data</string>
+    
     <string name="diaginp_dat_title" translatable="false">Inputs diagnostics</string>
     <string name="diag_input_bitfield" translatable="false">Inputs bitfield</string>
+    
     <string name="diagout_dat_title" translatable="false">Output diagnostics</string>
     <string name="diagout_dat_bitfield_title" translatable="false">Outputs bitfield</string>
+    
+    <string name="secur_par_name_length" translatable="false">Bluetooth name length</string>
+    <string name="secur_par_pass_length" translatable="false">Bluetooth password length</string>
+    <string name="secur_par_flags" translatable="false">Security flags</string>
+    
     <string name="choke_manual_steps" translatable="false">Steps</string>	
     
     <integer name="protocol_temp_physical_magnitude_divider">4</integer>

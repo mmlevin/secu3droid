@@ -259,6 +259,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 										throw new IllegalArgumentException("Wrong spinner parameter attributes");
 									}								
 									break;
+								case R.id.parameter_type_string:
+									item = new ParamItemString(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+									break;
 								default: throw new IllegalArgumentException("Unknown parameter type");
 								}
 								if ((item != null) && (protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {

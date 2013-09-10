@@ -28,6 +28,8 @@
 <resources>
     <string name="pref_bluetooth_device_title">Choose Bluetooth Device</string>
     <string name="pref_bluetooth_device_summary">"Current device: %s"</string>
+	<string name="pref_binary_mode_title">Binary mode</string>
+    <string name="pref_binary_mode_summary">Secu-3 firmware must be compiled with option UART_BINARY</string>    
     <string name="pref_protocol_version_title">Choose protocol version</string>
     <string name="pref_protocol_version_summary">"Current protocol version: %s"</string>
     <string name="pref_connection_retries_title">Connection retry number</string>

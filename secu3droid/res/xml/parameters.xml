@@ -523,7 +523,31 @@
             app:name="@string/choke_manual_step_down_title"
             app:summary="@string/choke_manual_step_down_summary"
             app:units="@string/choke_manual_step_down_units"
-            app:type="@id/parameter_type_button"
-            stepValue="1"/>         
+            app:type="@id/parameter_type_button"/>         
+	</Page>
+	
+	<Page app:name="@string/secur_par_title"
+	      app:minVersion="2">
+	    <Parameter
+	        app:name="@string/secur_par_use_bluetooth_title"
+	        app:summary="@string/secur_par_use_bluetooth_summary"
+	        app:type="@id/parameter_type_boolean"/>
+	    <Parameter
+	        app:name="@string/secur_par_bluetooth_name_title"
+	        app:summary="@string/secur_par_bluetooth_name_summary"
+	        app:type="@id/parameter_type_string"/>
+	    <Parameter
+	        app:name="@string/secur_par_bluetooth_pass_title"
+	        app:summary="@string/secur_par_bluetooth_pass_summary"
+	        app:type="@id/parameter_type_string"/>
+	    <Parameter
+	        app:name="@string/secur_par_apply_bluetooth_title"
+	        app:summary="@string/secur_par_apply_bluetooth_summary"
+	        app:units="@string/secur_par_apply_bluetooth_units"
+	        app:type="@id/parameter_type_button"/>
+	    <Parameter
+	        app:name="@string/secur_par_use_immobilizer_title"
+	        app:summary="@string/secur_par_use_immobilizer_summary"
+	        app:type="@id/parameter_type_boolean"/>
 	</Page>
 </Parameters>

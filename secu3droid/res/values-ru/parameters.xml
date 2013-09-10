@@ -183,8 +183,7 @@
     <string name="choke_manual_step_down_units">Открыть</string>
     <string name="choke_manual_step_up_title">Ручное управление</string>
     <string name="choke_manual_step_up_summary">Закрыть воздушную заслонку</string>
-    <string name="choke_manual_step_up_units">Закрыть</string>
-    
+    <string name="choke_manual_step_up_units">Закрыть</string>      
     
     <string name="units_rpm">мин-1</string>
     <string name="units_degree">°</string>

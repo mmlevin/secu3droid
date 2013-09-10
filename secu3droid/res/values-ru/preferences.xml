@@ -28,6 +28,8 @@
 <resources>
     <string name="pref_bluetooth_device_title">Выбор устройства Bluetooth</string>
     <string name="pref_bluetooth_device_summary">Текущее устройство: %s</string>
+	<string name="pref_binary_mode_title">Двоичный режим</string>
+    <string name="pref_binary_mode_summary">Прошивка Secu-3 должна быть скомпилирована с опицей UART_BINARY</string>        
     <string name="pref_protocol_version_title">Выберите версию протокола</string>
     <string name="pref_protocol_version_summary">Текущая версия протокола: %s</string>
     <string name="pref_connection_retries_title">Количество попыток повтора соединения</string>
