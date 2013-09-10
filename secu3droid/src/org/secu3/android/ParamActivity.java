@@ -427,25 +427,29 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 
 	public void onItemChange(int itemId) {
 		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
-		if ((item != null) && (item.getPageId() == R.string.choke_control_title)) {
-			Secu3Packet packet = new Secu3Packet (ChokeControlSkeleton); 
-			switch (itemId) {
-			case R.string.choke_manual_step_down_title:
-				((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (-127);
-				break;
-			case R.string.choke_manual_step_up_title:
-				((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (127);
-				break;
-			case R.string.choke_testing_title:
-				((ProtoFieldInteger) packet.findField(R.string.choke_testing_title)).setValue (((ParamItemToggleButton) item).getValue()?1:0);
-				break;				
-			default:
-				break;
+		if (item != null) {
+			Secu3Packet packet = null;
+			if (item.getPageId() == R.string.choke_control_title) {
+				packet = new Secu3Packet (ChokeControlSkeleton); 
+				switch (itemId) {
+				case R.string.choke_manual_step_down_title:
+					((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (-127);
+					break;
+				case R.string.choke_manual_step_up_title:
+					((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (127);
+					break;
+				case R.string.choke_testing_title:
+					((ProtoFieldInteger) packet.findField(R.string.choke_testing_title)).setValue (((ParamItemToggleButton) item).getValue()?1:0);
+					break;				
+				default:
+					break;
+				}		
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 			}
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));			
-		} else if (uploadImmediatelly) {
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, item.getPageId())));
-		}
+			else if (uploadImmediatelly) {
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, item.getPageId())));
+			}						
+		} 
 	}
 	
 	@Override

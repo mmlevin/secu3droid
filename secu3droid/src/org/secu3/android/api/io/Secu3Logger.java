@@ -33,6 +33,8 @@ import java.io.OutputStreamWriter;
 import java.util.Locale;
 
 import org.secu3.android.R;
+import org.secu3.android.api.utils.PacketUtils;
+
 import android.os.Environment;
 import android.text.format.Time;
 
@@ -41,10 +43,10 @@ public class Secu3Logger {
 	private boolean started = false;
 	private Time time = null;
 	private String path = null;
+	private int protocol_version;
 
 	private static final char CSV_DELIMETER = ',';
 	private static final String cCSVTimeTemplateString = "%H:%M:%S";
-	private static final String cCSVDataTemplateString = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%s\r\n";
 	private static final String cCSVFileNameTemplateString = "%Y.%m.%d_%H.%M.%S.csv";
 	private static final String CSVMillisTemplateString = "%s.%02d";	
 	
@@ -56,36 +58,46 @@ public class Secu3Logger {
 		 return res;
 	}
 
+	private String logString (Secu3Packet packet) {		
+		int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
+		
+		String out = String.format(Locale.US, "%c ", CSV_DELIMETER);
+		out += String.format(Locale.US, "%05d%c", ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_voltage_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_temperature_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%4.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%02d%c", ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_air_flow_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_GAS), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", 0, CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.3f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.3f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue(), CSV_DELIMETER);
+		
+		if (protocol_version >= 2) {
+			out += String.format(Locale.US, "%5.1f%c", PacketUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()), CSV_DELIMETER);
+			out += String.format(Locale.US, "%7.2f%c", PacketUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue()), CSV_DELIMETER);
+		}	
+		
+		out += String.format(Locale.US, "%s\r\n", IntToBinaryString(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue()));
+
+		return out;
+	}
+	
 	public void OnPacketReceived (Secu3Packet secu3Packet) {
 		if (started && (secu3Packet != null) && (secu3Packet.getNameId() == R.string.sensor_dat_title)) {				
 			long t = System.currentTimeMillis();
 			time.set(t);
 			String time = String.format(Locale.US,CSVMillisTemplateString,this.time.format(cCSVTimeTemplateString), (t%1000)/10);
-			char x = CSV_DELIMETER;
-			String formatString = String.format(Locale.US,cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
-			int bitfield = ((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
-			String out = String.format (Locale.US,formatString,
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_map_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_voltage_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_temperature_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_knock_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_air_flow_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_bitfield_title)).getValue(),
-					Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB),					
-					Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_GAS),
-					Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE),
-					Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE),
-					Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN),
-					Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK),					
-					0,
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_tps_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
-					((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_choke_position_title)).getValue(),
-					IntToBinaryString(((ProtoFieldInteger) secu3Packet.getField(R.string.sensor_dat_errors_title)).getValue()));
+			String out = logString(secu3Packet);
 			try {
 				logWriter.write(time);
 				logWriter.write(out);
@@ -95,7 +107,8 @@ public class Secu3Logger {
 		}
 	}
 	
-	public boolean beginLogging () {
+	public boolean beginLogging (int protocol_version) {
+		this.protocol_version = protocol_version;
 		if (started) return true; 
 		else {
 			time = new Time();

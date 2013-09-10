@@ -67,6 +67,6 @@
     
     <string-array name="protocol_versions" translatable="false">
         <item>12042013 Spring Release</item>
-        <item>XXXX2013 Summer Release</item>
+        <item>28082013 Summer Release</item>
     </string-array>
 </resources>

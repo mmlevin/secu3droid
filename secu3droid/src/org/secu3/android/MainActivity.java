@@ -33,6 +33,8 @@ import org.secu3.android.api.io.ProtoFieldString;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.api.io.Secu3Service;
+import org.secu3.android.api.utils.PacketUtils;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -241,21 +243,11 @@ public class MainActivity extends Activity {
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));
+								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));						
 						
-						float speedF = 0;
-						int speed = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue();
-						if ((speed != 0) && (speed != 65535)) {
-							speedF = (0.1f / (speed / 250000.0f)) * 3.6f;
-						}
-						if (speedF > 999.9f) speedF = 999.9f;
-						
-						float distanceF = 0;
-						long distance = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue();
-						distanceF = 0.1f * distance / 1000.0f;
-						if (distanceF > 9999.99f) distanceF = 9999.99f;
-						
-						textViewDataExt.setText(String.format(Locale.US, speedFormat, speedF, distanceF));
+						textViewDataExt.setText(String.format(Locale.US,speedFormat,
+								PacketUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()),
+								PacketUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));
 					}			
 					break;
 				case R.string.packet_type_adcraw_dat:
