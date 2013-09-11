@@ -40,7 +40,8 @@ import android.preference.PreferenceManager;
 import android.util.SparseArray;
 
 public class PacketUtils {
-	SparseArray<Secu3Packet> packetSkeletons = null;
+	SparseArray<Secu3Packet> packetInputSkeletons = null;
+	SparseArray<Secu3Packet> packetOutputSkeletons = null;
 	
 	float m_period_distance = 0f;
 	
@@ -48,11 +49,20 @@ public class PacketUtils {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String pulses = sharedPreferences.getString(context.getString(R.string.pref_speed_pulse_key), context.getString(R.string.defaultSpeedPulse));
 		m_period_distance = 1000.0f / (float)Integer.parseInt(pulses);
-		packetSkeletons = new SparseArray<Secu3Packet>();
+		packetInputSkeletons = new SparseArray<Secu3Packet>();
+		packetOutputSkeletons = new SparseArray<Secu3Packet>();
 	}
 	
-	public Secu3Packet buildPacket (ParamPagerAdapter paramAdapter, int packetId) {
-		Secu3Packet packet = packetSkeletons.get(packetId);
+	public Secu3Packet buildPacket (ParamPagerAdapter paramAdapter, int packetId, int packetDir) {
+		Secu3Packet packet = null;
+		if ((packetDir == 0) || (packetDir == Secu3Packet.INPUT_TYPE)) {
+			packet = packetInputSkeletons.get(packetId);
+			if (packet == null) packet = packetOutputSkeletons.get(packetId);
+		}
+		else {
+			packet = packetOutputSkeletons.get(packetId);
+			if (packet == null) packet = packetInputSkeletons.get(packetId);
+		}
 		if ((packet != null) && (packet.getFields() != null) && (packet.getFields().size() > 0)) {
 			BaseProtoField field = null;
 			for (int i = 0; i != packet.getFields().size(); i++) {
@@ -78,6 +88,11 @@ public class PacketUtils {
 	public void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Packet packet)
 	{
 		if ((packet != null) && (packet.getFields() != null) && (packet.getFields().size() > 0)) {
+			SparseArray<Secu3Packet> packetSkeletons = null;			
+			if ((packet.getPacketDirResId() == 0) || (packet.getPacketDirResId() == Secu3Packet.INPUT_TYPE))
+				packetSkeletons = packetInputSkeletons;
+			else
+				packetSkeletons = packetOutputSkeletons;
 			if (packetSkeletons.indexOfKey(packet.getNameId()) < 0) {
 				Secu3Packet packetSkeleton = new Secu3Packet(packet);
 				packetSkeleton.reset();
