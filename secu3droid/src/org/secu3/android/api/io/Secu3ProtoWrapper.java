@@ -225,6 +225,7 @@ public class Secu3ProtoWrapper {
 	
 	public void parse (String data) {
 		if (inputPackets != null) {
+			
 			boolean result = false;
 			Secu3Packet packet = null;
 			if (inputPackets != null) {

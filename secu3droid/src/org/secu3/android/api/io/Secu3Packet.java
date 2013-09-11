@@ -301,7 +301,6 @@ public class Secu3Packet implements Parcelable {
 
 	public void parse(String data) {
 		if ((data != null) && (fields != null)) {
-			if (!isBinary()) {
 				BaseProtoField field;
 
 				if (data.charAt(INPUT_OUTPUT_POS) != input_type.charAt(INPUT_OUTPUT_POS))
@@ -319,9 +318,6 @@ public class Secu3Packet implements Parcelable {
 							.substring(position, position += delta);
 					field.setData(subdata);
 				}
-			} else
-				throw new IllegalArgumentException(
-						"Non-hexadecimal mode is not supported in Secu3Packet.parse()");
 		}
 	}
 

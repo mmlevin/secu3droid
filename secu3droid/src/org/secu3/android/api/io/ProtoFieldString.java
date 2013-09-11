@@ -1,5 +1,7 @@
 package org.secu3.android.api.io;
 
+import org.secu3.android.api.utils.EncodingCP866;
+
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -48,6 +50,12 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 	@Override
 	public void setData(String data) {
 		super.setData(data);
+		if (data != null) {
+			int[] buf = new int[data.length()];
+			for (int i = 0; i != buf.length; i++) buf[i] = data.charAt(i);
+			EncodingCP866.Cp866ToUtf16(buf);
+			data = new String(buf,0,buf.length);
+		}
 		setValue(data);
 	}
 	

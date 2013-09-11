@@ -117,4 +117,13 @@ public class BaseProtoField implements Parcelable {
 
 	public void pack() {		
 	}
+	
+	public int BinToInt () {
+		int v = 0;
+		for (int i = 0; i != getLength(); i++) {
+			v <<= 8;
+			v |= data.charAt(i);
+		}		
+		return v;
+	}
 }

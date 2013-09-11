@@ -136,27 +136,33 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 	public void setData(String data) {
 		super.setData(data);
 		if (data != null) {
+			int v = 0;
+			if (isBinary()) v = BinToInt();
 			if (signed) {
 				switch (getType()) {
 				case R.id.field_type_float4:
 				case R.id.field_type_float24:
 					throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
 				case R.id.field_type_float8:
-					setIntValue(Integer.valueOf(data,16).byteValue());					
+					if (isBinary()) v = Integer.valueOf(v).byteValue();
+					else v = Integer.valueOf(data,16).byteValue(); 
 					break;
 				case R.id.field_type_float16:
-					setIntValue(Integer.valueOf(data,16).shortValue());
+					if (isBinary()) v = Integer.valueOf(v).shortValue();
+					else v = Integer.valueOf(data,16).shortValue(); 
 					break;
-				case R.id.field_type_float32:				
-					setIntValue(Long.valueOf(data,16).intValue());
+				case R.id.field_type_float32:	
+					if (isBinary()) v = Long.valueOf(v).intValue();
+					else v = Long.valueOf(data,16).intValue(); 
 					break;
 				default:
 					break;
 				}
 			} else {
-				setIntValue(Integer.parseInt(data, 16));			
+				if (!isBinary()) v = Integer.parseInt(data, 16);			
 			}
-			setValue((float)(intValue+intOffset)*intMultiplier/intDivider);
+			setIntValue (v);
+			setValue((float)(v+intOffset)*intMultiplier/intDivider);
 		}		
 	}
 	
