@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Timer;
@@ -60,16 +61,7 @@ public class Secu3Manager {
 	private final static int PROGRESS_TOTAL_PARAMS_VERSION_1 = 19;
 	private final static int PROGRESS_TOTAL_PARAMS_VERSION_2 = 19;
 	
-	// There are several special reserved symbols in binary mode: 0x21, 0x40, 0x0D, 0x0A
-	private final static int FIBEGIN = 0x21;  // '!' indicates beginning of the ingoing packet
-	private final static int FOBEGIN = 0x40;  // '@' indicates beginning of the outgoing packet
-	private final static int FIOEND = 0x0D;   // '\r' indicates ending of the ingoing/outgoing packet
-	private final static int FESC = 0x0A;     // '\n' Packet escape (FESC)
-	// Following bytes are used only in escape sequeces and may appear in the data without any problems
-	private final static int TFIBEGIN = 0x81; // Transposed FIBEGIN
-	private final static int TFOBEGIN = 0x82; // Transposed FOBEGIN
-	private final static int TFIOEND = 0x83;  // Transposed FIOEND
-	private final static int TFESC= 0x84;    // Transposed FESC
+
 
 	
 	private int progress_total_params;
@@ -369,28 +361,8 @@ public class Secu3Manager {
 			default:
 				break;
 			}											
-		}		
+		}				
 		
-		public int[] EscRxPacket (int[] packetBuffer) {
-			int[] buf = new int[packetBuffer.length];
-			boolean esc = false;
-			int idx = 0;
-			for (int i = 0; i != packetBuffer.length; i++) {
-				if (packetBuffer[i] == FESC) {
-					esc = true;
-					continue;
-				}
-				if (esc) {
-					esc = false;
-					if (packetBuffer[i] == TFOBEGIN) buf[idx++] = FOBEGIN;
-					else if (packetBuffer[i] == TFIOEND) buf[idx++] = FIOEND;
-					else if (packetBuffer[i] == TFESC) buf[idx++] = FESC;
-				} else
-				buf[idx++] = packetBuffer[i];
-			}
-			return buf;
-		}
-			
 		public void run() {
 			timer.scheduleAtFixedRate(onlineTask, 0, 100);	
 			int idx = 0;
@@ -429,8 +401,7 @@ public class Secu3Manager {
 							}												
 							if ((secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_END) && ((char)ch == '\r')) {
 								secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
-								if (binary) packetBuffer = EscRxPacket(packetBuffer);
-								//else EncodingCP866.Cp866ToUtf16(packetBuffer);
+								if (binary) packetBuffer = Secu3Packet.EscRxPacket(packetBuffer);
 								line = new String(packetBuffer,0,idx-1);
 								Log.d(LOG_TAG, "Recieved: " + line);
 								parsePacket(line,reader,writer);

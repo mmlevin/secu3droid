@@ -137,7 +137,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 		super.setData(data);
 		if (data != null) {
 			int v = 0;
-			if (isBinary()) v = BinToInt();
+			if (isBinary()) v = BinToInt(data);
 			if (signed) {
 				switch (getType()) {
 				case R.id.field_type_float4:
@@ -168,44 +168,32 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 	
 	@Override
 	public void pack() {
-		if (signed) {
-			switch (getType()) {
-			case R.id.field_type_float4:
-			case R.id.field_type_float24:
-				throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
-			case R.id.field_type_float8:
-				setData(String.format("%02X", Integer.valueOf(Math.round(floatValue*intDivider/intMultiplier-intOffset)).byteValue()));
-				break;
-			case R.id.field_type_float16:
-				setData(String.format("%04X", Integer.valueOf(Math.round(floatValue*intDivider/intMultiplier-intOffset)).shortValue()));
-				break;
-			case R.id.field_type_float32:				
-				setData(String.format("%08X", Long.valueOf(Math.round(floatValue*intDivider/intMultiplier-intOffset)).intValue()));
-				break;
-			default:
-				break;
-			}
-		} else {	
-			switch (getType()) {
-			case R.id.field_type_float4:
-				setData(String.format("%01X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
-				break;
-			case R.id.field_type_float8:
-				setData(String.format("%02X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
-				break;
-			case R.id.field_type_float16:
-				setData(String.format("%04X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
-				break;
-			case R.id.field_type_float24:
-				setData(String.format("%06X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
-				break;
-			case R.id.field_type_float32:				
-				setData(String.format("%08X", Math.round(floatValue*intDivider/intMultiplier-intOffset)));
-				break;
-			default:
-				break;
-			}
-		}		
+		int v = Math.round(floatValue*intDivider/intMultiplier-intOffset);
+		switch (getType()) {
+		case R.id.field_type_float4:
+			if (signed) throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
+			if (!isBinary()) setData(String.format("%01X", v));
+			break;				
+		case R.id.field_type_float8:
+			if (signed) v = Integer.valueOf(v).byteValue();
+			if (!isBinary()) setData(String.format("%02X", (byte)v));
+			break;
+		case R.id.field_type_float16:
+			if (signed) v = Integer.valueOf(v).shortValue();
+			if (!isBinary()) setData(String.format("%04X", (short)v));
+			break;
+		case R.id.field_type_float24:
+			if (signed) throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
+			if (!isBinary()) setData(String.format("%06X", v));
+			break;				
+		case R.id.field_type_float32:	
+			if (signed) v = Long.valueOf(v).intValue();
+			if (!isBinary()) setData(String.format("%08X", v));
+			break;
+		default:
+			break;
+		}	
+		if (isBinary()) setData(IntToBin(v));
 	}	
 	
 	@Override

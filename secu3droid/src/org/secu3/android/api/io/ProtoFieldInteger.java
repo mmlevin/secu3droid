@@ -6,71 +6,73 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
+public class ProtoFieldInteger extends BaseProtoField implements Parcelable {
 	private int value;
 	private int multiplier;
 	private boolean signed;
-	
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		super.writeToParcel(dest, flags);
 		dest.writeInt(value);
 		dest.writeInt(multiplier);
-		dest.writeInt(signed?1:0);
-	}	
-	
-	public static final Parcelable.Creator<ProtoFieldInteger> CREATOR = new Parcelable.Creator<ProtoFieldInteger>() {
-		 public ProtoFieldInteger createFromParcel(Parcel in) {			 
-			 return new ProtoFieldInteger(in);
-		 }
+		dest.writeInt(signed ? 1 : 0);
+	}
 
-		 public ProtoFieldInteger[] newArray(int size) {
-			 return new ProtoFieldInteger[size];
-		 }
+	public static final Parcelable.Creator<ProtoFieldInteger> CREATOR = new Parcelable.Creator<ProtoFieldInteger>() {
+		public ProtoFieldInteger createFromParcel(Parcel in) {
+			return new ProtoFieldInteger(in);
+		}
+
+		public ProtoFieldInteger[] newArray(int size) {
+			return new ProtoFieldInteger[size];
+		}
 	};
-	
+
 	public ProtoFieldInteger(Parcel in) {
 		super(in);
 		value = in.readInt();
 		multiplier = in.readInt();
-		signed = (in.readInt()==0)?false:true;
+		signed = (in.readInt() == 0) ? false : true;
 	}
-	
+
 	public ProtoFieldInteger(ProtoFieldInteger field) {
 		super(field);
 		if (field != null) {
 			this.value = field.value;
 			this.multiplier = field.multiplier;
-			this.signed = field.signed;			
+			this.signed = field.signed;
 		}
 	}
-	
-	public ProtoFieldInteger(Context context, int nameId, int type, boolean signed, boolean binary) {
+
+	public ProtoFieldInteger(Context context, int nameId, int type,
+			boolean signed, boolean binary) {
 		value = 0;
 		setData(null);
-		
+
 		setNameId(nameId);
 		setType(type);
 		setSigned(signed);
 		setMultiplier(1);
 		setBinary(binary);
-		if (nameId != 0) this.setName(context.getString(nameId));
-		
+		if (nameId != 0)
+			this.setName(context.getString(nameId));
+
 		switch (type) {
 		case R.id.field_type_int4:
 			setLength(1);
 			break;
 		case R.id.field_type_int8:
-			setLength(isBinary()?1:2);
+			setLength(isBinary() ? 1 : 2);
 			break;
 		case R.id.field_type_int16:
-			setLength(isBinary()?2:4);
+			setLength(isBinary() ? 2 : 4);
 			break;
 		case R.id.field_type_int24:
-			setLength(isBinary()?3:6);
+			setLength(isBinary() ? 3 : 6);
 			break;
 		case R.id.field_type_int32:
-			setLength(isBinary()?4:8);
+			setLength(isBinary() ? 4 : 8);
 			break;
 		default:
 			setLength(0);
@@ -92,82 +94,92 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable{
 	public void setSigned(boolean signed) {
 		this.signed = signed;
 	}
-	
+
 	@Override
 	public void setData(String data) {
 		super.setData(data);
 		if (data != null) {
 			int v = 0;
-			if (isBinary()) v = BinToInt();
+			if (isBinary())
+				v = BinToInt(data);
 			if (signed) {
 				switch (getType()) {
 				case R.id.field_type_int4:
 				case R.id.field_type_int24:
-					throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
+					throw new IllegalArgumentException(
+							"No rules for converting 4/24-bit value into a signed number");
 				case R.id.field_type_int8:
-					if (isBinary()) v = Integer.valueOf(v).byteValue();
-					else v = Integer.valueOf(data,16).byteValue();
+					if (isBinary())
+						v = Integer.valueOf(v).byteValue();
+					else
+						v = Integer.valueOf(data, 16).byteValue();
 					break;
 				case R.id.field_type_int16:
-					if (isBinary()) v = Integer.valueOf(v).shortValue();
-					else v = Integer.valueOf(data,16).shortValue(); 
+					if (isBinary())
+						v = Integer.valueOf(v).shortValue();
+					else
+						v = Integer.valueOf(data, 16).shortValue();
 					break;
-				case R.id.field_type_int32:				
-					if (isBinary()) v = Long.valueOf(v).intValue();
-					else v = Long.valueOf(data,16).intValue(); 
+				case R.id.field_type_int32:
+					if (isBinary())
+						v = Long.valueOf(v).intValue();
+					else
+						v = Long.valueOf(data, 16).intValue();
 					break;
 				default:
 					break;
 				}
 			} else {
-				if (!isBinary()) v =  Integer.parseInt(data, 16);				
+				if (!isBinary())
+					v = Integer.parseInt(data, 16);
 			}
-			setValue(v*multiplier);
+			setValue(v * multiplier);
 		}
 	}
-	
+
 	@Override
 	public void pack() {
-		if (signed) {
-			switch (getType()) {
-			case R.id.field_type_int4:
-			case R.id.field_type_int24:
-				throw new IllegalArgumentException("No rules for converting 4/24-bit value into a signed number");
-			case R.id.field_type_int8:
-				setData(String.format("%02X", Integer.valueOf(value/multiplier).byteValue()));
-				break;
-			case R.id.field_type_int16:
-				setData(String.format("%04X", Integer.valueOf(value/multiplier).shortValue()));
-				break;
-			case R.id.field_type_int32:				
-				setData(String.format("%08X", Long.valueOf(value/multiplier).intValue()));
-				break;
-			default:
-				break;
-			}
-		} else {	
-			switch (getType()) {
-			case R.id.field_type_int4:
-				setData(String.format("%01X", value/multiplier));
-				break;
-			case R.id.field_type_int8:
-				setData(String.format("%02X", value/multiplier));
-				break;
-			case R.id.field_type_int16:
-				setData(String.format("%04X", value/multiplier));
-				break;
-			case R.id.field_type_int24:
-				setData(String.format("%06X", value/multiplier));
-				break;				
-			case R.id.field_type_int32:				
-				setData(String.format("%08X", value));
-				break;
-			default:
-				break;
-			}
-		}		
+		int v = value / multiplier;
+		switch (getType()) {
+		case R.id.field_type_int4:
+			if (signed)
+				throw new IllegalArgumentException(
+						"No rules for converting 4/24-bit value into a signed number");
+			if (!isBinary())
+				setData(String.format("%01X", v));
+			break;
+		case R.id.field_type_int8:
+			if (signed)
+				v = Integer.valueOf(v).byteValue();
+			if (!isBinary())
+				setData(String.format("%02X", (byte)v));
+			break;
+		case R.id.field_type_int16:
+			if (signed)
+				v = Integer.valueOf(v).shortValue();
+			if (!isBinary())
+				setData(String.format("%04X", (short)v));
+			break;
+		case R.id.field_type_int24:
+			if (signed)
+				throw new IllegalArgumentException(
+						"No rules for converting 4/24-bit value into a signed number");
+			if (!isBinary())
+				setData(String.format("%06X", v));
+			break;
+		case R.id.field_type_int32:
+			if (signed)
+				v = Long.valueOf(v).intValue();
+			if (!isBinary())
+				setData(String.format("%08X", v));
+			break;
+		default:
+			break;
+		}
+		if (isBinary())
+			setData(IntToBin(v));
 	}
-	
+
 	@Override
 	public void reset() {
 		super.reset();

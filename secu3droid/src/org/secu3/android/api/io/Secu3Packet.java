@@ -12,13 +12,13 @@ import android.os.Parcelable;
 public class Secu3Packet implements Parcelable {
 	public final static int INPUT_TYPE = R.string.packet_dir_input;
 	public final static int OUTPUT_TYPE = R.string.packet_dir_output;
-	
+
 	public final static int INPUT_OUTPUT_POS = 0;
 	public final static int PACKET_ID_POS = 1;
 
 	public final static int SECUR_USE_BT_FLAG = 1;
 	public final static int SECUR_USE_IMMO_FLAG = 4;
-	
+
 	public final static int BITNUMBER_EPHH_VALVE = 0;
 	public final static int BITNUMBER_CARB = 1;
 	public final static int BITNUMBER_GAS = 2;
@@ -112,6 +112,93 @@ public class Secu3Packet implements Parcelable {
 		value >>= bitNumber;
 		return (value & 0x01);
 	};
+
+	// There are several special reserved symbols in binary mode: 0x21, 0x40,
+	// 0x0D, 0x0A
+	private final static int FIBEGIN = 0x21; // '!' indicates beginning of the
+												// ingoing packet
+	private final static int FOBEGIN = 0x40; // '@' indicates beginning of the
+												// outgoing packet
+	private final static int FIOEND = 0x0D; // '\r' indicates ending of the
+											// ingoing/outgoing packet
+	private final static int FESC = 0x0A; // '\n' Packet escape (FESC)
+	// Following bytes are used only in escape sequeces and may appear in the
+	// data without any problems
+	private final static int TFIBEGIN = 0x81; // Transposed FIBEGIN
+	private final static int TFOBEGIN = 0x82; // Transposed FOBEGIN
+	private final static int TFIOEND = 0x83; // Transposed FIOEND
+	private final static int TFESC = 0x84; // Transposed FESC
+
+	public String EscTxPacket(String packetBuffer) {
+		ArrayList<Integer> buf = new ArrayList<Integer>(
+				packetBuffer.length() - 3);
+		for (int i = 0; i != packetBuffer.length(); i++) {
+			if ((i >= 2) && (i < packetBuffer.length()-1)) {
+				if (packetBuffer.charAt(i) == FIBEGIN) {
+					buf.add(FESC);
+					buf.add(TFIBEGIN);
+					continue;
+				} else if (packetBuffer.charAt(i) == FIOEND) {
+					buf.add(FESC);
+					buf.add(FIOEND);
+					continue;
+				} else if (packetBuffer.charAt(i) == FESC) {
+					buf.add(FESC);
+					buf.add(TFESC);
+					continue;
+				}
+			}
+			buf.add((int) packetBuffer.charAt(i));
+		}
+		int[] outBuf = new int[buf.size()];
+		for (int i = 0; i != buf.size(); i++)
+			outBuf[i] = buf.get(i);
+		return new String(outBuf, 0, outBuf.length);
+	}
+
+	public static int[] EscRxPacket(int[] packetBuffer) {
+		int[] buf = new int[packetBuffer.length];
+		boolean esc = false;
+		int idx = 0;
+		for (int i = 0; i != packetBuffer.length; i++) {
+			if ((packetBuffer[i] == FESC) && (i >= 2)) {
+				esc = true;
+				continue;
+			}
+			if (esc) {
+				esc = false;
+				if (packetBuffer[i] == TFOBEGIN)
+					buf[idx++] = FOBEGIN;
+				else if (packetBuffer[i] == TFIOEND)
+					buf[idx++] = FIOEND;
+				else if (packetBuffer[i] == TFESC)
+					buf[idx++] = FESC;
+			} else
+				buf[idx++] = packetBuffer[i];
+		}
+		return buf;
+	}
+
+	public int[] EscTxPacket(int[] packetBuffer) {
+		ArrayList<Integer> buf = new ArrayList<Integer>(packetBuffer.length);
+		for (int i = 0; i != packetBuffer.length; i++) {
+			if (packetBuffer[i] == FIBEGIN) {
+				buf.add(FESC);
+				buf.add(TFIBEGIN);
+			} else if (packetBuffer[i] == FIOEND) {
+				buf.add(FESC);
+				buf.add(FIOEND);
+			} else if (packetBuffer[i] == FESC) {
+				buf.add(FESC);
+				buf.add(TFESC);
+			} else
+				buf.add(packetBuffer[i]);
+		}
+		int[] outBuf = new int[buf.size()];
+		for (int i = 0; i != buf.size(); i++)
+			outBuf[i] = buf.get(i);
+		return outBuf;
+	}
 
 	private ArrayList<BaseProtoField> fields;
 
@@ -207,13 +294,14 @@ public class Secu3Packet implements Parcelable {
 		}
 	}
 
-	public Secu3Packet(Context context, int nameId, int packetIdResId, boolean binary) {
+	public Secu3Packet(Context context, int nameId, int packetIdResId,
+			boolean binary) {
 		setFields(null);
 		setNameId(nameId);
 		setPacketIdResId(packetIdResId);
 		setPacketDirResId(packetDirResId);
 		input_type = context.getString(R.string.packet_dir_input);
-		output_type = context.getString(R.string.packet_dir_output);		
+		output_type = context.getString(R.string.packet_dir_output);
 		setBinary(binary);
 
 		if (nameId != 0)
@@ -301,23 +389,23 @@ public class Secu3Packet implements Parcelable {
 
 	public void parse(String data) {
 		if ((data != null) && (fields != null)) {
-				BaseProtoField field;
+			BaseProtoField field;
 
-				if (data.charAt(INPUT_OUTPUT_POS) != input_type.charAt(INPUT_OUTPUT_POS))
-					throw new IllegalArgumentException("Not an input packet");
-				char ch = data.charAt(PACKET_ID_POS);
-				if (ch != packetId.charAt(0))
-					throw new IllegalArgumentException("Wrong packet type");
-				setData(data);
-				int position = 2; // Skip first 2 chars
-				int delta = 0;
-				for (int i = 0; i != fields.size(); i++) {
-					field = fields.get(i);
-					delta = field.getLength();
-					String subdata = data
-							.substring(position, position += delta);
-					field.setData(subdata);
-				}
+			if (data.charAt(INPUT_OUTPUT_POS) != input_type
+					.charAt(INPUT_OUTPUT_POS))
+				throw new IllegalArgumentException("Not an input packet");
+			char ch = data.charAt(PACKET_ID_POS);
+			if (ch != packetId.charAt(0))
+				throw new IllegalArgumentException("Wrong packet type");
+			setData(data);
+			int position = 2; // Skip first 2 chars
+			int delta = 0;
+			for (int i = 0; i != fields.size(); i++) {
+				field = fields.get(i);
+				delta = field.getLength();
+				String subdata = data.substring(position, position += delta);
+				field.setData(subdata);
+			}
 		}
 	}
 
@@ -391,7 +479,10 @@ public class Secu3Packet implements Parcelable {
 				field.pack();
 				pack += field.getData();
 			}
-			return pack+"\r\n";
+			pack += "\r";
+			if (isBinary())
+				pack = EscTxPacket(pack);
+			return pack;
 		}
 		return null;
 	}
