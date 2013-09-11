@@ -344,7 +344,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	    	progressBar.setVisibility(ProgressBar.VISIBLE);			
 	    	Secu3Packet packet = new Secu3Packet(OpCompNcSkeleton);
 	    	((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_title)).setValue (Secu3Packet.OPCODE_EEPROM_PARAM_SAVE);
-	    	((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_title)).setValue (0);
+	    	((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_code_title)).setValue (0);
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 			return true;
 		default:

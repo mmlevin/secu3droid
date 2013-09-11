@@ -64,6 +64,7 @@ public class MainActivity extends Activity {
 	private String sensorsRawFormat = "";
 	private boolean isOnline;
 	private boolean errors = false;
+	private int protocol_version = 0;
 	
 	private PacketUtils packetUtils = null;
 	
@@ -99,6 +100,7 @@ public class MainActivity extends Activity {
 		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);	
 		setContentView(R.layout.activity_main);		
 
+		protocol_version = SettingsActivity.getProtocolVersion(getBaseContext());
 		packetUtils = new PacketUtils(this);
 		
 		sensorsFormat = getString(R.string.sensors_format);
@@ -249,9 +251,11 @@ public class MainActivity extends Activity {
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));						
 						
-						textViewDataExt.setText(String.format(Locale.US,speedFormat,
-								packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()),
-								packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));
+						if (protocol_version >= 2) {
+							textViewDataExt.setText(String.format(Locale.US,speedFormat,
+									packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()),
+									packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));
+						}
 					}			
 					break;
 				case R.string.packet_type_adcraw_dat:
