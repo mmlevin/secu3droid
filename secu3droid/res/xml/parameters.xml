@@ -509,7 +509,8 @@
             app:summary="@string/choke_steps_summary"
             app:type="@id/parameter_type_integer"
             minValue="50"
-            maxValue="1000"/>
+            maxValue="1000"
+            stepValue="1"/>
         <Parameter
             app:name="@string/choke_testing_title"
             app:summary="@string/choke_testing_summary"
