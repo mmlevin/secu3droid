@@ -32,6 +32,8 @@ import android.view.View;
 import android.widget.TextView;
 
 public class ParamItemString extends BaseParamItem {
+	private String value;
+	
 	public ParamItemString(Context context, String name, String summary) {
 		this.setContext(context);
 		this.setName(name);
@@ -53,9 +55,19 @@ public class ParamItemString extends BaseParamItem {
 		
 		TextView paramName = (TextView) v.findViewById(R.id.param_name);
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
+		TextView paramValue = (TextView) v.findViewById(R.id.param_value);
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());			
+		paramValue.setText(value);
 		return v;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

@@ -41,19 +41,23 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +82,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private static final String PARAMETERS = "Parameters";
 	public static final int PARAMS_NUMBER = 9;
 	
+	private String bluetoothSecurityValue;
+	private int bluetoothSecurityFlags;
+	
     private int position = Integer.MAX_VALUE;    
 	private boolean isOnline = false;
 	private boolean uploadImmediatelly = false;
@@ -95,6 +102,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	
 	private Secu3Packet OpCompNcSkeleton = null;
 	private Secu3Packet ChokeControlSkeleton = null;
+	private Secu3Packet SecurParSkeleton = null;
 	private PacketUtils packetUtils = null;
 	
 	private int protocol_version = 0;
@@ -323,6 +331,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		
     	isValid = false;
 		
+    	BaseParamItem i = paramAdapter.findItemByNameId(R.string.secur_par_apply_bluetooth_title); 
+    	if (i != null) i.setEnabled(false);
 		super.onCreate(savedInstanceState);		
 	}
 
@@ -371,8 +381,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.ckps_title,Secu3Packet.OUTPUT_TYPE)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.miscellaneous_title,Secu3Packet.OUTPUT_TYPE)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.choke_control_title,Secu3Packet.OUTPUT_TYPE)));
-			if (protocol_version >= 2)
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.secur_par_title,Secu3Packet.OUTPUT_TYPE)));
+			if (protocol_version >= 2) {
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.secur_par_title,Secu3Packet.OUTPUT_TYPE)));
+			}
 		}
 	}
 
@@ -384,14 +395,15 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		
 	@Override
 	protected void onResume() {
+		super.onResume();	
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.op_comp_nc_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.choke_control_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.secur_par_title).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR, Secu3Packet.OUTPUT_TYPE));
 		dialog = (CustomNumberPickerDialog)getLastCustomNonConfigurationInstance();
 		if (dialog != null) {
 			dialog.setOnCustomNumberPickerAcceptListener(this);
 		}							
-		registerReceiver(receiver, receiver.intentFilter);
-		super.onResume();		
+		registerReceiver(receiver, receiver.intentFilter);	
 	}	
 	
 	
@@ -421,6 +433,35 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			} else if (i instanceof ParamItemBoolean) {
 				adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);
 				onItemChange(i.getNameId());
+			} else if (i instanceof ParamItemString) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(i.getName());
+				final EditText input = new EditText(this);
+				bluetoothSecurityFlags = i.getNameId();
+				input.setText(((ParamItemString) i).getValue());
+				switch (bluetoothSecurityFlags) { 
+				case R.string.secur_par_bluetooth_name_title:
+					input.setInputType(InputType.TYPE_CLASS_TEXT);
+					break;
+				case R.string.secur_par_bluetooth_pass_title:
+					input.setInputType(InputType.TYPE_CLASS_NUMBER);
+					break;
+				}				
+				builder.setView(input);
+				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						bluetoothSecurityValue = input.getText().toString();						
+						onItemChange(bluetoothSecurityFlags);
+					}
+				});
+				builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {				
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+				builder.show();
 			}
 		}
 	}	
@@ -432,9 +473,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	}
 
 	public void onItemChange(int itemId) {
+		Secu3Packet packet = null;		
 		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
 		if (item != null) {
-			Secu3Packet packet = null;
 			if (item.getPageId() == R.string.choke_control_title) {
 				packet = new Secu3Packet (ChokeControlSkeleton); 
 				switch (itemId) {
@@ -451,6 +492,29 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 					break;
 				}		
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
+			} else if (item.getNameId() == R.string.secur_par_apply_bluetooth_title) {
+				Secu3Packet sourcePacket = packetUtils.buildPacket(paramAdapter, R.string.secur_par_title, Secu3Packet.OUTPUT_TYPE);
+				if (sourcePacket != null) {
+					int flags = ((ProtoFieldInteger) sourcePacket.findField(R.string.secur_par_flags)).getValue();
+					packet = new Secu3Packet(SecurParSkeleton);				
+					flags |= Secu3Packet.SECUR_SET_BTBR_FLAG;
+					((ProtoFieldInteger) packet.findField(R.string.secur_par_flags)).setValue (flags);		
+					String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
+					String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
+					if ((name != null) && (pass != null)) {
+						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length)).setValue (name.length());
+						((ProtoFieldString) packet.findField(R.string.secur_par_name)).setValue (name);
+						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length)).setValue (pass.length());
+						((ProtoFieldString) packet.findField(R.string.secur_par_pass)).setValue (pass);
+						startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
+					}
+				}
+			} else if ((item.getNameId() == R.string.secur_par_bluetooth_name_title) || (item.getNameId() == R.string.secur_par_bluetooth_pass_title)) {
+				paramAdapter.setStringItem(bluetoothSecurityFlags, bluetoothSecurityValue);				
+				String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
+				String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
+				paramAdapter.findItemByNameId(R.string.secur_par_apply_bluetooth_title).setEnabled((name != null) && (pass != null) && (!TextUtils.isEmpty(name)) && (!TextUtils.isEmpty(pass)));
+				adapter.notifyDataSetChanged();
 			}
 			else if (uploadImmediatelly) {
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, item.getPageId(),Secu3Packet.OUTPUT_TYPE)));
@@ -492,6 +556,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			if (packet != null) {
 				if (packet.getNameId() == R.string.op_comp_nc_title) OpCompNcSkeleton = packet;
 				else if (packet.getNameId() == R.string.choke_control_title) ChokeControlSkeleton = packet;
+				else  if (packet.getNameId() == R.string.secur_par_title) SecurParSkeleton = packet;
 			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);

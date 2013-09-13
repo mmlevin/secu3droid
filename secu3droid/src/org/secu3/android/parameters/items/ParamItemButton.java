@@ -74,9 +74,10 @@ public class ParamItemButton extends BaseParamItem {
 		Button paramButton =(Button) v.findViewById(R.id.param_button);
 		paramButton.setText(getUnits());
 		paramButton.setOnClickListener(new CustomClickListener(this));
+		paramButton.setEnabled(isEnabled());
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());			
 		return v;
-	}
+	}	
 }

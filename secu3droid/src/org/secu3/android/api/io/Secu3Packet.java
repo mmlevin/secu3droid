@@ -17,6 +17,7 @@ public class Secu3Packet implements Parcelable {
 	public final static int PACKET_ID_POS = 1;
 
 	public final static int SECUR_USE_BT_FLAG = 1;
+	public final static int SECUR_SET_BTBR_FLAG = 2;
 	public final static int SECUR_USE_IMMO_FLAG = 4;
 
 	public final static int BITNUMBER_EPHH_VALVE = 0;

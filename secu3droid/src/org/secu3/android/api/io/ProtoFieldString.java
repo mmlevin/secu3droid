@@ -61,7 +61,12 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 	
 	@Override
 	public void pack() {
-		setData(value.substring(0,getLength()));
+		char[] buf = new char[getLength()];
+		for (int i = 0; i != Math.min(getLength(), value.length()); i++) {
+			buf[i] = value.charAt(i);
+		}
+		String s = new String(buf);
+		setData(s);
 	}
 
 	public String getValue() {
