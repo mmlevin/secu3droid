@@ -56,6 +56,17 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	public static final String EVENT_SECU3_SERVICE_PROGRESS_TOTAL = "org.secu3.android.intent.action.extra.SECU3_SERVICE_PROGRESS_TOTAL";
 	public static final String EVENT_SECU3_SERVICE_RECEIVE_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_RECEIVE_PACKET";
 	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_RECEIVE_PARAM_PACKET";
+
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON = "org.secu3.android.intent.action.SECU3_SERVICE_OBTAIN_PACKET_SKELETON";
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM = "org.secu3.android.intent.action.extra.SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM";
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR = "org.secu3.android.intent.action.extra.SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET = "org.secu3.android.intent.action.SECU3_SERVICE_RECEIVE_SKELETON_PACKET";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET = "org.secu3.android.intent.action.extra.SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET";
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PARAMETER = "org.secu3.android.intent.action.SECU3_SERVICE_OBTAIN_PARAMETER";
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_ID = "org.secu3.android.intent.action.extra.SECU3_SERVICE_OBTAIN_PARAMETER_ID";
+	public static final String ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_FUNSET_NAMES = "org.secu3.android.intent.action.extra.SECU3_SERVICE_OBTAIN_PARAMETER_FUNSET_NAMES";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAMETER = "org.secu3.android.intent.action.SECU3_SERVICE_RECEIVE_PARAMETER";
+	public static final String EVENT_SECU3_SERVICE_RECEIVE_PARAMETER_FUNSET_NAMES = "org.secu3.android.intent.action.extra.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER_FUNSET_NAMES";
 	
 	
 	NotificationManager notificationManager;
@@ -123,12 +134,32 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 			}
 		} else if (ACTION_SECU3_SERVICE_SEND_PACKET.equals(intent.getAction())) {
 			if (secu3Manager != null) {
-				Secu3Dat packet = intent.getParcelableExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET);
+				Secu3Packet packet = intent.getParcelableExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET);
 				int packets_counter = intent.getIntExtra(ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, 0); 
 				secu3Manager.appendPacket (packet, packets_counter);
 				sendBroadcast(intent);
 			}
+		} else if (ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON.equals(intent.getAction())) {
+			if (secu3Manager != null) {
+				Secu3ProtoWrapper wrapper = secu3Manager.getProtoWrapper();
+				if (wrapper != null) {
+					Secu3Packet packet = wrapper.obtainPacketSkeleton(intent.getIntExtra(ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, 0),intent.getIntExtra(ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR, 0));
+					if (packet != null) {
+						sendBroadcast(packet.getSkeletonIntent());
+					}
+				}
+			}
+		} else if (ACTION_SECU3_SERVICE_OBTAIN_PARAMETER.equals(intent.getAction())) {
+			if (ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_FUNSET_NAMES.equals(intent.getStringExtra(ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_ID))) {
+				if (secu3Manager != null) {
+					Secu3ProtoWrapper wrapper = secu3Manager.getProtoWrapper();
+					if (wrapper != null) {
+						sendBroadcast(new Intent(EVENT_SECU3_SERVICE_RECEIVE_PARAMETER).putExtra(EVENT_SECU3_SERVICE_RECEIVE_PARAMETER_FUNSET_NAMES, wrapper.getFunsetNames()));
+					}
+				}
+			}
 		}
+			
 				
 		return super.onStartCommand(intent, flags, startId);	
 	}

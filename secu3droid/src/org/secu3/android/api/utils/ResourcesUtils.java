@@ -42,4 +42,9 @@ public class ResourcesUtils {
 		if (reference == null) return null;
 		return context.getString(Integer.parseInt(reference.replace("@","")));
 	}
+	
+	public static int getReferenceInt (Context context,String reference) {
+		if (reference == null) return 0;
+		return context.getResources().getInteger(Integer.parseInt(reference.replace("@","")));
+	}
 }

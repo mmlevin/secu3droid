@@ -118,6 +118,7 @@ public class ParamItemSpinner extends BaseParamItem {
 				paramSpinner.setEnabled(true);
 				paramSpinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,values));
 				((ArrayAdapter<String>) paramSpinner.getAdapter()).setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				setIndex(index);
 			}
 		}
 		this.value = value;

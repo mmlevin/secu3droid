@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Timer;
@@ -42,9 +43,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.secu3.android.R;
-import org.secu3.android.api.io.Secu3Dat.FnNameDat;
-import org.secu3.android.api.io.Secu3Dat.*;
-import org.secu3.android.api.utils.EncodingCP866;
+import org.secu3.android.SettingsActivity;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -57,11 +56,18 @@ import android.util.Log;
 
 public class Secu3Manager {	
 	private static final String LOG_TAG = "Secu3Manager";		
-	private final static int PROGRESS_TOTAL_PARAMS = 19;
+	private final static int PROGRESS_TOTAL_PARAMS_VERSION_1 = 19;
+	private final static int PROGRESS_TOTAL_PARAMS_VERSION_2 = 19;
+	
+
+
+	
+	private int progress_total_params;
+	private int protocol_version;
 	
 	public enum SECU3_STATE {SECU3_NORMAL, SECU3_BOOTLOADER};
 	public enum SECU3_PACKET_SEARCH {SEARCH_START, SEARCH_END};
-	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_SAVED_ERRORS,SECU3_READ_FW_INFO,SECU3_START_LOGGING,SECU3_STOP_LOGGING};
+	public enum SECU3_TASK {SECU3_NONE,SECU3_READ_SENSORS,SECU3_RAW_SENSORS,SECU3_READ_PARAMS,SECU3_READ_ERRORS,SECU3_READ_FW_INFO,SECU3_START_LOGGING,SECU3_STOP_LOGGING};
 	
 	private int progressCurrent = 0;
 	private int progressTotal = 0;
@@ -69,6 +75,7 @@ public class Secu3Manager {
 	private int disableReason = 0;
 	private int maxConnectionRetries = 0;
 	private int nbRetriesRemaining = 0;
+	private boolean binary = false;
 	
 	private SECU3_TASK secu3Task = SECU3_TASK.SECU3_NONE;
 	private SECU3_TASK prevSecu3Task = SECU3_TASK.SECU3_NONE;
@@ -86,11 +93,17 @@ public class Secu3Manager {
 	private Context appContext = null;
 	private Secu3Logger logger = new Secu3Logger();	
 	
+	private Secu3ProtoWrapper wrapper = null;
+	
+	private Secu3Packet ChMode = null;
+	
+	private String input_type = null; 
+	
 	
 	private class ConnectedSecu3 extends Thread {
 		public static final int STATUS_TIMEOUT = 10;
 
-		public Queue<Secu3Dat> sendPackets = new LinkedList<Secu3Dat>();
+		public Queue<Secu3Packet> sendPackets = new LinkedList<Secu3Packet>();
 		public Queue<SECU3_TASK> tasks = new LinkedList<Secu3Manager.SECU3_TASK>();
 		
 		private final BluetoothSocket socket;
@@ -105,8 +118,7 @@ public class Secu3Manager {
 	
 		private boolean ready = false;
 		
-		int packetBuffer[] = new int [Secu3Dat.MAX_PACKET_SIZE];
-		Secu3Parser parser = new Secu3Parser();		
+		int packetBuffer[] = new int [Secu3Packet.MAX_PACKET_SIZE];		
 		
 		public ConnectedSecu3 (BluetoothSocket socket) {
 			this.socket = socket;
@@ -164,12 +176,17 @@ public class Secu3Manager {
 			};
 		}
 		
-		void parsePacket(String packet, BufferedReader reader, BufferedWriter writer) throws Exception {
-			
+		void parsePacket(String packet, BufferedReader reader, BufferedWriter writer) throws IOException {
+			Secu3Packet ChangeMode = new Secu3Packet(ChMode);
 			switch (secu3State) {
 			case SECU3_NORMAL:
-					parser.parse(packet);
-					appContext.sendBroadcast(parser.getLastPacketIntent());
+					try {
+						getProtoWrapper().parse(packet);
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+						break;
+					}
+					appContext.sendBroadcast(getProtoWrapper().getLastPacketIntent());
 					
 					if (secu3Task != prevSecu3Task) { // If task changed
 						prevSecu3Task = secu3Task;
@@ -179,45 +196,46 @@ public class Secu3Manager {
 							break;
 						case SECU3_START_LOGGING:
 							logger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path), ""));
-							logger.beginLogging();
+							logger.beginLogging(protocol_version,appContext);
 							break;
 						case SECU3_STOP_LOGGING:
 							logger.endLogging();
 							break;							
 						// Task to read sensors
-						case SECU3_READ_SENSORS:					
-							writer.write(ChangeMode.pack(Secu3Dat.SENSOR_DAT));
+						case SECU3_READ_SENSORS:		
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_sendor_dat));
+							writer.write(ChangeMode.pack());
 							writer.flush();					
 							break;
 						case SECU3_RAW_SENSORS:
-							writer.write(ChangeMode.pack(Secu3Dat.ADCRAW_DAT));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_adcraw_dat));
+							writer.write(ChangeMode.pack());
 							writer.flush();					
 							break;							
 						// Task to read params
 						case SECU3_READ_PARAMS:
 							progressCurrent = 0;
-							progressTotal = PROGRESS_TOTAL_PARAMS;
+							progressTotal = progress_total_params;
 							subprogress = 0;
-							parser.init();
-							writer.write(ChangeMode.pack(Secu3Dat.STARTR_PAR));
+							getProtoWrapper().init();
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_startr_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();					
 							break;
 						case SECU3_READ_ERRORS:
-							writer.write(ChangeMode.pack(Secu3Dat.CE_ERR_CODES));							
-							writer.flush();
-							break;
-						case SECU3_READ_SAVED_ERRORS:
-							writer.write(ChangeMode.pack(Secu3Dat.CE_SAVED_ERR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_ce_err_codes));
+							writer.write(ChangeMode.pack());							
 							writer.flush();
 							break;
 						case SECU3_READ_FW_INFO:
-							writer.write(ChangeMode.pack(Secu3Dat.FWINFO_DAT));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_fwinfo_dat));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
 						}
 					}
 
-					logger.OnPacketReceived(parser.getLastPacket());
+					logger.OnPacketReceived(getProtoWrapper().getLastPacket());
 					
 					switch (secu3Task) {
 					case SECU3_NONE:
@@ -230,105 +248,119 @@ public class Secu3Manager {
 						updateTask();
 						break;
 					case SECU3_READ_PARAMS:
-						switch (parser.getLastPackedId()) {
-						case Secu3Dat.STARTR_PAR:
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
+						case R.string.packet_type_startr_par:
 							updateProgress(1 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.ANGLES_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_angles_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
-						case Secu3Dat.ANGLES_PAR:
+						case R.string.packet_type_angles_par:
 							updateProgress(2 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.IDLREG_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_idlreg_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;					
-						case Secu3Dat.IDLREG_PAR:
+						case R.string.packet_type_idlreg_par:
 							updateProgress(3 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.FNNAME_DAT));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_fnname_dat));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
-						case Secu3Dat.FNNAME_DAT:
+						case R.string.packet_type_fnname_dat:
 							updateProgress(4 + subprogress);
-							FnNameDat fnNameDat = (FnNameDat) parser.getLastPacket();
-							subprogress = (fnNameDat == null)?0:fnNameDat.names_count();
-							if (fnNameDat.names_available()) {
-								writer.write(ChangeMode.pack(Secu3Dat.FUNSET_PAR));
+							subprogress = wrapper.funsetNamesCounter();
+							if (wrapper.funsetNamesValid()) {
+								((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_funset_par));
+								writer.write(ChangeMode.pack());
 								writer.flush();
 							}
 							break;								
-						case Secu3Dat.FUNSET_PAR:
+						case R.string.packet_type_funset_par:
 							updateProgress(5 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.TEMPER_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_temper_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
-						case Secu3Dat.TEMPER_PAR:
+						case R.string.packet_type_temper_par:
 							updateProgress(6 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.CARBUR_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_carbur_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
-						case Secu3Dat.CARBUR_PAR:
+						case R.string.packet_type_carbur_par:
 							updateProgress(7 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.ADCCOR_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_adccor_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
-						case Secu3Dat.ADCCOR_PAR:
+						case R.string.packet_type_adccor_par:
 							updateProgress(8 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.CKPS_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_ckps_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
-						case Secu3Dat.CKPS_PAR:
+						case R.string.packet_type_ckps_par:
 							updateProgress(9 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.MISCEL_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_miscel_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;
-						case Secu3Dat.MISCEL_PAR:
+						case R.string.packet_type_miscel_par:
 							updateProgress(10 + subprogress);
-							writer.write(ChangeMode.pack(Secu3Dat.CHOKE_PAR));
+							((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_choke_par));
+							writer.write(ChangeMode.pack());
 							writer.flush();
 							break;	
-						case Secu3Dat.CHOKE_PAR:
+						case R.string.packet_type_choke_par:
 							updateProgress(11 + subprogress);
-							updateTask();							
+							if (protocol_version == 1) {
+								updateTask();
+							}
+							else {
+								((ProtoFieldString) ChangeMode.findField(R.string.change_mode_data_title)).setValue(appContext.getString(R.string.packet_type_secur_par));
+								writer.write(ChangeMode.pack());
+								writer.flush();								
+							}
+							break;
+						case R.string.packet_type_secur_par:
+							updateProgress(12 + subprogress);
+							updateTask();
 							break;
 						}			
 						break;
 					case SECU3_READ_ERRORS:
-						switch (parser.getLastPackedId()) {
-						case Secu3Dat.CE_ERR_CODES:	
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
+						case R.string.packet_type_ce_err_codes:	
 							updateTask();						
 						}				
 						break;						
-					case SECU3_READ_SAVED_ERRORS:
-						switch (parser.getLastPackedId()) {
-						case Secu3Dat.CE_SAVED_ERR:
-							updateTask();
-						}
-						break;
 					case SECU3_READ_FW_INFO:
-						switch (parser.getLastPackedId()) {
-						case Secu3Dat.FWINFO_DAT:
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
+						case R.string.packet_type_fwinfo_dat:
 							updateTask();						
 						}				
 						break;						
 					case SECU3_RAW_SENSORS:
-						switch (parser.getLastPackedId()) {
-						case Secu3Dat.ADCRAW_DAT:
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
+						case R.string.packet_type_adcraw_dat:
 							updateTask();
 						}
 						break;
 					case SECU3_READ_SENSORS:
-						switch (parser.getLastPackedId()) {
-						case Secu3Dat.SENSOR_DAT:
+						switch (getProtoWrapper().getLastPacket().getPacketIdResId()) {
+						case R.string.packet_type_sendor_dat:
 							updateTask();
 						}
 						break;						
 					}
-					Log.d(LOG_TAG,parser.getLogString());							
+					Log.d(LOG_TAG,getProtoWrapper().getLogString());							
 				break;
 			default:
 				break;
 			}											
-		}		
-			
+		}				
+		
 		public void run() {
 			timer.scheduleAtFixedRate(onlineTask, 0, 100);	
 			int idx = 0;
@@ -340,42 +372,37 @@ public class Secu3Manager {
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out,"ISO-8859-1"));				
 				while (enabled) {
 					if (!sendPackets.isEmpty()) {				
-						try {
-							Secu3Dat packet =sendPackets.poll(); 
-							writer.append(packet.pack() + "\r\n");
-							Log.d(LOG_TAG, "Send packet");
+							Secu3Packet packet = sendPackets.poll(); 
+							String p = packet.pack();
+							writer.append(p);
+							Log.d(LOG_TAG, "Send packet:" + p);
 							updateProgress(++progressCurrent);
-							Thread.sleep(200);							
-						} catch (Exception e) {
-							e.printStackTrace();
-						} finally {
+							try {
+								Thread.sleep(200);
+							} catch (InterruptedException e) {
+							}							
 							writer.flush();
-						}
 					}					
 					if (reader.ready()) {
 						ready = true;												
 						if ((ch = (char)reader.read()) != -1) {							
 							if (secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_START) {							
-								if (ch == Secu3Dat.INPUT_PACKET) {
+								if (ch == input_type.charAt(Secu3Packet.INPUT_OUTPUT_POS)) {
 									secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_END;								
 									idx = 0;
 								}
 							}
 							packetBuffer [idx++] = ch;
-							if (idx >= Secu3Dat.MAX_PACKET_SIZE) {
+							if (idx >= Secu3Packet.MAX_PACKET_SIZE) {
 								secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
 								idx = 0;
 							}												
 							if ((secu3packetSearch == SECU3_PACKET_SEARCH.SEARCH_END) && ((char)ch == '\r')) {
 								secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
-								EncodingCP866.Cp866ToUtf16(packetBuffer);
+								if (binary) packetBuffer = Secu3Packet.EscRxPacket(packetBuffer);
 								line = new String(packetBuffer,0,idx-1);
 								Log.d(LOG_TAG, "Recieved: " + line);
-								try {
-									parsePacket(line,reader,writer);
-								} catch (Exception e) {
-									Log.d(LOG_TAG, e.getMessage());
-								}
+								parsePacket(line,reader,writer);
 								onlineTask.reset();					
 								appContext.sendBroadcast(new Intent(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE).putExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS, true));
 							}
@@ -385,8 +412,9 @@ public class Secu3Manager {
 						SystemClock.sleep(100);
 					}
 				}
-			} catch (IOException e) {
-				Log.d(LOG_TAG, "Error while getting data "+e.toString());				
+			} catch (Exception e) {
+				Log.d(LOG_TAG, "Error while getting data "+e.toString());		
+				e.printStackTrace();
 			} finally {
 				this.close();
 			}
@@ -416,9 +444,27 @@ public class Secu3Manager {
 	public Secu3Manager(Service callingService, String deviceAddress, int maxRetries) {
 		this.callingService = callingService;
 		this.deviceAddress = deviceAddress;
-		this.maxConnectionRetries = maxRetries;
-		this.nbRetriesRemaining =maxRetries + 1;
-		this.appContext = callingService.getApplicationContext();		
+		maxConnectionRetries = maxRetries;
+		nbRetriesRemaining = maxRetries + 1;
+		appContext = callingService.getApplicationContext();
+		this.binary = PreferenceManager.getDefaultSharedPreferences(appContext).getBoolean(appContext.getString(R.string.pref_binary_mode_key), false);
+		wrapper = new Secu3ProtoWrapper(appContext);	
+		wrapper.setBinary(binary);
+		input_type = appContext.getString(R.string.packet_dir_input);
+		try {
+			getProtoWrapper().instantiateFromXml(R.xml.protocol,protocol_version = SettingsActivity.getProtocolVersion(appContext));
+			switch (protocol_version) {
+			case 1:
+				progress_total_params = PROGRESS_TOTAL_PARAMS_VERSION_1;
+				break;
+			default:
+				progress_total_params = PROGRESS_TOTAL_PARAMS_VERSION_2;
+				break;
+			}
+			ChMode = wrapper.obtainPacketSkeleton(R.string.change_mode_title,0);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void setDisableReason (int reasonID) {
@@ -555,8 +601,8 @@ public class Secu3Manager {
 		}
 	}
 	
-	public synchronized void appendPacket (Secu3Dat packet, int packets_counter) {
-		if ((connectedSecu3 != null) && (connectedSecu3.sendPackets != null)) {
+	public synchronized void appendPacket (Secu3Packet packet, int packets_counter) {
+		if ((connectedSecu3 != null) && (connectedSecu3.sendPackets != null) && (packet != null)) {
 			connectedSecu3.sendPackets.add(packet);
 		}
 		if (packets_counter != 0) {
@@ -604,5 +650,9 @@ public class Secu3Manager {
 			callingService.stopSelf();
         	Log.d(LOG_TAG, "Bluetooth Secu3 manager disabled");
 		}
-	}	
+	}
+
+	public Secu3ProtoWrapper getProtoWrapper() {
+		return wrapper;
+	}
 }

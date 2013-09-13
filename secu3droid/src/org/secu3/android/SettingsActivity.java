@@ -28,6 +28,7 @@ package org.secu3.android;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
@@ -48,10 +49,20 @@ import org.secu3.android.api.io.Secu3Logger;
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	private SharedPreferences sharedPref ;
 	private BluetoothAdapter bluetoothAdapter = null;
+	String versions[] = null;
+	
+	public static int getProtocolVersion(Context ctx) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+		int version = 0;
+		String versionS = sharedPreferences.getString(ctx.getString(R.string.pref_protocol_version_key), null);
+		if (versionS != null) {
+			version = Integer.parseInt(versionS);
+		}
+        return version+1;
+	}
 		
 	@SuppressWarnings("deprecation")
-	private void updateDevicePreferenceSummary(){
-        // update bluetooth device summary
+	private void updatePreferenceSummary(){
 		String deviceName = "";
         ListPreference prefDevices = (ListPreference)findPreference(getString(R.string.pref_bluetooth_device_key));
         String deviceAddress = sharedPref.getString(getString(R.string.pref_bluetooth_device_key), null);
@@ -59,12 +70,21 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         	deviceName = bluetoothAdapter.getRemoteDevice(deviceAddress).getName();
         }
         prefDevices.setSummary(getString(R.string.pref_bluetooth_device_summary, deviceName));
+        
+        String protocolVersion = versions[getProtocolVersion(this)-1];
+        ListPreference prefVersions = (ListPreference)findPreference(getString(R.string.pref_protocol_version_key));        
+        prefVersions.setSummary(protocolVersion);
+        
+		findPreference(getString(R.string.pref_write_log_path)).setSummary(String.format(getString(R.string.pref_write_log_path_summary), Secu3Logger.getDefaultPath()));
+		
+        Preference speedPulses = (Preference)findPreference(getString(R.string.pref_speed_pulse_key));
+        speedPulses.setSummary(sharedPref.getString(getString(R.string.pref_speed_pulse_key), getString(R.string.defaultSpeedPulse)));
     }   
 
 	@SuppressWarnings("deprecation")
-	private void updateDevicePreferenceList(){
+	private void updatePreferenceList(){
         // update bluetooth device summary
-		updateDevicePreferenceSummary();
+		updatePreferenceSummary();
 		// update bluetooth device list
         ListPreference prefDevices = (ListPreference)findPreference(getString(R.string.pref_bluetooth_device_key));
         Set<BluetoothDevice> pairedDevices = new HashSet<BluetoothDevice>();
@@ -83,12 +103,21 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         }
         prefDevices.setEntryValues(entryValues);
         prefDevices.setEntries(entries);
+        
+        ListPreference prefVersions = (ListPreference)findPreference(getString(R.string.pref_protocol_version_key));
+        entryValues = new String[versions.length];
+        for (int j = 0; j != versions.length; j++) {
+        	entryValues[j] = Integer.toString(j);
+        }
+        prefVersions.setEntryValues(entryValues);
+        prefVersions.setEntries(versions);
+        
         Preference pref;        
         pref = (Preference)findPreference(getString(R.string.pref_connection_retries_key));
         String maxConnRetries = sharedPref.getString(getString(R.string.pref_connection_retries_key), getString(R.string.defaultConnectionRetries));
         pref.setSummary(getString(R.string.pref_connection_retries_summary,maxConnRetries));
         this.onContentChanged();
-    }
+    }	
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -96,9 +125,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);		
 		super.onCreate(savedInstanceState);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		addPreferencesFromResource(R.xml.preferences);							
+		addPreferencesFromResource(R.xml.preferences);				
+        versions = getResources().getStringArray(R.array.protocol_versions);
 		
-		findPreference(getString(R.string.pref_write_log_path)).setSummary(String.format(getString(R.string.pref_write_log_path_summary), Secu3Logger.getDefaultPath()));
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();	
         Preference pref = findPreference(getString(R.string.pref_about_key));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {		
@@ -107,13 +136,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				SettingsActivity.this.displayAboutDialog();
 				return true;
 			}
-		});                
-	}	
-	
+		});          
+	}		
+
 	@Override
 	protected void onResume() {
         sharedPref.registerOnSharedPreferenceChangeListener(this);
-		this.updateDevicePreferenceList();		
+		this.updatePreferenceList();		
 		super.onResume();		
 	}
 	
@@ -126,8 +155,14 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (getString(R.string.pref_bluetooth_device_key).equals(key)) {
-			updateDevicePreferenceSummary();
-			updateDevicePreferenceList();			
+			updatePreferenceSummary();
+			updatePreferenceList();			
+		} else if (getString(R.string.pref_protocol_version_key).equals(key)) {
+			updatePreferenceSummary();
+			updatePreferenceList();		
+		} else if (getString(R.string.pref_speed_pulse_key).equals(key))
+		{
+			updatePreferenceSummary();
 		}
 		if (getString(R.string.pref_night_mode_key).equals(key)) {
 			getApplicationContext().setTheme(sharedPreferences.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme);

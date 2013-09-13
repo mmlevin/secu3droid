@@ -29,8 +29,21 @@
     <item type = "id" name="parameter_type_integer">integer</item>
     <item type = "id" name="parameter_type_float">float</item>
     <item type = "id" name="parameter_type_boolean">boolean</item>
-    <item type = "id" name="parameter_type_label">label</item>               
+    <item type = "id" name="parameter_type_label">label</item>
+    <item type = "id" name="parameter_type_string">string</item>               
     <item type = "id" name="parameter_type_button">button</item>
     <item type = "id" name="parameter_type_toggle_button">togglebutton</item>
     <item type = "id" name="parameter_type_spinner">spinner</item>
+    
+    <item type = "id" name="field_type_int4">int4</item>
+    <item type = "id" name="field_type_int8">int8</item>
+    <item type = "id" name="field_type_int16">int16</item>
+    <item type = "id" name="field_type_int24">int24</item>
+    <item type = "id" name="field_type_int32">int32</item>
+    <item type = "id" name="field_type_float4">float4</item>
+    <item type = "id" name="field_type_float8">float8</item>
+    <item type = "id" name="field_type_float16">float16</item>
+    <item type = "id" name="field_type_float24">float24</item>
+    <item type = "id" name="field_type_float32">float32</item>
+	<item type = "id" name="field_type_string">string</item>    
 </resources>

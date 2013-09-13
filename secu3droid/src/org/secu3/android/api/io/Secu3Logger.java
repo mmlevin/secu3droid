@@ -31,8 +31,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
-import org.secu3.android.api.io.Secu3Dat.SensorDat;
 
+import org.secu3.android.R;
+import org.secu3.android.api.utils.PacketUtils;
+
+import android.content.Context;
 import android.os.Environment;
 import android.text.format.Time;
 
@@ -41,10 +44,11 @@ public class Secu3Logger {
 	private boolean started = false;
 	private Time time = null;
 	private String path = null;
+	private int protocol_version;
+	private PacketUtils packetUtils = null;
 
 	private static final char CSV_DELIMETER = ',';
 	private static final String cCSVTimeTemplateString = "%H:%M:%S";
-	private static final String cCSVDataTemplateString = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%s\r\n";
 	private static final String cCSVFileNameTemplateString = "%Y.%m.%d_%H.%M.%S.csv";
 	private static final String CSVMillisTemplateString = "%s.%02d";	
 	
@@ -56,33 +60,46 @@ public class Secu3Logger {
 		 return res;
 	}
 
-	public void OnPacketReceived (Secu3Dat packet) {
-		if (started && (packet != null) && (packet.packet_id == Secu3Dat.SENSOR_DAT)) {				
+	private String logString (Secu3Packet packet) {		
+		int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
+		
+		String out = String.format(Locale.US, "%c ", CSV_DELIMETER);
+		out += String.format(Locale.US, "%05d%c", ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_voltage_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_temperature_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%4.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%02d%c", ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_air_flow_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_GAS), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK), CSV_DELIMETER);
+		out += String.format(Locale.US, "%01d%c", 0, CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.3f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%6.3f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(), CSV_DELIMETER);
+		out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue(), CSV_DELIMETER);
+		
+		if (protocol_version >= 2) {
+			out += String.format(Locale.US, "%5.1f%c", packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()), CSV_DELIMETER);
+			out += String.format(Locale.US, "%7.2f%c", packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue()), CSV_DELIMETER);
+		}	
+		
+		out += String.format(Locale.US, "%s\r\n", IntToBinaryString(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue()));
+
+		return out;
+	}
+	
+	public void OnPacketReceived (Secu3Packet secu3Packet) {
+		if (started && (secu3Packet != null) && (secu3Packet.getNameId() == R.string.sensor_dat_title)) {				
 			long t = System.currentTimeMillis();
 			time.set(t);
 			String time = String.format(Locale.US,CSVMillisTemplateString,this.time.format(cCSVTimeTemplateString), (t%1000)/10);
-			char x = CSV_DELIMETER;
-			String formatString = String.format(Locale.US,cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
-			String out = String.format (Locale.US,formatString, ((SensorDat)packet).frequen,
-					((SensorDat)packet).adv_angle,
-					((SensorDat)packet).pressure,
-					((SensorDat)packet).voltage,
-					((SensorDat)packet).temperat,
-					((SensorDat)packet).knock_k,
-					((SensorDat)packet).knock_retard,
-					((SensorDat)packet).air_flow,
-					((SensorDat)packet).carb,
-					((SensorDat)packet).gas,
-					((SensorDat)packet).ephh_valve,
-					((SensorDat)packet).epm_valve,
-					((SensorDat)packet).cool_fan,
-					((SensorDat)packet).st_block,
-					0,
-					((SensorDat)packet).tps,
-					((SensorDat)packet).add_i1,
-					((SensorDat)packet).add_i2,
-					((SensorDat)packet).choke_pos,
-					IntToBinaryString((((SensorDat)packet).ce_errors)));
+			String out = logString(secu3Packet);
 			try {
 				logWriter.write(time);
 				logWriter.write(out);
@@ -92,7 +109,9 @@ public class Secu3Logger {
 		}
 	}
 	
-	public boolean beginLogging () {
+	public boolean beginLogging (int protocol_version, Context context) {
+		this.protocol_version = protocol_version;
+		this.packetUtils = new PacketUtils(context);
 		if (started) return true; 
 		else {
 			time = new Time();

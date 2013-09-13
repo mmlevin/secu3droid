@@ -97,6 +97,8 @@ public class ParamItemsAdapter extends BaseAdapter {
 			} 													
 		} else if (i instanceof ParamItemBoolean) {
 			((ParamItemBoolean) i).setValue(Boolean.parseBoolean(value));
+		} else if (i instanceof ParamItemString) {
+			((ParamItemString) i).setValue(value);
 		}
 		notifyDataSetChanged();
 	}

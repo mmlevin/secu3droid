@@ -29,55 +29,45 @@ import org.secu3.android.R;
 
 import android.content.Context;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 
-public class ParamItemButton extends BaseParamItem {
+public class ParamItemString extends BaseParamItem {
+	private String value;
 	
-	class CustomClickListener implements OnClickListener {
-		ParamItemButton item;
-		
-		public CustomClickListener(ParamItemButton item) {
-			this.item = item;
-		}		
-		
-		@Override
-		public void onClick(View v) {
-			if (listener != null) listener.onParamItemChange(item);			
-		}		
-	}
-	
-	public ParamItemButton(Context context, String name, String summary, String units) {
+	public ParamItemString(Context context, String name, String summary) {
 		this.setContext(context);
 		this.setName(name);
 		this.setSummary(summary);
-		this.setUnits(units);
 	}
 		
-	public ParamItemButton(Context context, int nameID, int summaryID, int unitsID) {
+	public ParamItemString(Context context, int nameID, int summaryID) {
 		this.setNameId(nameID);
 		this.setSummaryId(summaryID);
-		this.setUnitsId(unitsID);
+		this.setUnitsId(summaryID);
 		this.setContext(context);
 		if (nameID != 0) this.setName(context.getString(nameID));
-		if (summaryID!= 0) this.setSummary(context.getString(summaryID));
-		if (unitsID!= 0) this.setSummary(context.getString(unitsID));
+		if (summaryID != 0) this.setSummary(context.getString(summaryID));
 	}
 	
 	@Override
 	public View getView() {	
-		View v = super.getView(R.layout.params_list_item_button);
+		View v = super.getView(R.layout.params_list_item_string);
 		
 		TextView paramName = (TextView) v.findViewById(R.id.param_name);
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
-		Button paramButton =(Button) v.findViewById(R.id.param_button);
-		paramButton.setText(getUnits());
-		paramButton.setOnClickListener(new CustomClickListener(this));
-		paramButton.setEnabled(isEnabled());
+		TextView paramValue = (TextView) v.findViewById(R.id.param_value);
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());			
+		paramValue.setText(value);
 		return v;
-	}	
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
 }
