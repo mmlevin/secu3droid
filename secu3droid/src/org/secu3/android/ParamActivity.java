@@ -31,7 +31,6 @@ import java.util.ArrayList;
 
 import org.secu3.android.api.io.*;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
-import org.secu3.android.api.io.Secu3Dat.*;
 import org.secu3.android.api.utils.*;
 import org.secu3.android.api.utils.CustomNumberPickerDialog.OnNumberPickerDialogAcceptListener;
 import org.secu3.android.parameters.*;
@@ -42,28 +41,49 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ParamActivity extends FragmentActivity implements OnItemClickListener,OnNumberPickerDialogAcceptListener,OnParamItemChangeListener {
+	private static final String MAX_VERSION = "maxVersion";
+	private static final String MIN_VERSION = "minVersion";
+	private static final String INDEX = "index";
+	private static final String FORMAT = "format";
+	private static final String STEP_VALUE = "stepValue";
+	private static final String MAX_VALUE = "maxValue";
+	private static final String MIN_VALUE = "minValue";
+	private static final String STR_VALUE = "str_value";
+	private static final String VALUE = "value";
+	private static final String TYPE = "type";
+	private static final String UNITS = "units";
+	private static final String SUMMARY = "summary";
+	private static final String PARAMETER = "Parameter";
+	private static final String NAME = "name";
+	private static final String PAGE = "Page";
+	private static final String PARAMETERS = "Parameters";
 	public static final int PARAMS_NUMBER = 9;
 	
-	private static final String PAGE = "page";
+	private String bluetoothSecurityValue;
+	private int bluetoothSecurityFlags;
 	
     private int position = Integer.MAX_VALUE;    
 	private boolean isOnline = false;
@@ -79,6 +99,13 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private ParamItemsAdapter adapter = null;
 	private CustomNumberPickerDialog dialog = null;	
 	private ReceiveMessages receiver = null;
+	
+	private Secu3Packet OpCompNcSkeleton = null;
+	private Secu3Packet ChokeControlSkeleton = null;
+	private Secu3Packet SecurParSkeleton = null;
+	private PacketUtils packetUtils = null;
+	
+	private int protocol_version = 0;
 		    
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
@@ -89,6 +116,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS);
 			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER);
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET);
 		}
 		
 		@Override
@@ -109,186 +138,154 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		return dialog;
 	}	
 	
-	public void createFormFromXml (int id){
-		String name;
+	public void createFormFromXml (int xmlId, int protocolVersion){
 		ParamsPage page = null;
 		BaseParamItem item = null;
-
-		int parameterType = 0;		
-		String parameterName = null;
-		String parameterSummary = null;
-		String parameterUnits = null;
-		String parameterStrValue = null;
-		String parameterValue = null;
-		String parameterMinValue = null;
-		String parameterMaxValue = null;
-		String parameterStepValue = null;
-		String parameterIndex = null;
-		String parameterMasFormat = null;
 		String attr = null;
 		String attrValue = null;		
 		
+		this.protocol_version = protocolVersion;
+		
 		try {
-			XmlPullParser xpp = getResources().getXml(id);
+			XmlPullParser xpp = getResources().getXml(xmlId);
 			pages = new ArrayList<ParamsPage>();
 			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
 				switch (xpp.getEventType()) {
-				case XmlPullParser.START_DOCUMENT:
-					break;
 				case XmlPullParser.START_TAG:
-					name = xpp.getName();
-					if (name.equalsIgnoreCase("Parameters")) {
+					String name = xpp.getName();
+					if (name.equals(PARAMETERS)) {
 						if (pages.size() != 0) throw new IllegalArgumentException("Pages adapter is non empty, probably nested Parameter element"); 
 					} else					
 					// Found new page element
-					if (name.equalsIgnoreCase("Page")) {
-						if (page != null) {
-							throw new IllegalArgumentException("Pages can't be nested");
-						}
+					if (name.equals(PAGE)) {
 						int count = xpp.getAttributeCount(); 
 						if (count > 0) {
+							int pageMinVersion = protocolVersion;
+							int pageMaxVersion = protocolVersion;
 							for (int i = 0; i != count; i++) {
 								attr  = xpp.getAttributeName(i);
 								attrValue = xpp.getAttributeValue(i);
-								if (attr.equals("name")) {
+								if (attr.equals(NAME)) {
 									if (ResourcesUtils.isResource(attrValue)) {
 										page = new ParamsPage(ResourcesUtils.referenceToInt(attrValue));
 									} else throw new IllegalArgumentException("Page name must be a string reference");									
-									pages.add(page);
+								} else if (attr.equals(MIN_VERSION)) {
+									pageMinVersion = Integer.parseInt(attrValue);
+								} else if (attr.equals(MAX_VERSION)) {
+									pageMaxVersion = Integer.parseInt(attrValue);
 								}
 							}
-						}						
+							if ((protocolVersion >= pageMinVersion)&&(protocolVersion <= pageMaxVersion)) {
+								pages.add(page);
+							}
+						}	
 					} else
 					// Found new parameter element
-					if (name.equalsIgnoreCase("Parameter")){
-						if (item != null) {
-							throw new IllegalArgumentException("Parameters can't be nested");
-						}
-						int count = xpp.getAttributeCount(); 
-						parameterName = null;
-						parameterSummary = null;
-						parameterUnits = null;
-						parameterStrValue = null;
-						parameterValue = null;
-						parameterMinValue = null;
-						parameterMaxValue = null;
-						parameterStepValue = null;
-						parameterIndex = null;
-						parameterMasFormat = null;
+					if (name.equals(PARAMETER)){
+						int count = xpp.getAttributeCount();
+						int parameterType = 0;
+						String parameterName = null;
+						String parameterSummary = null;
+						String parameterUnits = null;
+						String parameterStrValue = null;
+						String parameterValue = null;
+						String parameterMinValue = null;
+						String parameterMaxValue = null;
+						String parameterStepValue = null;
+						String parameterIndex = null;
+						String parameterMasFormat = null;
 						if (count > 0) {
+							int minVersion = protocolVersion;
+							int maxVersion = protocolVersion;
 							for (int i = 0; i != count; i++) {
 								attr  = xpp.getAttributeName(i);
 								attrValue = xpp.getAttributeValue(i);
-								if (attr.equalsIgnoreCase("name")) {
+								if (attr.equals(NAME)) {
 									if (ResourcesUtils.isResource(attrValue)) {
 										parameterName = attrValue;
 									} else throw new IllegalArgumentException("Parameter name must be a string reference");									
-								} else if (attr.equalsIgnoreCase("summary")) {
+								} else if (attr.equals(SUMMARY)) {
 									parameterSummary = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else									
-								if (attr.equalsIgnoreCase("units")) {
+								} else if (attr.equals(UNITS)) {
 									parameterUnits = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else
-								if (attr.equalsIgnoreCase("type")) {
+								} else if (attr.equals(TYPE)) {
 									if (ResourcesUtils.isResource(attrValue)) {
 										parameterType = ResourcesUtils.referenceToInt(attrValue);
 									} else throw new IllegalArgumentException("Parameter type must be a reference");									
-								} else 
-								if (attr.equalsIgnoreCase("value")) {
+								} else if (attr.equals(VALUE)) {
 									parameterValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else
-								if (attr.equalsIgnoreCase("str_value")) {
+								} else if (attr.equals(STR_VALUE)) {
 									parameterStrValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else	
-								if (attr.equalsIgnoreCase("minValue")) {
+								} else if (attr.equals(MIN_VALUE)) {
 									parameterMinValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else 
-								if (attr.equalsIgnoreCase("maxValue")) {
+								} else if (attr.equals(MAX_VALUE)) {
 									parameterMaxValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else 
-								if (attr.equalsIgnoreCase("stepValue")) {
+								} else if (attr.equals(STEP_VALUE)) {
 									parameterStepValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else 
-								if (attr.equalsIgnoreCase("format")) {
+								} else if (attr.equals(FORMAT)) {
 									parameterMasFormat = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								}
-								else 
-								if (attr.equalsIgnoreCase("index")) {
+								} else if (attr.equals(INDEX)) {
 									parameterIndex = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else if (attr.equals(MIN_VERSION)) {
+									minVersion = Integer.parseInt(attrValue);
+								} else if (attr.equals(MAX_VERSION)) {
+									maxVersion = Integer.parseInt(attrValue);
+								}
+							}
+							if ((parameterName == null) || (parameterType == 0) || (TextUtils.isEmpty(parameterName))) throw new IllegalArgumentException("Parameter element is invalid");
+							else {
+								switch (parameterType) {
+								case R.id.parameter_type_boolean:
+									item = new ParamItemBoolean(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterValue);
+									break;
+								case R.id.parameter_type_integer:
+									try {
+										item = new ParamItemInteger(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+												parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+									} catch (ParseException e) {
+										throw new IllegalArgumentException("Wrong integer parameter attributes");
+									}
+									break;
+								case R.id.parameter_type_float:
+									try {
+										item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+												parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+										((ParamItemFloat) item).setFormat (parameterMasFormat);
+									} catch (ParseException e) {
+										throw new IllegalArgumentException("Wrong integer parameter attributes");
+									}								
+									break;
+								case R.id.parameter_type_label:
+									item = new ParamItemLabel(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+									break;
+								case R.id.parameter_type_button:
+									item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterUnits);
+									break;
+								case R.id.parameter_type_toggle_button:
+									item = new ParamItemToggleButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+									break;
+								case R.id.parameter_type_spinner:
+									try {
+										item = new ParamItemSpinner(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterStrValue,parameterIndex);																			
+									} catch (ParseException e) {
+										throw new IllegalArgumentException("Wrong spinner parameter attributes");
+									}								
+									break;
+								case R.id.parameter_type_string:
+									item = new ParamItemString(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+									break;
+								default: throw new IllegalArgumentException("Unknown parameter type");
+								}
+								if ((item != null) && (protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
+									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
+									item.setPageId(page.getNameId());
+									item.setOnParamItemChangeListener(this);								
+									page.addParamItem(item);
+									item = null;
 								}
 							}
 						}											
 					}
-					break;
-				case XmlPullParser.END_TAG:
-					name = xpp.getName();
-					if (name.equalsIgnoreCase("Parameters")) {
-						if (pages.size() == 0) throw new IllegalArgumentException("Parameters closed, but not opened");
-					} else				
-					if (name.equalsIgnoreCase("Page")) {
-						if (page == null) throw new IllegalArgumentException("Page closed, but not opened");
-						else page = null;
-					} else
-					if (name.equalsIgnoreCase("Parameter")) {
-						if ((parameterName == null) || (parameterType == 0) || (TextUtils.isEmpty(parameterName))) throw new IllegalArgumentException("Parameter element is invalid");
-						else {
-							switch (parameterType) {
-							case R.id.parameter_type_boolean:
-								item = new ParamItemBoolean(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterValue);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_integer:
-								try {
-									item = new ParamItemInteger(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
-											parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
-								} catch (ParseException e) {
-									throw new IllegalArgumentException("Wrong integer parameter attributes");
-								}
-								break;
-							case R.id.parameter_type_float:
-								try {
-									item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
-											parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));	
-									((ParamItemFloat) item).setFormat (parameterMasFormat);
-								} catch (ParseException e) {
-									throw new IllegalArgumentException("Wrong integer parameter attributes");
-								}								
-								break;
-							case R.id.parameter_type_label:
-								item = new ParamItemLabel(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_button:
-								item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterUnits);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_toggle_button:
-								item = new ParamItemToggleButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
-								item.setNameId(ResourcesUtils.referenceToInt(parameterName));
-								break;
-							case R.id.parameter_type_spinner:
-								try {
-									item = new ParamItemSpinner(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterStrValue,parameterIndex);
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
-								} catch (ParseException e) {
-									throw new IllegalArgumentException("Wrong spinner parameter attributes");
-								}								
-								break;
-							default: throw new IllegalArgumentException("Unknown parameter type");
-							}
-							if (item != null) {
-								item.setOnParamItemChangeListener(this);								
-								page.addParamItem(item);
-								item = null;
-							}
-						}
-					}
-					break;
-				case XmlPullParser.TEXT:					
-					break;
-				default:
 					break;
 				}
 				xpp.next();
@@ -316,8 +313,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		setTheme(sharedPref.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
 		setContentView(R.layout.activity_param);
 		
-		createFormFromXml(R.xml.parameters);
+		createFormFromXml(R.xml.parameters, SettingsActivity.getProtocolVersion(this));
 				
+		packetUtils = new PacketUtils(this);
 		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),this,pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
 		paramsRead();
@@ -333,6 +331,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		
     	isValid = false;
 		
+    	BaseParamItem i = paramAdapter.findItemByNameId(R.string.secur_par_apply_bluetooth_title); 
+    	if (i != null) i.setEnabled(false);
 		super.onCreate(savedInstanceState);		
 	}
 
@@ -351,14 +351,15 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			paramsRead();
 			return true;
 		case R.id.menu_params_upload:
-			if (isValid) {
-				paramsUpload();
-			}
+			paramsUpload();			
 			return true;
 		case R.id.menu_params_save_eeprom:
 	    	progressBar.setIndeterminate(true);
-	    	progressBar.setVisibility(ProgressBar.VISIBLE);				
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, new OpCompNc(Secu3Dat.OPCODE_EEPROM_PARAM_SAVE,0)));
+	    	progressBar.setVisibility(ProgressBar.VISIBLE);			
+	    	Secu3Packet packet = new Secu3Packet(OpCompNcSkeleton);
+	    	((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_title)).setValue (Secu3Packet.OPCODE_EEPROM_PARAM_SAVE);
+	    	((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_code_title)).setValue (0);
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -366,19 +367,24 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
     }
 
 	private void paramsUpload() {
-		progressBar.setIndeterminate(true);
-		progressBar.setVisibility(ProgressBar.VISIBLE);					
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, PARAMS_NUMBER));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.STARTR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.ANGLES_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.IDLREG_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.FUNSET_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.TEMPER_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CARBUR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.ADCCOR_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CKPS_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.MISCEL_PAR)));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, Secu3Dat.CHOKE_PAR)));
+		if (isValid) {
+			progressBar.setIndeterminate(true);
+			progressBar.setVisibility(ProgressBar.VISIBLE);					
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, PARAMS_NUMBER));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.starter_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.angles_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.idling_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.functions_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.temperature_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.carburetor_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.adc_errors_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.ckps_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.miscellaneous_title,Secu3Packet.OUTPUT_TYPE)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.choke_control_title,Secu3Packet.OUTPUT_TYPE)));
+			if (protocol_version >= 2) {
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, R.string.secur_par_title,Secu3Packet.OUTPUT_TYPE)));
+			}
+		}
 	}
 
 	@Override
@@ -388,13 +394,16 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	}
 		
 	@Override
-	protected void onResume() {					
+	protected void onResume() {
+		super.onResume();	
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.op_comp_nc_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.choke_control_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.secur_par_title).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR, Secu3Packet.OUTPUT_TYPE));
 		dialog = (CustomNumberPickerDialog)getLastCustomNonConfigurationInstance();
 		if (dialog != null) {
 			dialog.setOnCustomNumberPickerAcceptListener(this);
 		}							
-		registerReceiver(receiver, receiver.intentFilter);
-		super.onResume();		
+		registerReceiver(receiver, receiver.intentFilter);	
 	}	
 	
 	
@@ -424,6 +433,35 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			} else if (i instanceof ParamItemBoolean) {
 				adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);
 				onItemChange(i.getNameId());
+			} else if (i instanceof ParamItemString) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(i.getName());
+				final EditText input = new EditText(this);
+				bluetoothSecurityFlags = i.getNameId();
+				input.setText(((ParamItemString) i).getValue());
+				switch (bluetoothSecurityFlags) { 
+				case R.string.secur_par_bluetooth_name_title:
+					input.setInputType(InputType.TYPE_CLASS_TEXT);
+					break;
+				case R.string.secur_par_bluetooth_pass_title:
+					input.setInputType(InputType.TYPE_CLASS_NUMBER);
+					break;
+				}				
+				builder.setView(input);
+				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						bluetoothSecurityValue = input.getText().toString();						
+						onItemChange(bluetoothSecurityFlags);
+					}
+				});
+				builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {				
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+				builder.show();
 			}
 		}
 	}	
@@ -435,25 +473,53 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	}
 
 	public void onItemChange(int itemId) {
-		if (PacketUtils.isParamFromPage(itemId, R.string.choke_control_title)) {
-			ChokePar packet = (ChokePar) PacketUtils.buildPacket(paramAdapter, Secu3Dat.CHOKE_PAR);
-			switch (itemId) {
-			case R.string.choke_manual_step_down_title:
-				packet.manual_delta = -127;
-				break;
-			case R.string.choke_manual_step_up_title:
-				packet.manual_delta = 127;
-				break;
-			case R.string.choke_testing_title:
-				packet.testing = ((ParamItemToggleButton) paramAdapter.findItemByNameId(itemId)).getValue()?1:0;
-				break;				
-			default:
-				break;
+		Secu3Packet packet = null;		
+		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
+		if (item != null) {
+			if (item.getPageId() == R.string.choke_control_title) {
+				packet = new Secu3Packet (ChokeControlSkeleton); 
+				switch (itemId) {
+				case R.string.choke_manual_step_down_title:
+					((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (-127);
+					break;
+				case R.string.choke_manual_step_up_title:
+					((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (127);
+					break;
+				case R.string.choke_testing_title:
+					((ProtoFieldInteger) packet.findField(R.string.choke_testing_title)).setValue (((ParamItemToggleButton) item).getValue()?1:0);
+					break;				
+				default:
+					break;
+				}		
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
+			} else if (item.getNameId() == R.string.secur_par_apply_bluetooth_title) {
+				Secu3Packet sourcePacket = packetUtils.buildPacket(paramAdapter, R.string.secur_par_title, Secu3Packet.OUTPUT_TYPE);
+				if (sourcePacket != null) {
+					int flags = ((ProtoFieldInteger) sourcePacket.findField(R.string.secur_par_flags)).getValue();
+					packet = new Secu3Packet(SecurParSkeleton);				
+					flags |= Secu3Packet.SECUR_SET_BTBR_FLAG;
+					((ProtoFieldInteger) packet.findField(R.string.secur_par_flags)).setValue (flags);		
+					String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
+					String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
+					if ((name != null) && (pass != null)) {
+						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length)).setValue (name.length());
+						((ProtoFieldString) packet.findField(R.string.secur_par_name)).setValue (name);
+						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length)).setValue (pass.length());
+						((ProtoFieldString) packet.findField(R.string.secur_par_pass)).setValue (pass);
+						startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
+					}
+				}
+			} else if ((item.getNameId() == R.string.secur_par_bluetooth_name_title) || (item.getNameId() == R.string.secur_par_bluetooth_pass_title)) {
+				paramAdapter.setStringItem(bluetoothSecurityFlags, bluetoothSecurityValue);				
+				String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
+				String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
+				paramAdapter.findItemByNameId(R.string.secur_par_apply_bluetooth_title).setEnabled((name != null) && (pass != null) && (!TextUtils.isEmpty(name)) && (!TextUtils.isEmpty(pass)));
+				adapter.notifyDataSetChanged();
 			}
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));			
-		} else if (uploadImmediatelly) {
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, PacketUtils.buildPacket(paramAdapter, itemId)));			
-		}
+			else if (uploadImmediatelly) {
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(paramAdapter, item.getPageId(),Secu3Packet.OUTPUT_TYPE)));
+			}						
+		} 
 	}
 	
 	@Override
@@ -474,14 +540,23 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);
 			textViewStatus.setText(s);
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction())) {
-			Secu3Dat packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
-			if (packet instanceof OpCompNc) {
-				if (((OpCompNc)packet).opcode == Secu3Dat.OPCODE_EEPROM_PARAM_SAVE) {
-					progressBar.setVisibility(ProgressBar.GONE);				
-					Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((OpCompNc)packet).opdata), Toast.LENGTH_LONG).show();
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet != null) {
+				if (packet.getNameId() == R.string.op_comp_nc_title) {
+					if (((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_title)).getValue() == Secu3Packet.OPCODE_EEPROM_PARAM_SAVE) {
+						progressBar.setVisibility(ProgressBar.GONE);				
+						Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
+					}
+				} else {
+					packetUtils.setParamFromPacket(paramAdapter, packet);
 				}
-			} else {
-				PacketUtils.setParamFromPacket(paramAdapter, packet);
+			}
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET.equals(intent.getAction())) {
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET);
+			if (packet != null) {
+				if (packet.getNameId() == R.string.op_comp_nc_title) OpCompNcSkeleton = packet;
+				else if (packet.getNameId() == R.string.choke_control_title) ChokeControlSkeleton = packet;
+				else  if (packet.getNameId() == R.string.secur_par_title) SecurParSkeleton = packet;
 			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_PROGRESS.equals(intent.getAction())) {
 			int current = intent.getIntExtra(Secu3Service.EVENT_SECU3_SERVICE_PROGRESS_CURRENT,0);
@@ -490,10 +565,16 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			progressBar.setMax(total);
 			progressBar.setProgress(current);
 			if (current == total) {
-				progressBar.setVisibility(ProgressBar.GONE);
-				paramAdapter.notifyDataSetChanged();
-				isValid = true;
+				startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PARAMETER,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_ID, Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PARAMETER_FUNSET_NAMES));
 			}			
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER.equals(intent.getAction())) {
+			String funsetNames[] = intent.getStringArrayExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAMETER_FUNSET_NAMES);
+			if (funsetNames != null) {
+				progressBar.setVisibility(ProgressBar.GONE);				
+				PacketUtils.setFunsetNames(paramAdapter, funsetNames);
+				paramAdapter.notifyDataSetChanged();				
+				isValid = true;				
+			}
 		}
 	}
 

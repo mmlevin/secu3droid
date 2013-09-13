@@ -183,8 +183,20 @@
     <string name="choke_manual_step_down_units">Открыть</string>
     <string name="choke_manual_step_up_title">Ручное управление</string>
     <string name="choke_manual_step_up_summary">Закрыть воздушную заслонку</string>
-    <string name="choke_manual_step_up_units">Закрыть</string>
+    <string name="choke_manual_step_up_units">Закрыть</string>      
     
+    <string name="secur_par_title">Безопасность</string>
+    <string name="secur_par_use_bluetooth_title">Использовать Bluetooth</string>
+    <string name="secur_par_use_bluetooth_summary">Secu-3 подключается через Bluetooth</string>
+    <string name="secur_par_bluetooth_name_title">Имя Bluetooth</string>
+    <string name="secur_par_bluetooth_name_summary">Имя Bluetooth для Secu-3, как оно отображается при сканировани</string>
+    <string name="secur_par_bluetooth_pass_title">Пин-код Bluetooth</string>
+    <string name="secur_par_bluetooth_pass_summary">Пароль для добавления устройства</string>
+    <string name="secur_par_apply_bluetooth_title">Применить настройки bluetooth</string>
+    <string name="secur_par_apply_bluetooth_summary">Применить новое имя и пин-код для Bluetooth</string>
+    <string name="secur_par_apply_bluetooth_units">Применить</string>
+    <string name="secur_par_use_immobilizer_title">Использовать иммобилайзер</string>
+    <string name="secur_par_use_immobilizer_summary">Противоугонная функция Secu-3</string>
     
     <string name="units_rpm">мин-1</string>
     <string name="units_degree">°</string>

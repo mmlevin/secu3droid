@@ -32,6 +32,7 @@ import org.secu3.android.parameters.items.ParamItemBoolean;
 import org.secu3.android.parameters.items.ParamItemFloat;
 import org.secu3.android.parameters.items.ParamItemInteger;
 import org.secu3.android.parameters.items.ParamItemSpinner;
+import org.secu3.android.parameters.items.ParamItemString;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -81,6 +82,11 @@ public class ParamPagerAdapter extends FragmentPagerAdapter{
 	public void setIntegerItem (int id, int value) {
 		BaseParamItem item;
 		if ((item = findItemByNameId(id)) != null ) ((ParamItemInteger)item).setValue (value);
+	}
+	
+	public void setStringItem (int id, String value) {
+		BaseParamItem item;
+		if ((item = findItemByNameId(id)) != null ) ((ParamItemString)item).setValue (value);
 	}
 	
 	public void setFloatItem (int id, float value) {

@@ -3,6 +3,7 @@ package org.secu3.android.test;
 import junit.framework.TestCase;
 
 import org.secu3.android.api.io.Secu3Dat;
+import org.secu3.android.api.io.Secu3ProtoWrapper;
 import org.secu3.android.api.io.Secu3Dat.*;
 import android.os.Parcel;
 
@@ -396,5 +397,5 @@ public class PacketsTest extends TestCase {
 		{
 			assertNull(e.getMessage(),e);			
 		}
-	}	
+	}		
 }

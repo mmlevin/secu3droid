@@ -38,6 +38,7 @@ public abstract class BaseParamItem {
 	private String summary = null;
 	private int summaryId = 0;
 	private boolean enabled = true;
+	private int pageId = 0;
 	
 	public interface OnParamItemChangeListener {
 		void onParamItemChange (BaseParamItem item);
@@ -121,5 +122,13 @@ public abstract class BaseParamItem {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public int getPageId() {
+		return pageId;
+	}
+
+	public void setPageId(int pageId) {
+		this.pageId = pageId;
 	}
 }
