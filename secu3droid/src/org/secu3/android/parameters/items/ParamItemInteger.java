@@ -103,6 +103,7 @@ public class ParamItemInteger extends BaseParamItem {
 	}
 	
 	public void setValue(int value) {
+		if ((value <= maxValue) && (value >= minValue))
 		this.value = value;
 	}
 	

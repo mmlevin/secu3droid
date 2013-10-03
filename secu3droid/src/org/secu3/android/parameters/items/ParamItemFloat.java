@@ -114,6 +114,7 @@ public class ParamItemFloat extends BaseParamItem {
 	}
 	
 	public void setValue(float value) {
+		if ((value <= maxValue) && (value >= minValue))
 		this.value = value;
 	}
 	

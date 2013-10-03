@@ -158,20 +158,20 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		inputItems = new ArrayList<BaseParamItem>();
 		outputItems = new ArrayList<BaseParamItem>();
 		
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_voltage, 0, R.string.units_volts,0));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_voltage_title, 0, R.string.units_volts,0));
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_map_s, 0, R.string.units_volts,0));
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_temp, 0, R.string.units_volts,0));
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_add_io1, 0, R.string.units_volts,0));
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_add_io2, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_carb, 0, false,false));
+		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_carb_title, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_gas_v, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_ckps, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_ref_s, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_ps, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_bl, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_de, 0, false,false));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks1, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks2, 0, R.string.units_volts,0));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks1_title, 0, R.string.units_volts,0));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks2_title, 0, R.string.units_volts,0));
 
 		String outputNames[] = getResources().getStringArray(R.array.diagnostics_output_names);
 		for (int i = 0; i != outputNames.length; i++) {

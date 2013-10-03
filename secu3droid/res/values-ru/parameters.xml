@@ -93,7 +93,7 @@
     <string name="temper_use_temp_sensor_summary"></string>
     <string name="temper_use_pwm_title">Управлять вентилятором используя ШИМ</string>
     <string name="temper_use_pwm_summary"></string>
-    <string name="temper_use_table">Кривая датчика задается таблицей</string>
+    <string name="temper_use_table_title">Кривая датчика задается таблицей</string>
     <string name="temper_use_summary"></string>
     
     <string name="carburetor_title">Карбюратор</string>

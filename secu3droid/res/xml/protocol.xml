@@ -6,7 +6,7 @@
                app:type="@id/field_type_int4"/>
         <Field app:name="@string/temper_use_pwm_title"
                app:type="@id/field_type_int4"/>
-		<Field app:name="@string/temper_use_table"               
+		<Field app:name="@string/temper_use_table_title"               
                app:type="@id/field_type_int4"/>  
         <Field app:name="@string/temper_fan_on_title"               
                app:type="@id/field_type_float16"
@@ -57,7 +57,7 @@
         <Field app:name="@string/idlreg_rpm_sensitivity_title"
                app:type="@id/field_type_int16"
                app:signed="true"/>        
-		<Field app:name="@string/idlreg_target_rpm_summary"
+		<Field app:name="@string/idlreg_target_rpm_title"
                app:type="@id/field_type_int16"
                app:signed="true"/>         
         <Field app:name="@string/idlreg_minimal_angle_title"
@@ -95,7 +95,7 @@
                app:type="@id/field_type_float16"
                app:divider="@integer/protocol_angle_divider"
                app:signed="true"/>        
-		<Field app:name="@string/angles_zero_angle_summary"
+		<Field app:name="@string/angles_zero_angle_title"
                app:type="@id/field_type_int4"/>               
     </Packet>
     
@@ -115,7 +115,7 @@
                app:signed="true"/>        
 		<Field app:name="@string/funset_map_sensor_offset_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"
+               app:divider="@integer/protocol_adc_discrete_title"
                app:signed="true"/>                        
 		<Field app:name="@string/funset_map_sensor_gradient_title"
                app:type="@id/field_type_float16"
@@ -124,7 +124,7 @@
                app:signed="true"/>
 		<Field app:name="@string/funset_tps_curve_offset_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"
+               app:divider="@integer/protocol_adc_discrete_title"
                app:signed="true"/>		
 		<Field app:name="@string/funset_tps_curve_gradient_title"
                app:type="@id/field_type_float16"
@@ -260,25 +260,25 @@
 	    	app:packet_id="@string/packet_type_adcraw_dat">
 		<Field app:name="@string/adcraw_map_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>	    	    	    
+               app:divider="@integer/protocol_adc_discrete_title"/>	    	    	    
         <Field app:name="@string/adcraw_voltage_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
+               app:divider="@integer/protocol_adc_discrete_title"/>
 		<Field app:name="@string/adcraw_temperature_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
+               app:divider="@integer/protocol_adc_discrete_title"/>
 		<Field app:name="@string/adcraw_knock_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
+               app:divider="@integer/protocol_adc_discrete_title"/>
 		<Field app:name="@string/adcraw_tps_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
+               app:divider="@integer/protocol_adc_discrete_title"/>
 		<Field app:name="@string/adcraw_addi1_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/> 
+               app:divider="@integer/protocol_adc_discrete_title"/> 
 		<Field app:name="@string/adcraw_addi2_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>                      
+               app:divider="@integer/protocol_adc_discrete_title"/>                      
 	</Packet>
 	
 	<Packet app:name="@string/fnname_dat_title"
@@ -320,7 +320,7 @@
                app:signed="true"/>
 		<Field app:name="@string/sensor_dat_knock_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
+               app:divider="@integer/protocol_adc_discrete_title"/>
 		<Field app:name="@string/sensor_dat_knock_retard_title"
                app:type="@id/field_type_float16"
                app:divider="@integer/protocol_angle_divider"/>	 
@@ -333,10 +333,10 @@
                app:divider="@integer/protocol_tps_physical_magnitude_divider"/>
        	<Field app:name="@string/sensor_dat_addi1_voltage_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
+               app:divider="@integer/protocol_adc_discrete_title"/>
        	<Field app:name="@string/sensor_dat_addi2_voltage_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>	
+               app:divider="@integer/protocol_adc_discrete_title"/>	
         <Field app:name="@string/sensor_dat_errors_title"
                app:type="@id/field_type_int16"/>	    
 		<Field app:name="@string/sensor_dat_choke_position_title"
@@ -359,30 +359,30 @@
 	
 	<Packet app:name="@string/diaginp_dat_title"
 	    	app:packet_id="@string/packet_type_diaginp_dat">
-		<Field app:name="@string/diag_input_voltage"
+		<Field app:name="@string/diag_input_voltage_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>	    	    
+               app:divider="@integer/protocol_adc_discrete_title"/>	    	    
 		<Field app:name="@string/diag_input_map_s"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>             
+               app:divider="@integer/protocol_adc_discrete_title"/>             
 		<Field app:name="@string/diag_input_temp"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>            
+               app:divider="@integer/protocol_adc_discrete_title"/>            
 		<Field app:name="@string/diag_input_add_io1"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>               
+               app:divider="@integer/protocol_adc_discrete_title"/>               
 		<Field app:name="@string/diag_input_add_io2"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>               
-		<Field app:name="@string/diag_input_carb"
+               app:divider="@integer/protocol_adc_discrete_title"/>               
+		<Field app:name="@string/diag_input_carb_title"
                app:type="@id/field_type_int16"/>            
-        <Field app:name="@string/diag_input_ks1"
+        <Field app:name="@string/diag_input_ks1_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
-        <Field app:name="@string/diag_input_ks2"
+               app:divider="@integer/protocol_adc_discrete_title"/>
+        <Field app:name="@string/diag_input_ks2_title"
                app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_adc_discrete"/>
-		<Field app:name="@string/diag_input_bitfield"
+               app:divider="@integer/protocol_adc_discrete_title"/>
+		<Field app:name="@string/diag_input_bitfield_title"
                app:type="@id/field_type_int8"/>        
 	</Packet>
 	
@@ -398,7 +398,7 @@
                app:type="@id/field_type_int16"/>	    
 		<Field app:name="@string/choke_testing_title"
                app:type="@id/field_type_int4"/>               
-		<Field app:name="@string/choke_manual_steps"
+		<Field app:name="@string/choke_manual_steps_title"
                app:type="@id/field_type_int8"/>               
 	</Packet>	    	
 	
@@ -406,11 +406,11 @@
 	    	app:packet_id="@string/packet_type_secur_par"
 	    	app:packet_dir="@string/packet_dir_input"
 	    	app:minVersion="2">
-		<Field app:name="@string/secur_par_name_length"
+		<Field app:name="@string/secur_par_name_length_title"
                app:type="@id/field_type_int4"/>
-		<Field app:name="@string/secur_par_pass_length"
+		<Field app:name="@string/secur_par_pass_length_title"
                app:type="@id/field_type_int4"/>		
-		<Field app:name="@string/secur_par_flags"
+		<Field app:name="@string/secur_par_flags_title"
                app:type="@id/field_type_int8"/>	    
 	</Packet>
 	
@@ -418,17 +418,17 @@
 	    	app:packet_id="@string/packet_type_secur_par"
 	    	app:packet_dir="@string/packet_dir_output"
 	    	app:minVersion="2">
-		<Field app:name="@string/secur_par_name_length"
+		<Field app:name="@string/secur_par_name_length_title"
                app:type="@id/field_type_int4"/>
-		<Field app:name="@string/secur_par_pass_length"
+		<Field app:name="@string/secur_par_pass_length_title"
                app:type="@id/field_type_int4"/>		
-		<Field app:name="@string/secur_par_name"
+		<Field app:name="@string/secur_par_name_title"
 		       app:length="10"
                app:type="@id/field_type_string"/>
-		<Field app:name="@string/secur_par_pass"
+		<Field app:name="@string/secur_par_pass_title"
 		       app:length="10"
                app:type="@id/field_type_string"/>		
-		<Field app:name="@string/secur_par_flags"
+		<Field app:name="@string/secur_par_flags_title"
                app:type="@id/field_type_int8"/>	    
 	</Packet>	
 </Protocol>

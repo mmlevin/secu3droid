@@ -93,7 +93,7 @@
     <string name="temper_use_temp_sensor_summary"></string>
     <string name="temper_use_pwm_title">Control cooling fan using PWM</string>
     <string name="temper_use_pwm_summary"></string>
-    <string name="temper_use_table">Use table to define sensor\'s curve</string>
+    <string name="temper_use_table_title">Use table to define sensor\'s curve</string>
     <string name="temper_use_summary"></string>
     
     <string name="carburetor_title">Carburetor</string>

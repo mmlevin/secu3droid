@@ -242,7 +242,7 @@
             app:summary="@string/temper_use_pwm_summary"
             app:type="@id/parameter_type_boolean"/>
 		<Parameter
-            app:name="@string/temper_use_table"
+            app:name="@string/temper_use_table_title"
             app:summary="@string/temper_use_summary"
             app:type="@id/parameter_type_boolean"/>						    	    
 	</Page>
@@ -342,7 +342,7 @@
             format="%.4f"
             minValue="-2.0"
             maxValue="2.0"
-            stepValue="0.025"/>        
+            stepValue="0.0025"/>        
         <Parameter
             app:name="@string/adccor_temper_sensor_factor_title"
             app:summary="@string/adccor_temper_sensor_factor_summary"
@@ -358,7 +358,7 @@
             format="%.4f"
             minValue="-2.0"
             maxValue="2.0"
-            stepValue="0.025"/>
+            stepValue="0.0025"/>
         <Parameter
             app:name="@string/adccor_tps_sensor_factor_title"
             app:summary="@string/adccor_tps_sensor_factor_summary"
@@ -374,7 +374,7 @@
             format="%.4f"
             minValue="-2.0"
             maxValue="2.0"
-            stepValue="0.025"/>
+            stepValue="0.0025"/>
 		<Parameter
             app:name="@string/adccor_addi1_sensor_factor_title"
             app:summary="@string/adccor_addi1_sensor_factor_summary"
@@ -390,7 +390,7 @@
             format="%.4f"
             minValue="-2.0"
             maxValue="2.0"
-            stepValue="0.025"/>
+            stepValue="0.0025"/>
         <Parameter
             app:name="@string/adccor_addi2_sensor_factor_title"
             app:summary="@string/adccor_addi2_sensor_factor_summary"
@@ -406,7 +406,7 @@
             format="%.4f"
             minValue="-2.0"
             maxValue="2.0"
-            stepValue="0.025"/>                
+            stepValue="0.0025"/>                
 	</Page>
 	
 	<Page app:name="@string/ckps_title">

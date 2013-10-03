@@ -155,7 +155,9 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		} else {
 			float whole = Float.valueOf(numberPickerMain.getDisplayedValues()[numberPickerMain.getValue()]);
 			float trunc = Float.valueOf("0"+numberPickerAdditional.getDisplayedValues()[numberPickerAdditional.getValue()]);
-			return String.format(Locale.US,getFormat(),whole+Math.signum(whole)*trunc);
+			float signum = Math.signum(whole);
+			if (signum == 0.0) signum = 1.0f;
+			return String.format(Locale.US,getFormat(),whole+signum*trunc);
 		}
 	}	
 }

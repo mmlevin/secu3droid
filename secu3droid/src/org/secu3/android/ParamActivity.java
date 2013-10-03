@@ -495,17 +495,17 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			} else if (item.getNameId() == R.string.secur_par_apply_bluetooth_title) {
 				Secu3Packet sourcePacket = packetUtils.buildPacket(paramAdapter, R.string.secur_par_title, Secu3Packet.OUTPUT_TYPE);
 				if (sourcePacket != null) {
-					int flags = ((ProtoFieldInteger) sourcePacket.findField(R.string.secur_par_flags)).getValue();
+					int flags = ((ProtoFieldInteger) sourcePacket.findField(R.string.secur_par_flags_title)).getValue();
 					packet = new Secu3Packet(SecurParSkeleton);				
 					flags |= Secu3Packet.SECUR_SET_BTBR_FLAG;
-					((ProtoFieldInteger) packet.findField(R.string.secur_par_flags)).setValue (flags);		
+					((ProtoFieldInteger) packet.findField(R.string.secur_par_flags_title)).setValue (flags);		
 					String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
 					String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
 					if ((name != null) && (pass != null)) {
-						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length)).setValue (name.length());
-						((ProtoFieldString) packet.findField(R.string.secur_par_name)).setValue (name);
-						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length)).setValue (pass.length());
-						((ProtoFieldString) packet.findField(R.string.secur_par_pass)).setValue (pass);
+						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length_title)).setValue (name.length());
+						((ProtoFieldString) packet.findField(R.string.secur_par_name_title)).setValue (name);
+						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length_title)).setValue (pass.length());
+						((ProtoFieldString) packet.findField(R.string.secur_par_pass_title)).setValue (pass);
 						startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 					}
 				}
