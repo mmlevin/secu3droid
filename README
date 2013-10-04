@@ -1,1 +1,16 @@
 Android manager for microcontroller ignition system SECU-3 (http://secu-3.org)
+Distributed under GPL license
+
+Designed By Maksim M. Levin 2013. Russia, Voronezh.
+
+How-to-compile (using Eclipse):
+1. Clone this repository with git.
+2. Open Eclipse, import Secu3Droid project as "Existing Android Code Into Workspace"
+3. Make "Add support library" with "Android Tools" context menu
+4. Project depends of android-numberpicker library by SimonVT. Clone repository https://github.com/SimonVT/android-numberpicker/ to folder near Secu3Droid
+5. Import android-numberpicker project like in step 2
+6. Select "Fix Project Properties" in menu "Android tools" context menu for both projects
+7. Choose project properties for Secu3Droid, select chapter "Java Build Path", then tab "Libraries", press button "Add library". Select "User library" in dialog, set checkbox near "number_picker", press "Finish", then "OK"
+8. Choose project properties and set Project Build Target to Android 4.2.2 (api 17) in chapter "Android"
+9. Set checkbox near "library [android-numberpicker master]" in chapter "Project references"
+10. Make clean and build, enjoy!
