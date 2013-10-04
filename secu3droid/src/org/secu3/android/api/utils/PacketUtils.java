@@ -78,14 +78,26 @@ public class PacketUtils {
 				else {
 					BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId()); 
 					if (item != null) {
-						if (item.getNameId() == R.string.miscel_baudrate_title) {
-							int baud_rate = Secu3Packet.BAUD_RATE_INDEX[((ParamItemSpinner) item).getIndex()];
-							((ProtoFieldInteger) field).setValue (baud_rate);
-						} else {
-							if (item instanceof ParamItemInteger) ((ProtoFieldInteger) field).setValue (((ParamItemInteger) item).getValue());
-							else if (item instanceof ParamItemFloat) ((ProtoFieldFloat) field).setValue (((ParamItemFloat) item).getValue());
-							else if (item instanceof ParamItemBoolean) ((ProtoFieldInteger) field).setValue (((ParamItemBoolean) item).getValue()?1:0);
-							else if (item instanceof ParamItemSpinner) ((ProtoFieldInteger) field).setValue (((ParamItemSpinner) item).getIndex());
+						switch (item.getNameId()) {
+							case R.string.miscel_baudrate_title:
+								int baud_rate = Secu3Packet.BAUD_RATE_INDEX[((ParamItemSpinner) item).getIndex()];
+								((ProtoFieldInteger) field).setValue (baud_rate);
+								break;
+							case R.string.adccor_map_sensor_correction_title:
+							case R.string.adccor_voltage_sensor_correction_title:
+							case R.string.adccor_temper_sensor_correction_title:
+							case R.string.adccor_tps_sensor_correction_title:
+							case R.string.adccor_addi1_sensor_correction_title:
+							case R.string.adccor_addi2_sensor_correction_title:
+							buildCorrection(paramAdapter, item);
+								((ProtoFieldFloat) field).setValue (buildCorrection(paramAdapter, item));
+								break;
+							default:
+								if (item instanceof ParamItemInteger) ((ProtoFieldInteger) field).setValue (((ParamItemInteger) item).getValue());
+								else if (item instanceof ParamItemFloat) ((ProtoFieldFloat) field).setValue (((ParamItemFloat) item).getValue());
+								else if (item instanceof ParamItemBoolean) ((ProtoFieldInteger) field).setValue (((ParamItemBoolean) item).getValue()?1:0);
+								else if (item instanceof ParamItemSpinner) ((ProtoFieldInteger) field).setValue (((ParamItemSpinner) item).getIndex());
+								break;
 						}
 					}
 				}
@@ -93,6 +105,39 @@ public class PacketUtils {
 			return packet;
 		}
 		return null;
+	}
+
+	private float buildCorrection(ParamPagerAdapter paramAdapter, BaseParamItem item) {
+		int correctionId = item.getNameId();
+		int factorId = 0;
+		switch (correctionId) {
+		case R.string.adccor_map_sensor_correction_title:
+			factorId = R.string.adccor_map_sensor_factor_title;
+			break;
+		case R.string.adccor_voltage_sensor_correction_title:
+			factorId = R.string.adccor_voltage_sensor_factor_title;
+			break;
+		case R.string.adccor_temper_sensor_correction_title:
+			factorId = R.string.adccor_temper_sensor_factor_title;
+			break;
+		case R.string.adccor_tps_sensor_correction_title:
+			factorId = R.string.adccor_tps_sensor_factor_title;
+			break;
+		case R.string.adccor_addi1_sensor_correction_title:
+			factorId = R.string.adccor_addi1_sensor_factor_title;
+			break;
+		case R.string.adccor_addi2_sensor_correction_title:
+			factorId = R.string.adccor_addi2_sensor_factor_title;
+			break;
+		}
+		ParamItemFloat factorItem = (ParamItemFloat) paramAdapter.findItemByNameId(factorId);
+		if (factorItem != null) {
+			float factorValue = factorItem.getValue();
+			float correctionValue = ((ParamItemFloat) item).getValue();
+			correctionValue = correctionValue * 400 * factorValue;
+			return correctionValue;
+		}
+		return 0;
 	}
 			
 	public void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Packet packet)
@@ -118,20 +163,69 @@ public class PacketUtils {
 				} else {
 					BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId());					
 					if (item != null) {
-						if (item.getNameId() == R.string.miscel_baudrate_title) {
-							int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
-							((ParamItemSpinner) item).setIndex(baud_rate_index);
-						}
-						else {
-							if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
-							else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
-							else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue((((ProtoFieldInteger) field).getValue()==1)?true:false);
-							else if (item instanceof ParamItemSpinner) ((ParamItemSpinner) item).setIndex(((ProtoFieldInteger)field).getValue());
+						switch (item.getNameId()) {
+							case R.string.miscel_baudrate_title:
+								int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
+								((ParamItemSpinner) item).setIndex(baud_rate_index);
+								break;
+							case R.string.adccor_map_sensor_correction_title:
+							case R.string.adccor_voltage_sensor_correction_title:
+							case R.string.adccor_temper_sensor_correction_title:
+							case R.string.adccor_tps_sensor_correction_title:
+							case R.string.adccor_addi1_sensor_correction_title:
+							case R.string.adccor_addi2_sensor_correction_title:
+								((ParamItemFloat) item).setValue (calculateFactor(packet, field));
+								break;
+							default:
+								if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
+								else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
+								else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue((((ProtoFieldInteger) field).getValue()==1)?true:false);
+								else if (item instanceof ParamItemSpinner) ((ParamItemSpinner) item).setIndex(((ProtoFieldInteger)field).getValue());
+								break;
 						}
 					}		
 				}
 			}						
 		}
+	}
+
+	private float calculateFactor(Secu3Packet packet, BaseProtoField field) {
+		if ((packet != null) && (field != null)) {
+			ProtoFieldFloat factorField;
+			float correctionValue,factorValue;
+			int correctionId = field.getNameId();
+			int factorId = 0;
+			switch (correctionId) {
+				case R.string.adccor_map_sensor_correction_title:
+					factorId = R.string.adccor_map_sensor_factor_title;
+					break;
+				case R.string.adccor_voltage_sensor_correction_title:
+					factorId = R.string.adccor_voltage_sensor_factor_title;
+					break;
+				case R.string.adccor_temper_sensor_correction_title:
+					factorId = R.string.adccor_temper_sensor_factor_title;
+					break;
+				case R.string.adccor_tps_sensor_correction_title:
+					factorId = R.string.adccor_tps_sensor_factor_title;
+					break;
+				case R.string.adccor_addi1_sensor_correction_title:
+					factorId = R.string.adccor_addi1_sensor_factor_title;
+					break;
+				case R.string.adccor_addi2_sensor_correction_title:
+					factorId = R.string.adccor_addi2_sensor_factor_title;
+					break;
+			}
+			correctionValue = ((ProtoFieldFloat) field).getValue();
+			factorField = ((ProtoFieldFloat) packet.findField(factorId));
+			if (factorField != null) {
+				factorValue = factorField.getValue();
+				if (factorValue != 0) {
+					correctionValue = correctionValue / factorValue / 400;
+				} else return 0;
+				return correctionValue;
+			}
+		}
+		return 0;
 	}
 
 	public static void setFunsetNames(ParamPagerAdapter paramAdapter, String[] funsetNames) {

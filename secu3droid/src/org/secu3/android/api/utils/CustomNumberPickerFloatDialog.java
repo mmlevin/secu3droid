@@ -26,6 +26,11 @@
 package org.secu3.android.api.utils;
 
 import java.util.Locale;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import net.simonvt.numberpicker.NumberPicker;
 
 public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
@@ -37,6 +42,16 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 	private float stepValue = 0;
 	private String format = "%.02f";
 	private int stepsCount;	
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		if (!isShortMode()) {
+			String formatString = String.format(Locale.US, " (%1$s...%1$s)",getFormat());
+			getDialog().setTitle(getTag() + String.format(Locale.US, formatString, minValue, maxValue));
+		}
+		return super.onCreateView(inflater, container, savedInstanceState);
+	}
 	
 	@Override
 	protected void setMainNumberPickerDisplayedValues(NumberPicker numberPicker) {
@@ -63,11 +78,18 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 				numberPicker.setDisplayedValues(values);
 			}
 			else {
-				int stepsCount = Math.round(maxValue - minValue);
-				int index = Math.round(value - minValue);
+				int stepsCount = Math.round(Math.max(Math.abs(maxValue),Math.abs(minValue)));
+				int index = Math.round(Math.abs(value));
 				
-				int mMinValue = Math.round(minValue);		
+				int mMinValue = 0;		
+				boolean signFlag = false;
 				
+				if ((minValue < 0) && (maxValue > 0)) {
+					mMinValue = 0;
+					signFlag = true;
+				} else mMinValue = Math.round(minValue);
+				
+				if (signFlag) stepsCount ++;
 				numberPicker.setMinValue(0);
 				numberPicker.setMaxValue(stepsCount);
 				numberPicker.setValue(index);
@@ -96,12 +118,7 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		if (numberPicker != null) {	
 			if (!isShortMode()) {
 				int stepsCount = Math.round(1 / stepValue);
-				int index = (int) Math.round((value-Math.floor(value)) / stepValue);		
-				
-				float mMinValue = (float) (value - Math.floor(value));
-				while ((mMinValue - stepValue) >=  0) {
-					mMinValue -= stepValue;
-				}				
+				int index = (int) Math.round((Math.abs(value) - Float.valueOf(Math.abs(value)).intValue()) / stepValue);						
 				
 				numberPicker.setMinValue(0);
 				numberPicker.setMaxValue(stepsCount-1);
@@ -109,13 +126,39 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 				
 				String values[] = new String[stepsCount];
 				for (int i = 0; i != stepsCount; i++) {					
-					String value = String.format(Locale.US, getFormat(), mMinValue + stepValue * i);					
+					String value = String.format(Locale.US, getFormat(), stepValue * i);					
 					values[i] = value.substring(value.indexOf('.'));;
 				}
 				
 				numberPicker.setDisplayedValues(values);				
 			}
 		}
+	}	
+	
+	@Override
+	protected void setSignNumberPickerDisplayedValues(NumberPicker numberPicker) {
+		if (numberPicker != null) {
+			if (!isShortMode()) {
+				numberPicker.setMinValue(0);
+				if ((minValue < 0) && (maxValue >= 0)) {
+					String values[] = new String[2];
+					values [0] = "-"; values [1] ="+";
+					numberPicker.setMaxValue(1);
+					numberPicker.setValue((value < 0)?0:1);
+					numberPicker.setDisplayedValues(values);
+				} else if ((minValue < 0) && (maxValue < 0)) {
+					String values[] = new String[1];
+					values [0] = "-";
+					numberPicker.setDisplayedValues(values);
+				} else if ((minValue >= 0) && (maxValue >= 0)) {
+					String values[] = new String[1];
+					values [0] = "+";
+					numberPicker.setDisplayedValues(values);
+					numberPicker.setVisibility(View.GONE);
+				}
+			}
+		}
+		
 	}	
 	
 	public CustomNumberPickerFloatDialog setRange (float value, float minValue, float maxValue, float stepValue) {				
@@ -134,7 +177,7 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		this.stepValue = stepValue;
 		
 		stepsCount = Math.round((maxValue - minValue) / stepValue);
-		
+				
 		setShortMode(stepsCount <= SHORT_STYLE_THRESHOLD);
 		return this;
 	}
@@ -155,9 +198,9 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		} else {
 			float whole = Float.valueOf(numberPickerMain.getDisplayedValues()[numberPickerMain.getValue()]);
 			float trunc = Float.valueOf("0"+numberPickerAdditional.getDisplayedValues()[numberPickerAdditional.getValue()]);
-			float signum = Math.signum(whole);
-			if (signum == 0.0) signum = 1.0f;
-			return String.format(Locale.US,getFormat(),whole+signum*trunc);
+			String signChar = numberPickerSign.getDisplayedValues()[numberPickerSign.getValue()];
+			float sign = (signChar == "-")?-1.0f:1.0f;					
+			return String.format(Locale.US,getFormat(),sign*(whole+trunc));
 		}
-	}	
+	}
 }

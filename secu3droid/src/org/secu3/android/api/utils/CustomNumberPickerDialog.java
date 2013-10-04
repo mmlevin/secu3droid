@@ -44,8 +44,11 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 			void onNumberPickerDialogAccept (int itemId);
 		}		
 		
+		protected NumberPicker numberPickerSign = null;
 		protected NumberPicker numberPickerMain = null;
 		protected NumberPicker numberPickerAdditional = null;
+		private AlertDialog.Builder builder = null;
+		private int numberPickerIndexSign = Integer.MAX_VALUE;
 		private int numberPickerIndexMain = Integer.MAX_VALUE;
 		private int numberPickerIndexAdditional = Integer.MAX_VALUE;
 		private int numberPickerId = 0;
@@ -62,7 +65,7 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			setRetainInstance(true);			
 			
-		    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		    builder = new AlertDialog.Builder(getActivity());
 		    builder.setTitle(getTag());
 		    builder.setCancelable(true);
 		    
@@ -76,9 +79,18 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		    LayoutInflater inflater = this.getActivity().getLayoutInflater();
 
 		    View v = inflater.inflate(R.layout.custom_number_picker,null);
+		    numberPickerSign = (NumberPicker) v.findViewById(R.id.numberPickerSign);
 		    numberPickerMain = (NumberPicker) v.findViewById(R.id.numberPickerMain);
 		    numberPickerAdditional = (NumberPicker) v.findViewById(R.id.numberPickerAdditional);
 		    		
+		    if (numberPickerSign != null) {		    	
+		    	setSignNumberPickerDisplayedValues(numberPickerSign);
+		    	if (numberPickerIndexSign != Integer.MAX_VALUE)
+		    		numberPickerSign.setValue(numberPickerIndexSign);		    	
+		    	numberPickerSign.setFocusable(true);
+		    	numberPickerSign.setFocusableInTouchMode(true);
+		    }
+		    
 		    if (numberPickerMain != null) {		    	
 		    	setMainNumberPickerDisplayedValues(numberPickerMain);
 		    	if (numberPickerIndexMain != Integer.MAX_VALUE)
@@ -128,12 +140,18 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 
 		@Override
 		public void onSaveInstanceState(Bundle arg0) {
-			if (numberPickerMain != null) {
+			if (numberPickerSign != null) {
+				numberPickerIndexSign = numberPickerSign.getValue();
+			}if (numberPickerMain != null) {
 				numberPickerIndexMain = numberPickerMain.getValue();
+			}
+			if (numberPickerAdditional != null) {
+				numberPickerIndexAdditional = numberPickerAdditional.getValue();
 			}
 			super.onSaveInstanceState(arg0);
 		}
 		
+		protected abstract void setSignNumberPickerDisplayedValues(NumberPicker numberPicker);
 		protected abstract void setMainNumberPickerDisplayedValues(NumberPicker numberPicker);
 		protected abstract void setAdditionalNumberPickerDisplayedValues(NumberPicker numberPicker);
 		public abstract String getValue();
@@ -141,9 +159,11 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		public boolean isShortMode() {
 			return shortMode;
 		}
-
+				
 		public void setShortMode(boolean shortMode) {
 			this.shortMode = shortMode;
+			if (numberPickerSign != null)
+				numberPickerSign.setVisibility(shortMode?View.GONE:View.VISIBLE);
 			if (numberPickerAdditional != null)
 				numberPickerAdditional.setVisibility(shortMode?View.GONE:View.VISIBLE);
 		}

@@ -87,4 +87,8 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 	public String getValue() {
 		return numberPickerMain.getDisplayedValues()[numberPickerMain.getValue()];
 	}
+
+	@Override
+	protected void setSignNumberPickerDisplayedValues(NumberPicker numberPicker) {		
+	}
 }
