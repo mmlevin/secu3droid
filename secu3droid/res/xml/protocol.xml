@@ -228,9 +228,10 @@
                app:multiplier="@integer/protocol_miscel_period_multiplier"/>        
 		<Field app:name="@string/miscel_ignition_cutoff_title"
                app:type="@id/field_type_int4"/>        
-        <Field app:name="@string/miscel_ignition_cutoff_rpm_title"
+        <Field app:name="@string/miscel_ignition_cutoff_rpm_title"               
                app:type="@id/field_type_int16"/>
 		<Field app:name="@string/miscel_hall_output_start_title"
+		       app:signed="true"
                app:type="@id/field_type_int8"/>        
 		<Field app:name="@string/miscel_hall_output_delay_title"
                app:type="@id/field_type_int8"/>               
@@ -422,10 +423,10 @@
                app:type="@id/field_type_int4"/>
 		<Field app:name="@string/secur_par_pass_length_title"
                app:type="@id/field_type_int4"/>		
-		<Field app:name="@string/secur_par_name_title"
+		<Field app:name="@string/secur_par_bluetooth_name_title"
 		       app:length="10"
                app:type="@id/field_type_string"/>
-		<Field app:name="@string/secur_par_pass_title"
+		<Field app:name="@string/secur_par_bluetooth_pass_title"
 		       app:length="10"
                app:type="@id/field_type_string"/>		
 		<Field app:name="@string/secur_par_flags_title"

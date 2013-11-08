@@ -262,13 +262,13 @@ public class MainActivity extends Activity {
 					if (checkBoxRawData.isChecked()) {
 						textViewDataExt.setText(null);
 						textViewData.setText(String.format(Locale.US,sensorsRawFormat,
-								((ProtoFieldInteger) packet.getField(R.string.adcraw_map_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.adcraw_voltage_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.adcraw_temperature_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.adcraw_knock_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.adcraw_tps_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.adcraw_addi1_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.adcraw_addi2_title)).getValue()));
+								((ProtoFieldFloat) packet.getField(R.string.adcraw_map_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.adcraw_voltage_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.adcraw_temperature_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.adcraw_knock_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.adcraw_tps_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.adcraw_addi1_title)).getValue(),
+								((ProtoFieldFloat) packet.getField(R.string.adcraw_addi2_title)).getValue()));
 					}
 					break;
 				case R.string.packet_type_fwinfo_dat:

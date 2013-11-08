@@ -96,8 +96,6 @@
     
     <string name="secur_par_name_length_title" translatable="false">Bluetooth name length</string>
     <string name="secur_par_pass_length_title" translatable="false">Bluetooth password length</string>
-    <string name="secur_par_name_title" translatable="false">Bluetooth name</string>
-    <string name="secur_par_pass_title" translatable="false">Bluetooth password</string>
     <string name="secur_par_flags_title" translatable="false">Security flags</string>
     
     <string name="choke_manual_steps_title" translatable="false">Steps</string>	
