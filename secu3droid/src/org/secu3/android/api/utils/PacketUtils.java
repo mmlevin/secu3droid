@@ -29,6 +29,7 @@ import org.secu3.android.R;
 import org.secu3.android.api.io.BaseProtoField;
 import org.secu3.android.api.io.ProtoFieldFloat;
 import org.secu3.android.api.io.ProtoFieldInteger;
+import org.secu3.android.api.io.ProtoFieldString;
 import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.ParamPagerAdapter;
@@ -81,6 +82,11 @@ public class PacketUtils {
 							default:
 								if (item instanceof ParamItemInteger) ((ProtoFieldInteger) field).setValue (((ParamItemInteger) item).getValue());
 								else if (item instanceof ParamItemFloat) ((ProtoFieldFloat) field).setValue (((ParamItemFloat) item).getValue());
+								else if (item instanceof ParamItemString) {
+									String value = ((ParamItemString) item).getValue();
+									if (value == null) value = "";
+									((ProtoFieldString) field).setValue (value);
+								}
 								else if (item instanceof ParamItemBoolean) ((ProtoFieldInteger) field).setValue (((ParamItemBoolean) item).getValue()?1:0);
 								else if (item instanceof ParamItemSpinner) ((ProtoFieldInteger) field).setValue (((ParamItemSpinner) item).getIndex());
 								break;

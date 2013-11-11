@@ -198,7 +198,7 @@ public class Secu3Manager {
 							logger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path), ""));
 							logger.beginLogging(protocol_version,appContext);
 							break;
-						case SECU3_STOP_LOGGING:
+					case SECU3_STOP_LOGGING:
 							logger.endLogging();
 							break;							
 						// Task to read sensors
@@ -362,7 +362,7 @@ public class Secu3Manager {
 		}				
 		
 		public void run() {
-			timer.scheduleAtFixedRate(onlineTask, 0, 100);	
+			timer.scheduleAtFixedRate(onlineTask, 100, 100);	
 			int idx = 0;
 			int ch;	
 			String line;

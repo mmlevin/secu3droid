@@ -194,6 +194,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {				
 		registerReceiver(receiver, receiver.intentFilter);
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
+		setRawMode(checkBoxRawData.isChecked());
 		super.onResume();		
 	}
 	

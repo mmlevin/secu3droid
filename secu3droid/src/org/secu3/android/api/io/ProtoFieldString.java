@@ -25,6 +25,8 @@
 
 package org.secu3.android.api.io;
 
+import java.io.UnsupportedEncodingException;
+
 import org.secu3.android.api.utils.EncodingCP866;
 
 import android.content.Context;
@@ -86,12 +88,17 @@ public class ProtoFieldString extends BaseProtoField implements Parcelable{
 	
 	@Override
 	public void pack() {
-		char[] buf = new char[getLength()];
+		byte[] buf = new byte[getLength()];
 		for (int i = 0; i != Math.min(getLength(), value.length()); i++) {
-			buf[i] = value.charAt(i);
+			buf[i] = (byte) value.charAt(i);
 		}
-		String s = new String(buf);
-		setData(s);
+		String s;
+		try {
+			s = new String(buf,0,buf.length,"ISO-8859-1");
+			setData(s);			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getValue() {
