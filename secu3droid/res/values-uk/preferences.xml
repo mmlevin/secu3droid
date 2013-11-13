@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Secu3Droid - An open source, free manager for SECU-3 engine
+  control unit
+  Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
+  
+  SECU-3  - An open source, free engine control unit
+  Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+  contacts:
+             http://secu-3.org
+             email: mmlevin@mail.ru
+
+-->
+
+<resources>
+    <string name="pref_bluetooth_device_title">Вибір пристрою Bluetooth</string>
+    <string name="pref_bluetooth_device_summary">Поточний пристрій: %s</string>
+        <string name="pref_binary_mode_title">Двійковий режим</string>
+        <string name="pref_speed_pulse_title">Імпульсів датчика швидкості на 1 км</string>
+    <string name="pref_binary_mode_summary">Прошивка Secu-3 повинна бути скомпільована з UART_BINARY, вимагає перезапуску при зміні</string>        
+    <string name="pref_protocol_version_title">Оберіть версію протоколу</string>
+    <string name="pref_protocol_version_summary">Поточна версія протоколу: %s, вимагає перезапуску при зміні</string>
+    <string name="pref_connection_retries_title">Кількість спроб повтору з\'єднання</string>
+    <string name="pref_connection_retries_summary">Кількість спроб до виходу: %s</string>
+    <string name="pref_about_title">Про програму</string>
+    <string name="pref_about_summary"></string>
+    <string name="pref_upload_immediately_title">Завантажувати зміни негайно</string>
+    <string name="pref_upload_immediately_summary">При зміні значення користувачем</string>
+    <string name="pref_write_log_title">Запис логу</string>
+    <string name="pref_write_log_summary">Записувати інформацію з сенсорів в лог</string>
+    <string name="pref_write_log_path_title">Шлях для збереження логів</string>
+    <string name="pref_write_log_path_summary"> Якщо нічого не введено, лог буде зберігатися в %1$s</string>
+    <string name="pref_night_mode_title">Нічний режим</string>
+    <string name="pref_night_mode_summary">Використовувати темне оформлення, вимагає перезапуску</string>
+</resources>

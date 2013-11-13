@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Secu3Droid - An open source, free manager for SECU-3 engine
+  control unit
+  Copyright (C) 2013 Maksim M. Levin. Russia, Voronezh
+  
+  SECU-3  - An open source, free engine control unit
+  Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+  contacts:
+             http://secu-3.org
+             email: mmlevin@mail.ru
+
+-->
+
+<resources>
+    <string name="app_name">Secu3Droid</string>
+    <string name="sensors_format">Оберти: %1$d хв-1\r\nАбсолютний тиск: %2$.2f кПа\r\nНапруга: %3$.2f В\r\nТемпература: %4$.2f °C\r\nКут випередження: %5$+.2f °\r\nСигнал детонації: %6$.2f В\r\nПоправка на детонацію: %7$+.2f °\r\nВитрата повітря: %8$d\r\nКлапан ЕПХХ: %9$d\r\nДросельна заслонка: %10$d\r\nГазовий клапан: %11$d\r\nКлапан ЕМР: %12$d\r\nВентилятор: %13$d\r\nСтартер заблокований: %14$d\r\nADD_IO1: %15$.2f\r\nADD_IO2: %16$.2f\r\nДПДЗ:%17$.2f\r\nПовітряна заслонка: %18$.2f</string>
+    <string name="sensors_raw_format">Датчик абсолютного тиску: %1$.2f В\r\nНапруга бортової мережі: %2$.2f В\r\nДатчик температури: %3$.2f В\r\nДатчик детонації: %4$.2f В\r\nДПДЗ: %5$.2f В\r\nADD_IO1: %6$.2f В\r\nADD_IO2: %7$.2f В</string>
+    <string name="speed_format">Швидкість: %1$.1f км/ч\r\nПробіг: %2$.2f км</string>
+    <string name="title_activity_param">Параметри</string>
+    <string name="menu_param">Параметри</string>    
+    <string name="service_closed_because_connection_problem_notification_title">Secu3Droid зупинений</string>
+    <string name="service_closed_because_connection_problem_notification">Причина: %1$s</string>
+    <string name="connection_problem_notification_title">Secu3: проблеми із з\'єднанням</string>
+
+    <plurals name="connection_problem_notification">
+        <item quantity="one">Буде зроблена ще одна спроба</item>
+        <item quantity="few">Буде зроблено ще %d спроби</item>
+        <item quantity="other">Буде зроблено ще %d спроб</item>
+    </plurals>
+
+    <string name="foreground_service_started_notification_title">Secu3Droid</string>
+    <string name="foreground_service_started_notification">Сервіс Secu3Droid запущено</string>
+    <string name="msg_bluetooth_unsupported">Bluetooth не підтримується на Вашому пристрої</string>
+    <string name="msg_bluetooth_disabled">Bluetooth відключений</string>
+    <string name="msg_bluetooth_secu3_unavaible">Неможливо з\'єднатися з Secu-3</string>
+    <string name="msg_service_started">Сервіс Secu3Droid… застосований</string>
+    <string name="msg_service_stopped">Сервіс Secu3Droid… зупинений</string>
+    <string name="msg_service_stopped_by_problem">"Не вдалося запустити: %s"</string>
+    <string name="msg_service_already_started">Secu3Droid… вже запущений</string>
+    <string name="msg_too_many_connection_problems">Занадто багато невдалих спроб з\'єднання</string>
+    <string name="status_offline">Відключено</string>
+    <string name="status_online">Підключено</string>
+    <string name="title_activity_errors">Помилки</string>
+    <string name="title_activity_settings">Налаштування</string>
+    <string name="menu_errors">Помилки</string>
+    <string name="menu_preferences">Налаштування</string>
+    <string name="menu_exit">Вихід</string>
+    <string name="menu_diagnostics">Діагностика</string>
+    <string name="menu_diagnostics_warning_title">Вимкніть котушки запалювання перед входом в діагностичний режим, інакше можливе їх пошкодження!</string>
+    <string name="menu_params_download_title">Зчитати</string>
+    <string name="menu_params_upload_title">Завантажити</string>
+    <string name="menu_params_save_eeprom_title">Зберегти</string>
+    <string name="menu_errors_read">Зчитати</string>
+    <string name="menu_errors_write">Зберегти</string>
+    <string name="about_title">Про програму</string>
+    <string name="about_version">Secu3Droid версія</string>
+    <string name="about_copyright_1">Copyright © 2013 Максим Левин</string>
+    <string name="about_copyright_2">Copyright © 2013 Secu3Droid Project</string>
+    <string name="about_app_desc">Secu3Droid це додаток для налаштування системи управління двигуном Secu-3. Secu-3 це безкоштовна система управління двигуном з відкритими вихідними кодами<a href="http://secu-3.org"><b>http://secu-3.org</b></a>"</string>
+    <string name="about_license">Це програмне забезпечення з відкритим вихідним кодом розповсюджується безкоштовно у відповідності з умовами<a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
+    <string name="about_sources">Вихідний код доступний з Git-репозиторію на вебсайті проекту https://github.com/mmlevin/secu3droid</string>
+    <string name="about_acknowledgements">Подяки: \nУкраїнська локалізація - V.</string>    
+   
+    <string-array name="diagnostics_fragments_title">
+        <item>Входи</item>
+        <item>Виходи</item>
+        <item>Графіки</item>
+    </string-array>
+
+    <string name="data_will_appear_after_connect">Інформація буде відображена після з\'єднання з Secu-3</string>
+
+    <string-array name="errors_ecu_errors_names">
+        <item>Збої в роботі ДПКВ - помилки синхронізації</item>
+        <item>Параметри в EEPROM пошкоджені (CRC)</item>
+        <item>Код прошивки пошкоджений (CRC)</item>
+        <item>Процесор детонації не відповідає</item>
+        <item>Виявлялася детонація</item>
+        <item>Несправність або неправильна робота ДАТ</item>
+        <item>Несправність або неправильна робота ДТОР</item>
+        <item>Ненормальна напруга бортової мережі</item>
+        <item>Управління часом накопичення енергії КЗ</item>
+        <item>Несправність або неправильна робота ДФ</item>
+        <item>Несправність або неправильні показання ДПДЗ</item>
+    </string-array>
+
+    <string name="errors_realtime_errors_title">Зчитувати помилки в реальному часі</string>
+    <string name="errors_inertion_title">Показувати помилки з інертністю</string>
+    <string name="show_raw_data_title">Показувати сирі значення датчиків</string>
+    <string name="title_activity_diagnostics">Діагностика</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="diagnostics_not_supported_title">Режим діагностики відключений в прошивці або не встановлено з\'єднання з Secu-3</string>
+    <string name="errors_code">Код помилки %s</string>
+    <string name="params_saved_error_code">Параметри збережено</string>
+    <string name="errors_saved_error_code">Помилки збережені</string>
+</resources>
+

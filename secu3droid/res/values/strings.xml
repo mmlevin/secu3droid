@@ -72,6 +72,7 @@
     <string name="about_app_desc">Secu3Droid is an application for managing Secu-3 ignition system. Secu-3 is an open source, free engine control unit, see <a href="http://secu-3.org"><b>http://secu-3.org</b></a>"</string>
     <string name="about_license">It is open source software distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
     <string name="about_sources">The source code is available from Git repository on the project website: https://github.com/mmlevin/secu3droid</string>
+    <string name="about_acknowledgements">Acknowledgements: \nUkrainian localization - V.</string>
    
     <string-array name="diagnostics_fragments_title">
         <item>Inputs</item>
