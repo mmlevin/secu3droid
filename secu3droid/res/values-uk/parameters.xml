@@ -119,7 +119,7 @@
     <string name="adccor_map_sensor_factor_summary">Коефіцієнт</string>
     <string name="adccor_map_sensor_correction_title">Датчик абсолютного тиску</string>
     <string name="adccor_map_sensor_correction_summary">Корекція</string>
-    <string name="adccor_voltage_sensor_factor_title">Напруга бортмережі/string>
+    <string name="adccor_voltage_sensor_factor_title">Напруга бортмережі</string>
     <string name="adccor_voltage_sensor_factor_summary">Коефіцієнт</string>
     <string name="adccor_voltage_sensor_correction_title">Напруга бортмережі</string>
     <string name="adccor_voltage_sensor_correction_summary">Корекція</string>
@@ -208,5 +208,4 @@
     <string name="units_degrees_celcius">°C</string>
     <string name="units_percents">%</string>
     <string name="units_percent_per_volts">%/В</string>
-    </string>
 </resources>
