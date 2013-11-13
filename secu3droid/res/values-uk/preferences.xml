@@ -40,8 +40,10 @@
     <string name="pref_about_summary"></string>
     <string name="pref_upload_immediately_title">Завантажувати зміни негайно</string>
     <string name="pref_upload_immediately_summary">При зміні значення користувачем</string>
-    <string name="pref_write_log_title">Запис логу</string>
+    <string name="pref_write_log_title">Запис логу сенсорів</string>
     <string name="pref_write_log_summary">Записувати інформацію з сенсорів в лог</string>
+    <string name="pref_write_raw_log_title">Запис логу обміну</string>
+    <string name="pref_write_raw_log_summary">Запис обміну даними між Secu-3 і менеджером</string>     
     <string name="pref_write_log_path_title">Шлях для збереження логів</string>
     <string name="pref_write_log_path_summary"> Якщо нічого не введено, лог буде зберігатися в %1$s</string>
     <string name="pref_night_mode_title">Нічний режим</string>
