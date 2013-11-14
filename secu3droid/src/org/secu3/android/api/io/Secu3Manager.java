@@ -194,7 +194,7 @@ public class Secu3Manager {
 			switch (secu3State) {
 			case SECU3_NORMAL:
 				try {
-					rawLogger.log(packet);
+					rawLogger.log(packet+"\r\n");
 					getProtoWrapper().parse(packet);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
