@@ -313,8 +313,9 @@
                app:type="@id/field_type_float16"
                app:divider="@integer/protocol_voltage_physical_magnitude_divider"/>	    
 		<Field app:name="@string/sensor_dat_temperature_title"
-               app:type="@id/field_type_float16"
-               app:divider="@integer/protocol_temp_physical_magnitude_divider"/>
+               app:type="@id/field_type_float16"               
+               app:divider="@integer/protocol_temp_physical_magnitude_divider"
+               app:signed="true"/>
 		<Field app:name="@string/sensor_dat_angle_correction_title"
                app:type="@id/field_type_float16"
                app:divider="@integer/protocol_angle_divider"
