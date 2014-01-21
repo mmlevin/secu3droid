@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 	private String sensorsRawFormat = "";
 	private boolean isOnline;
 	private boolean errors = false;
-	private int protocol_version = 0;
+	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
 	
 	private PacketUtils packetUtils = null;
 	
@@ -147,6 +147,11 @@ public class MainActivity extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem m = menu.findItem(R.id.menu_errors);
 		m.setIcon(errors?R.drawable.ic_menu_errors_highlighted:R.drawable.ic_menu_errors);
+		if ((protocol_version < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) || (!SettingsActivity.isSensorLoggerEnabled(this))) {			
+			menu.removeItem(R.id.menu_set_log_marker_1);
+			menu.removeItem(R.id.menu_set_log_marker_2);
+			menu.removeItem(R.id.menu_set_log_marker_3);
+		}
 		return true;
 	}
 	
@@ -183,6 +188,15 @@ public class MainActivity extends Activity {
 				.setNegativeButton(android.R.string.cancel, null)
 				.create()
 				.show();
+			return true;
+		case R.id.menu_set_log_marker_1:
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_1.ordinal()));
+			return true;
+		case R.id.menu_set_log_marker_2:
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_2.ordinal()));
+			return true;
+		case R.id.menu_set_log_marker_3:
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_3.ordinal()));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -252,7 +266,7 @@ public class MainActivity extends Activity {
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));						
 						
-						if (protocol_version >= 2) {
+						if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
 							textViewDataExt.setText(String.format(Locale.US,speedFormat,
 									packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()),
 									packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));

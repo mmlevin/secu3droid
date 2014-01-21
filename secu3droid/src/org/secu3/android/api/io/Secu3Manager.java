@@ -44,7 +44,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.secu3.android.R;
 import org.secu3.android.SettingsActivity;
-
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -61,7 +60,7 @@ public class Secu3Manager {
 	private final static int PROGRESS_TOTAL_PARAMS_VERSION_2 = 19;
 
 	private int progress_total_params;
-	private int protocol_version;
+	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
 
 	public enum SECU3_STATE {
 		SECU3_NORMAL, SECU3_BOOTLOADER
@@ -72,7 +71,7 @@ public class Secu3Manager {
 	};
 
 	public enum SECU3_TASK {
-		SECU3_NONE, SECU3_READ_SENSORS, SECU3_RAW_SENSORS, SECU3_READ_PARAMS, SECU3_READ_ERRORS, SECU3_READ_FW_INFO, SECU3_START_SENSOR_LOGGING, SECU3_STOP_SENSOR_LOGGING, SECU3_START_RAW_LOGGING, SECU3_STOP_RAW_LOGGING
+		SECU3_NONE, SECU3_READ_SENSORS, SECU3_RAW_SENSORS, SECU3_READ_PARAMS, SECU3_READ_ERRORS, SECU3_READ_FW_INFO, SECU3_START_SENSOR_LOGGING, SECU3_STOP_SENSOR_LOGGING, SECU3_START_RAW_LOGGING, SECU3_STOP_RAW_LOGGING, SECU3_SET_LOG_MARKER_1, SECU3_SET_LOG_MARKER_2, SECU3_SET_LOG_MARKER_3
 	};
 
 	private int progressCurrent = 0;
@@ -222,6 +221,15 @@ public class Secu3Manager {
 					case SECU3_STOP_SENSOR_LOGGING:
 						sensorLogger.endLogging();
 						break;
+					case SECU3_SET_LOG_MARKER_1:
+						sensorLogger.setMarker(1);
+						break;
+					case SECU3_SET_LOG_MARKER_2:
+						sensorLogger.setMarker(2);
+						break;
+					case SECU3_SET_LOG_MARKER_3:
+						sensorLogger.setMarker(3);
+						break;
 					case SECU3_START_RAW_LOGGING:
 						rawLogger
 								.setPath(PreferenceManager
@@ -298,6 +306,11 @@ public class Secu3Manager {
 				case SECU3_STOP_SENSOR_LOGGING:
 					updateTask();
 					break;
+				case SECU3_SET_LOG_MARKER_1:
+				case SECU3_SET_LOG_MARKER_2:
+				case SECU3_SET_LOG_MARKER_3:
+					updateTask();
+					break;					
 				case SECU3_START_RAW_LOGGING:
 					updateTask();
 					break;
@@ -403,7 +416,7 @@ public class Secu3Manager {
 						break;
 					case R.string.packet_type_choke_par:
 						updateProgress(11 + subprogress);
-						if (protocol_version == 1) {
+						if (protocol_version == SettingsActivity.PROTOCOL_12042013_SPRING_RELEASE) {
 							updateTask();
 						} else {
 							((ProtoFieldString) ChangeMode
@@ -570,7 +583,7 @@ public class Secu3Manager {
 					protocol_version = SettingsActivity
 							.getProtocolVersion(appContext));
 			switch (protocol_version) {
-			case 1:
+			case SettingsActivity.PROTOCOL_12042013_SPRING_RELEASE:
 				progress_total_params = PROGRESS_TOTAL_PARAMS_VERSION_1;
 				break;
 			default:

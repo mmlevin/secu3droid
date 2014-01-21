@@ -47,7 +47,7 @@
         android:id="@+id/diagnosticsPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/diagnosticsStatusTextView"
+        android:layout_above="@+id/diagnosticsEnableBlDe"
         android:scrollbars="vertical" >
     
         <android.support.v4.view.PagerTabStrip
@@ -56,5 +56,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"/>
     </android.support.v4.view.ViewPager>
+
+    <CheckBox
+        android:id="@+id/diagnosticsEnableBlDe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/diagnosticsStatusTextView"
+        android:layout_alignLeft="@+id/diagnosticsPager"
+        android:text="@string/diag_enable_bl_de"
+        android:visibility="gone" />
 
 </RelativeLayout>

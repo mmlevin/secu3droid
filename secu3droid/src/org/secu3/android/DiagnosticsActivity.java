@@ -54,6 +54,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -64,6 +66,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	private boolean isOnline = false;
 	
 	private ListFragment inputFragment = null;	
+	private int protocolversion = SettingsActivity.PROTOCOL_UNKNOWN;
 	private OutputDiagListFragment outputsFragment = null;
 	private List<Fragment> pages = null;		
 	private ArrayList<BaseParamItem> inputItems = null;
@@ -71,10 +74,12 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	private DiagnosticsPagerAdapter diagnosticsAdapter = null;
 	private ViewPager pager = null;
 	private ReceiveMessages receiver = null;
-	private TextView textViewStatus = null;	
+	private TextView textViewStatus = null;
+	private CheckBox checkBoxEnableBlDeDiagnostics = null;
 	
 	private Secu3Packet OpCompNc = null;
 	private Secu3Packet DiagOutDat = null;
+	private boolean BlDeDiagEnabled = false;
 	
 	public static class OutputDiagListFragment extends ListFragment {
 		OnItemClickListener listener;		
@@ -135,25 +140,49 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	}
 	
 	private void setOutputs (int outputs) {
-		for (int i = 0; i != outputItems.size(); ++i) {
+		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:4); ++i) {
 			((ParamItemBoolean) outputItems.get(i)).setValue(((outputs & 0x01)!=0)?true:false); 
 			outputs >>= 1;
-		}		
+		}
+		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) && (BlDeDiagEnabled)){
+			((ParamItemBoolean) outputItems.get(outputItems.size()-4)).setValue(((outputs >> 11) == 0) &&((outputs >> 12)==0)); // BL-Z state
+			((ParamItemBoolean) outputItems.get(outputItems.size()-3)).setValue(((outputs >> 11) == 0) &&((outputs >> 12)==1)); // BL
+			((ParamItemBoolean) outputItems.get(outputItems.size()-2)).setValue(((outputs >> 13) == 0) &&((outputs >> 14)==0)); // DE-Z state
+			((ParamItemBoolean) outputItems.get(outputItems.size()-1)).setValue(((outputs >> 13) == 0) &&((outputs >> 14)==1)); // DE state
+		}
 	}
 	
 	private int getOutputs () {
 		int res = 0;
-		for (int i = 0; i != outputItems.size(); ++i) {
+		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:4); ++i) {
 			if (((ParamItemBoolean) outputItems.get(i)).getValue()) res |= 0x01 << i; 
+		}
+		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE)){
+			res &= ~(0x0F << 11);
+			if (BlDeDiagEnabled) {
+				if (((ParamItemBoolean) outputItems.get(outputItems.size()-3)).getValue()) res |= 0x01 << 12; // BL			
+				if (((ParamItemBoolean) outputItems.get(outputItems.size()-4)).getValue()) res &= ~(0x03 << 11); // BL-Z state
+				if (((ParamItemBoolean) outputItems.get(outputItems.size()-1)).getValue()) res |= 0x01 << 14; // DE			
+				if (((ParamItemBoolean) outputItems.get(outputItems.size()-2)).getValue()) res &= ~(0x03 << 13); // DE-Z state
+			}
 		}
 		return res;
 	}
+	
+	private void createOutputs() {
+		String outputNames[] = getResources().getStringArray(R.array.diagnostics_output_names);
+		for (int i = 0; i != outputNames.length-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:4); i++) { // In 3 protocol version BL & DE testing added
+			outputItems.add(new ParamItemBoolean(this, outputNames[i], null, false));
+			outputItems.get(i).setOnParamItemChangeListener(this);
+		}
+	}	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
 		setContentView(R.layout.activity_diagnostics);
 		
+		protocolversion = SettingsActivity.getProtocolVersion(this);
 		pages = new ArrayList<Fragment>();
 		inputItems = new ArrayList<BaseParamItem>();
 		outputItems = new ArrayList<BaseParamItem>();
@@ -173,11 +202,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks1_title, 0, R.string.units_volts,0));
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks2_title, 0, R.string.units_volts,0));
 
-		String outputNames[] = getResources().getStringArray(R.array.diagnostics_output_names);
-		for (int i = 0; i != outputNames.length; i++) {
-			outputItems.add(new ParamItemBoolean(this, outputNames[i], null, false));
-			outputItems.get(i).setOnParamItemChangeListener(this);
-		}
+		createOutputs();
 		
 		inputFragment = new ListFragment();
 		inputFragment.setListAdapter(new ParamItemsAdapter(inputItems));
@@ -199,9 +224,25 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 			int page = savedInstanceState.getInt(PAGE);
 			pager.setCurrentItem(page);
 		}
+		
+		checkBoxEnableBlDeDiagnostics = (CheckBox) findViewById(R.id.diagnosticsEnableBlDe);
+		checkBoxEnableBlDeDiagnostics.setVisibility((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE)?View.VISIBLE:View.GONE);
+		checkBoxEnableBlDeDiagnostics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				BlDeDiagEnabled = isChecked;				
+				if (protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) {
+					((ParamItemBoolean) outputItems.get(outputItems.size()-4)).setEnabled(isChecked);
+					((ParamItemBoolean) outputItems.get(outputItems.size()-3)).setEnabled(isChecked);
+					((ParamItemBoolean) outputItems.get(outputItems.size()-2)).setEnabled(isChecked);
+					((ParamItemBoolean) outputItems.get(outputItems.size()-1)).setEnabled(isChecked);
+				}
+			}
+		});
+		
 		super.onCreate(savedInstanceState);		
 	}
-
 
 	@Override
 	protected void onPause() {

@@ -53,23 +53,27 @@
         <item>25</item>
         <item>26</item>
     </string-array>
-    
-    <string-array name="diagnostics_output_names" translatable="false">
+        <string-array name="diagnostics_output_names" translatable="false">
         <item>IGN_OUT1</item>
         <item>IGN_OUT2</item>
         <item>IGN_OUT3</item>
         <item>IGN_OUT4</item>
-        <item>ADD_IO1</item>
-        <item>ADD_IO2</item>
         <item>IE</item>
         <item>FE</item>
         <item>ECF</item>
         <item>CE</item>
-        <item>ST_BLOCK</item>
+        <item>ST_BLOCK</item>        
+        <item>ADD_IO1</item>
+        <item>ADD_IO2</item>
+        <item>BL Z-state</item>
+        <item>BL</item>        
+        <item >DE Z-state</item>
+        <item >DE</item>
     </string-array>             
     
     <string-array name="protocol_versions" translatable="false">
         <item>12042013 Spring Release</item>
         <item>28082013 Summer Release</item>
+        <item>26122013 Winter Release</item>
     </string-array>
 </resources>

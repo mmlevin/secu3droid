@@ -104,7 +104,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	SparseArray<Secu3Packet> Skeletons = null;	
 	private PacketUtils packetUtils = null;
 	
-	private int protocol_version = 0;
+	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
 		    
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
@@ -188,6 +188,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 						String parameterUnits = null;
 						String parameterStrValue = null;
 						String parameterValue = null;
+						int parameterMinVersion = protocolVersion;
+						int parameterMaxVersion = protocolVersion;
 						String parameterMinValue = null;
 						String parameterMaxValue = null;
 						String parameterStepValue = null;
@@ -213,6 +215,10 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 									} else throw new IllegalArgumentException("Parameter type must be a reference");									
 								} else if (attr.equals(VALUE)) {
 									parameterValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
+								} else if (attr.equals(MIN_VERSION)) {
+									parameterMinVersion = Integer.parseInt(attrValue);
+								} else if (attr.equals(MAX_VERSION)) {
+											parameterMaxVersion = Integer.parseInt(attrValue);
 								} else if (attr.equals(STR_VALUE)) {
 									parameterStrValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
 								} else if (attr.equals(MIN_VALUE)) {
@@ -275,7 +281,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 									break;
 								default: throw new IllegalArgumentException("Unknown parameter type");
 								}
-								if ((item != null) && (protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
+								if ((item != null) && (protocolVersion >= minVersion) && (protocolVersion <= maxVersion) && (protocolVersion >= parameterMinVersion) && (protocolVersion <= parameterMaxVersion)) {
 									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
 									item.setPageId(page.getNameId());
 									item.setOnParamItemChangeListener(this);								
@@ -381,7 +387,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.ckps_title), paramAdapter, R.string.ckps_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.miscellaneous_title), paramAdapter, R.string.miscellaneous_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.choke_control_title), paramAdapter, R.string.choke_control_title)));
-			if (protocol_version >= 2) {
+			if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.secur_par_title)));
 			}
 		}

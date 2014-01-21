@@ -31,5 +31,8 @@
     <item android:id="@+id/menu_params" android:title="@string/menu_param" android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_manage"></item>
     <item android:id="@+id/menu_errors" android:title="@string/menu_errors" android:showAsAction="ifRoom" android:icon="@drawable/ic_menu_errors"></item>
 	<item android:id="@+id/menu_exit" android:title="@string/menu_exit" android:showAsAction="never" android:icon="@android:drawable/ic_menu_close_clear_cancel"/>
-	<item android:id="@+id/menu_diagnostics" android:title="@string/menu_diagnostics" android:showAsAction="never" android:icon="@android:drawable/ic_menu_agenda"/>	    
+	<item android:id="@+id/menu_diagnostics" android:title="@string/menu_diagnostics" android:showAsAction="never" android:icon="@android:drawable/ic_menu_agenda"/>
+	<item android:id="@+id/menu_set_log_marker_1" android:title="@string/menu_log_marker_1" android:showAsAction="never"></item>
+	<item android:id="@+id/menu_set_log_marker_2" android:title="@string/menu_log_marker_2" android:showAsAction="never"></item>
+	<item android:id="@+id/menu_set_log_marker_3" android:title="@string/menu_log_marker_3" android:showAsAction="never"></item>	    
 </menu>

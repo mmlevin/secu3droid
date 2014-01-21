@@ -510,6 +510,16 @@
             app:type="@id/parameter_type_integer"
             minValue="50"
             maxValue="1000"
+            app:minVersion="1"
+            app:maxVersion="2"
+            stepValue="1"/>
+    	<Parameter
+            app:name="@string/choke_steps_title"
+            app:summary="@string/choke_steps_summary"
+            app:type="@id/parameter_type_integer"
+            minValue="50"
+            maxValue="2000"
+            app:minVersion="3"
             stepValue="1"/>
         <Parameter
             app:name="@string/choke_testing_title"

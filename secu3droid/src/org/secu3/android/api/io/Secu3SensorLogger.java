@@ -28,6 +28,7 @@ package org.secu3.android.api.io;
 import java.util.Locale;
 
 import org.secu3.android.R;
+import org.secu3.android.SettingsActivity;
 import org.secu3.android.api.utils.PacketUtils;
 
 import android.content.Context;
@@ -38,8 +39,9 @@ public class Secu3SensorLogger extends Secu3Logger {
 	private static final char CSV_DELIMETER = ',';
 	private static final String cCSVTimeTemplateString = "%H:%M:%S";
 	private static final String cCSVFileNameTemplateString = "%Y.%m.%d_%H.%M.%S.csv";
-	private static final String CSVMillisTemplateString = "%s.%02d";	
+	private static final String CSVMillisTemplateString = "%s.%02d";		 
 	
+	private int marker;
 
 	private String IntToBinaryString(int i)
 	{
@@ -72,10 +74,14 @@ public class Secu3SensorLogger extends Secu3Logger {
 		out += String.format(Locale.US, "%6.3f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(), CSV_DELIMETER);
 		out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue(), CSV_DELIMETER);
 		
-		if (protocol_version >= 2) {
+		if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
 			out += String.format(Locale.US, "%5.1f%c", packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()), CSV_DELIMETER);
 			out += String.format(Locale.US, "%7.2f%c", packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue()), CSV_DELIMETER);
-		}	
+		}
+		
+		if (protocol_version >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) {
+			out += String.format(Locale.US, "%01d%c", marker,CSV_DELIMETER);
+		}
 		
 		out += String.format(Locale.US, "%s\r\n", IntToBinaryString(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue()));
 
@@ -94,8 +100,13 @@ public class Secu3SensorLogger extends Secu3Logger {
 	
 	public boolean beginLogging (int protocol_version, Context context) {		
 		this.packetUtils = new PacketUtils(context);
+		marker = 0;
 		return super.beginLogging(protocol_version);		
 	}	
+	
+	public void setMarker (int marker) {
+		this.marker = marker;
+	}
 
 	@Override
 	public String getFileName() {

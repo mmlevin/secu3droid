@@ -47,6 +47,11 @@ import java.util.Set;
 import org.secu3.android.api.io.Secu3Logger;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	public final static int PROTOCOL_UNKNOWN = 0;
+	public final static int PROTOCOL_12042013_SPRING_RELEASE = 1;
+	public final static int PROTOCOL_28082013_SUMMER_RELEASE = 2;
+	public final static int PROTOCOL_26122013_WINTER_RELEASE = 3;
+	
 	private SharedPreferences sharedPref ;
 	private BluetoothAdapter bluetoothAdapter = null;
 	String versions[] = null;
@@ -59,6 +64,12 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			version = Integer.parseInt(versionS);
 		}
         return version+1;
+	}
+	
+	public static boolean isSensorLoggerEnabled (Context ctx){
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+		boolean enabled = sharedPreferences.getBoolean(ctx.getString(R.string.pref_write_log_key), false);
+		return enabled;
 	}
 		
 	@SuppressWarnings("deprecation")

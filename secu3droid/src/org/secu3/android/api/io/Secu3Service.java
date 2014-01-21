@@ -45,6 +45,7 @@ public class Secu3Service extends Service implements OnSharedPreferenceChangeLis
 	public static final String ACTION_SECU3_SERVICE_STOP = "org.secu3.android.intent.action.SECU3_SERVICE_STOP";
 	public static final String ACTION_SECU3_SERVICE_SET_TASK = "org.secu3.android.intent.action.SECU3_SERVICE_SET_TASK";
 	public static final String ACTION_SECU3_SERVICE_SET_TASK_PARAM = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SET_TASK_PARAM";
+	public static final String ACTION_SECU3_SERVICE_SET_TASK_PARAM_EXTRA = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SET_TASK_PARAM_EXTRA";
 	public static final String ACTION_SECU3_SERVICE_SEND_PACKET= "org.secu3.android.intent.action.SECU3_SERVICE_SEND_PACKET";
 	public static final String ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET= "org.secu3.android.intent.action.extra.SECU3_SERVICE_SEND_PACKET_PARAM_PACKET";	
 	public static final String ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS = "org.secu3.android.intent.action.extra.SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS";

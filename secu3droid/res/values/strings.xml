@@ -58,8 +58,11 @@
     <string name="menu_errors">Errors</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_exit">Exit</string>
+    <string name="menu_log_marker_1">Insert marker #1</string>
+    <string name="menu_log_marker_2">Insert marker #2</string>
+    <string name="menu_log_marker_3">Insert marker #3</string>
     <string name="menu_diagnostics">Diagnostics</string>
-    <string name="menu_diagnostics_warning_title">Disconnect ignition coils before entering diagnostics mode! Ignoring may cause coils breakage!</string>
+    <string name="menu_diagnostics_warning_title">WARNING! Disconnect ignition coils before entering diagnostic mode. Before testing of BL, DE outputs make sure that corresp. jumpers are opened!\nWARNING! Displayed inputs\' values are on the MCU lines, not on the external connector (there are differences).</string>
     <string name="menu_params_download_title">Download</string>
     <string name="menu_params_upload_title">Upload</string>
     <string name="menu_params_save_eeprom_title">Save</string>
@@ -117,6 +120,7 @@
     <string name="diag_input_de" translatable="false">DE</string>
     <string name="diag_input_ks1_title" translatable="false">KS_1</string>
     <string name="diag_input_ks2_title" translatable="false">KS_2</string>
+    <string name="diag_enable_bl_de">Enable BL/DE outputs diagnostics</string>
     <string name="params_saved_error_code">Parameters saved</string>    
     <string name="errors_saved_error_code">Errors saved</string>    
 </resources>
