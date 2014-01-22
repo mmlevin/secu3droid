@@ -136,9 +136,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         
         ListPreference prefCSV = (ListPreference)findPreference(getString(R.string.pref_log_csv_delimeter_key));                
         prefCSV.setEntryValues(CSVDelimeters);
-        prefCSV.setEntries(CSVDelimeters);
-        
-        prefVersions.setEntries(CSVDelimeters);
+        prefCSV.setEntries(CSVDelimeters);        
         
         Preference pref;        
         pref = (Preference)findPreference(getString(R.string.pref_connection_retries_key));
