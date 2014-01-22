@@ -81,9 +81,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	
 	private Secu3Packet OpCompNc = null;
 	private Secu3Packet DiagOutDat = null;
-	private boolean BlDeDiagEnabled = false;
-	
-	private final static int FIELDINDEXES[] = {0,1,2,3,9,10,4,5,6,7,8}; // »ндексы битовых полей в соответствии с галочками
+	private boolean BlDeDiagEnabled = false;	
 	
 	public static class OutputDiagListFragment extends ListFragment {
 		OnItemClickListener listener;		
@@ -145,7 +143,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	
 	private void setOutputs (int outputs) {
 		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:2); i++) {
-			((ParamItemBoolean) outputItems.get(FIELDINDEXES[i])).setValue(((outputs & 0x01)!=0)?true:false); 
+			((ParamItemBoolean) outputItems.get(i)).setValue(((outputs & 0x01)!=0)?true:false); 
 			outputs >>= 1;
 		}
 		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) && (BlDeDiagEnabled)){
@@ -157,7 +155,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	private int getOutputs () {
 		int res = 0;
 		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:2); i++) {
-			if (((ParamItemBoolean) outputItems.get(FIELDINDEXES[i])).getValue()) res |= 0x01 << i; 
+			if (((ParamItemBoolean) outputItems.get(i)).getValue()) res |= 0x01 << i; 
 		}		
 		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE)){
 			res &= ~(0x0F << 11);

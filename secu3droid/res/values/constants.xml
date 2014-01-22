@@ -60,13 +60,13 @@
         <item>IGN_OUT2</item>
         <item>IGN_OUT3</item>
         <item>IGN_OUT4</item>
+        <item>ADD_IO1</item>
+        <item>ADD_IO2</item>        
         <item>IE</item>
         <item>FE</item>
         <item>ECF</item>
         <item>CE</item>
         <item>ST_BLOCK</item>        
-        <item>ADD_IO1</item>
-        <item>ADD_IO2</item>
         <item>BL</item>        
         <item >DE</item>
     </string-array>             
