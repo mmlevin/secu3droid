@@ -247,12 +247,13 @@ public class PacketUtils {
 	}
 	
 	public float calcSpeed (int rawSpeed) {
+		float speed = 0;
 		if ((rawSpeed != 0) && (rawSpeed != 65535)) {
 			float period_s = (float)rawSpeed/250000.0f;
-			float speed = (m_period_distance / period_s) * 3600.0f / 1000.0f;
+			speed = (m_period_distance / period_s) * 3600.0f / 1000.0f;
 			if (speed >= 999.9f) speed = 999.9f;
 		}
-		return 0;
+		return speed;
 	}
 	
 	public float calcDistance (int rawDistance) {
