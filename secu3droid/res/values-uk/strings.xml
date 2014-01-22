@@ -107,7 +107,7 @@
     <string name="title_activity_diagnostics">Діагностика</string>
     <string name="action_settings">Налаштування</string>
     <string name="diagnostics_not_supported_title">Режим діагностики відключений в прошивці або не встановлено з\'єднання з Secu-3</string>
-    <string name="errors_code">Код помилки %s</string>]
+    <string name="errors_code">Код помилки %s</string>
     <string name="diag_enable_bl_de">Включити діагностику BL/DE виходів</string>
     <string name="params_saved_error_code">Параметри збережено</string>
     <string name="errors_saved_error_code">Помилки збережені</string>
