@@ -133,7 +133,7 @@ public class MainActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {						
 		outState.putString(DATA, textViewData.getText().toString());
 		outState.putString(STATUS, textViewStatus.getText().toString());
-		outState.putBoolean(STATUS, checkBoxRawData.isChecked());
+		outState.putBoolean(CHECKBOX, checkBoxRawData.isChecked());
 		super.onSaveInstanceState(outState);		
 	}
 		
@@ -209,6 +209,7 @@ public class MainActivity extends Activity {
 		registerReceiver(receiver, receiver.intentFilter);
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
 		setRawMode(checkBoxRawData.isChecked());
+		ActivityCompat.invalidateOptionsMenu(this);
 		super.onResume();		
 	}
 	

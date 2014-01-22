@@ -146,7 +146,8 @@ public class ParamItemFloat extends BaseParamItem {
 		return format;
 	}
 
-	public void setFormat(String mask) {
+	public ParamItemFloat setFormat(String mask) {
 		if (mask != null) this.format = mask;
+		return this;
 	}
 }

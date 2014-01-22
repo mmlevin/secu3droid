@@ -233,7 +233,7 @@ public class PacketUtils {
 					adapter.setFloatItem(R.string.diag_input_add_io2, (((ProtoFieldFloat) packet.findField(R.string.diag_input_add_io2)).getValue()));
 					adapter.setFloatItem(R.string.diag_input_ks1_title, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks1_title)).getValue()));
 					adapter.setFloatItem(R.string.diag_input_ks2_title, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks2_title)).getValue()));
-					adapter.setBooleanItem(R.string.diag_input_carb_title, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_carb_title)).getValue())==1)?true:false);
+					adapter.setFloatItem(R.string.diag_input_carb_title, (((ProtoFieldFloat) packet.findField(R.string.diag_input_carb_title)).getValue()));
 					adapter.setBooleanItem(R.string.diag_input_gas_v, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & (1 << 0)) != 0));
 					adapter.setBooleanItem(R.string.diag_input_ckps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & (1 << 1)) != 0));
 					adapter.setBooleanItem(R.string.diag_input_ref_s, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & (1 << 2)) != 0));

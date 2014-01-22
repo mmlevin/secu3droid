@@ -55,6 +55,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	private SharedPreferences sharedPref ;
 	private BluetoothAdapter bluetoothAdapter = null;
 	String versions[] = null;
+	String CSVDelimeters[] = null;
 	
 	public static int getProtocolVersion(Context ctx) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -70,8 +71,15 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
 		boolean enabled = sharedPreferences.getBoolean(ctx.getString(R.string.pref_write_log_key), false);
 		return enabled;
-	}
+	}	
 		
+	public static String getCSVDelimeter(Context ctx) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+		String delimeter = sharedPreferences.getString(ctx.getString(R.string.pref_log_csv_delimeter_key), ctx.getString(R.string.defaultCsvDelimeter));
+        int idx = delimeter.indexOf("\"");
+        return 	delimeter.substring(idx+1,idx+2);
+	}
+	
 	@SuppressWarnings("deprecation")
 	private void updatePreferenceSummary(){
 		String deviceName = "";
@@ -90,6 +98,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		
         Preference speedPulses = (Preference)findPreference(getString(R.string.pref_speed_pulse_key));
         speedPulses.setSummary(sharedPref.getString(getString(R.string.pref_speed_pulse_key), getString(R.string.defaultSpeedPulse)));
+        
+        ListPreference csvDelimeter = (ListPreference)findPreference(getString(R.string.pref_log_csv_delimeter_key));
+        csvDelimeter.setSummary(getString(R.string.pref_log_csv_delimeter_summary, sharedPref.getString(getString(R.string.pref_log_csv_delimeter_key), getString(R.string.defaultCsvDelimeter))));
     }   
 
 	@SuppressWarnings("deprecation")
@@ -123,6 +134,12 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         prefVersions.setEntryValues(entryValues);
         prefVersions.setEntries(versions);
         
+        ListPreference prefCSV = (ListPreference)findPreference(getString(R.string.pref_log_csv_delimeter_key));                
+        prefCSV.setEntryValues(CSVDelimeters);
+        prefCSV.setEntries(CSVDelimeters);
+        
+        prefVersions.setEntries(CSVDelimeters);
+        
         Preference pref;        
         pref = (Preference)findPreference(getString(R.string.pref_connection_retries_key));
         String maxConnRetries = sharedPref.getString(getString(R.string.pref_connection_retries_key), getString(R.string.defaultConnectionRetries));
@@ -138,6 +155,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		addPreferencesFromResource(R.xml.preferences);				
         versions = getResources().getStringArray(R.array.protocol_versions);
+        CSVDelimeters = getResources().getStringArray(R.array.csv_delimeters);
 		
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();	
         Preference pref = findPreference(getString(R.string.pref_about_key));
@@ -170,8 +188,12 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			updatePreferenceList();			
 		} else if (getString(R.string.pref_protocol_version_key).equals(key)) {
 			updatePreferenceSummary();
-			updatePreferenceList();		
-		} else if (getString(R.string.pref_speed_pulse_key).equals(key))
+			updatePreferenceList();					
+		} else if (getString(R.string.pref_log_csv_delimeter_key).equals(key)) {
+			updatePreferenceSummary();
+			updatePreferenceList();
+		}
+		else if (getString(R.string.pref_speed_pulse_key).equals(key))
 		{
 			updatePreferenceSummary();
 		}

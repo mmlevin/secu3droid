@@ -45,6 +45,8 @@
     <string name="pref_write_raw_log_summary">Write log of raw data between Secu-3 &amp; manager</string>
     <string name="pref_write_log_path_title">Path for storing logs</string>
     <string name="pref_write_log_path_summary">Directory where Secu3Droid should store logs. If empty, logs will be stored to %1$s</string>
+    <string name="pref_log_csv_delimeter_title">CSV log delimeter char</string>
+    <string name="pref_log_csv_delimeter_summary">Currently: %1$s</string>
     <string name="pref_night_mode_title">Night mode</string>
     <string name="pref_night_mode_summary">Apply dark theme if selected, need to restart if changed</string>
 </resources>

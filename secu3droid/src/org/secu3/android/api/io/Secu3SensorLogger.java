@@ -36,12 +36,12 @@ import android.content.Context;
 public class Secu3SensorLogger extends Secu3Logger {				
 	private PacketUtils packetUtils = null;
 
-	private static final char CSV_DELIMETER = ',';
+	private static char CSV_DELIMETER = ';';
 	private static final String cCSVTimeTemplateString = "%H:%M:%S";
 	private static final String cCSVFileNameTemplateString = "%Y.%m.%d_%H.%M.%S.csv";
 	private static final String CSVMillisTemplateString = "%s.%02d";		 
 	
-	private int marker;
+	private int marker = 0;
 
 	private String IntToBinaryString(int i)
 	{
@@ -82,6 +82,7 @@ public class Secu3SensorLogger extends Secu3Logger {
 		if (protocol_version >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) {
 			out += String.format(Locale.US, "%01d%c", marker,CSV_DELIMETER);
 		}
+		marker = 0;
 		
 		out += String.format(Locale.US, "%s\r\n", IntToBinaryString(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue()));
 
@@ -100,7 +101,6 @@ public class Secu3SensorLogger extends Secu3Logger {
 	
 	public boolean beginLogging (int protocol_version, Context context) {		
 		this.packetUtils = new PacketUtils(context);
-		marker = 0;
 		return super.beginLogging(protocol_version);		
 	}	
 	
@@ -112,5 +112,9 @@ public class Secu3SensorLogger extends Secu3Logger {
 	public String getFileName() {
 		getTime().setToNow();
 		return getTime().format(cCSVFileNameTemplateString);
+	}
+	
+	public void setCsvDelimeter (String delimeter) {
+		CSV_DELIMETER = delimeter.charAt(0);
 	}
 }

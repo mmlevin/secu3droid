@@ -40,7 +40,7 @@
     <plurals name="connection_problem_notification">
         <item quantity="one">Буде зроблена ще одна спроба</item>
         <item quantity="few">Буде зроблено ще %d спроби</item>
-        <item quantity="other">Буде зроблено ще %d спроб</item>
+        <item quantity="many">Буде зроблено ще %d спроб</item>
     </plurals>
 
     <string name="foreground_service_started_notification_title">Secu3Droid</string>
@@ -67,6 +67,9 @@
     <string name="menu_params_save_eeprom_title">Зберегти</string>
     <string name="menu_errors_read">Зчитати</string>
     <string name="menu_errors_write">Зберегти</string>
+    <string name="menu_log_marker_1">Вставити маркер #1</string>
+    <string name="menu_log_marker_2">Вставити маркер #2</string>
+    <string name="menu_log_marker_3">Вставити маркер #3</string>
     <string name="about_title">Про програму</string>
     <string name="about_version">Secu3Droid версія</string>
     <string name="about_copyright_1">Copyright © 2013 Максим Левин</string>
@@ -104,7 +107,8 @@
     <string name="title_activity_diagnostics">Діагностика</string>
     <string name="action_settings">Налаштування</string>
     <string name="diagnostics_not_supported_title">Режим діагностики відключений в прошивці або не встановлено з\'єднання з Secu-3</string>
-    <string name="errors_code">Код помилки %s</string>
+    <string name="errors_code">Код помилки %s</string>]
+    <string name="diag_enable_bl_de">Включити діагностику BL/DE виходів</string>
     <string name="params_saved_error_code">Параметри збережено</string>
     <string name="errors_saved_error_code">Помилки збережені</string>
 </resources>

@@ -34,10 +34,12 @@
     <string name="pref_upload_immediately_key" translatable="false">uploadImmediately</string>
     <string name="pref_write_log_key" translatable="false">writeLog</string>
     <string name="pref_write_raw_log_key" translatable="false">writeRawLog</string>
+    <string name="pref_log_csv_delimeter_key" translatable="false">logCsvDelimeter</string>
     <string name="pref_write_log_path" translatable="false">writeLogPath</string>
     <string name="pref_about_key" translatable="false">about</string>
     <string name="defaultConnectionRetries" translatable="false">5</string>
-    <string name="defaultSpeedPulse" translatable="false">6000</string>        
+    <string name="defaultSpeedPulse" translatable="false">6000</string>
+    <string name="defaultCsvDelimeter" translatable="false">\";\" Semicolon</string>        
     <string name="pref_night_mode_key" translatable="false">nightMode</string>      
     
     <string-array name="errors_ecu_errors_blink_codes" translatable="false">
@@ -65,9 +67,7 @@
         <item>ST_BLOCK</item>        
         <item>ADD_IO1</item>
         <item>ADD_IO2</item>
-        <item>BL Z-state</item>
         <item>BL</item>        
-        <item >DE Z-state</item>
         <item >DE</item>
     </string-array>             
     
@@ -75,5 +75,14 @@
         <item>12042013 Spring Release</item>
         <item>28082013 Summer Release</item>
         <item>26122013 Winter Release</item>
+    </string-array>
+    
+    <string-array name="csv_delimeters" translatable="false">
+        <item>\",\" Comma</item>
+        <item>\";\" Semicolon</item>
+        <item>\":\" Colon</item>
+        <item>\"+\" Plus</item>
+        <item>\"-\" Minus</item>
+        <item>\" \" Space</item>
     </string-array>
 </resources>

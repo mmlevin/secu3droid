@@ -42,6 +42,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Region.Op;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -60,6 +61,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class DiagnosticsActivity extends FragmentActivity implements OnItemClickListener, OnParamItemChangeListener{
+	private static final String BLDEENABLED = "BLDEENABLED";
 	private static final String PAGE = "page";
 	private static final String OUTPUTS = "outputs";	
 
@@ -80,6 +82,8 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	private Secu3Packet OpCompNc = null;
 	private Secu3Packet DiagOutDat = null;
 	private boolean BlDeDiagEnabled = false;
+	
+	private final static int FIELDINDEXES[] = {0,1,2,3,9,10,4,5,6,7,8}; // »ндексы битовых полей в соответствии с галочками
 	
 	public static class OutputDiagListFragment extends ListFragment {
 		OnItemClickListener listener;		
@@ -140,30 +144,26 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	}
 	
 	private void setOutputs (int outputs) {
-		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:4); ++i) {
-			((ParamItemBoolean) outputItems.get(i)).setValue(((outputs & 0x01)!=0)?true:false); 
+		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:2); i++) {
+			((ParamItemBoolean) outputItems.get(FIELDINDEXES[i])).setValue(((outputs & 0x01)!=0)?true:false); 
 			outputs >>= 1;
 		}
 		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) && (BlDeDiagEnabled)){
-			((ParamItemBoolean) outputItems.get(outputItems.size()-4)).setValue(((outputs >> 11) == 0) &&((outputs >> 12)==0)); // BL-Z state
 			((ParamItemBoolean) outputItems.get(outputItems.size()-3)).setValue(((outputs >> 11) == 0) &&((outputs >> 12)==1)); // BL
-			((ParamItemBoolean) outputItems.get(outputItems.size()-2)).setValue(((outputs >> 13) == 0) &&((outputs >> 14)==0)); // DE-Z state
 			((ParamItemBoolean) outputItems.get(outputItems.size()-1)).setValue(((outputs >> 13) == 0) &&((outputs >> 14)==1)); // DE state
 		}
 	}
 	
 	private int getOutputs () {
 		int res = 0;
-		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:4); ++i) {
-			if (((ParamItemBoolean) outputItems.get(i)).getValue()) res |= 0x01 << i; 
-		}
+		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:2); i++) {
+			if (((ParamItemBoolean) outputItems.get(FIELDINDEXES[i])).getValue()) res |= 0x01 << i; 
+		}		
 		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE)){
 			res &= ~(0x0F << 11);
-			if (BlDeDiagEnabled) {
-				if (((ParamItemBoolean) outputItems.get(outputItems.size()-3)).getValue()) res |= 0x01 << 12; // BL			
-				if (((ParamItemBoolean) outputItems.get(outputItems.size()-4)).getValue()) res &= ~(0x03 << 11); // BL-Z state
-				if (((ParamItemBoolean) outputItems.get(outputItems.size()-1)).getValue()) res |= 0x01 << 14; // DE			
-				if (((ParamItemBoolean) outputItems.get(outputItems.size()-2)).getValue()) res &= ~(0x03 << 13); // DE-Z state
+			if (BlDeDiagEnabled) {				
+				res |= ((((ParamItemBoolean) outputItems.get(outputItems.size()-2)).getValue())?1:2)  << 11; // BL							
+				res |= ((((ParamItemBoolean) outputItems.get(outputItems.size()-1)).getValue())?1:2)  << 13; // DE			
 			}
 		}
 		return res;
@@ -171,11 +171,20 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	
 	private void createOutputs() {
 		String outputNames[] = getResources().getStringArray(R.array.diagnostics_output_names);
-		for (int i = 0; i != outputNames.length-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:4); i++) { // In 3 protocol version BL & DE testing added
+		for (int i = 0; i != outputNames.length-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?2:0); i++) { // In 3 protocol version BL & DE testing added
 			outputItems.add(new ParamItemBoolean(this, outputNames[i], null, false));
 			outputItems.get(i).setOnParamItemChangeListener(this);
 		}
 	}	
+	
+	private void setBlDeEnabled(boolean BlDeEnabled) {
+		this.BlDeDiagEnabled = BlDeEnabled; 
+		if (protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) {
+			((ParamItemBoolean) outputItems.get(outputItems.size()-2)).setEnabled(BlDeEnabled);
+			((ParamItemBoolean) outputItems.get(outputItems.size()-1)).setEnabled(BlDeEnabled);
+			onParamItemChange (null);
+		}
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -187,20 +196,20 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		inputItems = new ArrayList<BaseParamItem>();
 		outputItems = new ArrayList<BaseParamItem>();
 		
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_voltage_title, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_map_s, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_temp, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_add_io1, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_add_io2, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_carb_title, 0, false,false));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_voltage_title, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_map_s, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_temp, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_add_io1, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_add_io2, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_carb_title, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_gas_v, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_ckps, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_ref_s, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_ps, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_bl, 0, false,false));
 		inputItems.add(new ParamItemBoolean(this, R.string.diag_input_de, 0, false,false));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks1_title, 0, R.string.units_volts,0));
-		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks2_title, 0, R.string.units_volts,0));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks1_title, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
+		inputItems.add(new ParamItemFloat(this, R.string.diag_input_ks2_title, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
 
 		createOutputs();
 		
@@ -221,6 +230,8 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		if (savedInstanceState != null) {
 			int outputs = savedInstanceState.getInt(OUTPUTS);
 			setOutputs(outputs);
+			boolean blde = savedInstanceState.getBoolean(BLDEENABLED);
+			setBlDeEnabled(blde);
 			int page = savedInstanceState.getInt(PAGE);
 			pager.setCurrentItem(page);
 		}
@@ -230,14 +241,8 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		checkBoxEnableBlDeDiagnostics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				BlDeDiagEnabled = isChecked;				
-				if (protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) {
-					((ParamItemBoolean) outputItems.get(outputItems.size()-4)).setEnabled(isChecked);
-					((ParamItemBoolean) outputItems.get(outputItems.size()-3)).setEnabled(isChecked);
-					((ParamItemBoolean) outputItems.get(outputItems.size()-2)).setEnabled(isChecked);
-					((ParamItemBoolean) outputItems.get(outputItems.size()-1)).setEnabled(isChecked);
-				}
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {				
+				setBlDeEnabled(isChecked);
 			}
 		});
 		
@@ -260,11 +265,14 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putInt(OUTPUTS, getOutputs());
 		outState.putInt(PAGE, pager.getCurrentItem());
+		outState.putBoolean(BLDEENABLED, BlDeDiagEnabled);
 		//super.onSaveInstanceState(outState);
 	}
 	
 	@Override
-	protected void onResume() {							
+	protected void onResume() {					
+		OpCompNc = null;
+		DiagOutDat = null;
 		registerReceiver(receiver, receiver.intentFilter);
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.op_comp_nc_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.diagout_dat_title));
@@ -292,17 +300,23 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 				if (packet.getNameId() == R.string.diaginp_dat_title) {	
 					PacketUtils.setDiagInpFromPacket((ParamItemsAdapter) inputFragment.getListAdapter(), packet);
 					((ParamItemsAdapter) inputFragment.getListAdapter()).notifyDataSetChanged();
-				}
+				} else
+				if ((OpCompNc != null)&&(DiagOutDat != null)) {
+					((ProtoFieldInteger) OpCompNc.findField(R.string.op_comp_nc_operation_title)).setValue(Secu3Packet.OPCODE_DIAGNOST_ENTER);
+					((ProtoFieldInteger) OpCompNc.findField(R.string.op_comp_nc_operation_code_title)).setValue (0);
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, OpCompNc));
+					onParamItemChange(null);
+				}				
 			}
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_SKELETON_PACKET.equals(intent.getAction())) {
 			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_SKELETON_PACKET);
 			if (packet != null) {
 				if (packet.getNameId() == R.string.op_comp_nc_title) {
 					OpCompNc = packet;
-					((ProtoFieldInteger) packet.findField(R.string.op_comp_nc_operation_title)).setValue(Secu3Packet.OPCODE_DIAGNOST_ENTER);
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, OpCompNc));
 				}
-				else if (packet.getNameId() == R.string.diagout_dat_title) DiagOutDat = packet;
+				else if (packet.getNameId() == R.string.diagout_dat_title) {
+					DiagOutDat = packet;
+				}
 			}
 		}		
 	}

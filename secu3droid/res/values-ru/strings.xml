@@ -39,7 +39,7 @@
     <plurals name="connection_problem_notification">
         <item quantity="one">Будет сделана еще одна попытка</item>
         <item quantity="few">Будет сделано еще %d попытки</item>
-        <item quantity="other">Будет сделано еще %d попыток</item>
+        <item quantity="many">Будет сделано еще %d попыток</item>
     </plurals>
 
     <string name="foreground_service_started_notification_title">Secu3Droid</string>

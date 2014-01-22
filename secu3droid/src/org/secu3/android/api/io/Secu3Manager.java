@@ -209,13 +209,8 @@ public class Secu3Manager {
 					case SECU3_NONE:
 						break;
 					case SECU3_START_SENSOR_LOGGING:
-						sensorLogger
-								.setPath(PreferenceManager
-										.getDefaultSharedPreferences(appContext)
-										.getString(
-												appContext
-														.getString(R.string.pref_write_log_path),
-												""));
+						sensorLogger.setCsvDelimeter(SettingsActivity.getCSVDelimeter(appContext));
+						sensorLogger.setPath(PreferenceManager.getDefaultSharedPreferences(appContext).getString(appContext.getString(R.string.pref_write_log_path),""));						
 						sensorLogger.beginLogging(protocol_version, appContext);
 						break;
 					case SECU3_STOP_SENSOR_LOGGING:
@@ -228,7 +223,7 @@ public class Secu3Manager {
 						sensorLogger.setMarker(2);
 						break;
 					case SECU3_SET_LOG_MARKER_3:
-						sensorLogger.setMarker(3);
+						sensorLogger.setMarker(4);
 						break;
 					case SECU3_START_RAW_LOGGING:
 						rawLogger

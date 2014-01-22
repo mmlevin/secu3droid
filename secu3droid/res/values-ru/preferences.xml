@@ -41,6 +41,8 @@
     <string name="pref_upload_immediately_summary">При изменении значения пользователем</string>
     <string name="pref_write_log_title">Запись лога сенсоров</string>
     <string name="pref_write_log_summary">Записывать информацию с сенсоров в лог</string>
+    <string name="pref_log_csv_delimeter_title">Символ-роздільник логу</string>
+    <string name="pref_log_csv_delimeter_summary">Встановлено: %1$s</string>
     <string name="pref_write_raw_log_title">Запись лога обмена</string>
     <string name="pref_write_raw_log_summary">Запись обмена данными между Secu-3 и менеджером</string>    
     <string name="pref_write_log_path_title">Путь для сохранения логов</string>

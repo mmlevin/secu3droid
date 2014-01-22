@@ -377,7 +377,8 @@
                app:type="@id/field_type_float16"
                app:divider="@integer/protocol_adc_discrete_title"/>               
 		<Field app:name="@string/diag_input_carb_title"
-               app:type="@id/field_type_int16"/>            
+               app:type="@id/field_type_float16"
+               app:divider="@integer/protocol_adc_discrete_title"/>            
         <Field app:name="@string/diag_input_ks1_title"
                app:type="@id/field_type_float16"
                app:divider="@integer/protocol_adc_discrete_title"/>
