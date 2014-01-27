@@ -80,6 +80,16 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         return 	delimeter.substring(idx+1,idx+2);
 	}
 	
+	public static boolean isKeepScreenAliveActive (Context ctx) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+		return sharedPreferences.getBoolean(ctx.getString(R.string.pref_keep_screen_key), false);
+	}
+	
+	public static boolean isWakeLockEnabled (Context ctx) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+		return sharedPreferences.getBoolean(ctx.getString(R.string.pref_wakelock_key), false);
+	}
+	
 	@SuppressWarnings("deprecation")
 	private void updatePreferenceSummary(){
 		String deviceName = "";

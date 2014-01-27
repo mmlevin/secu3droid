@@ -37,6 +37,7 @@ import org.secu3.android.api.utils.PacketUtils;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -49,6 +50,7 @@ import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,6 +69,7 @@ public class MainActivity extends Activity {
 	private boolean rawSensors = false;
 	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
 	private LinearLayout logButtonLayout = null;
+	private PowerManager.WakeLock wakelock = null;
 	
 	private PacketUtils packetUtils = null;
 	
@@ -113,6 +116,9 @@ public class MainActivity extends Activity {
 		
 		receiver = new ReceiveMessages();		
 		
+		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+		wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Secu3Droid wakelock");
+		
 		if (savedInstanceState != null) {
 			textViewData.setText(savedInstanceState.getString(DATA));
 			textViewStatus.setText(savedInstanceState.getString(STATUS));
@@ -151,6 +157,14 @@ public class MainActivity extends Activity {
 		
 		
 		super.onCreate(savedInstanceState);		
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if ((wakelock != null)&&(wakelock.isHeld())) {
+			wakelock.release();
+		}
+		super.onDestroy();
 	}
 	
 	@Override
@@ -221,7 +235,17 @@ public class MainActivity extends Activity {
 	
 	
 	@Override
-	protected void onResume() {				
+	protected void onResume() {
+		if (SettingsActivity.isKeepScreenAliveActive(this)) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		if ((wakelock != null)&&(SettingsActivity.isWakeLockEnabled(this))) {
+			wakelock.acquire();
+		} else if ((wakelock != null)&&(wakelock.isHeld())) {
+			wakelock.release();
+		}
 		registerReceiver(receiver, receiver.intentFilter);
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
 		protocol_version = SettingsActivity.getProtocolVersion(getBaseContext());
@@ -232,7 +256,10 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	protected void onPause() {				
+	protected void onPause() {	
+		if (SettingsActivity.isKeepScreenAliveActive(this)) {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 		unregisterReceiver(receiver);
 		super.onPause();		
 	}

@@ -41,6 +41,8 @@
     <string name="defaultSpeedPulse" translatable="false">6000</string>
     <string name="defaultCsvDelimeter" translatable="false">\";\" Semicolon</string>        
     <string name="pref_night_mode_key" translatable="false">nightMode</string>      
+    <string name="pref_keep_screen_key" translatable="false">flagKeepScreenOn</string>
+    <string name="pref_wakelock_key" translatable="false">wakelock</string>
     
     <string-array name="errors_ecu_errors_blink_codes" translatable="false">
         <item>21</item>

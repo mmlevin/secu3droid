@@ -80,6 +80,14 @@
 	    android:key="@string/pref_night_mode_key"
 	    android:title="@string/pref_night_mode_title"
 	    android:summary="@string/pref_night_mode_summary"/>
+	<CheckBoxPreference 
+	    android:key="@string/pref_keep_screen_key"
+	    android:title="@string/pref_keep_screen_title"
+	    android:summary="@string/pref_keep_screen_summary"/>
+	<CheckBoxPreference 
+	    android:key="@string/pref_wakelock_key"
+	    android:title="@string/pref_wakelock_title"
+	    android:summary="@string/pref_wakelock_summary"/>
 	<Preference
 		android:key="@string/pref_about_key"
 		android:persistent="false"

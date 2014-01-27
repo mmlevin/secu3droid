@@ -29,8 +29,8 @@
 <resources>
     <string name="pref_bluetooth_device_title">Вибір пристрою Bluetooth</string>
     <string name="pref_bluetooth_device_summary">Поточний пристрій: %s</string>
-        <string name="pref_binary_mode_title">Двійковий режим</string>
-        <string name="pref_speed_pulse_title">Імпульсів датчика швидкості на 1 км</string>
+    <string name="pref_binary_mode_title">Двійковий режим</string>
+    <string name="pref_speed_pulse_title">Імпульсів датчика швидкості на 1 км</string>
     <string name="pref_binary_mode_summary">Прошивка Secu-3 повинна бути скомпільована з UART_BINARY, вимагає перезапуску при зміні</string>        
     <string name="pref_protocol_version_title">Оберіть версію протоколу</string>
     <string name="pref_protocol_version_summary">Поточна версія протоколу: %s, вимагає перезапуску при зміні</string>
@@ -50,4 +50,8 @@
     <string name="pref_write_log_path_summary"> Якщо нічого не введено, лог буде зберігатися в %1$s</string>
     <string name="pref_night_mode_title">Нічний режим</string>
     <string name="pref_night_mode_summary">Використовувати темне оформлення, вимагає перезапуску</string>
+    <string name="pref_keep_screen_title">Не вимикати екран</string>
+    <string name="pref_keep_screen_summary">Екран залишається включеним, поки відображаються дані сенсорів</string>
+    <string name="pref_wakelock_title">Залишати пристрій включеним</string>
+    <string name="pref_wakelock_summary">CPU завжди працює, поки запущений Secu3Droid</string>
 </resources>
