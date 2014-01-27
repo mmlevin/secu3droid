@@ -48,14 +48,14 @@ import android.content.IntentFilter;
 import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-	private static final String CHECKBOX = "checkbox";
+	private static final String RAW_SENSORS = "RAW_SENSORS";
 	private static final String STATUS = "status";
 	private static final String DATA = "data";	
 
@@ -64,7 +64,9 @@ public class MainActivity extends Activity {
 	private String sensorsRawFormat = "";
 	private boolean isOnline;
 	private boolean errors = false;
+	private boolean rawSensors = false;
 	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
+	private LinearLayout logButtonLayout = null;
 	
 	private PacketUtils packetUtils = null;
 	
@@ -72,8 +74,7 @@ public class MainActivity extends Activity {
 	TextView textViewData = null;
 	TextView textViewDataExt = null;
 	TextView textViewStatus = null;
-	TextView textFWInfo = null;
-	CheckBox checkBoxRawData = null;	
+	TextView textFWInfo = null;	
 	int fwOptions = Integer.MIN_VALUE;
 	
 	public class ReceiveMessages extends BroadcastReceiver 
@@ -100,7 +101,6 @@ public class MainActivity extends Activity {
 		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);	
 		setContentView(R.layout.activity_main);		
 
-		protocol_version = SettingsActivity.getProtocolVersion(getBaseContext());
 		packetUtils = new PacketUtils(this);
 		
 		sensorsFormat = getString(R.string.sensors_format);
@@ -110,21 +110,45 @@ public class MainActivity extends Activity {
 		textViewDataExt = (TextView)findViewById(R.id.textViewDataExt);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		textFWInfo = (TextView)findViewById(R.id.mainTextFWInfo);
-		checkBoxRawData = (CheckBox)findViewById(R.id.mainShowRawDataCheckBox);	
-		checkBoxRawData.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (buttonView == checkBoxRawData) setRawMode(isChecked);				
-			}
-		});
 		
 		receiver = new ReceiveMessages();		
 		
 		if (savedInstanceState != null) {
 			textViewData.setText(savedInstanceState.getString(DATA));
 			textViewStatus.setText(savedInstanceState.getString(STATUS));
-			checkBoxRawData.setChecked(savedInstanceState.getBoolean(CHECKBOX));
+			rawSensors =  savedInstanceState.getBoolean(RAW_SENSORS);
 		}
+		
+		setRawMode(rawSensors);
+				
+		logButtonLayout = (LinearLayout)findViewById(R.id.mainLogButtonLayout);
+				
+		View.OnClickListener logButtonListener = new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				switch (v.getId()) {
+				case R.id.mainLogButton1:
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,v.getContext(),Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_1.ordinal()));
+					break;
+				case R.id.mainLogButton2:startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,v.getContext(),Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_2.ordinal()));
+					break;
+				case R.id.mainLogButton3:
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,v.getContext(),Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_3.ordinal()));
+					break;
+					default:break;
+				}
+				
+			}
+		};
+		
+		Button b = (Button) findViewById(R.id.mainLogButton1);
+		b.setOnClickListener(logButtonListener);
+		b= (Button) findViewById(R.id.mainLogButton2);
+		b.setOnClickListener(logButtonListener);
+		b= (Button) findViewById(R.id.mainLogButton3);
+		b.setOnClickListener(logButtonListener);
+		
 		
 		super.onCreate(savedInstanceState);		
 	}
@@ -133,7 +157,7 @@ public class MainActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {						
 		outState.putString(DATA, textViewData.getText().toString());
 		outState.putString(STATUS, textViewStatus.getText().toString());
-		outState.putBoolean(CHECKBOX, checkBoxRawData.isChecked());
+		outState.putBoolean(RAW_SENSORS, rawSensors);
 		super.onSaveInstanceState(outState);		
 	}
 		
@@ -145,13 +169,10 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem m = menu.findItem(R.id.menu_errors);
+		MenuItem m = menu.findItem(R.id.menu_errors);		
 		m.setIcon(errors?R.drawable.ic_menu_errors_highlighted:R.drawable.ic_menu_errors);
-		if ((protocol_version < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) || (!SettingsActivity.isSensorLoggerEnabled(this))) {			
-			menu.removeItem(R.id.menu_set_log_marker_1);
-			menu.removeItem(R.id.menu_set_log_marker_2);
-			menu.removeItem(R.id.menu_set_log_marker_3);
-		}
+		m = menu.findItem(R.id.menu_raw_sensors);
+		m.setChecked(rawSensors);
 		return true;
 	}
 	
@@ -189,14 +210,9 @@ public class MainActivity extends Activity {
 				.create()
 				.show();
 			return true;
-		case R.id.menu_set_log_marker_1:
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_1.ordinal()));
-			return true;
-		case R.id.menu_set_log_marker_2:
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_2.ordinal()));
-			return true;
-		case R.id.menu_set_log_marker_3:
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_SET_LOG_MARKER_3.ordinal()));
+		case R.id.menu_raw_sensors:
+			rawSensors = item.isChecked();
+			setRawMode(rawSensors);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -208,7 +224,9 @@ public class MainActivity extends Activity {
 	protected void onResume() {				
 		registerReceiver(receiver, receiver.intentFilter);
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
-		setRawMode(checkBoxRawData.isChecked());
+		protocol_version = SettingsActivity.getProtocolVersion(getBaseContext());
+		logButtonLayout.setVisibility(((protocol_version < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) || (!SettingsActivity.isSensorLoggerEnabled(this)))?View.GONE:View.VISIBLE);
+		setRawMode(rawSensors);
 		ActivityCompat.invalidateOptionsMenu(this);
 		super.onResume();		
 	}
@@ -222,7 +240,7 @@ public class MainActivity extends Activity {
 	private void setRawMode(boolean raw) {
 		SECU3_TASK task = raw?SECU3_TASK.SECU3_RAW_SENSORS:SECU3_TASK.SECU3_READ_SENSORS;
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));
-	}
+	}	
 	
 	void update(Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {			
@@ -232,7 +250,7 @@ public class MainActivity extends Activity {
 			if (isOnline && !this.isOnline) {
 				this.isOnline = true;						
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, SECU3_TASK.SECU3_READ_FW_INFO.ordinal()));
-				setRawMode(checkBoxRawData.isChecked());				
+				setRawMode(rawSensors);				
 			}						
 		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
 		{
@@ -245,7 +263,7 @@ public class MainActivity extends Activity {
 						this.errors = errors;
 						ActivityCompat.invalidateOptionsMenu(this);
 					}
-					if (!checkBoxRawData.isChecked()) {
+					if (rawSensors) {
 						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
 						textViewData.setText(String.format(Locale.US,sensorsFormat,
 								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
@@ -275,7 +293,7 @@ public class MainActivity extends Activity {
 					}			
 					break;
 				case R.string.packet_type_adcraw_dat:
-					if (checkBoxRawData.isChecked()) {
+					if (rawSensors) {
 						textViewDataExt.setText(null);
 						textViewData.setText(String.format(Locale.US,sensorsRawFormat,
 								((ProtoFieldFloat) packet.getField(R.string.adcraw_map_title)).getValue(),

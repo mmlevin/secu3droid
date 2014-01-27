@@ -57,10 +57,8 @@
     <string name="title_activity_settings">Settings</string>
     <string name="menu_errors">Errors</string>
     <string name="menu_preferences">Preferences</string>
+    <string name="menu_raw_sensors">Raw values</string>
     <string name="menu_exit">Exit</string>
-    <string name="menu_log_marker_1">Insert marker #1</string>
-    <string name="menu_log_marker_2">Insert marker #2</string>
-    <string name="menu_log_marker_3">Insert marker #3</string>
     <string name="menu_diagnostics">Diagnostics</string>
     <string name="menu_diagnostics_warning_title">WARNING! Disconnect ignition coils before entering diagnostic mode. Before testing of BL, DE outputs make sure that corresp. jumpers are opened!\nWARNING! Displayed inputs\' values are on the MCU lines, not on the external connector (there are differences).</string>
     <string name="menu_params_download_title">Download</string>
@@ -98,10 +96,12 @@
         <item>Breakage or wrong work of cam sensor</item>
         <item>Breakage or wrong indications of TPS</item>
     </string-array>
-
+    
+    <string name="log_marker_1">Mrk.#1</string>
+    <string name="log_marker_2">Mrk.#2</string>
+    <string name="log_marker_3">Mrk.#3</string>    
     <string name="errors_realtime_errors_title">Read errors in realtime</string>
     <string name="errors_inertion_title">Show errors with inertness</string>
-    <string name="show_raw_data_title">Show raw values of sensors</string>
     <string name="title_activity_diagnostics">Diagnostics</string>
     <string name="action_settings">Settings</string>
     <string name="diagnostics_not_supported_title">Diagnostics option disabled in your firmware or Secu-3 device not connected</string>

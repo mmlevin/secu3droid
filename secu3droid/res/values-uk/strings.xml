@@ -60,6 +60,7 @@
     <string name="menu_errors">Помилки</string>
     <string name="menu_preferences">Налаштування</string>
     <string name="menu_exit">Вихід</string>
+    <string name="menu_raw_sensors">Сирі значення</string>
     <string name="menu_diagnostics">Діагностика</string>
     <string name="menu_diagnostics_warning_title">Вимкніть котушки запалювання перед входом в діагностичний режим, інакше можливе їх пошкодження!</string>
     <string name="menu_params_download_title">Зчитати</string>
@@ -67,9 +68,6 @@
     <string name="menu_params_save_eeprom_title">Зберегти</string>
     <string name="menu_errors_read">Зчитати</string>
     <string name="menu_errors_write">Зберегти</string>
-    <string name="menu_log_marker_1">Вставити маркер #1</string>
-    <string name="menu_log_marker_2">Вставити маркер #2</string>
-    <string name="menu_log_marker_3">Вставити маркер #3</string>
     <string name="about_title">Про програму</string>
     <string name="about_version">Secu3Droid версія</string>
     <string name="about_copyright_1">Copyright © 2013 Максим Левин</string>
@@ -101,9 +99,11 @@
         <item>Несправність або неправильні показання ДПДЗ</item>
     </string-array>
 
+    <string name="log_marker_1">Мрк.#1</string>
+    <string name="log_marker_2">Мрк.#2</string>
+    <string name="log_marker_3">Мрк.#3</string>
     <string name="errors_realtime_errors_title">Зчитувати помилки в реальному часі</string>
     <string name="errors_inertion_title">Показувати помилки з інертністю</string>
-    <string name="show_raw_data_title">Показувати сирі значення датчиків</string>
     <string name="title_activity_diagnostics">Діагностика</string>
     <string name="action_settings">Налаштування</string>
     <string name="diagnostics_not_supported_title">Режим діагностики відключений в прошивці або не встановлено з\'єднання з Secu-3</string>

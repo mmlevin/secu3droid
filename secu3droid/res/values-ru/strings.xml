@@ -59,16 +59,14 @@
     <string name="menu_errors">Ошибки</string>
     <string name="menu_preferences">Настройки</string>
     <string name="menu_exit">Выход</string>
+    <string name="menu_raw_sensors">Сырые значения</string>
     <string name="menu_diagnostics">Диагностика</string>
     <string name="menu_diagnostics_warning_title">ВНИМАНИЕ! Отключите катушки зажигания перед входом в диагностический режим. Перед тестиров. вых. BL, DE убедитесь что перемычки сняты!\nВНИМАНИЕ! Значения входов показываются на выводах МК, а не на внешнем разъеме (есть отличия).</string>
     <string name="menu_params_download_title">Считать</string>
     <string name="menu_params_upload_title">Загрузить</string>
     <string name="menu_params_save_eeprom_title">Сохранить</string>
     <string name="menu_errors_read">Считать</string>
-    <string name="menu_errors_write">Сохранить</string>
-    <string name="menu_log_marker_1">Вставить маркер #1</string>
-    <string name="menu_log_marker_2">Вставить маркер #2</string>
-    <string name="menu_log_marker_3">Вставить маркер #3</string>
+    <string name="menu_errors_write">Сохранить</string>    
     <string name="about_title">О программе</string>
     <string name="about_version">Secu3Droid версия</string>
     <string name="about_copyright_1">Copyright © 2013 Максим Левин</string>
@@ -100,9 +98,11 @@
         <item>Поломка или неправильные показания ДПДЗ</item>
     </string-array>
 
+    <string name="log_marker_1">Мрк.#1</string>
+    <string name="log_marker_2">Мрк.#2</string>
+    <string name="log_marker_3">Мрк.#3</string>
     <string name="errors_realtime_errors_title">Считывать ошибки в реальном времени</string>
     <string name="errors_inertion_title">Показывать ошибки с инертностью</string>
-    <string name="show_raw_data_title">Показывать сырые значения датчиков</string>
     <string name="title_activity_diagnostics">Диагностика</string>
     <string name="action_settings">Настройки</string>
     <string name="diagnostics_not_supported_title">Режим диагностики отключен в прошивке или не установлено соединение с Secu-3</string>

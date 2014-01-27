@@ -44,19 +44,11 @@
         android:layout_centerHorizontal="true"
         android:text="@string/status_offline" />
 
-    <CheckBox
-        android:id="@+id/mainShowRawDataCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/mainTextViewStatus"
-        android:layout_alignParentLeft="true"
-        android:text="@string/show_raw_data_title" />
-
     <TextView
         android:id="@+id/mainTextFWInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/mainShowRawDataCheckBox"
+        android:layout_above="@+id/mainTextViewStatus"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:text=""
@@ -66,7 +58,7 @@
         android:id="@+id/mainScrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/mainTextFWInfo"
+        android:layout_above="@+id/mainLogButtonLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" >
@@ -93,5 +85,34 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/mainLogButtonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/mainTextFWInfo">
+
+        <Button
+            android:id="@+id/mainLogButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log_marker_1" />
+
+        <Button
+            android:id="@+id/mainLogButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log_marker_2" />
+
+        <Button
+            android:id="@+id/mainLogButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log_marker_3" />
+
+    </LinearLayout>
 
 </RelativeLayout>
