@@ -224,8 +224,8 @@ public class MainActivity extends Activity {
 				.create()
 				.show();
 			return true;
-		case R.id.menu_raw_sensors:
-			rawSensors = item.isChecked();
+		case R.id.menu_raw_sensors:			
+			item.setChecked(rawSensors = !item.isChecked());
 			setRawMode(rawSensors);
 			return true;
 		default:
@@ -290,7 +290,7 @@ public class MainActivity extends Activity {
 						this.errors = errors;
 						ActivityCompat.invalidateOptionsMenu(this);
 					}
-					if (rawSensors) {
+					if (!rawSensors) {
 						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
 						textViewData.setText(String.format(Locale.US,sensorsFormat,
 								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
