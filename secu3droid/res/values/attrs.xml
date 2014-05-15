@@ -40,4 +40,31 @@
 	<attr name="packet_id" format="string"/>
 	<attr name="packet_dir" format="string"/>
 	<attr name="signed" format="boolean"/>
+	
+	<attr name="id" format="reference" />
+    <attr name="texture" format="string" />
+    <attr name="scale_texture" format="string" />
+    <attr name="labels_texture" format="string" />
+    <attr name="arrow_texture" format="string" />
+    <attr name="degrees_per_unit" format="float" />
+    <attr name="begin_angle" format="float" />
+    <attr name="end_angle" format="float" />         
+    <attr name="width" format="float" />   
+    <attr name="height" format="float" />
+    <attr name="x" format="float" />
+    <attr name="y" format="float" />
+    <attr name="scale_x" format="float" />
+    <attr name="scale_y" format="float" />
+    <attr name="labels_x" format="float" />
+    <attr name="labels_y" format="float" />
+    <attr name="arrow_x" format="float" />
+    <attr name="arrow_y" format="float" />
+    <attr name="arrow_anchor_x" format="float" />
+    <attr name="arrow_anchor_y" format="float" />
+    <attr name="max_value" format="float" />
+    <attr name="min_value" format="float" />
+    <attr name="size" format="float" />
+    <attr name="font" format="string" />
+    <attr name="format" format="string" />
+    <attr name="color" format="integer" />
 </resources>

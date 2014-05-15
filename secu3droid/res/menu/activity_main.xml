@@ -26,7 +26,7 @@
 -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+	<item android:id="@+id/menu_dashboard" android:title="@string/menu_dashboard" android:showAsAction="never" android:icon="@android:drawable/ic_menu_preferences"/>
     <item android:id="@+id/menu_preferences" android:title="@string/menu_preferences" android:showAsAction="never" android:icon="@android:drawable/ic_menu_preferences"/>
     <item android:id="@+id/menu_params" android:title="@string/menu_param" android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_manage"></item>
     <item android:id="@+id/menu_errors" android:title="@string/menu_errors" android:showAsAction="ifRoom" android:icon="@drawable/ic_menu_errors"></item>

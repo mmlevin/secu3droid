@@ -27,6 +27,7 @@ package org.secu3.android;
 
 import java.util.Locale;
 
+import org.andengine.AndEngine;
 import org.secu3.android.api.io.ProtoFieldFloat;
 import org.secu3.android.api.io.ProtoFieldInteger;
 import org.secu3.android.api.io.ProtoFieldString;
@@ -34,6 +35,7 @@ import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.utils.PacketUtils;
+import org.secu3.android.DashBoardActivity;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -193,6 +195,16 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_dashboard:
+			if(!AndEngine.isDeviceSupported(this)) {
+				new AlertDialog.Builder(this)
+				.setTitle(R.string.dialog_device_not_supported_title)
+				.setMessage(R.string.dialog_device_not_supported_title)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(android.R.string.ok, null)
+				.create().show();
+			} else startActivity(new Intent(this,DashBoardActivity.class));
+			return true;
 		case R.id.menu_preferences:
 			startActivity(new Intent(this,SettingsActivity.class));
 			return true;

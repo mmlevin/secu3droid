@@ -46,4 +46,17 @@
     <item type = "id" name="field_type_float24">float24</item>
     <item type = "id" name="field_type_float32">float32</item>
 	<item type = "id" name="field_type_string">string</item>    
+    
+    <item type = "id" name="GaugeSpeedometer">speedometer</item>
+    <item type = "id" name="GaugeOdometer">odometer</item>
+    <item type = "id" name="GaugeTachometer">tachometer</item>
+    <item type = "id" name="GaugeTermometer">termometer</item>
+    <item type = "id" name="GaugeVoltmeter">voltmeter</item>
+    <item type = "id" name="GaugeManometer">manometer</item>
+    <item type = "id" name="GaugeSprite">sprite</item>
+    <item type = "id" name="LedCheckEngine">check_engine</item>
+    <item type = "id" name="LedGasoline">gasoline</item>
+    <item type = "id" name="LedEco">eco</item>
+    <item type = "id" name="LedPower">power</item>
+    <item type = "id" name="LedChoke">choke</item>
 </resources>

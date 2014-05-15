@@ -73,6 +73,12 @@
             android:name="org.secu3.android.DiagnosticsActivity"
             android:label="@string/title_activity_diagnostics" >
         </activity>
+        <activity
+            android:name=".DashBoardActivity"
+            android:label="@string/app_name"
+            android:configChanges="">
+		</activity>            
+        
     </application>
 
 </manifest>
