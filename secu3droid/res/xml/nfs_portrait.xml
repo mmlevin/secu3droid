@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res/org.secu3.android"
     app:width="1024"
     app:height="600"
-    app:texture="gfx/landscape/background_landscape.png">
+    app:color="0">
 
     <GaugeDigital
         app:id="@id/GaugeSpeedometer"
@@ -12,7 +12,7 @@
         app:font="digital-7 (mono italic).ttf"
         app:size="170"
         app:color="4294967295"
-        app:format="%03d"/>    
+        app:format="%03.0f"/>    
         
     <GaugeDigital
         app:id="@id/GaugeOdometer"
@@ -21,8 +21,56 @@
         app:font="digital-7 (mono italic).ttf"
         app:size="85"
         app:color="4294967295"
-        app:format="%06d"/>
+        app:format="%08.1f"/>
     
+	<Led
+        app:id="@id/LedOnline"
+        texture="gfx/landscape/car.png"
+        app:x="512"
+        app:y="220"/>
+	
+	<Sprite
+        app:id="@id/GaugeSprite"
+        texture="gfx/landscape/indicators_frame_landscape.png"
+        app:x="510.5"
+        app:y="53"/>
+    
+    <Led
+        app:id="@id/LedCheckEngine"
+        app:texture="gfx/landscape/indicators-check-engine-landscape.png"
+        app:x="347"
+        app:y="55"/> 
+        
+    <Led
+        app:id="@id/LedGasoline"
+        app:texture="gfx/landscape/indicators-gasoline-landscape.png"
+        app:x="428"
+        app:y="55"/>
+    
+    <Led
+        app:id="@id/LedEco"
+        app:texture="gfx/landscape/indicators-eco-landscape.png"
+        app:x="511"
+        app:y="55"/>
+        
+    <Led
+        app:id="@id/LedPower"
+        app:texture="gfx/landscape/indicators-pwr-landscape.png"
+        app:x="593"
+        app:y="55"/>
+    
+    <Led
+        app:id="@id/LedChoke"
+        app:texture="gfx/landscape/indicators-choke-landscape.png"
+        app:x="674"
+        app:y="55"/>    
+        
+    <Led
+        app:id="@id/LedFan"
+        app:texture="gfx/landscape/indicators_fan_landscape.png"
+        app:x="674"
+        app:y="53"/>
+        
     <GaugeAnalog
         app:id="@id/GaugeSpeedometer"
         app:scale_texture="gfx/landscape/speedometer_scale_landscape.png"
@@ -64,8 +112,8 @@
         app:scale_texture="gfx/landscape/temperature_scale_landscape.png"
         app:labels_texture="gfx/landscape/temperature_labels_landscape.png"
 		app:arrow_texture="gfx/landscape/little_arrow_landscape.png"
-		app:degrees_per_unit="-0.443"
-		app:begin_angle="176.3"
+		app:degrees_per_unit="-0.43"
+		app:begin_angle="178.3"
         app:scale_x="802"
         app:scale_y="438"
         app:labels_x="772"
@@ -83,7 +131,7 @@
         app:labels_texture="gfx/landscape/voltmeter_labels_landscape.png"
         app:arrow_texture="gfx/landscape/little_arrow_landscape.png"
         app:degrees_per_unit="-4.41"
-        app:begin_angle="228.4"
+        app:begin_angle="230"
         app:scale_x="802"
         app:scale_y="146.5"
         app:labels_x="793"
@@ -100,8 +148,8 @@
         app:scale_texture="gfx/landscape/map_scale_landscape.png"
         app:labels_texture="gfx/landscape/map_labels_landscape.png"
         app:arrow_texture="gfx/landscape/little_arrow_landscape.png"
-        app:degrees_per_unit="0.34"
-        app:begin_angle="-48.4"
+        app:degrees_per_unit="0.438"
+        app:begin_angle="-50.4"
         app:scale_x="218"
         app:scale_y="146"
         app:labels_x="232.5"
@@ -111,44 +159,7 @@
         app:arrow_anchor_x="369"
         app:arrow_anchor_y="5"        
         app:min_value="-5"
-        app:max_value="105"/>
-    
-    <Sprite
-        app:id="@id/GaugeSprite"
-        texture="gfx/landscape/indicators_frame_landscape.png"
-        app:x="510.5"
-        app:y="53"/>
-    
-    <Led
-        app:id="@id/LedCheckEngine"
-        app:texture="gfx/landscape/indicators-check-engine-landscape.png"
-        app:x="347"
-        app:y="55"/> 
-        
-    <Led
-        app:id="@id/LedGasoline"
-        app:texture="gfx/landscape/indicators-gasoline-landscape.png"
-        app:x="428"
-        app:y="55"/>
-    
-    <Led
-        app:id="@id/LedEco"
-        app:texture="gfx/landscape/indicators-eco-landscape.png"
-        app:x="511"
-        app:y="55"/>
-        
-    <Led
-        app:id="@id/LedPower"
-        app:texture="gfx/landscape/indicators-pwr-landscape.png"
-        app:x="593"
-        app:y="55"/>
-    
-    <Led
-        app:id="@id/LedChoke"
-        app:texture="gfx/landscape/indicators-choke-landscape.png"
-        app:x="674"
-        app:y="55"/>    
-    
+        app:max_value="105"/>            
 </DashBoard>    
 
 

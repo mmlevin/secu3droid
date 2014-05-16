@@ -2,7 +2,6 @@ package org.secu3.android;
 
 import java.io.IOException;
 
-import org.andengine.AndEngine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -12,6 +11,12 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.secu3.android.api.io.ProtoFieldFloat;
+import org.secu3.android.api.io.ProtoFieldInteger;
+import org.secu3.android.api.io.Secu3Packet;
+import org.secu3.android.api.io.Secu3Service;
+import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
+import org.secu3.android.api.utils.PacketUtils;
 import org.secu3.android.api.utils.ResourcesUtils;
 import org.secu3.android.gauges.DashBoard;
 import org.secu3.android.gauges.GaugeAnalog;
@@ -21,8 +26,14 @@ import org.secu3.android.gauges.SpriteGauge;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.view.WindowManager;
 
 public class DashBoardActivity extends SimpleBaseGameActivity {	
 	private DashBoard dashBoard = null;
@@ -30,6 +41,44 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 	private Camera mCamera;
 		
 	protected int odometer;
+	private boolean isOnline;
+	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
+	private PowerManager.WakeLock wakelock = null;
+	ReceiveMessages receiver = null;
+	private PacketUtils packetUtils = null;
+	long time = 0;
+	float delta = 0;
+	
+	float speedData = 0;
+	float odometerData = 0;
+	float pressureData = 0;
+	float tempData = 0;
+	float voltageData = 8;
+	float rpmData = 0;
+	float onlineData = 0;
+	float checkEngineData = 0;
+	float gasolineData = 0;
+	float ecoData = 0;
+	float powerData = 0;
+	float chokeData = 0;
+	float fanData = 0;
+	
+	public class ReceiveMessages extends BroadcastReceiver 
+	{
+		public IntentFilter intentFilter;
+		
+		public ReceiveMessages() {
+			intentFilter = new IntentFilter();
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET);			
+			intentFilter.addAction(Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE);
+		}
+		
+		@Override
+		public void onReceive(Context context, Intent intent) 
+		{    
+			update (intent); 
+		}
+	}
 	
 	public void createDashboardFromXml (int xmlId)
 	{
@@ -45,6 +94,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 						String textureName = null;
 						String width = null;
 						String height = null;
+						int color = 0;
 						
 						int count = xpp.getAttributeCount();
 						for (int i = 0; i != count; i++) {
@@ -59,8 +109,11 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 							if (attr.equals("texture")) {
 								textureName = attrValue;
 							}
+							if (attr.equals("color")) {
+								color = Integer.parseInt(attrValue);
+							}
 						}
-						dashBoard = new DashBoard(Float.parseFloat(width), Float.parseFloat(height), textureName);
+						dashBoard = new DashBoard(Float.parseFloat(width), Float.parseFloat(height), textureName,color);
 					} else
 					if (name.equals("GaugeAnalog")) {				
 						String scaleTexture = null;
@@ -243,6 +296,11 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 	
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
+		packetUtils = new PacketUtils(this);
+		receiver = new ReceiveMessages();				
+		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+		wakelock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Secu3Droid wakelock");
+		
 		super.onCreate(pSavedInstanceState);
 	}
 
@@ -262,37 +320,122 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 	protected Scene onCreateScene() {
 		odometer = 0;
 		this.mEngine.registerUpdateHandler(new FPSLogger());
-		final Scene scene = new Scene();
-				
+		final Scene scene = new Scene();				
 		dashBoard.attach(scene, this.getVertexBufferObjectManager());
 				
 		scene.registerUpdateHandler(new TimerHandler(1 / 10.0f, true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(final TimerHandler pTimerHandler) {
-				odometer++;
-				if (odometer >= 999999) odometer = 0;
-				float speed = (float) (110 - 110*Math.cos(odometer/50.0f));
-				float press = speed / 2;
-				float temp = speed / 2;
-				float voltage = speed / 10;
-				float rpm = speed * 25;
-				dashBoard.setGaugeValue(R.id.GaugeOdometer, odometer,1/10f);
-				dashBoard.setGaugeValue(R.id.GaugeSpeedometer, speed,1/10f);
-				dashBoard.setGaugeValue(R.id.GaugeManometer, press,1/10f);
-				dashBoard.setGaugeValue(R.id.GaugeTermometer, temp,1/10f);
-				dashBoard.setGaugeValue(R.id.GaugeVoltmeter, voltage,1/10f);
-				dashBoard.setGaugeValue(R.id.GaugeTachometer, rpm,1/10f);
+				if (delta <= 0.1) delta = 0.1f;
+				dashBoard.setGaugeValue(R.id.GaugeOdometer, odometerData,delta);
+				dashBoard.setGaugeValue(R.id.GaugeSpeedometer, speedData,delta);
+				dashBoard.setGaugeValue(R.id.GaugeManometer, pressureData,delta);
+				dashBoard.setGaugeValue(R.id.GaugeTermometer, tempData,delta);
+				dashBoard.setGaugeValue(R.id.GaugeVoltmeter, voltageData,delta);
+				dashBoard.setGaugeValue(R.id.GaugeTachometer, rpmData,delta);			
 				
-				int lamp = (int) (speed / 120);
-				dashBoard.setGaugeValue(R.id.LedCheckEngine, lamp, 0.3f);
-				dashBoard.setGaugeValue(R.id.LedGasoline, lamp, 0.3f);
-				dashBoard.setGaugeValue(R.id.LedEco, lamp, 0.3f);
-				dashBoard.setGaugeValue(R.id.LedPower, lamp, 0.3f);
-				dashBoard.setGaugeValue(R.id.LedChoke, lamp, 0.3f);
+				dashBoard.setGaugeValue(R.id.LedOnline, onlineData, 0.3f);
+				dashBoard.setGaugeValue(R.id.LedCheckEngine, checkEngineData, 0.3f);
+				dashBoard.setGaugeValue(R.id.LedGasoline, gasolineData, 0.3f);
+				dashBoard.setGaugeValue(R.id.LedEco, ecoData, 0.3f);
+				dashBoard.setGaugeValue(R.id.LedPower, powerData, 0.3f);
+				dashBoard.setGaugeValue(R.id.LedChoke, chokeData, 0.3f);
+				dashBoard.setGaugeValue(R.id.LedFan, fanData, 0.3f);
 			}
 		}));
 					
 		return scene;
 	}
+	
+	@Override
+	protected synchronized void onResume() {
+		if (SettingsActivity.isKeepScreenAliveActive(this)) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		if ((wakelock != null)&&(SettingsActivity.isWakeLockEnabled(this))) {
+			wakelock.acquire();
+		} else if ((wakelock != null)&&(wakelock.isHeld())) {
+			wakelock.release();
+		}
+		registerReceiver(receiver, receiver.intentFilter);
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
+		protocol_version = SettingsActivity.getProtocolVersion(getBaseContext());
+		SECU3_TASK task = SECU3_TASK.SECU3_READ_SENSORS;
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));		
+		super.onResume();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if ((wakelock != null)&&(wakelock.isHeld())) {
+			wakelock.release();
+		}
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {	
+		if (SettingsActivity.isKeepScreenAliveActive(this)) {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		unregisterReceiver(receiver);
+		super.onPause();		
+	}
+	
+	void update(Intent intent) {
+		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {				
+			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
+			onlineData = isOnline?1:0;
+			if (isOnline && !this.isOnline) {
+				this.isOnline = true;						
 
+			}						
+		} else if (Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PACKET.equals(intent.getAction()))
+		{
+			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
+			if (packet != null) {
+				if (time != 0) {
+					delta = (float) ((System.currentTimeMillis() - time) / 1000.0);
+				}
+				time = System.currentTimeMillis();
+				
+				switch (packet.getPacketIdResId()) {
+				case R.string.packet_type_sendor_dat:
+					int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
+					rpmData = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue();
+					pressureData = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue();
+					voltageData = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_voltage_title)).getValue();
+					tempData = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_temperature_title)).getValue(); 
+					checkEngineData = (((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue() != 0)?1:0;
+					gasolineData = (Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_GAS) != 0) ? 0:1;
+					ecoData = (Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE) != 0)?0:1;
+					powerData = (Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE) != 0)?1:0;
+					fanData = (Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN) != 0)?1:0;
+					chokeData = (((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()>=95.0)?1:0;
+					
+
+					/*		((ProtoFieldFloat) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(),
+							((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_title)).getValue(),
+							((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(),
+							((ProtoFieldInteger) packet.getField(R.string.sensor_dat_air_flow_title)).getValue(),
+							Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB),							
+							Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK),
+							((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(),
+							((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
+							((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue() */													
+					
+					if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
+						speedData = packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue());
+						odometerData = packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue()); 		
+					}			
+					break;
+				default:
+					break;
+				}
+			}
+		}		
+	}
+	
 }

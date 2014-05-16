@@ -45,7 +45,7 @@ public class GaugeDigital extends BaseGauge {
 
 	@Override
 	public void attach(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
-		text = new Text (getX(),getY(),font,String.format(format, Float.valueOf(value).intValue()),10,new TextOptions(HorizontalAlign.LEFT),vertexBufferObjectManager);
+		text = new Text (getX(),getY(),font,String.format(format, value),15,new TextOptions(HorizontalAlign.LEFT),vertexBufferObjectManager);
 		text.setAnchorCenterX(0);
 		text.setPosition(getX()-text.getWidth()/2, getY());
 		scene.attachChild(text);
@@ -58,7 +58,7 @@ public class GaugeDigital extends BaseGauge {
 	@Override
 	public void setValue(float value, float delay) {
 		this.value = value;
-		text.setText(String.format(format, Float.valueOf(value).intValue()));
+		text.setText(String.format(format, value));
 	}
 
 }

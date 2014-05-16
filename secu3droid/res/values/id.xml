@@ -54,9 +54,11 @@
     <item type = "id" name="GaugeVoltmeter">voltmeter</item>
     <item type = "id" name="GaugeManometer">manometer</item>
     <item type = "id" name="GaugeSprite">sprite</item>
+	<item type = "id" name="LedOnline">check_engine</item>    
     <item type = "id" name="LedCheckEngine">check_engine</item>
     <item type = "id" name="LedGasoline">gasoline</item>
     <item type = "id" name="LedEco">eco</item>
     <item type = "id" name="LedPower">power</item>
     <item type = "id" name="LedChoke">choke</item>
+    <item type = "id" name="LedFan">fan</item>
 </resources>

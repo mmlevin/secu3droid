@@ -58,6 +58,8 @@
     <string name="title_activity_errors">Помилки</string>
     <string name="title_activity_settings">Налаштування</string>
     <string name="menu_errors">Помилки</string>
+    <string name="menu_dashboard">Приладова панель</string>
+    <string name="dialog_device_not_supported_title">Пристрій не підтримується!</string>
     <string name="menu_preferences">Налаштування</string>
     <string name="menu_exit">Вихід</string>
     <string name="menu_raw_sensors">Сирі значення</string>

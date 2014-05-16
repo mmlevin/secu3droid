@@ -23,8 +23,9 @@ public class DashBoard extends BaseGauge {
 	private ITexture texture;
 	private ITextureRegion textureRegion;
 	private Sprite sprite;
+	private int color;
 	
-	public DashBoard(float width, float height, String texture) {
+	public DashBoard(float width, float height, String texture, int color) {
 		gauges = new ArrayList<BaseGauge>();
 		this.textureName = texture;
 		this.width = width;
@@ -33,9 +34,11 @@ public class DashBoard extends BaseGauge {
 
 	@Override
 	public void load(BaseGameActivity activity) throws IOException {
-		this.texture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.textureName, TextureOptions.BILINEAR);
-		this.textureRegion = TextureRegionFactory.extractFromTexture(this.texture);
-		this.texture.load();	
+		if (textureName != null) {
+			this.texture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.textureName, TextureOptions.BILINEAR);
+			this.textureRegion = TextureRegionFactory.extractFromTexture(this.texture);
+			this.texture.load();	
+		}		
 		
 		int count = gauges.size();
 		for (int i = 0;  i != count; i++) {
@@ -45,8 +48,11 @@ public class DashBoard extends BaseGauge {
 	
 	@Override
 	public void attach(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
-		sprite = new Sprite(width/2, height/2, textureRegion, vertexBufferObjectManager);
-		scene.attachChild(sprite);
+		scene.getBackground().setColor((color & 0xff)/255.0f,((color >> 8)&0xff)/255.0f,((color >> 16)&0xff)/255.0f,((color >> 24)&0xff)/255.0f);
+		if (textureName != null) {
+			sprite = new Sprite(width/2, height/2, textureRegion, vertexBufferObjectManager);
+			scene.attachChild(sprite);
+		}
 		
 		int count = gauges.size();
 		for (int i = 0;  i != count; i++) {
@@ -78,5 +84,13 @@ public class DashBoard extends BaseGauge {
 		int count = gauges.size();
 		for (int i=0; i != count; i++)
 			if (gauges.get(i).getId() == id) gauges.get(i).setValue(value, delay);
+	}
+
+	public int getColor() {
+		return color;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
 	}
 }

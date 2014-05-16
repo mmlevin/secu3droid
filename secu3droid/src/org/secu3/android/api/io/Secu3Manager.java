@@ -484,7 +484,7 @@ public class Secu3Manager {
 						Log.d(LOG_TAG, "Send packet:" + p);
 						updateProgress(++progressCurrent);
 						try {
-							Thread.sleep(200);
+							Thread.sleep(20);
 						} catch (InterruptedException e) {
 						}
 						writer.flush();

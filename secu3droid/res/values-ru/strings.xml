@@ -55,6 +55,8 @@
     <string name="status_offline">Отключено</string>
     <string name="status_online">Подключено</string>
     <string name="title_activity_errors">Ошибки</string>
+    <string name="menu_dashboard">Приборная панель</string>
+    <string name="dialog_device_not_supported_title">Устройство не поддерживается!</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="menu_errors">Ошибки</string>
     <string name="menu_preferences">Настройки</string>
