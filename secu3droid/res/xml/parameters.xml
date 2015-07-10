@@ -26,7 +26,8 @@
 -->
 
 <Parameters xmlns:app="http://schemas.android.com/apk/res/org.secu3.android">
-    <Page app:name="@string/starter_title">
+    <Page
+        app:name="@string/starter_title">
         <Parameter
             app:name="@string/starter_off_title"
             app:summary="@string/starter_off_summary"
@@ -89,7 +90,8 @@
             stepValue="0.1"/>
     </Page>         
     
-    <Page app:name="@string/angles_title">
+    <Page
+        app:name="@string/angles_title">
         <Parameter
             app:name="@string/angles_min_angle_title"
             app:summary="@string/angles_min_angle_summary"
@@ -136,7 +138,8 @@
             stepValue="0.25"/>            
     </Page>
     
-    <Page app:name="@string/idling_title">
+    <Page
+        app:name="@string/idling_title">
 		<Parameter
             app:name="@string/idlreg_ifac1_title"
             app:summary="@string/idlreg_ifac1_summary"
@@ -197,7 +200,8 @@
             app:type="@id/parameter_type_boolean"/>
     </Page>
     
-	<Page app:name="@string/functions_title">
+	<Page
+        app:name="@string/functions_title">
 		<Parameter
             app:name="@string/funset_lower_pressure_title"
             app:summary="@string/funset_lower_pressure_summary"
@@ -260,7 +264,8 @@
             stepValue="0.01"/>			
 	</Page>
 	
-	<Page app:name="@string/temperature_title">
+	<Page
+        app:name="@string/temperature_title">
 		<Parameter
             app:name="@string/temper_fan_on_title"
             app:summary="@string/temper_fan_on_summary"
@@ -300,7 +305,8 @@
             stepValue="1"/>
 	</Page>
 	
-	<Page app:name="@string/carburetor_title">
+	<Page
+        app:name="@string/carburetor_title">
        	<Parameter
             app:name="@string/carbur_overrun_lower_threshold_gasoline_title"
             app:summary="@string/carbur_overrun_lower_threshold_gasoline_summary"
@@ -381,7 +387,8 @@
             stepValue="0.25"/>
 	</Page>
 	
-	<Page app:name="@string/adc_errors_title">
+	<Page
+        app:name="@string/adc_errors_title">
 		<Parameter
             app:name="@string/adccor_map_sensor_factor_title"
             app:summary="@string/adccor_map_sensor_factor_summary"
@@ -480,7 +487,8 @@
             stepValue="0.0025"/>                
 	</Page>
 	
-	<Page app:name="@string/ckps_title">
+	<Page
+        app:name="@string/ckps_title">
 		<Parameter
             app:name="@string/ckps_ckps_edge_title"
             app:summary="@string/ckps_ckps_edge_summary"
@@ -540,8 +548,84 @@
             maxValue="110"
             stepValue="0.1"/>
 	</Page>
-        
-	<Page app:name="@string/miscellaneous_title">
+
+    <Page
+        app:name="@string/knock_par_title">
+        <Parameter
+            app:name="@string/knock_par_use_knock_sensor_title"
+            app:summary="@string/knock_par_use_knock_sensor_summary"
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/knock_par_phase_window_begin_title"
+            app:summary="@string/knock_par_phase_window_begin_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="-12"
+            maxValue="54"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/knock_par_phase_window_end_title"
+            app:summary="@string/knock_par_phase_window_end_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="-12"
+            maxValue="54"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/knock_par_knock_filter_frequency_title"
+            app:summary="@string/knock_par_knock_filter_frequency_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="1.22|1.26|1.31|1.35|1.40|1.45|1.51|1.57|1.63|1.71|1.78|1.87|1.96|2.07|2.18|2.31|2.46|2.54|2.62|2.71|2.81|2.92|3.03|3.15|3.28|3.43|3.59|3.76|3.95|4.16|4.39|4.66|4.95|5.12|5.29|5.48|5.68|5.90|6.12|6.37|6.64|6.94|7.27|7.63|8.02|8.46|8.95|9.50|10.12|10.46|10.83|11.22|11.65|12.10|12.60|13.14|13.72|14.36|15.07|15.84|16.71|17.67|18.76|19.98|"
+            app:units="@string/units_kilohertz"/>
+        <Parameter
+            app:name="@string/knock_par_integration_timeout_title"
+            app:summary="@string/knock_par_integration_timeout_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="40|45|50|55|60|65|70|75|80|90|100|110|120|130|140|150|160|180|200|220|240|260|280|300|320|360|400|440|480|520|560|600"
+            app:units="@string/units_us"/>
+        <Parameter
+            app:name="@string/knock_par_angle_displacement_step_title"
+            app:summary="@string/knock_par_angle_displacement_step_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="0"
+            maxValue="20"
+            stepValue="0.25"/>
+        <Parameter
+            app:name="@string/knock_par_angle_retard_step_title"
+            app:summary="@string/knock_par_angle_retard_step_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="0"
+            maxValue="5"
+            stepValue="0.2"/>
+        <Parameter
+            app:name="@string/knock_par_maximal_angle_displacement_title"
+            app:summary="@string/knock_par_maximal_angle_displacement_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            minValue="0"
+            maxValue="25"
+            stepValue="0.25"/>
+        <Parameter
+            app:name="@string/knock_par_knock_threshold_title"
+            app:summary="@string/knock_par_knock_threshold_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_volts"
+            minValue="0.1"
+            maxValue="5"
+            stepValue="0.01"/>
+        <Parameter
+            app:name="@string/knock_par_angle_recovery_delay_title"
+            app:summary="@string/knock_par_angle_recovery_delay_summary"
+            app:type="@id/parameter_type_integer"
+            minValue="1"
+            maxValue="99"
+            stepValue="1"/>
+    </Page>
+
+	<Page
+        app:name="@string/miscellaneous_title">
 		<Parameter
             app:name="@string/miscel_baudrate_title"
             app:summary="@string/miscel_baudrate_summary"
@@ -583,7 +667,8 @@
             stepValue="1"/>		            
 	</Page>
 	
-	<Page app:name="@string/choke_control_title">
+	<Page
+        app:name="@string/choke_control_title">
     	<Parameter
             app:name="@string/choke_steps_title"
             app:summary="@string/choke_steps_summary"
@@ -670,8 +755,9 @@
             app:type="@id/parameter_type_button"/>         
 	</Page>
 	
-	<Page app:name="@string/secur_par_title"
-	      app:minVersion="2">
+	<Page
+        app:name="@string/secur_par_title"
+	    app:minVersion="2">
 	    <Parameter
 	        app:name="@string/secur_par_use_bluetooth_title"
 	        app:summary="@string/secur_par_use_bluetooth_summary"
@@ -705,7 +791,215 @@
             app:minVersion="4"/>
 	</Page>
 
-    <Page app:name="@string/lambda_par_title"
+    <Page
+        app:name="@string/uniout_par_title"
+        app:minVersion="5">
+        <Parameter
+            app:name="@string/unioutput1_title"
+            app:summary="@string/unioutput1_summary"
+            app:type="@id/parameter_type_label"/>
+        <Parameter
+            app:name="@string/unioutput1_condition_1_title"
+            app:summary="@string/unioutput1_condition_1_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_conditions"/>
+        <Parameter
+            app:name="@string/unioutput1_condition_1_inverse_title"
+            app:summary="@string/unioutput1_condition_1_inverse_summary"
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/unioutput1_condition1_on_value_title"
+            app:summary="@string/unioutput1_condition1_on_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput1_condition1_off_value_title"
+            app:summary="@string/unioutput1_condition1_off_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput1_logical_functions_title"
+            app:summary="@string/unioutput1_logical_functions_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_logical_functions"/>
+        <Parameter
+            app:name="@string/unioutput1_condition_2_title"
+            app:summary="@string/unioutput1_condition_2_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_conditions"/>
+        <Parameter
+            app:name="@string/unioutput1_condition_2_inverse_title"
+            app:summary="@string/unioutput1_condition_2_inverse_summary"
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/unioutput1_condition2_on_value_title"
+            app:summary="@string/unioutput1_condition2_on_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput1_condition2_off_value_title"
+            app:summary="@string/unioutput1_condition2_off_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput_delimeter_title"
+            app:type="@id/parameter_type_label"/>
+        <Parameter
+            app:name="@string/unioutput2_title"
+            app:summary="@string/unioutput2_summary"
+            app:type="@id/parameter_type_label"/>
+        <Parameter
+            app:name="@string/unioutput2_condition_1_title"
+            app:summary="@string/unioutput2_condition_1_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_conditions"/>
+        <Parameter
+            app:name="@string/unioutput2_condition_1_inverse_title"
+            app:summary="@string/unioutput2_condition_1_inverse_summary"
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/unioutput2_condition1_on_value_title"
+            app:summary="@string/unioutput2_condition1_on_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput2_condition1_off_value_title"
+            app:summary="@string/unioutput2_condition1_off_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput2_logical_functions_title"
+            app:summary="@string/unioutput2_logical_functions_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_logical_functions"/>
+        <Parameter
+            app:name="@string/unioutput2_condition_2_title"
+            app:summary="@string/unioutput2_condition_2_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_conditions"/>
+        <Parameter
+            app:name="@string/unioutput2_condition_2_inverse_title"
+            app:summary="@string/unioutput2_condition_2_inverse_summary"
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/unioutput2_condition2_on_value_title"
+            app:summary="@string/unioutput2_condition2_on_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput2_condition2_off_value_title"
+            app:summary="@string/unioutput2_condition2_off_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput_delimeter_title"
+            app:type="@id/parameter_type_label"/>
+        <Parameter
+            app:name="@string/unioutput3_title"
+            app:summary="@string/unioutput3_summary"
+            app:type="@id/parameter_type_label"/>
+        <Parameter
+            app:name="@string/unioutput3_condition_1_title"
+            app:summary="@string/unioutput3_condition_1_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_conditions"/>
+        <Parameter
+            app:name="@string/unioutput3_condition_1_inverse_title"
+            app:summary="@string/unioutput3_condition_1_inverse_summary"
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/unioutput3_condition1_on_value_title"
+            app:summary="@string/unioutput3_condition1_on_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput3_condition1_off_value_title"
+            app:summary="@string/unioutput3_condition1_off_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput3_logical_functions_title"
+            app:summary="@string/unioutput3_logical_functions_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_logical_functions"/>
+        <Parameter
+            app:name="@string/unioutput3_condition_2_title"
+            app:summary="@string/unioutput3_condition_2_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_conditions"/>
+        <Parameter
+            app:name="@string/unioutput3_condition_2_inverse_title"
+            app:summary="@string/unioutput3_condition_2_inverse_summary"
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/unioutput3_condition2_on_value_title"
+            app:summary="@string/unioutput3_condition2_on_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput3_condition2_off_value_title"
+            app:summary="@string/unioutput3_condition2_off_value_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="1"
+            stepvalue="1"/>
+    </Page>
+
+    <Page
+        app:name="@string/injctr_par_title"
+        app:minVersion="5">
+        <Parameter
+            app:name="@string/injctr_par_enjine_displacement_title"
+            app:summary="@string/injctr_par_enjine_displacement_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_liter"
+            minValue="0.05"
+            maxValue="3"
+            stepValue="0.001"/>
+        <Parameter
+            app:name="@string/injctr_par_injector_flow_rate_title"
+            app:summary="@string/injctr_par_injector_flow_rate_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_cc_per_min"
+            minValue="50"
+            maxValue="1000"
+            stepValue="0.02"/>
+        <Parameter
+            app:name="@string/injctr_par_injector_config_title"
+            app:summary="@string/injctr_par_injector_config_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/injctr_par_injector_config_type"/>
+        <Parameter
+            app:name="@string/injctr_par_number_of_squirts_per_cycle_title"
+            app:summary="@string/injctr_par_number_of_squirts_per_cycle_summary"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="1|2|4"/>
+    </Page>
+
+    <Page
+        app:name="@string/lambda_par_title"
         app:minVersion="5">
         <Parameter
             app:name="@string/lambda_par_strokes_per_step_title"
@@ -764,7 +1058,8 @@
             stepValue="1"/>
     </Page>
 
-    <Page app:name="@string/accel_par_title"
+    <Page
+        app:name="@string/accel_par_title"
         app:minVersion="5">
         <Parameter
             app:name="@string/accel_par_tpsdot_threshold_title"

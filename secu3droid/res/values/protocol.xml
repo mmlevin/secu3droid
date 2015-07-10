@@ -120,36 +120,33 @@
 
     <string name="ckps_flags_title" translatable="false">CKPS flags</string>
 
-    <string name="uniout_par_unioutput_1_flags_title">Unioutput 1 flags</string>
-    <string name="uniout_par_unioutput_1_condition_1_title">Code of condition 1 for unioutput 1</string>
-    <string name="uniout_par_unioutput_1_condition_2_title">Code of condition 2 for unioutput 1</string>
-    <string name="uniout_par_unioutput_1_threshold_1_on_title">ON threshold 1 for unioutput 1</string>
-    <string name="uniout_par_unioutput_1_threshold_1_off_title">OFF threshold 1 for unioutput 1</string>
-    <string name="uniout_par_unioutput_1_threshold_2_on_title">ON threshold 2 for unioutput 1</string>
-    <string name="uniout_par_unioutput_1_threshold_2_off_title">OFF threshold 2 for unioutput 1</string>
-    <string name="uniout_par_unioutput_2_flags_title">Unioutput 2 flags</string>
-    <string name="uniout_par_unioutput_2_condition_1_title">Code of condition 1 for unioutput 2</string>
-    <string name="uniout_par_unioutput_2_condition_2_title">Code of condition 2 for unioutput 2</string>
-    <string name="uniout_par_unioutput_2_threshold_1_on_title">ON threshold 1 for unioutput 2</string>
-    <string name="uniout_par_unioutput_2_threshold_1_off_title">OFF threshold 1 for unioutput 2</string>
-    <string name="uniout_par_unioutput_2_threshold_2_on_title">ON threshold 2 for unioutput 2</string>
-    <string name="uniout_par_unioutput_2_threshold_2_off_title">OFF threshold 2 for unioutput 2</string>
-    <string name="uniout_par_unioutput_3_flags_title">Unioutput 2 flags</string>
-    <string name="uniout_par_unioutput_3_condition_1_title">Code of condition 1 for unioutput 3</string>
-    <string name="uniout_par_unioutput_3_condition_2_title">Code of condition 2 for unioutput 3</string>
-    <string name="uniout_par_unioutput_3_threshold_1_on_title">ON threshold 1 for unioutput 3</string>
-    <string name="uniout_par_unioutput_3_threshold_1_off_title">OFF threshold 1 for unioutput 3</string>
-    <string name="uniout_par_unioutput_3_threshold_2_on_title">ON threshold 2 for unioutput 3</string>
-    <string name="uniout_par_unioutput_3_threshold_2_off_title">OFF threshold 2 for unioutput 3</string>
-    <string name="uniout_par_logic_function_1_2_title">Logical function between unuioutputs 1 and 2</string>
+    <string name="uniout_par_unioutput_1_flags_title" translatable="false">Unioutput 1 flags</string>
+    <string name="uniout_par_unioutput_1_condition_1_title" translatable="false">Code of condition 1 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_condition_2_title" translatable="false">Code of condition 2 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_1_on_title" translatable="false">ON threshold 1 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_1_off_title" translatable="false">OFF threshold 1 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_2_on_title" translatable="false">ON threshold 2 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_2_off_title" translatable="false">OFF threshold 2 for unioutput 1</string>
+    <string name="uniout_par_unioutput_2_flags_title" translatable="false">Unioutput 2 flags</string>
+    <string name="uniout_par_unioutput_2_condition_1_title" translatable="false">Code of condition 1 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_condition_2_title" translatable="false">Code of condition 2 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_1_on_title" translatable="false">ON threshold 1 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_1_off_title" translatable="false">OFF threshold 1 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_2_on_title" translatable="false">ON threshold 2 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_2_off_title" translatable="false">OFF threshold 2 for unioutput 2</string>
+    <string name="uniout_par_unioutput_3_flags_title" translatable="false">Unioutput 2 flags</string>
+    <string name="uniout_par_unioutput_3_condition_1_title" translatable="false">Code of condition 1 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_condition_2_title" translatable="false">Code of condition 2 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_1_on_title" translatable="false">ON threshold 1 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_1_off_title" translatable="false">OFF threshold 1 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_2_on_title" translatable="false">ON threshold 2 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_2_off_title" translatable="false">OFF threshold 2 for unioutput 3</string>
+    <string name="uniout_par_logic_function_1_2_title" translatable="false">Logical function between unuioutputs 1 and 2</string>
 
     <string name="injctr_par_cyl_num_title" translatable="false">Injector cylinders number</string>
     <string name="injctr_par_injector_flags_title" translatable="false">Injector flags</string>
-    <string name="injctr_par_injector_config_title" translatable="false">Injector configuration</string>
-    <string name="injctr_par_injector_flow_rate_title" translatable="false">Injector flow rate</string>
     <string name="injctr_par_injector_cyl_disp_title" translatable="false">Injector cylinder displacement</string>
     <string name="injctr_par_injector_sd_igl_const_title" translatable="false">Precalculated constant</string>
-
 
     <integer name="protocol_temp_physical_magnitude_divider">4</integer>
     <integer name="protocol_map_physical_magnitude_divider">64</integer>

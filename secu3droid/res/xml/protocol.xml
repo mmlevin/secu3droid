@@ -703,4 +703,34 @@
             app:type="@id/field_type_string"
             app:length="6"/>
     </Packet>
+
+    <Packet app:name="@string/knock_par_title"
+        app:packet_id="@string/packet_type_knock_par">
+        <Field app:name="@string/knock_par_use_knock_sensor_title"
+            app:type="@id/field_type_int4"/>
+        <Field app:name="@string/knock_par_knock_filter_frequency_title"
+            app:type="@id/field_type_int8"/>
+        <Field app:name="@string/knock_par_phase_window_begin_title"
+            app:type="@id/field_type_float16"
+            app:divider="@integer/protocol_angle_divider"/>
+        <Field app:name="@string/knock_par_phase_window_end_title"
+            app:type="@id/field_type_float16"
+            app:divider="@integer/protocol_angle_divider"/>
+        <Field app:name="@string/knock_par_integration_timeout_title"
+            app:type="@id/field_type_int8"/>
+        <Field app:name="@string/knock_par_angle_displacement_step_title"
+            app:type="@id/field_type_float16"
+            app:divider="@integer/protocol_angle_divider"/>
+        <Field app:name="@string/knock_par_angle_retard_step_title"
+            app:type="@id/field_type_float16"
+            app:divider="@integer/protocol_angle_divider"/>
+        <Field app:name="@string/knock_par_maximal_angle_displacement_title"
+            app:type="@id/field_type_float16"
+            app:divider="@integer/protocol_angle_divider"/>
+        <Field app:name="@string/knock_par_knock_threshold_title"
+            app:type="@id/field_type_float16"
+            app:divider="@integer/protocol_adc_discrete_title"/>
+        <Field app:name="@string/knock_par_angle_recovery_delay_title"
+            app:type="@id/field_type_int8"/>
+    </Packet>
 </Protocol>
