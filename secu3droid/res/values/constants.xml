@@ -76,7 +76,10 @@
     <string-array name="protocol_versions" translatable="false">
         <item>12042013 Spring Release</item>
         <item>28082013 Summer Release</item>
-        <item>26122013 Winter Release</item>
+        <item>14012014 Winter Release</item>
+        <item>16052014 Spring Release</item>
+        <item>10022015 Winter Release</item>
+        <item>Developer Release</item>
     </string-array>
     
     <string-array name="csv_delimeters" translatable="false">

@@ -32,8 +32,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import android.os.Environment;
 import android.text.format.Time;
+import android.util.Log;
 
-public abstract class Secu3Logger {			
+public abstract class Secu3Logger {
+	private static final String LOG_TAG = "Secu3Logger";
+
 	private Time time = null;	
 	private BufferedWriter logWriter = null;	
 	private boolean started = false;
@@ -44,7 +47,8 @@ public abstract class Secu3Logger {
 		try {
 			logWriter.write(log);
 			logWriter.flush();
-		} catch (IOException e) {				
+		} catch (IOException e) {
+			Log.e(LOG_TAG,e.getMessage());
 		}		
 	}
 		

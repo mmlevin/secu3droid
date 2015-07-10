@@ -50,8 +50,7 @@ public abstract class BaseParamItem {
 	
 	protected View getView(int resourceID) {
 		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflater.inflate(resourceID, null);
-		return v;
+		return inflater.inflate(resourceID, null);
 	}
 	
 	abstract public View getView();

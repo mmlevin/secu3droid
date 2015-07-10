@@ -64,15 +64,15 @@ public class Secu3Manager {
 
 	public enum SECU3_STATE {
 		SECU3_NORMAL, SECU3_BOOTLOADER
-	};
+	}
 
 	public enum SECU3_PACKET_SEARCH {
 		SEARCH_START, SEARCH_END
-	};
+	}
 
 	public enum SECU3_TASK {
 		SECU3_NONE, SECU3_READ_SENSORS, SECU3_RAW_SENSORS, SECU3_READ_PARAMS, SECU3_READ_ERRORS, SECU3_READ_FW_INFO, SECU3_START_SENSOR_LOGGING, SECU3_STOP_SENSOR_LOGGING, SECU3_START_RAW_LOGGING, SECU3_STOP_RAW_LOGGING, SECU3_SET_LOG_MARKER_1, SECU3_SET_LOG_MARKER_2, SECU3_SET_LOG_MARKER_3
-	};
+	}
 
 	private int progressCurrent = 0;
 	private int progressTotal = 0;
@@ -108,8 +108,8 @@ public class Secu3Manager {
 	private class ConnectedSecu3 extends Thread {
 		public static final int STATUS_TIMEOUT = 10;
 
-		public Queue<Secu3Packet> sendPackets = new LinkedList<Secu3Packet>();
-		public Queue<SECU3_TASK> tasks = new LinkedList<Secu3Manager.SECU3_TASK>();
+		public Queue<Secu3Packet> sendPackets = new LinkedList<>();
+		public Queue<SECU3_TASK> tasks = new LinkedList<>();
 
 		private final BluetoothSocket socket;
 		private final InputStream in;
@@ -184,7 +184,6 @@ public class Secu3Manager {
 				prevSecu3Task = SECU3_TASK.SECU3_NONE;
 				secu3Task = tasks.poll();
 			}
-			;
 		}
 
 		void parsePacket(String packet, BufferedReader reader,
@@ -244,7 +243,7 @@ public class Secu3Manager {
 						((ProtoFieldString) ChangeMode
 								.findField(R.string.change_mode_data_title))
 								.setValue(appContext
-										.getString(R.string.packet_type_sendor_dat));
+										.getString(R.string.packet_type_sensor_dat));
 						writer.write(ChangeMode.pack());
 						writer.flush();
 						break;
@@ -452,7 +451,7 @@ public class Secu3Manager {
 				case SECU3_READ_SENSORS:
 					switch (getProtoWrapper().getLastPacket()
 							.getPacketIdResId()) {
-					case R.string.packet_type_sendor_dat:
+					case R.string.packet_type_sensor_dat:
 						updateTask();
 					}
 					break;
@@ -486,6 +485,7 @@ public class Secu3Manager {
 						try {
 							Thread.sleep(20);
 						} catch (InterruptedException e) {
+							Log.e (LOG_TAG, e.getMessage());
 						}
 						writer.flush();
 					}

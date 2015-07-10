@@ -47,7 +47,6 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		protected NumberPicker numberPickerSign = null;
 		protected NumberPicker numberPickerMain = null;
 		protected NumberPicker numberPickerAdditional = null;
-		private AlertDialog.Builder builder = null;
 		private int numberPickerIndexSign = Integer.MAX_VALUE;
 		private int numberPickerIndexMain = Integer.MAX_VALUE;
 		private int numberPickerIndexAdditional = Integer.MAX_VALUE;
@@ -63,8 +62,10 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 		
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			setRetainInstance(true);			
-			
+			setRetainInstance(true);
+
+			AlertDialog.Builder builder;
+
 		    builder = new AlertDialog.Builder(getActivity());
 		    builder.setTitle(getTag());
 		    builder.setCancelable(true);

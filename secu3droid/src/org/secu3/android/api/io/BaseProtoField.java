@@ -43,7 +43,7 @@ public class BaseProtoField implements Parcelable {
 		this.name = in.readString();
 		this.nameId = in.readInt();
 		this.type = in.readInt();
-		this.binary = (in.readInt()==1)?true:false;
+		this.binary = (in.readInt()==1);
 		this.data = in.readString();
 		this.length = in.readInt();
 	}
@@ -153,7 +153,7 @@ public class BaseProtoField implements Parcelable {
 	}
 	
 	public String IntToBin (int i) {
-		String s = new String();
+		String s = "";
 		switch (getLength()) {
 		case 1:
 			s += (char)(i & 0x00FF);

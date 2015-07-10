@@ -161,7 +161,7 @@ public class PacketUtils {
 							default:
 								if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
 								else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
-								else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue((((ProtoFieldInteger) field).getValue()==1)?true:false);
+								else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue(((ProtoFieldInteger) field).getValue()==1);
 								else if (item instanceof ParamItemSpinner) ((ParamItemSpinner) item).setIndex(((ProtoFieldInteger)field).getValue());
 								break;
 						}
@@ -234,7 +234,7 @@ public class PacketUtils {
 					adapter.setFloatItem(R.string.diag_input_ks1_title, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks1_title)).getValue()));
 					adapter.setFloatItem(R.string.diag_input_ks2_title, (((ProtoFieldFloat) packet.findField(R.string.diag_input_ks2_title)).getValue()));
 					adapter.setFloatItem(R.string.diag_input_carb_title, (((ProtoFieldFloat) packet.findField(R.string.diag_input_carb_title)).getValue()));
-					adapter.setBooleanItem(R.string.diag_input_gas_v, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & (1 << 0)) != 0));
+					adapter.setBooleanItem(R.string.diag_input_gas_v, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & 1) != 0));
 					adapter.setBooleanItem(R.string.diag_input_ckps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & (1 << 1)) != 0));
 					adapter.setBooleanItem(R.string.diag_input_ref_s, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & (1 << 2)) != 0));
 					adapter.setBooleanItem(R.string.diag_input_ps, ((((ProtoFieldInteger) packet.findField(R.string.diag_input_bitfield_title)).getValue() & (1 << 3)) != 0));

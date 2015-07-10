@@ -29,7 +29,7 @@
     xmlns:app="http://schemas.android.com/apk/res/org.secu3.android"
     app:width="1024"
     app:height="600"
-    app:color="0">
+    app:color="#000">
 
     <GaugeDigital
         app:id="@id/GaugeSpeedometer"
@@ -37,7 +37,7 @@
         app:y="347"
         app:font="digital-7 (mono italic).ttf"
         app:size="170"
-        app:color="4294967295"
+        app:color="#ffffffff"
         app:format="%03.0f"/>    
         
     <GaugeDigital
@@ -46,7 +46,7 @@
         app:y="173"
         app:font="digital-7 (mono italic).ttf"
         app:size="85"
-        app:color="4294967295"
+        app:color="#ffffffff"
         app:format="%08.1f"/>
     
 	<Led

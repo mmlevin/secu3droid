@@ -41,7 +41,6 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 	private float maxValue = 0;
 	private float stepValue = 0;
 	private String format = "%.02f";
-	private int stepsCount;	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,7 +117,7 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		if (numberPicker != null) {	
 			if (!isShortMode()) {
 				int stepsCount = Math.round(1 / stepValue);
-				int index = (int) Math.round((Math.abs(value) - Float.valueOf(Math.abs(value)).intValue()) / stepValue);						
+				int index = Math.round((Math.abs(value) - Float.valueOf(Math.abs(value)).intValue()) / stepValue);
 				
 				numberPicker.setMinValue(0);
 				numberPicker.setMaxValue(stepsCount-1);
@@ -127,7 +126,7 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 				String values[] = new String[stepsCount];
 				for (int i = 0; i != stepsCount; i++) {					
 					String value = String.format(Locale.US, getFormat(), stepValue * i);					
-					values[i] = value.substring(value.indexOf('.'));;
+					values[i] = value.substring(value.indexOf('.'));
 				}
 				
 				numberPicker.setDisplayedValues(values);				
@@ -170,13 +169,14 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 		} else {
 			if (value < minValue) throw new IllegalArgumentException("value could not be less than minValue");
 			if (value > maxValue) throw new IllegalArgumentException("value could not be greater than minValue");
-		};
+		}
+
 		this.value = value;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.stepValue = stepValue;
 		
-		stepsCount = Math.round((maxValue - minValue) / stepValue);
+		int stepsCount = Math.round((maxValue - minValue) / stepValue);
 				
 		setShortMode(stepsCount <= SHORT_STYLE_THRESHOLD);
 		return this;
@@ -199,7 +199,7 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 			float whole = Float.valueOf(numberPickerMain.getDisplayedValues()[numberPickerMain.getValue()]);
 			float trunc = Float.valueOf("0"+numberPickerAdditional.getDisplayedValues()[numberPickerAdditional.getValue()]);
 			String signChar = numberPickerSign.getDisplayedValues()[numberPickerSign.getValue()];
-			float sign = (signChar == "-")?-1.0f:1.0f;					
+			float sign = (signChar.equals("-"))?-1.0f:1.0f;
 			return String.format(Locale.US,getFormat(),sign*(whole+trunc));
 		}
 	}

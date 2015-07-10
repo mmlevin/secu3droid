@@ -43,7 +43,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,7 +83,7 @@ public class ErrorsActivity extends Activity {
 		}		
 		adapter.notifyDataSetChanged();
 		ReadingInertion.setEnabled (realtime);
-		ActivityCompat.invalidateOptionsMenu(ErrorsActivity.this);		
+		invalidateOptionsMenu();
 		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SENSORS;
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));	
 	}
@@ -132,7 +131,7 @@ public class ErrorsActivity extends Activity {
 		ReadingInertion = (CheckBox)findViewById(R.id.errorsInertionCheckBox);
 		
 		boolean realtime = RealtimeError.isChecked();
-		errors = new ArrayList<BaseParamItem>();
+		errors = new ArrayList<>();
 		errorsInertness = new int [INERTNESS_COUNT]; 
 		String errorNames[] = getResources().getStringArray(R.array.errors_ecu_errors_names);
 		String errorBCs[] = getResources().getStringArray(R.array.errors_ecu_errors_blink_codes);
@@ -250,7 +249,7 @@ public class ErrorsActivity extends Activity {
 		}
 		
 		for (int i = 0; i != Secu3Packet.SECU3_ECU_ERRORS_COUNT; ++i) {
-			((ParamItemBoolean) errors.get(i)).setValue(((flags & 0x01) != 0)?true:false);
+			((ParamItemBoolean) errors.get(i)).setValue((flags & 0x01) != 0);
 			flags >>= 1; 
 		}
 		adapter.notifyDataSetChanged();
@@ -266,7 +265,7 @@ public class ErrorsActivity extends Activity {
 	
 	private void setErrors(int errors) {
 		for (int i = 0; i != Secu3Packet.SECU3_ECU_ERRORS_COUNT; ++i) {
-			((ParamItemBoolean) this.errors.get(i)).setValue(((errors & 0x01)!=0)?true:false);
+			((ParamItemBoolean) this.errors.get(i)).setValue((errors & 0x01)!=0);
 			errors >>= 1;
 		}		
 	}

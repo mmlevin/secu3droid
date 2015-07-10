@@ -73,13 +73,41 @@ public class Secu3SensorLogger extends Secu3Logger {
 		out += String.format(Locale.US, "%6.3f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(), CSV_DELIMETER);
 		out += String.format(Locale.US, "%6.3f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(), CSV_DELIMETER);
 		out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue(), CSV_DELIMETER);
-		
+
+		if (protocol_version >= SettingsActivity.PROTOCOL_DEVELOPER_RELEASE) {
+			out += String.format(Locale.US, "%5.1f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_gasdose_position_title)).getValue(), CSV_DELIMETER);
+		}
+
 		if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
 			out += String.format(Locale.US, "%5.1f%c", packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()), CSV_DELIMETER);
 			out += String.format(Locale.US, "%7.2f%c", packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue()), CSV_DELIMETER);
 		}
-		
-		if (protocol_version >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) {
+
+		if (protocol_version >= SettingsActivity.PROTOCOL_16052014_SPRING_RELEASE) {
+			int airtemp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_air_temperature_title)).getIntValue();
+
+			if (airtemp != 0x7FFF) {
+				out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_air_temperature_title)).getValue(), CSV_DELIMETER);
+			}
+			else {
+				out += String.format(Locale.US, "%6.2f%c", 0.0, CSV_DELIMETER);
+			}
+
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_start_map_title)).getValue(), CSV_DELIMETER);
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_idle_map_title)).getValue(), CSV_DELIMETER);
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_work_map_title)).getValue(), CSV_DELIMETER);
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_cool_temp_map_title)).getValue(), CSV_DELIMETER);
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_air_temp_map_title)).getValue(), CSV_DELIMETER);
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_idling_regulator_title)).getValue(), CSV_DELIMETER);
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_octane_correction_title)).getValue(), CSV_DELIMETER);
+		}
+
+		if (protocol_version >= SettingsActivity.PROTOCOL_10022015_WINTER_RELEASE) {
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_lambda_correction_title)).getValue(), CSV_DELIMETER);
+			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_injection_pulse_title)).getValue(), CSV_DELIMETER);
+		}
+
+		if (protocol_version >= SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE) {
 			out += String.format(Locale.US, "%01d%c", marker,CSV_DELIMETER);
 		}
 		marker = 0;

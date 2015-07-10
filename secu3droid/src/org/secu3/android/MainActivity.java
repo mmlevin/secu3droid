@@ -35,7 +35,6 @@ import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
 import org.secu3.android.api.io.Secu3Packet;
 import org.secu3.android.api.io.Secu3Service;
 import org.secu3.android.api.utils.PacketUtils;
-import org.secu3.android.DashBoardActivity;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,7 +47,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -261,9 +259,9 @@ public class MainActivity extends Activity {
 		registerReceiver(receiver, receiver.intentFilter);
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_START,Uri.EMPTY,this,Secu3Service.class));
 		protocol_version = SettingsActivity.getProtocolVersion(getBaseContext());
-		logButtonLayout.setVisibility(((protocol_version < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) || (!SettingsActivity.isSensorLoggerEnabled(this)))?View.GONE:View.VISIBLE);
+		logButtonLayout.setVisibility(((protocol_version < SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE) || (!SettingsActivity.isSensorLoggerEnabled(this)))?View.GONE:View.VISIBLE);
 		setRawMode(rawSensors);
-		ActivityCompat.invalidateOptionsMenu(this);
+		invalidateOptionsMenu();
 		super.onResume();		
 	}
 	
@@ -296,11 +294,11 @@ public class MainActivity extends Activity {
 			Secu3Packet packet = intent.getParcelableExtra(Secu3Service.EVENT_SECU3_SERVICE_RECEIVE_PARAM_PACKET);
 			if (packet != null) {
 				switch (packet.getPacketIdResId()) {
-				case R.string.packet_type_sendor_dat:
+				case R.string.packet_type_sensor_dat:
 					boolean errors = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue() != 0;
 					if (errors != this.errors) {
 						this.errors = errors;
-						ActivityCompat.invalidateOptionsMenu(this);
+						invalidateOptionsMenu();
 					}
 					if (!rawSensors) {
 						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();

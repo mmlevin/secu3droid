@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 public class ParamItemBoolean extends BaseParamItem {
 	private boolean value = false;
-	private CheckBox paramValueBoolean;
 	
 	class CustomOnCheckChangeListener implements CompoundButton.OnCheckedChangeListener {
 		ParamItemBoolean item;
@@ -95,7 +94,7 @@ public class ParamItemBoolean extends BaseParamItem {
 		
 		TextView paramName = (TextView) v.findViewById(R.id.param_name);
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
-		paramValueBoolean = (CheckBox) v.findViewById(R.id.param_value_boolean);
+		 CheckBox paramValueBoolean = (CheckBox) v.findViewById(R.id.param_value_boolean);
 		
 		paramValueBoolean.setOnCheckedChangeListener(new CustomOnCheckChangeListener(this));
 		paramValueBoolean.setClickable(isEnabled());

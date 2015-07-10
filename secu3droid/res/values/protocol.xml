@@ -14,7 +14,7 @@
 	<string name="packet_type_startr_par" translatable="false">o</string>
 	
 	<string name="packet_type_fnname_dat" translatable="false">p</string>
-	<string name="packet_type_sendor_dat" translatable="false">q</string>
+	<string name="packet_type_sensor_dat" translatable="false">q</string>
 	
 	<string name="packet_type_adccor_par" translatable="false">r</string>
 	<string name="packet_type_adcraw_dat" translatable="false">s</string>
@@ -31,6 +31,7 @@
 	<string name="packet_type_miscel_par" translatable="false">z</string>	
 	<string name="packet_type_edittab_par" translatable="false">{</string>
 	<string name="packet_type_atttab_par" translatable="false">}</string>
+    <string name="packet_type_rpmgrd_par" translatable="false">"</string>
 	<string name="packet_type_dbgvar_dat" translatable="false">:</string>
 	
 	<string name="packet_type_diaginp_dat" translatable="false">=</string>
@@ -38,6 +39,11 @@
 	
 	<string name="packet_type_choke_par" translatable="false">%</string>
 	<string name="packet_type_secur_par" translatable="false">#</string>
+    <string name="packet_type_uniout_par" translatable="false">&amp;</string>
+
+    <string name="packet_type_injctr_par" translatable="false">;</string>
+    <string name="packet_type_lambda_par" translatable="false">-</string>
+    <string name="packet_type_accel_par" translatable="false">|</string>
 
     <string name="ce_saved_err_title" translatable="false">Saved errors</string>
     <string name="ce_saved_err_data_title" translatable="false">Saved errors data</string>
@@ -66,6 +72,7 @@
     <string name="fwinfo_dat_title" translatable="false">Firmware info</string>
     <string name="fwinfo_dat_data_title" translatable="false">Firmware tag</string>
     <string name="fwinfo_dat_options_title" translatable="false">Firmware options</string>
+    <string name="fwinfo_fw_version_title" translatable="false">Firmware version</string>
     
     <string name="sensor_dat_title" translatable="false">Sensors data</string>
     <string name="sensor_dat_rpm_title" translatable="false">RPM</string>
@@ -83,7 +90,18 @@
     <string name="sensor_dat_errors_title" translatable="false">Errors</string>
     <string name="sensor_dat_choke_position_title" translatable="false">Choke position</string>
     <string name="sensor_dat_speed_title" translatable="false">Speed</string>
-    <string name="sensor_dat_distance_title" translatable="false">Distance</string>    
+    <string name="sensor_dat_distance_title" translatable="false">Distance</string>
+    <string name="sensor_dat_gasdose_position_title" translatable="false">Gas dose position</string>
+    <string name="sensor_dat_air_temperature_title" translatable="false">Air temperature</string>
+    <string name="sensor_dat_advance_angle_start_map_title" translatable="false">Start map advance angle</string>
+    <string name="sensor_dat_advance_angle_idle_map_title" translatable="false">Idle map advance angle</string>
+    <string name="sensor_dat_advance_angle_work_map_title" translatable="false">Work map advance angle</string>
+    <string name="sensor_dat_advance_angle_cool_temp_map_title" translatable="false">Coolant temperature advance angle</string>
+    <string name="sensor_dat_advance_air_temp_map_title" translatable="false">Air temperature advance angle</string>
+    <string name="sensor_dat_advance_idling_regulator_title" translatable="false">Idling regulator advance angle</string>
+    <string name="sensor_dat_advance_octane_correction_title" translatable="false">Octane correction advance angle</string>
+    <string name="sensor_dat_lambda_correction_title" translatable="false">Lambda correction</string>
+    <string name="sensor_dat_injection_pulse_title" translatable="false">Injection pulse delay</string>
     
     <string name="change_mode_title" translatable="false">Change mode</string>
     <string name="change_mode_data_title" translatable="false">Data</string>
@@ -97,9 +115,42 @@
     <string name="secur_par_name_length_title" translatable="false">Bluetooth name length</string>
     <string name="secur_par_pass_length_title" translatable="false">Bluetooth password length</string>
     <string name="secur_par_flags_title" translatable="false">Security flags</string>
-    
-    <string name="choke_manual_steps_title" translatable="false">Steps</string>	
-    
+
+    <string name="choke_manual_steps_title" translatable="false">Steps</string>
+
+    <string name="ckps_flags_title" translatable="false">CKPS flags</string>
+
+    <string name="uniout_par_unioutput_1_flags_title">Unioutput 1 flags</string>
+    <string name="uniout_par_unioutput_1_condition_1_title">Code of condition 1 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_condition_2_title">Code of condition 2 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_1_on_title">ON threshold 1 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_1_off_title">OFF threshold 1 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_2_on_title">ON threshold 2 for unioutput 1</string>
+    <string name="uniout_par_unioutput_1_threshold_2_off_title">OFF threshold 2 for unioutput 1</string>
+    <string name="uniout_par_unioutput_2_flags_title">Unioutput 2 flags</string>
+    <string name="uniout_par_unioutput_2_condition_1_title">Code of condition 1 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_condition_2_title">Code of condition 2 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_1_on_title">ON threshold 1 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_1_off_title">OFF threshold 1 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_2_on_title">ON threshold 2 for unioutput 2</string>
+    <string name="uniout_par_unioutput_2_threshold_2_off_title">OFF threshold 2 for unioutput 2</string>
+    <string name="uniout_par_unioutput_3_flags_title">Unioutput 2 flags</string>
+    <string name="uniout_par_unioutput_3_condition_1_title">Code of condition 1 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_condition_2_title">Code of condition 2 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_1_on_title">ON threshold 1 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_1_off_title">OFF threshold 1 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_2_on_title">ON threshold 2 for unioutput 3</string>
+    <string name="uniout_par_unioutput_3_threshold_2_off_title">OFF threshold 2 for unioutput 3</string>
+    <string name="uniout_par_logic_function_1_2_title">Logical function between unuioutputs 1 and 2</string>
+
+    <string name="injctr_par_cyl_num_title" translatable="false">Injector cylinders number</string>
+    <string name="injctr_par_injector_flags_title" translatable="false">Injector flags</string>
+    <string name="injctr_par_injector_config_title" translatable="false">Injector configuration</string>
+    <string name="injctr_par_injector_flow_rate_title" translatable="false">Injector flow rate</string>
+    <string name="injctr_par_injector_cyl_disp_title" translatable="false">Injector cylinder displacement</string>
+    <string name="injctr_par_injector_sd_igl_const_title" translatable="false">Precalculated constant</string>
+
+
     <integer name="protocol_temp_physical_magnitude_divider">4</integer>
     <integer name="protocol_map_physical_magnitude_divider">64</integer>
     <integer name="protocol_angle_divider">32</integer>
@@ -113,6 +164,7 @@
     <integer name="protocol_adccor_correction_divider">16384</integer>
     <integer name="protocol_adccor_correction_offset">-8192</integer>
     <integer name="protocol_choke_position_divider">2</integer>
+    <integer name="protocol_gasdose_position_divider">2</integer>
     <integer name="protocol_overrun_valve_delay_divider">100</integer>
     <integer name="protocol_miscel_period_multiplier">10</integer>    
 </resources>

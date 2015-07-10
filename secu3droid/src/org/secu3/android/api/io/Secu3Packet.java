@@ -126,7 +126,7 @@ public class Secu3Packet implements Parcelable {
 	public final static int BAUD_RATE_INDEX[] = { 0x340, 0x1A0, 0xCF, 0x8A,
 			0x67, 0x44, 0x33, 0x22 };
 
-	/** Âû÷èñëÿåò èíäåêñ ýëåìåíòà â ìàñèâå **/
+	/** Ð’Ñ‹Ñ‡Ð¸ÑÐ»ÑÐµÑ‚ Ð¸Ð½Ð´ÐµÐºÑ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð² Ð¼Ð°ÑÐ¸Ð²Ðµ **/
 	public static int indexOf(int array[], int search) {
 		for (int i = 0; i != array.length; i++)
 			if (array[i] == search)
@@ -137,7 +137,7 @@ public class Secu3Packet implements Parcelable {
 	public static int bitTest(int value, int bitNumber) {
 		value >>= bitNumber;
 		return (value & 0x01);
-	};
+	}
 
 	// There are several special reserved symbols in binary mode: 0x21, 0x40,
 	// 0x0D, 0x0A
@@ -156,7 +156,7 @@ public class Secu3Packet implements Parcelable {
 	private final static int TFESC = 0x84; // Transposed FESC
 
 	public String EscTxPacket(String packetBuffer) {
-		ArrayList<Integer> buf = new ArrayList<Integer>(
+		ArrayList<Integer> buf = new ArrayList<>(
 				packetBuffer.length() - 3);
 		for (int i = 0; i != packetBuffer.length(); i++) {
 			if ((i >= 2) && (i < packetBuffer.length()-1)) {
@@ -206,7 +206,7 @@ public class Secu3Packet implements Parcelable {
 	}
 
 	public int[] EscTxPacket(int[] packetBuffer) {
-		ArrayList<Integer> buf = new ArrayList<Integer>(packetBuffer.length);
+		ArrayList<Integer> buf = new ArrayList<>(packetBuffer.length);
 		for (int i = 0; i != packetBuffer.length; i++) {
 			if (packetBuffer[i] == FIBEGIN) {
 				buf.add(FESC);
@@ -258,7 +258,7 @@ public class Secu3Packet implements Parcelable {
 		this.nameId = in.readInt();
 		this.input_type = in.readString();
 		this.output_type = in.readString();
-		this.binary = (in.readInt() == 0) ? false : true;
+		this.binary = in.readInt() != 0;
 		this.data = in.readString();
 		int counter = in.readInt();
 		this.fields = (counter == 0) ? null : new ArrayList<BaseProtoField>();
@@ -353,7 +353,7 @@ public class Secu3Packet implements Parcelable {
 			this.packetDirResId = packet.packetDirResId;
 			this.fields = null;
 			if (packet.fields != null) {
-				this.fields = new ArrayList<BaseProtoField>();
+				this.fields = new ArrayList<>();
 				BaseProtoField field = null;
 				for (int i = 0; i != packet.fields.size(); ++i) {
 					field = packet.fields.get(i);
@@ -380,7 +380,7 @@ public class Secu3Packet implements Parcelable {
 	public void addField(BaseProtoField field) {
 		if (field != null) {
 			if (fields == null)
-				fields = new ArrayList<BaseProtoField>();
+				fields = new ArrayList<>();
 			fields.add(field);
 		}
 	}

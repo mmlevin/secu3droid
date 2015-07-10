@@ -58,7 +58,7 @@ public class ProtoFieldInteger extends BaseProtoField implements Parcelable {
 		super(in);
 		value = in.readInt();
 		multiplier = in.readInt();
-		signed = (in.readInt() == 0) ? false : true;
+		signed = in.readInt() != 0;
 	}
 
 	public ProtoFieldInteger(ProtoFieldInteger field) {

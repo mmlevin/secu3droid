@@ -43,6 +43,50 @@
             minValue="40"
             maxValue="1000"
             stepValue="10"/>
+        <Parameter
+            app:name="@string/starter_dat_crank_to_run_time_title"
+            app:summary="@string/starter_dat_crank_to_run_time_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_sec"
+            app:minVersion="5"
+            minValue="0.1"
+            maxValue="99"
+            stepValue="0.01"/>
+        <Parameter
+            app:name="@string/starter_dat_afterstart_enrichment_strokes_title"
+            app:summary="@string/starter_dat_afterstart_enrichment_strokes_summary"
+            app:type="@id/parameter_type_integer"
+            app:minVersion="5"
+            minValue="1"
+            maxValue="255"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/starter_dat_prime_pulse_cold_title"
+            app:summary="@string/starter_dat_prime_pulse_cold_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_ms"
+            app:minVersion="5"
+            minValue="0"
+            maxValue="65"
+            stepValue="0.1"/>
+        <Parameter
+            app:name="@string/starter_dat_prime_pulse_hot_title"
+            app:summary="@string/starter_dat_prime_pulse_hot_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_ms"
+            app:minVersion="5"
+            minValue="0"
+            maxValue="65"
+            stepValue="0.1"/>
+        <Parameter
+            app:name="@string/starter_dat_prime_pulse_delay_title"
+            app:summary="@string/starter_dat_prime_pulse_delay_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_sec"
+            app:minVersion="5"
+            minValue="0"
+            maxValue="25"
+            stepValue="0.1"/>
     </Page>         
     
     <Page app:name="@string/angles_title">
@@ -244,7 +288,16 @@
 		<Parameter
             app:name="@string/temper_use_table_title"
             app:summary="@string/temper_use_summary"
-            app:type="@id/parameter_type_boolean"/>						    	    
+            app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/temper_fan_pwm_freq_title"
+            app:summary="@string/temper_fan_pwm_freq_summary"
+            app:type="@id/parameter_type_integer"
+            app:minVersion="5"
+            app:units="@string/units_hertz"
+            minValue="10"
+            maxValue="5000"
+            stepValue="1"/>
 	</Page>
 	
 	<Page app:name="@string/carburetor_title">
@@ -307,7 +360,25 @@
             app:units="@string/units_percents"
             minValue="0.0"
             maxValue="100.0"
-            stepValue="0.5"/>        
+            stepValue="0.5"/>
+        <Parameter
+            app:name="@string/carbur_fuelcut_map_threshold_title"
+            app:summary="@string/carbur_fuelcut_map_threshold_summary"
+            app:type="@id/parameter_type_float"
+            app:minVersion="5"
+            app:units="@string/units_pressure_kpa"
+            minValue="0"
+            maxValue="250"
+            stepValue="0.5"/>
+        <Parameter
+            app:name="@string/carbur_fuelcut_temp_threshold_title"
+            app:summary="@string/carbur_fuelcut_temp_threshold_summary"
+            app:type="@id/parameter_type_integer"
+            app:minVersion="5"
+            app:units="@string/units_degrees_celcius"
+            minValue="-30"
+            maxValue="180"
+            stepValue="0.25"/>
 	</Page>
 	
 	<Page app:name="@string/adc_errors_title">
@@ -459,6 +530,15 @@
             minValue="1"
             maxValue="200"
             stepValue="1"/>
+        <Parameter
+            app:name="@string/ckps_hall_wnd_width_title"
+            app:summary="@string/ckps_hall_wnd_width_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degree"
+            app:minVersion="4"
+            minValue="30"
+            maxValue="110"
+            stepValue="0.1"/>
 	</Page>
         
 	<Page app:name="@string/miscellaneous_title">
@@ -522,6 +602,59 @@
             app:minVersion="3"
             stepValue="1"/>
         <Parameter
+            app:name="@string/choke_startup_addition_title"
+            app:summary="@string/choke_startup_addition_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_percents"
+            minValue="0"
+            maxValue="100"
+            app:minVersion="4"
+            stepValue="0.5"/>
+        <Parameter
+            app:name="@string/choke_rpm_point_1_title"
+            app:summary="@string/choke_rpm_point_1_summary"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="0"
+            maxValue="3000"
+            app:minVersion="4"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/choke_rpm_point_2_title"
+            app:summary="@string/choke_rpm_point_2_summary"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_rpm"
+            minValue="0"
+            maxValue="3000"
+            app:minVersion="4"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/choke_rpm_if_factor_title"
+            app:summary="@string/choke_rpm_if_factor_summary"
+            app:type="@id/parameter_type_float"
+            minValue="0.01"
+            maxValue="1"
+            app:minVersion="4"
+            stepValue="0.01"/>
+        <Parameter
+            app:name="@string/choke_correction_time_title"
+            app:summary="@string/choke_correction_time_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_sec"
+            minValue="0.1"
+            maxValue="10"
+            app:minVersion="4"
+            stepValue="0.1"/>
+        <Parameter
+            app:name="@string/choke_temp_threshold_title"
+            app:summary="@string/choke_temp_threshold_summary"
+            app:type="@id/parameter_type_float"
+            app:units="@string/units_degrees_celcius"
+            minValue="-10"
+            maxValue="70"
+            app:minVersion="4"
+            stepValue="0.25"/>
+        <Parameter
             app:name="@string/choke_testing_title"
             app:summary="@string/choke_testing_summary"
             app:type="@id/parameter_type_toggle_button"/>	   
@@ -560,5 +693,94 @@
 	        app:name="@string/secur_par_use_immobilizer_title"
 	        app:summary="@string/secur_par_use_immobilizer_summary"
 	        app:type="@id/parameter_type_boolean"/>
+        <Parameter
+            app:name="@string/secur_par_ibtn_key_1_title"
+            app:summary="@string/secur_par_ibtn_key_1_summary"
+            app:type="@id/parameter_type_string"
+            app:minVersion="4"/>
+        <Parameter
+            app:name="@string/secur_par_ibtn_key_2_title"
+            app:summary="@string/secur_par_ibtn_key_2_summary"
+            app:type="@id/parameter_type_string"
+            app:minVersion="4"/>
 	</Page>
+
+    <Page app:name="@string/lambda_par_title"
+        app:minVersion="5">
+        <Parameter
+            app:name="@string/lambda_par_strokes_per_step_title"
+            app:summary="@string/lambda_par_strokes_per_step_summary"
+            app:type="@id/parameter_type_integer"
+            minValue="1"
+            maxValue="100"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/lambda_par_step_size_title"
+            app:summary="@string/lambda_par_step_size_summary"
+            app:units="@string/units_percents"
+            app:type="@id/parameter_type_float"
+            minValue="0.25"
+            maxValue="45"
+            stepValue="0.25"/>
+        <Parameter
+            app:name="@string/lambda_par_correction_limit_title"
+            app:summary="@string/lambda_par_correction_limit_summary"
+            app:units="@string/units_percents"
+            app:type="@id/parameter_type_float"
+            minValue="0.5"
+            maxValue="100"
+            stepValue="0.5"/>
+        <Parameter
+            app:name="@string/lambda_par_switch_point_title"
+            app:summary="@string/lambda_par_switch_point_summary"
+            app:units="@string/units_volts"
+            app:type="@id/parameter_type_float"
+            minValue="0.1"
+            maxValue="5"
+            stepValue="0.01"/>
+        <Parameter
+            app:name="@string/lambda_par_temp_threshold_title"
+            app:summary="@string/lambda_par_temp_threshold_summary"
+            app:units="@string/units_degrees_celcius"
+            app:type="@id/parameter_type_float"
+            minValue="0"
+            maxValue="100"
+            stepValue="0.25"/>
+        <Parameter
+            app:name="@string/lambda_par_rpm_threshold_title"
+            app:summary="@string/lambda_par_rpm_threshold_summary"
+            app:units="@string/units_rpm"
+            app:type="@id/parameter_type_integer"
+            minValue="100"
+            maxValue="5000"
+            stepValue="50"/>
+        <Parameter
+            app:name="@string/lambda_par_activation_delay_title"
+            app:summary="@string/lambda_par_activation_delay_summary"
+            app:units="@string/units_sec"
+            app:type="@id/parameter_type_integer"
+            minValue="5"
+            maxValue="255"
+            stepValue="1"/>
+    </Page>
+
+    <Page app:name="@string/accel_par_title"
+        app:minVersion="5">
+        <Parameter
+            app:name="@string/accel_par_tpsdot_threshold_title"
+            app:summary="@string/accel_par_tpsdot_threshold_summary"
+            app:type="@id/parameter_type_integer"
+            app:units="@string/units_percent_per_second"
+            minValue="0"
+            maxValue="255"
+            stepValue="1"/>
+        <Parameter
+            app:name="@string/accel_par_coldacc_mult_title"
+            app:summary="@string/accel_par_coldacc_mult_summary"
+            app:units="@string/units_percents"
+            app:type="@id/parameter_type_float"
+            minValue="100"
+            maxValue="299"
+            stepValue="1"/>
+    </Page>
 </Parameters>

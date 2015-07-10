@@ -64,9 +64,8 @@ public class ParamPagerAdapter extends FragmentPagerAdapter{
 	}	
 		
 	@Override
-	public ParamsPageFragment getItem (int position) {		
-		ParamsPageFragment fragment = ParamsPageFragment.newInstance(position);
-		return fragment;					
+	public ParamsPageFragment getItem (int position) {
+		return ParamsPageFragment.newInstance(position);
 	}	
 	
 	@Override

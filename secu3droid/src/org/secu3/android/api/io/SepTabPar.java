@@ -26,9 +26,9 @@
 package org.secu3.android.api.io;
 
 public class SepTabPar {
-	public int address;                 //адрес начала фрагмента данных в таблице
-	public float table_data[];                 //фрагмент данных (не более 16-ти байт)
-	public int data_size;               //размер фрагмента данных
+	public int address;                 //Р°РґСЂРµСЃ РЅР°С‡Р°Р»Р° С„СЂР°РіРјРµРЅС‚Р° РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Рµ
+	public float table_data[];                 //С„СЂР°РіРјРµРЅС‚ РґР°РЅРЅС‹С… (РЅРµ Р±РѕР»РµРµ 16-С‚Рё Р±Р°Р№С‚)
+	public int data_size;               //СЂР°Р·РјРµСЂ С„СЂР°РіРјРµРЅС‚Р° РґР°РЅРЅС‹С…
   
 	public SepTabPar()
 	{

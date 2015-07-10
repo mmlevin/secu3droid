@@ -46,7 +46,7 @@ public class ParamsPage {
 	}
 	public void addParamItem (BaseParamItem item) {
 		if (items == null) {
-			items = new ArrayList<BaseParamItem>();
+			items = new ArrayList<>();
 		}
 		items.add(item);
 	}

@@ -76,7 +76,7 @@ public class ParamItemsAdapter extends BaseAdapter {
 	}
   		
 	public void setValue(String value, int position) {
-		BaseParamItem i = (BaseParamItem)items.get(position);
+		BaseParamItem i = items.get(position);
 		if (i instanceof ParamItemInteger) {
 				NumberFormat format = NumberFormat.getInstance(Locale.US);
 				Number number;

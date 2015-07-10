@@ -66,5 +66,5 @@
     <attr name="size" format="float" />
     <attr name="font" format="string" />
     <attr name="format" format="string" />
-    <attr name="color" format="integer" />
+    <attr name="color" format="color" />
 </resources>

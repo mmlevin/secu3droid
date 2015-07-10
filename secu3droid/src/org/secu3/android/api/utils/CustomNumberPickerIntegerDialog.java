@@ -71,7 +71,7 @@ public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
 		} else {
 			if (value < minValue) throw new IllegalArgumentException("value could not be less than minValue");
 			if (value > maxValue) throw new IllegalArgumentException("value could not be greater than minValue");
-		};
+		}
 		this.value = value;
 		this.minValue = minValue;
 		this.maxValue = maxValue;

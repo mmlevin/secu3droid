@@ -28,11 +28,21 @@
 <resources>
 	<string name="params_note_title">NOTE: Secu-3 automatically saves parameters in 30 seconds after the last editing</string>    
     
-    <string name="starter_title">Starter</string> 
+    <string name="starter_title">Start</string>
     <string name="starter_off_title">RPM when starter will be turned off</string>
     <string name="starter_off_summary"></string>
     <string name="starter_map_abandon_title">RPM when switching from start map</string>
     <string name="starter_map_abandon_summary"></string>
+    <string name="starter_dat_crank_to_run_time_title">Time for going fronm crank to run position of IAC</string>
+    <string name="starter_dat_crank_to_run_time_summary"></string>
+    <string name="starter_dat_afterstart_enrichment_strokes_title">Afterstart enrichment time</string>
+    <string name="starter_dat_afterstart_enrichment_strokes_summary">In strokes</string>
+    <string name="starter_dat_prime_pulse_cold_title">Prime pulse width at -30°C</string>
+    <string name="starter_dat_prime_pulse_cold_summary"></string>
+    <string name="starter_dat_prime_pulse_hot_title">Prime pulse width at 70°C</string>
+    <string name="starter_dat_prime_pulse_hot_summary"></string>
+    <string name="starter_dat_prime_pulse_delay_title">Prime pulse delay</string>
+    <string name="starter_dat_prime_pulse_delay_summary"></string>
     
     <string name="angles_title">Angles</string>
     <string name="angles_min_angle_title">Minimal advance angle</string>
@@ -95,8 +105,11 @@
     <string name="temper_use_pwm_summary"></string>
     <string name="temper_use_table_title">Use table to define sensor\'s curve</string>
     <string name="temper_use_summary"></string>
+    <string name="temper_fan_pwm_freq_title">PWM frequency</string>
+    <string name="temper_fan_pwm_freq_summary">Frequency of PWM for fan and IAC</string>
+
     
-    <string name="carburetor_title">Carburetor</string>
+    <string name="carburetor_title">Fuel cutoff</string>
     <string name="carbur_tps_threshold_title">TPS threshold</string>
     <string name="carbur_tps_threshold_summary"></string>   
     <string name="carbur_overrun_lower_threshold_gasoline_title">Idle cut-off valve lower threshold for gasoline</string>
@@ -113,6 +126,10 @@
     <string name="carbur_epm_valve_on_pressure_summary"></string>
     <string name="carbur_sensor_inverse_title">Inversion of throttle position switch</string>
     <string name="carbur_sensor_inverse_summary"></string>
+    <string name="carbur_fuelcut_map_threshold_title">Fuel cut MAP threshold</string>
+    <string name="carbur_fuelcut_map_threshold_summary"></string>
+    <string name="carbur_fuelcut_temp_threshold_title">Fuel cut CTS threshold</string>
+    <string name="carbur_fuelcut_temp_threshold_summary"></string>
     
     <string name="adc_errors_title">ADC Errors Corr.</string>
     <string name="adccor_map_sensor_factor_title">MAP Sensor factor</string>
@@ -158,7 +175,9 @@
     <string name="ckps_engine_cylynders_summary"></string>
     <string name="ckps_ignition_pulse_delay_title">Duration of igniter\'s pulse driver in teeth of wheel</string>
     <string name="ckps_ignition_pulse_delay_summary"></string>
-        
+    <string name="ckps_hall_wnd_width_title">Hall sensor shutter\'s window width</string>
+    <string name="ckps_hall_wnd_width_summary">In degrees of crankshaft</string>
+
     <string name="miscellaneous_title">Miscellaneous</string>
     <string name="miscel_baudrate_title">Data transmission baudrate</string>
     <string name="miscel_baudrate_summary"></string>
@@ -184,6 +203,18 @@
     <string name="choke_manual_step_up_title">Manual choke control</string>
     <string name="choke_manual_step_up_summary">Close choke</string>
     <string name="choke_manual_step_up_units">Close</string>
+    <string name="choke_startup_addition_title">Additional startup closing</string>
+    <string name="choke_startup_addition_summary"></string>
+    <string name="choke_rpm_point_1_title">Warming-up RPM at -5°C</string>
+    <string name="choke_rpm_point_1_summary"></string>
+    <string name="choke_rpm_point_2_title">Warming-up RPM at 70°C</string>
+    <string name="choke_rpm_point_2_summary"></string>
+    <string name="choke_rpm_if_factor_title">Regulation factor</string>
+    <string name="choke_rpm_if_factor_summary"></string>
+    <string name="choke_correction_time_title">Additional startup time</string>
+    <string name="choke_correction_time_summary"></string>
+    <string name="choke_temp_threshold_title">Temperature threshold</string>
+    <string name="choke_temp_threshold_summary"></string>
     
     <string name="secur_par_title">Security</string>
     <string name="secur_par_use_bluetooth_title">Use bluetooth</string>
@@ -197,8 +228,39 @@
     <string name="secur_par_apply_bluetooth_units">Apply</string>
     <string name="secur_par_use_immobilizer_title">Use immobilizer</string>
     <string name="secur_par_use_immobilizer_summary">Use anti-theft functions of Secu-3</string>
+    <string name="secur_par_ibtn_key_1_title">iButton key #1</string>
+    <string name="secur_par_ibtn_key_1_summary"></string>
+    <string name="secur_par_ibtn_key_2_title">iButton key #2</string>
+    <string name="secur_par_ibtn_key_2_summary"></string>
+
+    <string name="uniout_par_title">Universal outputs</string>
+
+    <string name="injctr_par_title">Fuel injection</string>
+
+    <string name="lambda_par_title">Lambda control</string>
+    <string name="lambda_par_strokes_per_step_title">Number of strokes per step</string>
+    <string name="lambda_par_strokes_per_step_summary"></string>
+    <string name="lambda_par_step_size_title">Size of correction step</string>
+    <string name="lambda_par_step_size_summary"></string>
+    <string name="lambda_par_correction_limit_title">Correction limit (+/-)</string>
+    <string name="lambda_par_correction_limit_summary"></string>
+    <string name="lambda_par_switch_point_title">Switch point</string>
+    <string name="lambda_par_switch_point_summary"></string>
+    <string name="lambda_par_temp_threshold_title">CTS activation threshold</string>
+    <string name="lambda_par_temp_threshold_summary"></string>
+    <string name="lambda_par_rpm_threshold_title">RPM activation threshold</string>
+    <string name="lambda_par_rpm_threshold_summary"></string>
+    <string name="lambda_par_activation_delay_title">Activation after start in</string>
+    <string name="lambda_par_activation_delay_summary"></string>
+
+    <string name="accel_par_title">Acceleration</string>
+    <string name="accel_par_tpsdot_threshold_title">Acceleration TPS dot threshold</string>
+    <string name="accel_par_tpsdot_threshold_summary"></string>
+    <string name="accel_par_coldacc_mult_title">Cold acceleration multiplier</string>
+    <string name="accel_par_coldacc_mult_summary"></string>
         
     <string name="units_rpm">min-1</string>
+    <string name="units_hertz">Hz</string>
     <string name="units_degree">°</string>
     <string name="units_sec">sec</string>
     <string name="units_pressure_kpa">kPa</string>
@@ -207,5 +269,6 @@
     <string name="units_ms">ms</string>
     <string name="units_degrees_celcius">°C</string>
     <string name="units_percents">%</string>
-    <string name="units_percent_per_volts">%/V</string>                        
+    <string name="units_percent_per_volts">%/V</string>
+    <string name="units_percent_per_second">%/sec</string>
 </resources>

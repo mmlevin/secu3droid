@@ -62,7 +62,7 @@ public class ProtoFieldFloat extends BaseProtoField implements Parcelable{
 	
 	public ProtoFieldFloat(Parcel in) {
 		super(in);
-		signed = (in.readInt()==0)?false:true;		
+		signed = in.readInt()!=0;
 		intValue = in.readInt();
 		intDivider = in.readInt();
 		intMultiplier = in.readInt();

@@ -29,8 +29,7 @@ import android.content.Context;
 
 public class ResourcesUtils {
 	public static boolean isResource (String name) {
-		if (name == null) return false;
-		return name.matches("[@]\\d+");
+		return name != null && name.matches("[@]\\d+");
 	}
 	
 	public static int referenceToInt (String reference) {

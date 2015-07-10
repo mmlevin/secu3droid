@@ -38,9 +38,12 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 
 public class Secu3ProtoWrapper {
+	private static final String LOG_TAG = "Secu3ProtoWrapper";
+
 	private static final String SIGNED = "signed";
 	private static final String LENGTH = "length";
 	private static final String OFFSET = "offset";
@@ -87,8 +90,8 @@ public class Secu3ProtoWrapper {
 		
 		try {
 			XmlPullParser xpp = getContext().getResources().getXml(xmlId);
-			inputPackets = new SparseArray<Secu3Packet> ();
-			outputPackets = new SparseArray<Secu3Packet> ();
+			inputPackets = new SparseArray<> ();
+			outputPackets = new SparseArray<> ();
 			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
 				switch (xpp.getEventType()) {
 				case XmlPullParser.START_TAG:
@@ -253,26 +256,23 @@ public class Secu3ProtoWrapper {
 			
 			boolean result = false;
 			Secu3Packet packet = null;
-			if (inputPackets != null) {
-				for (int i = 0; i != inputPackets.size(); i++) {
-					try {
-						packet = inputPackets.valueAt(i);
-						if (packet != null) {
-							packet.parse(data);
-							lastPacket = packet; 							
-							result = true;
-							if (packet.getNameId() == R.string.fnname_dat_title) {
-								if (funsetNames == null) {
-									funsetNames = new String [((ProtoFieldInteger) packet.findField(R.string.fnname_dat_quantity_title)).getValue()];
-								}
-								if (getFunsetNames() != null) {
-									funsetNames[((ProtoFieldInteger) packet.findField(R.string.fnname_dat_index_title)).getValue()] = ((ProtoFieldString) packet.findField(R.string.fnname_dat_data_title)).getValue();
-								}
-							}
-							break;
+			for (int i = 0; i != inputPackets.size(); i++) {
+				try {
+					packet = inputPackets.valueAt(i);
+					packet.parse(data);
+					lastPacket = packet;
+					result = true;
+					if (packet.getNameId() == R.string.fnname_dat_title) {
+						if (funsetNames == null) {
+							funsetNames = new String [((ProtoFieldInteger) packet.findField(R.string.fnname_dat_quantity_title)).getValue()];
 						}
-					} catch (IllegalArgumentException e) {						
+						if (getFunsetNames() != null) {
+							funsetNames[((ProtoFieldInteger) packet.findField(R.string.fnname_dat_index_title)).getValue()] = ((ProtoFieldString) packet.findField(R.string.fnname_dat_data_title)).getValue();
+						}
 					}
+					break;
+				} catch (IllegalArgumentException e) {
+					Log.e (LOG_TAG, e.getMessage());
 				}
 			}
 			if (!result) {
