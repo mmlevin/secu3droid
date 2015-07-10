@@ -39,6 +39,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import java.util.HashSet;
@@ -47,10 +48,15 @@ import java.util.Set;
 import org.secu3.android.api.io.Secu3Logger;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	public final static String LOG_TAG = "SettingsActivity";
+
 	public final static int PROTOCOL_UNKNOWN = 0;
 	public final static int PROTOCOL_12042013_SPRING_RELEASE = 1;
 	public final static int PROTOCOL_28082013_SUMMER_RELEASE = 2;
-	public final static int PROTOCOL_26122013_WINTER_RELEASE = 3;
+	public final static int PROTOCOL_14012014_WINTER_RELEASE = 3;
+	public final static int PROTOCOL_16052014_SPRING_RELEASE = 4;
+	public final static int PROTOCOL_10022015_WINTER_RELEASE = 5;
+	public final static int PROTOCOL_DEVELOPER_RELEASE = 6;
 	
 	private SharedPreferences sharedPref ;
 	private BluetoothAdapter bluetoothAdapter = null;
@@ -69,8 +75,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 	public static boolean isSensorLoggerEnabled (Context ctx){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-		boolean enabled = sharedPreferences.getBoolean(ctx.getString(R.string.pref_write_log_key), false);
-		return enabled;
+		return sharedPreferences.getBoolean(ctx.getString(R.string.pref_write_log_key), false);
 	}	
 		
 	public static String getCSVDelimeter(Context ctx) {
@@ -106,7 +111,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         
 		findPreference(getString(R.string.pref_write_log_path)).setSummary(String.format(getString(R.string.pref_write_log_path_summary), Secu3Logger.getDefaultPath()));
 		
-        Preference speedPulses = (Preference)findPreference(getString(R.string.pref_speed_pulse_key));
+        Preference speedPulses = findPreference(getString(R.string.pref_speed_pulse_key));
         speedPulses.setSummary(sharedPref.getString(getString(R.string.pref_speed_pulse_key), getString(R.string.defaultSpeedPulse)));
         
         ListPreference csvDelimeter = (ListPreference)findPreference(getString(R.string.pref_log_csv_delimeter_key));
@@ -119,7 +124,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		updatePreferenceSummary();
 		// update bluetooth device list
         ListPreference prefDevices = (ListPreference)findPreference(getString(R.string.pref_bluetooth_device_key));
-        Set<BluetoothDevice> pairedDevices = new HashSet<BluetoothDevice>();
+        Set<BluetoothDevice> pairedDevices = new HashSet<>();
         if (bluetoothAdapter != null){
         	pairedDevices = bluetoothAdapter.getBondedDevices();  
         }
@@ -149,7 +154,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         prefCSV.setEntries(CSVDelimeters);        
         
         Preference pref;        
-        pref = (Preference)findPreference(getString(R.string.pref_connection_retries_key));
+        pref = findPreference(getString(R.string.pref_connection_retries_key));
         String maxConnRetries = sharedPref.getString(getString(R.string.pref_connection_retries_key), getString(R.string.defaultConnectionRetries));
         pref.setSummary(getString(R.string.pref_connection_retries_summary,maxConnRetries));
         this.onContentChanged();
@@ -226,7 +231,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         try {
         	PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
         	textView.setText(pInfo.versionName);
-        } catch (Exception e) {        	
+        } catch (Exception e) {
+			Log.e(LOG_TAG,e.getMessage());
         }
        
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);

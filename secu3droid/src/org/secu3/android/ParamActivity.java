@@ -90,8 +90,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private boolean isOnline = false;
 	private boolean uploadImmediatelly = false;
 	private boolean isValid = false;
-	
-	private SharedPreferences sharedPref = null;
+
 	private ArrayList<ParamsPage> pages = null;
 	private ProgressBar progressBar = null;	
 	private TextView textViewStatus = null;
@@ -147,7 +146,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		
 		try {
 			XmlPullParser xpp = getResources().getXml(xmlId);
-			pages = new ArrayList<ParamsPage>();
+			pages = new ArrayList<>();
 			while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
 				switch (xpp.getEventType()) {
 				case XmlPullParser.START_TAG:
@@ -299,7 +298,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	    		e.printStackTrace();
 	    	} catch (IOException e) {
 	    		e.printStackTrace();
-	    	}		
+	    	}
 	}
 	
 	@Override
@@ -313,8 +312,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {			
-		Skeletons = new SparseArray<Secu3Packet>();
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		Skeletons = new SparseArray<>();
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		uploadImmediatelly = sharedPref.getBoolean(getString(R.string.pref_upload_immediately_key), false);
 		setTheme(sharedPref.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
 		setContentView(R.layout.activity_param);

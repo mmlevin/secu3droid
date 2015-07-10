@@ -68,15 +68,10 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	
 	private ListFragment inputFragment = null;	
 	private int protocolversion = SettingsActivity.PROTOCOL_UNKNOWN;
-	private OutputDiagListFragment outputsFragment = null;
-	private List<Fragment> pages = null;		
-	private ArrayList<BaseParamItem> inputItems = null;
-	private ArrayList<BaseParamItem> outputItems = null;		
-	private DiagnosticsPagerAdapter diagnosticsAdapter = null;
+	private ArrayList<BaseParamItem> outputItems = null;
 	private ViewPager pager = null;
 	private ReceiveMessages receiver = null;
 	private TextView textViewStatus = null;
-	private CheckBox checkBoxEnableBlDeDiagnostics = null;
 	
 	private Secu3Packet OpCompNc = null;
 	private Secu3Packet DiagOutDat = null;
@@ -141,11 +136,11 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	}
 	
 	private void setOutputs (int outputs) {
-		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:2); i++) {
-			((ParamItemBoolean) outputItems.get(i)).setValue(((outputs & 0x01)!=0)?true:false); 
+		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE?0:2); i++) {
+			((ParamItemBoolean) outputItems.get(i)).setValue((outputs & 0x01)!=0);
 			outputs >>= 1;
 		}
-		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) && (BlDeDiagEnabled)){
+		if ((protocolversion >= SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE) && (BlDeDiagEnabled)){
 			((ParamItemBoolean) outputItems.get(outputItems.size()-3)).setValue(((outputs >> 11) == 0) &&((outputs >> 12)==1)); // BL
 			((ParamItemBoolean) outputItems.get(outputItems.size()-1)).setValue(((outputs >> 13) == 0) &&((outputs >> 14)==1)); // DE state
 		}
@@ -153,10 +148,10 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	
 	private int getOutputs () {
 		int res = 0;
-		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?0:2); i++) {
+		for (int i = 0; i != outputItems.size()-(this.protocolversion < SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE?0:2); i++) {
 			if (((ParamItemBoolean) outputItems.get(i)).getValue()) res |= 0x01 << i; 
 		}		
-		if ((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE)){
+		if ((protocolversion >= SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE)){
 			res &= ~(0x0F << 11);
 			if (BlDeDiagEnabled) {				
 				res |= ((((ParamItemBoolean) outputItems.get(outputItems.size()-2)).getValue())?1:2)  << 11; // BL							
@@ -168,7 +163,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	
 	private void createOutputs() {
 		String outputNames[] = getResources().getStringArray(R.array.diagnostics_output_names);
-		for (int i = 0; i != outputNames.length-(this.protocolversion < SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE?2:0); i++) { // In 3 protocol version BL & DE testing added
+		for (int i = 0; i != outputNames.length-(this.protocolversion < SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE?2:0); i++) { // In 3 protocol version BL & DE testing added
 			outputItems.add(new ParamItemBoolean(this, outputNames[i], null, false));
 			outputItems.get(i).setOnParamItemChangeListener(this);
 		}
@@ -176,22 +171,22 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 	
 	private void setBlDeEnabled(boolean BlDeEnabled) {
 		this.BlDeDiagEnabled = BlDeEnabled; 
-		if (protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE) {
-			((ParamItemBoolean) outputItems.get(outputItems.size()-2)).setEnabled(BlDeEnabled);
-			((ParamItemBoolean) outputItems.get(outputItems.size()-1)).setEnabled(BlDeEnabled);
+		if (protocolversion >= SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE) {
+			(outputItems.get(outputItems.size()-2)).setEnabled(BlDeEnabled);
+			(outputItems.get(outputItems.size()-1)).setEnabled(BlDeEnabled);
 			onParamItemChange (null);
 		}
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
+		setTheme(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false) ? R.style.AppBaseTheme : R.style.AppBaseTheme_Light);
 		setContentView(R.layout.activity_diagnostics);
 		
 		protocolversion = SettingsActivity.getProtocolVersion(this);
-		pages = new ArrayList<Fragment>();
-		inputItems = new ArrayList<BaseParamItem>();
-		outputItems = new ArrayList<BaseParamItem>();
+		List<Fragment> pages = new ArrayList<>();
+		ArrayList<BaseParamItem> inputItems = new ArrayList<>();
+		outputItems = new ArrayList<>();
 		
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_voltage_title, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
 		inputItems.add(new ParamItemFloat(this, R.string.diag_input_map_s, 0, R.string.units_volts,0,0,100,0).setFormat("%.3f"));
@@ -212,13 +207,13 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		
 		inputFragment = new ListFragment();
 		inputFragment.setListAdapter(new ParamItemsAdapter(inputItems));
-		outputsFragment = new OutputDiagListFragment();
+		OutputDiagListFragment outputsFragment = new OutputDiagListFragment();
 		outputsFragment.setOnItemClickListener(this);
 		outputsFragment.setListAdapter(new ParamItemsAdapter(outputItems));
 		pages.add(inputFragment);
-		pages.add(outputsFragment); 
-		
-		diagnosticsAdapter = new DiagnosticsPagerAdapter(getSupportFragmentManager(),pages);
+		pages.add(outputsFragment);
+
+		DiagnosticsPagerAdapter diagnosticsAdapter = new DiagnosticsPagerAdapter(getSupportFragmentManager(),pages);
 		receiver = new ReceiveMessages();
 		textViewStatus = (TextView) findViewById(R.id.diagnosticsStatusTextView);		
 		pager = (ViewPager)findViewById(R.id.diagnosticsPager);
@@ -233,8 +228,8 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 			pager.setCurrentItem(page);
 		}
 		
-		checkBoxEnableBlDeDiagnostics = (CheckBox) findViewById(R.id.diagnosticsEnableBlDe);
-		checkBoxEnableBlDeDiagnostics.setVisibility((protocolversion >= SettingsActivity.PROTOCOL_26122013_WINTER_RELEASE)?View.VISIBLE:View.GONE);
+		CheckBox checkBoxEnableBlDeDiagnostics = (CheckBox) findViewById(R.id.diagnosticsEnableBlDe);
+		checkBoxEnableBlDeDiagnostics.setVisibility((protocolversion >= SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE)?View.VISIBLE:View.GONE);
 		checkBoxEnableBlDeDiagnostics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			
 			@Override

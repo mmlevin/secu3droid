@@ -40,7 +40,6 @@ import org.andengine.ui.activity.BaseGameActivity;
 
 public class LedGauge extends BaseGauge {
 	private String textureName;
-	private ITexture texture;
 	private ITextureRegion textureRegion;
 	private Sprite sprite;
 	private AlphaModifier modifier;
@@ -57,9 +56,9 @@ public class LedGauge extends BaseGauge {
 	}
 	
 	public void load (BaseGameActivity activity) throws IOException {
-		this.texture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.textureName, TextureOptions.BILINEAR);
-		this.textureRegion = TextureRegionFactory.extractFromTexture(this.texture);
-		this.texture.load();			
+		ITexture texture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.textureName, TextureOptions.BILINEAR);
+		textureRegion = TextureRegionFactory.extractFromTexture(texture);
+		texture.load();
 	}
 	
 	public void attach (Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {

@@ -46,21 +46,16 @@ public class GaugeAnalog extends BaseGauge {
 	private float value;
 	
 	private String scaleTextureName;
-	private ITexture scaleTexture;
 	private ITextureRegion scaleTextureRegion;
-	private Sprite scaleSprite;
 	private float scaleX;
 	private float scaleY;
 	
 	private String labelsTextureName;
-	private ITexture labelsTexture;
 	private ITextureRegion labelsTextureRegion;
-	private Sprite labelsSprite;
 	private float labelsX;
 	private float labelsY;
 	
 	private String arrowTextureName;
-	private ITexture arrowTexture;
 	private ITextureRegion arrowTextureRegion;
 	private Sprite arrowSprite;
 	private float arrowX;
@@ -97,27 +92,27 @@ public class GaugeAnalog extends BaseGauge {
 	
 	@Override
 	public void load(BaseGameActivity activity) throws IOException {
-		this.scaleTexture = new AssetBitmapTexture(activity.getTextureManager(), activity.getAssets(), scaleTextureName, TextureOptions.BILINEAR);
-		this.scaleTextureRegion = TextureRegionFactory.extractFromTexture(this.scaleTexture);
-		this.scaleTexture.load();			
-		this.labelsTexture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.labelsTextureName, TextureOptions.BILINEAR);
-		this.labelsTextureRegion = TextureRegionFactory.extractFromTexture(this.labelsTexture);
-		this.labelsTexture.load();
-		this.arrowTexture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.arrowTextureName, TextureOptions.BILINEAR);
-		this.arrowTextureRegion = TextureRegionFactory.extractFromTexture(this.arrowTexture);
-		this.arrowTexture.load();
+		ITexture scaleTexture = new AssetBitmapTexture(activity.getTextureManager(), activity.getAssets(), scaleTextureName, TextureOptions.BILINEAR);
+		this.scaleTextureRegion = TextureRegionFactory.extractFromTexture(scaleTexture);
+		scaleTexture.load();
+		ITexture labelsTexture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.labelsTextureName, TextureOptions.BILINEAR);
+		this.labelsTextureRegion = TextureRegionFactory.extractFromTexture(labelsTexture);
+		labelsTexture.load();
+		ITexture arrowTexture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.arrowTextureName, TextureOptions.BILINEAR);
+		this.arrowTextureRegion = TextureRegionFactory.extractFromTexture(arrowTexture);
+		arrowTexture.load();
 	}
 
 	@Override
 	public void attach(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
-		scaleSprite = new Sprite(scaleX, scaleY, scaleTextureRegion, vertexBufferObjectManager);
+		Sprite scaleSprite = new Sprite(scaleX, scaleY, scaleTextureRegion, vertexBufferObjectManager);
 		scene.attachChild(scaleSprite);				
-		labelsSprite = new Sprite(labelsX, labelsY, labelsTextureRegion, vertexBufferObjectManager);
+		Sprite labelsSprite = new Sprite(labelsX, labelsY, labelsTextureRegion, vertexBufferObjectManager);
 		scene.attachChild(labelsSprite);
 		arrowSprite = new Sprite(arrowX, arrowY, arrowTextureRegion, vertexBufferObjectManager);
 		arrowSprite.setAnchorCenterX(arrowAnchorX/arrowSprite.getWidth());
 		arrowSprite.setAnchorCenterY(arrowAnchorY/arrowSprite.getHeight());
-		arrowSprite.setRotation(calc_angle(value));
+		arrowSprite.setRotation(calc_angle());
 		scene.attachChild(arrowSprite);
 	}
 
@@ -125,8 +120,8 @@ public class GaugeAnalog extends BaseGauge {
 		return value;
 	}
 
-	private float calc_angle (float angle) {
-		return angle = beginAngle+(value-minValue)*degreesPerUnit;
+	private float calc_angle () {
+		return beginAngle+(value-minValue)*degreesPerUnit;
 	}
 	
 	@Override
@@ -135,7 +130,7 @@ public class GaugeAnalog extends BaseGauge {
 		if (value >= maxValue) value = maxValue;
 		this.value = value;		
 		if (modifier != null) arrowSprite.unregisterEntityModifier(modifier);
-		modifier = new RotationModifier(delay, arrowSprite.getRotation() , calc_angle(value));
+		modifier = new RotationModifier(delay, arrowSprite.getRotation() , calc_angle());
 		arrowSprite.registerEntityModifier(modifier);
 	}
 

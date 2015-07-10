@@ -55,6 +55,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -62,8 +63,6 @@ import android.view.WindowManager;
 
 public class DashBoardActivity extends SimpleBaseGameActivity {	
 	private DashBoard dashBoard = null;
-		
-	private Camera mCamera;
 		
 	protected int odometer;
 	private boolean isOnline;
@@ -135,7 +134,11 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 								textureName = attrValue;
 							}
 							if (attr.equals("color")) {
-								color = Integer.parseInt(attrValue);
+								if (attrValue.startsWith("#")) {
+									color = Color.parseColor(attrValue);
+								} else {
+									color = Integer.parseInt(attrValue);
+								}
 							}
 						}
 						dashBoard = new DashBoard(Float.parseFloat(width), Float.parseFloat(height), textureName,color);
@@ -210,7 +213,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 							} else								
 							if (attr.equals("max_value")) {
 								maxValue = attrValue;
-							};							
+							}
 						}
 						dashBoard.addGauge(
 								new GaugeAnalog(id, Float.parseFloat(degreesPerUnit), Float.parseFloat(beginAngle), Float.parseFloat(minValue), Float.parseFloat(maxValue),
@@ -252,7 +255,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 								} else
 								if (attr.equals("format")) {
 									format = attrValue;
-								};
+								}
 								
 							}
 							dashBoard.addGauge(
@@ -332,8 +335,8 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 		createDashboardFromXml(R.xml.nfs_portrait);		
-		this.mCamera = new Camera(0, 0, dashBoard.getWidth(), dashBoard.getHeight());
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(dashBoard.getWidth(), dashBoard.getHeight()), this.mCamera);
+		Camera camera = new Camera(0, 0, dashBoard.getWidth(), dashBoard.getHeight());
+		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(dashBoard.getWidth(), dashBoard.getHeight()),camera);
 	}
 
 	@Override
@@ -427,7 +430,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 				time = System.currentTimeMillis();
 				
 				switch (packet.getPacketIdResId()) {
-				case R.string.packet_type_sendor_dat:
+				case R.string.packet_type_sensor_dat:
 					int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
 					rpmData = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue();
 					pressureData = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue();

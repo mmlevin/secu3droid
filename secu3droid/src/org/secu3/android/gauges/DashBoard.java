@@ -45,14 +45,12 @@ public class DashBoard extends BaseGauge {
 	private float width;
 	private float height;
 	String textureName;
-	private ITexture texture;
 	private ITextureRegion textureRegion;
-	private Sprite sprite;
 	private int color;
 	
 	public DashBoard(float width, float height, String texture, int color) {
 		
-		gauges = new ArrayList<BaseGauge>();
+		gauges = new ArrayList<>();
 		this.textureName = texture;
 		this.width = width;
 		this.height = height;
@@ -61,9 +59,9 @@ public class DashBoard extends BaseGauge {
 	@Override
 	public void load(BaseGameActivity activity) throws IOException {
 		if (textureName != null) {
-			this.texture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.textureName, TextureOptions.BILINEAR);
-			this.textureRegion = TextureRegionFactory.extractFromTexture(this.texture);
-			this.texture.load();	
+			ITexture texture = new AssetBitmapTexture(activity.getTextureManager(),activity.getAssets(), this.textureName, TextureOptions.BILINEAR);
+			this.textureRegion = TextureRegionFactory.extractFromTexture(texture);
+			texture.load();
 		}		
 		
 		int count = gauges.size();
@@ -76,7 +74,7 @@ public class DashBoard extends BaseGauge {
 	public void attach(Scene scene, VertexBufferObjectManager vertexBufferObjectManager) {
 		scene.getBackground().setColor((color & 0xff)/255.0f,((color >> 8)&0xff)/255.0f,((color >> 16)&0xff)/255.0f,((color >> 24)&0xff)/255.0f);
 		if (textureName != null) {
-			sprite = new Sprite(width/2, height/2, textureRegion, vertexBufferObjectManager);
+			Sprite sprite = new Sprite(width/2, height/2, textureRegion, vertexBufferObjectManager);
 			scene.attachChild(sprite);
 		}
 		
