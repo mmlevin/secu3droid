@@ -112,20 +112,26 @@ public class Secu3ProtoWrapper {
 							for (int i = 0; i != count; i++) {
 								attr  = xpp.getAttributeName(i);
 								attrValue = xpp.getAttributeValue(i);
-								if (attr.equals(NAME)) {	
-									if (!ResourcesUtils.isResource(attrValue)) throw new IllegalArgumentException("Packet name must be a string reference");
-									packetName = attrValue;
-								} else
-								if (attr.equals(PACKET_ID)) {
-									packetId = attrValue;
-								} else
-								 if (attr.equals(MIN_VERSION)) {
-									minVersion = Integer.parseInt(attrValue);
-								} else if (attr.equals(MAX_VERSION)) {
-									maxVersion = Integer.parseInt(attrValue);
-								} else if (attr.equals(PACKET_DIR)) {
-									if (!ResourcesUtils.isResource(attrValue)) throw new IllegalArgumentException("Packet direction must be a string reference");
-									packetDir = attrValue;
+								switch (attr) {
+									case NAME:
+										if (!ResourcesUtils.isResource(attrValue))
+											throw new IllegalArgumentException("Packet name must be a string reference");
+										packetName = attrValue;
+										break;
+									case PACKET_ID:
+										packetId = attrValue;
+										break;
+									case MIN_VERSION:
+										minVersion = Integer.parseInt(attrValue);
+										break;
+									case MAX_VERSION:
+										maxVersion = Integer.parseInt(attrValue);
+										break;
+									case PACKET_DIR:
+										if (!ResourcesUtils.isResource(attrValue))
+											throw new IllegalArgumentException("Packet direction must be a string reference");
+										packetDir = attrValue;
+										break;
 								}
 							}
 							if ((packetName == null) || (TextUtils.isEmpty(packetName)) || (packetId == null) || (TextUtils.isEmpty(packetId))) {

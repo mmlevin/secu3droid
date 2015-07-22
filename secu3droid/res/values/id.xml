@@ -50,7 +50,7 @@
     <item type = "id" name="GaugeSpeedometer">speedometer</item>
     <item type = "id" name="GaugeOdometer">odometer</item>
     <item type = "id" name="GaugeTachometer">tachometer</item>
-    <item type = "id" name="GaugeTermometer">termometer</item>
+    <item type = "id" name="GaugeThermometer">termometer</item>
     <item type = "id" name="GaugeVoltmeter">voltmeter</item>
     <item type = "id" name="GaugeManometer">manometer</item>
     <item type = "id" name="GaugeSprite">sprite</item>

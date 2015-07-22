@@ -22,7 +22,8 @@
  
   contacts:
              http://secu-3.org
-             email: mmlevin@mail.ru
+             email: mmlevin@mail.ru
+
 -->
 
 <resources>
@@ -36,7 +37,7 @@
     <string name="pref_connection_retries_title">Количество попыток повтора соединения</string>
     <string name="pref_connection_retries_summary">Число попыток до выхода: %s</string>
     <string name="pref_about_title">О программе</string>
-    <string name="pref_about_summary"></string>
+    <string name="pref_about_summary"/>
     <string name="pref_upload_immediately_title">Загружать изменения немедленно</string>
     <string name="pref_upload_immediately_summary">При изменении значения пользователем</string>
     <string name="pref_write_log_title">Запись лога сенсоров</string>

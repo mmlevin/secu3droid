@@ -36,5 +36,5 @@
 
     <style name="AppTheme" parent="AppBaseTheme">                
     </style>
-    <style name = "secu3TextAppearance" parent="@android:style/TextAppearance.Large"></style>
+    <style name = "secu3TextAppearance" parent="@android:style/TextAppearance.Large"/>
 </resources>

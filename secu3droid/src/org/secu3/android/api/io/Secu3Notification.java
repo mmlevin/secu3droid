@@ -43,7 +43,7 @@ public class Secu3Notification {
 	public NotificationManager notificationManager;
 	
 	private Context ctx = null;
-	
+
 	public Secu3Notification(Context ctx) {
 		this.ctx = ctx;
 		notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);			
@@ -68,8 +68,11 @@ public class Secu3Notification {
 			connectionProblemNotification = connectionProblemNotificationBuilder.build();
 			serviceStoppedNotification = serviceStoppedNotificationBuilder.build();
 		} else {
+			//noinspection deprecation
 			secu3Notification = secu3NotificationBuilder.getNotification();
+			//noinspection deprecation
 			connectionProblemNotification = connectionProblemNotificationBuilder.getNotification();
+			//noinspection deprecation
 			serviceStoppedNotification = serviceStoppedNotificationBuilder.getNotification();
 		}
 	}
@@ -89,6 +92,7 @@ public class Secu3Notification {
 		if (Build.VERSION.SDK_INT >= 16) {
 			connectionProblemNotification = connectionProblemNotificationBuilder.build();
 		} else {
+			//noinspection deprecation
 			connectionProblemNotification = connectionProblemNotificationBuilder.getNotification();
 		}
 		notificationManager.notify(R.string.connection_problem_notification_title, connectionProblemNotification);			
@@ -107,6 +111,7 @@ public class Secu3Notification {
 		if (Build.VERSION.SDK_INT >= 16) {
 			serviceStoppedNotification = serviceStoppedNotificationBuilder.build();
 		} else {
+			//noinspection deprecation
 			serviceStoppedNotification = serviceStoppedNotificationBuilder.getNotification();
 		}
 		notificationManager.notify(R.string.service_closed_because_connection_problem_notification_title, serviceStoppedNotification);		

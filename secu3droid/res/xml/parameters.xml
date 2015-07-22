@@ -525,8 +525,8 @@
             maxValue="89"
             stepValue="1"/>
 		<Parameter
-            app:name="@string/ckps_engine_cylynders_title"
-            app:summary="@string/ckps_engine_cylynders_summary"
+            app:name="@string/ckps_engine_cylinders_title"
+            app:summary="@string/ckps_engine_cylinders_summary"
             app:type="@id/parameter_type_integer"
             minValue="2"
             maxValue="8"
@@ -849,6 +849,14 @@
             minValue="0"
             maxValue="1"
             stepvalue="1"/>
+        <Parameter
+            app:name="@string/unioutput_delimeter_title"
+            app:type="@id/parameter_type_label"/>
+        <Parameter
+            app:name="@string/uniout_par_logic_function_1_2_title"
+            app:summary="@string/uniout_par_logic_function_1_2_title"
+            app:type="@id/parameter_type_spinner"
+            app:str_value="@string/uniout_par_logical_functions"/>
         <Parameter
             app:name="@string/unioutput_delimeter_title"
             app:type="@id/parameter_type_label"/>

@@ -114,7 +114,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 				switch (xpp.getEventType()){
 				case XmlPullParser.START_TAG:
 					String name = xpp.getName();
-					if (name.equals("DashBoard")) {		
+					if (name.equals("DashBoard")) {
 						String textureName = null;
 						String width = null;
 						String height = null;
@@ -124,26 +124,28 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 						for (int i = 0; i != count; i++) {
 							attr = xpp.getAttributeName(i);
 							attrValue = xpp.getAttributeValue(i);
-							if (attr.equals("width")) {
-								width = attrValue;
-							} else
-							if (attr.equals("height")) {
-								height = attrValue;
-							} else
-							if (attr.equals("texture")) {
-								textureName = attrValue;
-							}
-							if (attr.equals("color")) {
-								if (attrValue.startsWith("#")) {
-									color = Color.parseColor(attrValue);
-								} else {
-									color = Integer.parseInt(attrValue);
+							switch (attr) {
+								case "width":
+									width = attrValue;
+									break;
+								case "height":
+									height = attrValue;
+									break;
+								case "texture":
+									textureName = attrValue;
+									break;
+								case "color":
+									if (attrValue.startsWith("#")) {
+										color = Color.parseColor(attrValue);
+									} else {
+										color = Integer.parseInt(attrValue);
+									}
+									break;
 								}
-							}
 						}
 						dashBoard = new DashBoard(Float.parseFloat(width), Float.parseFloat(height), textureName,color);
 					} else
-					if (name.equals("GaugeAnalog")) {				
+					if (name.equals("GaugeAnalog")) {
 						String scaleTexture = null;
 						String labelsTexture = null;
 						String arrowTexture = null;
@@ -166,54 +168,57 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 						for (int i = 0; i != count; i++) {
 							attr = xpp.getAttributeName(i);
 							attrValue = xpp.getAttributeValue(i);
-							if (attr.equals("id")) {
-								if (ResourcesUtils.isResource(attrValue)) id = ResourcesUtils.referenceToInt(attrValue);
-							} else
-							if (attr.equals("scale_texture")) {
-								scaleTexture = attrValue;
-							} else
-							if (attr.equals("labels_texture")) {
-								labelsTexture = attrValue;
-							} else
-							if (attr.equals("arrow_texture")) {
-								arrowTexture = attrValue;
-							} else	
-							if (attr.equals("degrees_per_unit")) {
-								degreesPerUnit = attrValue;
-							} else				
-							if (attr.equals("begin_angle")) {
-								beginAngle = attrValue;
-							} else			
-							if (attr.equals("scale_x")) {
-								scaleX = attrValue;
-							} else								
-							if (attr.equals("scale_y")) {
-								scaleY = attrValue;
-							} else
-							if (attr.equals("labels_x")) {
-								labelsX = attrValue;
-							} else								
-							if (attr.equals("labels_y")) {
-								labelsY = attrValue;
-							} else		
-							if (attr.equals("arrow_x")) {
-								arrowX = attrValue;
-							} else								
-							if (attr.equals("arrow_y")) {
-								arrowY = attrValue;
-							} else
-							if (attr.equals("arrow_anchor_x")) {
-								arrowAnchorX = attrValue;
-							} else								
-							if (attr.equals("arrow_anchor_y")) {
-								arrowAnchorY = attrValue;
-							} else	
-							if (attr.equals("min_value")) {
-								minValue = attrValue;
-							} else								
-							if (attr.equals("max_value")) {
-								maxValue = attrValue;
-							}
+							switch (attr) {
+								case "id":
+									if (ResourcesUtils.isResource(attrValue))
+										id = ResourcesUtils.referenceToInt(attrValue);
+									break;
+								case "scale_texture":
+									scaleTexture = attrValue;
+									break;
+								case "labels_texture":
+									labelsTexture = attrValue;
+									break;
+								case "arrow_texture":
+									arrowTexture = attrValue;
+									break;
+								case "degrees_per_unit":
+									degreesPerUnit = attrValue;
+									break;
+								case "begin_angle":
+									beginAngle = attrValue;
+									break;
+								case "scale_x":
+									scaleX = attrValue;
+									break;
+								case "scale_y":
+									scaleY = attrValue;
+									break;
+								case "labels_x":
+									labelsX = attrValue;
+									break;
+								case "labels_y":
+									labelsY = attrValue;
+									break;
+								case "arrow_x":
+									arrowX = attrValue;
+									break;
+								case "arrow_y":
+									arrowY = attrValue;
+									break;
+								case "arrow_anchor_x":
+									arrowAnchorX = attrValue;
+									break;
+								case "arrow_anchor_y":
+									arrowAnchorY = attrValue;
+									break;
+								case "min_value":
+									minValue = attrValue;
+									break;
+								case "max_value":
+									maxValue = attrValue;
+									break;
+								}
 						}
 						dashBoard.addGauge(
 								new GaugeAnalog(id, Float.parseFloat(degreesPerUnit), Float.parseFloat(beginAngle), Float.parseFloat(minValue), Float.parseFloat(maxValue),
@@ -221,7 +226,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 										Float.parseFloat(scaleX), Float.parseFloat(scaleY), Float.parseFloat(labelsX), Float.parseFloat(labelsY), Float.parseFloat(arrowX), Float.parseFloat(arrowY), Float.parseFloat(arrowAnchorX), Float.parseFloat(arrowAnchorY))
 								);
 					} else
-						if (name.equals("GaugeDigital")) {				
+						if (name.equals("GaugeDigital")) {
 							String font = null;
 							String format = null;
 							String color = null;
@@ -235,33 +240,35 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 							for (int i = 0; i != count; i++) {
 								attr = xpp.getAttributeName(i);
 								attrValue = xpp.getAttributeValue(i);
-								if (attr.equals("id")) {
-									if (ResourcesUtils.isResource(attrValue)) id = ResourcesUtils.referenceToInt(attrValue);
-								} else
-								if (attr.equals("x")) {
-									x = attrValue;
-								} else
-								if (attr.equals("y")) {
-									y = attrValue;
-								} else
-								if (attr.equals("size")) {
-									size = attrValue;
-								} else
-								if (attr.equals("color")) {
-									color = attrValue;
-								} else	
-								if (attr.equals("font")) {
-									font = attrValue;
-								} else
-								if (attr.equals("format")) {
-									format = attrValue;
-								}
-								
+								switch (attr) {
+									case "id":
+										if (ResourcesUtils.isResource(attrValue))
+											id = ResourcesUtils.referenceToInt(attrValue);
+										break;
+									case "x":
+										x = attrValue;
+										break;
+									case "y":
+										y = attrValue;
+										break;
+									case "size":
+										size = attrValue;
+										break;
+									case "color":
+										color = attrValue;
+										break;
+									case "font":
+										font = attrValue;
+										break;
+									case "format":
+										format = attrValue;
+										break;
+									}
 							}
 							dashBoard.addGauge(
 									new GaugeDigital(id, Float.parseFloat(x), Float.parseFloat(y), font, Float.parseFloat(size), format, Integer.parseInt(color))
 									);
-					} else		
+					} else
 					if (name.equals("Sprite")) {
 						String textureName = null;
 						String x = null;
@@ -272,18 +279,21 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 						for (int i = 0; i != count; i++) {
 							attr = xpp.getAttributeName(i);
 							attrValue = xpp.getAttributeValue(i);
-							if (attr.equals("id")) {
-								if (ResourcesUtils.isResource(attrValue)) id = ResourcesUtils.referenceToInt(attrValue);
-							} else
-							if (attr.equals("texture")) {
-								textureName = attrValue;
-							} else
-							if (attr.equals("x")) {
-								x = attrValue;								
-							} else
-							if (attr.equals("y")) {
-								y = attrValue;
-							}
+							switch (attr) {
+								case "id":
+									if (ResourcesUtils.isResource(attrValue))
+										id = ResourcesUtils.referenceToInt(attrValue);
+									break;
+								case "texture":
+									textureName = attrValue;
+									break;
+								case "x":
+									x = attrValue;
+									break;
+								case "y":
+									y = attrValue;
+									break;
+								}
 						}						
 						dashBoard.addGauge(new SpriteGauge(id, textureName, Float.parseFloat(x), Float.parseFloat(y)));
 					} else
@@ -297,27 +307,28 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 						for (int i = 0; i != count; i++) {
 							attr = xpp.getAttributeName(i);
 							attrValue = xpp.getAttributeValue(i);
-							if (attr.equals("id")) {
-								if (ResourcesUtils.isResource(attrValue)) id = ResourcesUtils.referenceToInt(attrValue);
-							} else
-							if (attr.equals("texture")) {
-								textureName = attrValue;
-							} else
-							if (attr.equals("x")) {
-								x = attrValue;								
-							} else
-							if (attr.equals("y")) {
-								y = attrValue;
-							}
+							switch (attr) {
+								case "id":
+									if (ResourcesUtils.isResource(attrValue))
+										id = ResourcesUtils.referenceToInt(attrValue);
+									break;
+								case "texture":
+									textureName = attrValue;
+									break;
+								case "x":
+									x = attrValue;
+									break;
+								case "y":
+									y = attrValue;
+									break;
+								}
 						}						
 						dashBoard.addGauge(new LedGauge(id, textureName, Float.parseFloat(x), Float.parseFloat(y)));						
 					}
 				}
 				xpp.next();				
 			}
-		} catch (XmlPullParserException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (XmlPullParserException|IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -358,7 +369,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 				dashBoard.setGaugeValue(R.id.GaugeOdometer, odometerData,delta);
 				dashBoard.setGaugeValue(R.id.GaugeSpeedometer, speedData,delta);
 				dashBoard.setGaugeValue(R.id.GaugeManometer, pressureData,delta);
-				dashBoard.setGaugeValue(R.id.GaugeTermometer, tempData,delta);
+				dashBoard.setGaugeValue(R.id.GaugeThermometer, tempData,delta);
 				dashBoard.setGaugeValue(R.id.GaugeVoltmeter, voltageData,delta);
 				dashBoard.setGaugeValue(R.id.GaugeTachometer, rpmData,delta);			
 				

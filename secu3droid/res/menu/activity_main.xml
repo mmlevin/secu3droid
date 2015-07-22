@@ -28,8 +28,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 	<item android:id="@+id/menu_dashboard" android:title="@string/menu_dashboard" android:showAsAction="never" android:icon="@android:drawable/ic_menu_preferences"/>
     <item android:id="@+id/menu_preferences" android:title="@string/menu_preferences" android:showAsAction="never" android:icon="@android:drawable/ic_menu_preferences"/>
-    <item android:id="@+id/menu_params" android:title="@string/menu_param" android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_manage"></item>
-    <item android:id="@+id/menu_errors" android:title="@string/menu_errors" android:showAsAction="ifRoom" android:icon="@drawable/ic_menu_errors"></item>
+    <item android:id="@+id/menu_params" android:title="@string/menu_param" android:showAsAction="ifRoom" android:icon="@android:drawable/ic_menu_manage"/>
+    <item android:id="@+id/menu_errors" android:title="@string/menu_errors" android:showAsAction="ifRoom" android:icon="@drawable/ic_menu_errors"/>
 	<item android:id="@+id/menu_diagnostics" android:title="@string/menu_diagnostics" android:showAsAction="never" android:icon="@android:drawable/ic_menu_agenda"/>
 	<item android:id="@+id/menu_raw_sensors" android:title="@string/menu_raw_sensors" android:showAsAction="never" android:checkable="true"/>
 	<item android:id="@+id/menu_exit" android:title="@string/menu_exit" android:showAsAction="never" android:icon="@android:drawable/ic_menu_close_clear_cancel"/>	

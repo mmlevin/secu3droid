@@ -81,7 +81,6 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private static final String NAME = "name";
 	private static final String PAGE = "Page";
 	private static final String PARAMETERS = "Parameters";
-	public static final int PARAMS_NUMBER = 9;
 	
 	private String bluetoothSecurityValue;
 	private int bluetoothSecurityFlags;
@@ -151,152 +150,172 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 				switch (xpp.getEventType()) {
 				case XmlPullParser.START_TAG:
 					String name = xpp.getName();
-					if (name.equals(PARAMETERS)) {
-						if (pages.size() != 0) throw new IllegalArgumentException("Pages adapter is non empty, probably nested Parameter element"); 
-					} else					
+					int count;
+					switch (name) {
+						case PARAMETERS:
+							if (pages.size() != 0) throw new IllegalArgumentException("Pages adapter is non empty, probably nested Parameter element");
+							break;
 					// Found new page element
-					if (name.equals(PAGE)) {
-						int count = xpp.getAttributeCount(); 
-						if (count > 0) {
-							int pageMinVersion = protocolVersion;
-							int pageMaxVersion = protocolVersion;
-							for (int i = 0; i != count; i++) {
-								attr  = xpp.getAttributeName(i);
-								attrValue = xpp.getAttributeValue(i);
-								if (attr.equals(NAME)) {
-									if (ResourcesUtils.isResource(attrValue)) {
-										page = new ParamsPage(ResourcesUtils.referenceToInt(attrValue));
-									} else throw new IllegalArgumentException("Page name must be a string reference");									
-								} else if (attr.equals(MIN_VERSION)) {
-									pageMinVersion = Integer.parseInt(attrValue);
-								} else if (attr.equals(MAX_VERSION)) {
-									pageMaxVersion = Integer.parseInt(attrValue);
+						case PAGE:
+							count = xpp.getAttributeCount();
+							if (count > 0) {
+								int pageMinVersion = protocolVersion;
+								int pageMaxVersion = protocolVersion;
+								for (int i = 0; i != count; i++) {
+									attr  = xpp.getAttributeName(i);
+									attrValue = xpp.getAttributeValue(i);
+									switch (attr) {
+										case NAME:
+											if (ResourcesUtils.isResource(attrValue)) {
+												page = new ParamsPage(ResourcesUtils.referenceToInt(attrValue));
+											} else
+												throw new IllegalArgumentException("Page name must be a string reference");
+											break;
+										case MIN_VERSION:
+											pageMinVersion = Integer.parseInt(attrValue);
+											break;
+										case MAX_VERSION:
+											pageMaxVersion = Integer.parseInt(attrValue);
+											break;
+										}
+								}
+								if ((protocolVersion >= pageMinVersion)&&(protocolVersion <= pageMaxVersion)) {
+									pages.add(page);
 								}
 							}
-							if ((protocolVersion >= pageMinVersion)&&(protocolVersion <= pageMaxVersion)) {
-								pages.add(page);
-							}
-						}	
-					} else
+							break;
 					// Found new parameter element
-					if (name.equals(PARAMETER)){
-						int count = xpp.getAttributeCount();
-						int parameterType = 0;
-						String parameterName = null;
-						String parameterSummary = null;
-						String parameterUnits = null;
-						String parameterStrValue = null;
-						String parameterValue = null;
-						int parameterMinVersion = protocolVersion;
-						int parameterMaxVersion = protocolVersion;
-						String parameterMinValue = null;
-						String parameterMaxValue = null;
-						String parameterStepValue = null;
-						String parameterIndex = null;
-						String parameterMasFormat = null;
-						if (count > 0) {
-							int minVersion = protocolVersion;
-							int maxVersion = protocolVersion;
-							for (int i = 0; i != count; i++) {
-								attr  = xpp.getAttributeName(i);
-								attrValue = xpp.getAttributeValue(i);
-								if (attr.equals(NAME)) {
-									if (ResourcesUtils.isResource(attrValue)) {
-										parameterName = attrValue;
-									} else throw new IllegalArgumentException("Parameter name must be a string reference");									
-								} else if (attr.equals(SUMMARY)) {
-									parameterSummary = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(UNITS)) {
-									parameterUnits = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(TYPE)) {
-									if (ResourcesUtils.isResource(attrValue)) {
-										parameterType = ResourcesUtils.referenceToInt(attrValue);
-									} else throw new IllegalArgumentException("Parameter type must be a reference");									
-								} else if (attr.equals(VALUE)) {
-									parameterValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(MIN_VERSION)) {
-									parameterMinVersion = Integer.parseInt(attrValue);
-								} else if (attr.equals(MAX_VERSION)) {
+						case PARAMETER:
+							count = xpp.getAttributeCount();
+							int parameterType = 0;
+							String parameterName = null;
+							String parameterSummary = null;
+							String parameterUnits = null;
+							String parameterStrValue = null;
+							String parameterValue = null;
+							int parameterMinVersion = protocolVersion;
+							int parameterMaxVersion = protocolVersion;
+							String parameterMinValue = null;
+							String parameterMaxValue = null;
+							String parameterStepValue = null;
+							String parameterIndex = null;
+							String parameterMasFormat = null;
+							if (count > 0) {
+								int minVersion = protocolVersion;
+								int maxVersion = protocolVersion;
+								for (int i = 0; i != count; i++) {
+									attr = xpp.getAttributeName(i);
+									attrValue = xpp.getAttributeValue(i);
+									switch (attr) {
+										case NAME:
+											if (ResourcesUtils.isResource(attrValue)) {
+												parameterName = attrValue;
+											} else
+												throw new IllegalArgumentException("Parameter name must be a string reference");
+											break;
+										case SUMMARY:
+											parameterSummary = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case UNITS:
+											parameterUnits = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case TYPE:
+											if (ResourcesUtils.isResource(attrValue)) {
+												parameterType = ResourcesUtils.referenceToInt(attrValue);
+											} else
+												throw new IllegalArgumentException("Parameter type must be a reference");
+											break;
+										case VALUE:
+											parameterValue = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case MIN_VERSION:
+											parameterMinVersion = Integer.parseInt(attrValue);
+											break;
+										case MAX_VERSION:
 											parameterMaxVersion = Integer.parseInt(attrValue);
-								} else if (attr.equals(STR_VALUE)) {
-									parameterStrValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(MIN_VALUE)) {
-									parameterMinValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(MAX_VALUE)) {
-									parameterMaxValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(STEP_VALUE)) {
-									parameterStepValue = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(FORMAT)) {
-									parameterMasFormat = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(INDEX)) {
-									parameterIndex = (ResourcesUtils.isResource(attrValue))?ResourcesUtils.getReferenceString(this,attrValue):attrValue;
-								} else if (attr.equals(MIN_VERSION)) {
-									minVersion = Integer.parseInt(attrValue);
-								} else if (attr.equals(MAX_VERSION)) {
-									maxVersion = Integer.parseInt(attrValue);
-								}
-							}
-							if ((parameterName == null) || (parameterType == 0) || (TextUtils.isEmpty(parameterName))) throw new IllegalArgumentException("Parameter element is invalid");
-							else {
-								switch (parameterType) {
-								case R.id.parameter_type_boolean:
-									item = new ParamItemBoolean(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterValue);
-									break;
-								case R.id.parameter_type_integer:
-									try {
-										item = new ParamItemInteger(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
-												parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
-									} catch (ParseException e) {
-										throw new IllegalArgumentException("Wrong integer parameter attributes");
+											break;
+										case STR_VALUE:
+											parameterStrValue = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case MIN_VALUE:
+											parameterMinValue = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case MAX_VALUE:
+											parameterMaxValue = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case STEP_VALUE:
+											parameterStepValue = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case FORMAT:
+											parameterMasFormat = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
+										case INDEX:
+											parameterIndex = (ResourcesUtils.isResource(attrValue)) ? ResourcesUtils.getReferenceString(this, attrValue) : attrValue;
+											break;
 									}
-									break;
-								case R.id.parameter_type_float:
-									try {
-										item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
-												parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
-										((ParamItemFloat) item).setFormat (parameterMasFormat);
-									} catch (ParseException e) {
-										throw new IllegalArgumentException("Wrong integer parameter attributes");
-									}								
-									break;
-								case R.id.parameter_type_label:
-									item = new ParamItemLabel(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
-									break;
-								case R.id.parameter_type_button:
-									item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterUnits);
-									break;
-								case R.id.parameter_type_toggle_button:
-									item = new ParamItemToggleButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
-									break;
-								case R.id.parameter_type_spinner:
-									try {
-										item = new ParamItemSpinner(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,parameterStrValue,parameterIndex);																			
-									} catch (ParseException e) {
-										throw new IllegalArgumentException("Wrong spinner parameter attributes");
-									}								
-									break;
-								case R.id.parameter_type_string:
-									item = new ParamItemString(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
-									break;
-								default: throw new IllegalArgumentException("Unknown parameter type");
 								}
-								if ((item != null) && (protocolVersion >= minVersion) && (protocolVersion <= maxVersion) && (protocolVersion >= parameterMinVersion) && (protocolVersion <= parameterMaxVersion)) {
-									item.setNameId(ResourcesUtils.referenceToInt(parameterName));									
-									item.setPageId(page.getNameId());
-									item.setOnParamItemChangeListener(this);								
-									page.addParamItem(item);
-									item = null;
+								if ((parameterName == null) || (parameterType == 0) || (TextUtils.isEmpty(parameterName)))
+									throw new IllegalArgumentException("Parameter element is invalid");
+								else {
+									switch (parameterType) {
+										case R.id.parameter_type_boolean:
+											item = new ParamItemBoolean(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterValue);
+											break;
+										case R.id.parameter_type_integer:
+											try {
+												item = new ParamItemInteger(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+														parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+											} catch (ParseException e) {
+												throw new IllegalArgumentException("Wrong integer parameter attributes");
+											}
+											break;
+										case R.id.parameter_type_float:
+											try {
+												item = new ParamItemFloat(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary,
+														parameterUnits, parameterValue, parameterMinValue, parameterMaxValue, parameterStepValue);
+												((ParamItemFloat) item).setFormat(parameterMasFormat);
+											} catch (ParseException e) {
+												throw new IllegalArgumentException("Wrong integer parameter attributes");
+											}
+											break;
+										case R.id.parameter_type_label:
+											item = new ParamItemLabel(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+											break;
+										case R.id.parameter_type_button:
+											item = new ParamItemButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterUnits);
+											break;
+										case R.id.parameter_type_toggle_button:
+											item = new ParamItemToggleButton(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+											break;
+										case R.id.parameter_type_spinner:
+											try {
+												item = new ParamItemSpinner(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary, parameterStrValue, parameterIndex);
+											} catch (ParseException e) {
+												throw new IllegalArgumentException("Wrong spinner parameter attributes");
+											}
+											break;
+										case R.id.parameter_type_string:
+											item = new ParamItemString(this, ResourcesUtils.getReferenceString(this, parameterName), parameterSummary);
+											break;
+										default:
+											throw new IllegalArgumentException("Unknown parameter type");
+									}
+									if ((item != null) && (protocolVersion >= parameterMinVersion) && (protocolVersion <= parameterMaxVersion)) {
+										item.setNameId(ResourcesUtils.referenceToInt(parameterName));
+										item.setPageId(page.getNameId());
+										item.setOnParamItemChangeListener(this);
+										page.addParamItem(item);
+										item = null;
+									}
 								}
 							}
-						}											
+							break;
 					}
 					break;
 				}
 				xpp.next();
 			}
-	    	} catch (XmlPullParserException e) {
-	    		e.printStackTrace();
-	    	} catch (IOException e) {
+	    	} catch (XmlPullParserException|IOException e) {
 	    		e.printStackTrace();
 	    	}
 	}
@@ -374,8 +393,17 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private void paramsUpload() {
 		if (isValid) {
 			progressBar.setIndeterminate(true);
-			progressBar.setVisibility(ProgressBar.VISIBLE);					
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, PARAMS_NUMBER));
+			progressBar.setVisibility(ProgressBar.VISIBLE);
+
+			int paramsNumber = 10;
+			if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
+				paramsNumber = 11;
+				if (protocol_version >= SettingsActivity.PROTOCOL_10022015_WINTER_RELEASE) {
+					paramsNumber = 15;
+				}
+			}
+
+			startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, paramsNumber));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.starter_title),paramAdapter, R.string.starter_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.angles_title), paramAdapter, R.string.angles_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.idling_title), paramAdapter, R.string.idling_title)));
@@ -384,10 +412,17 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.carburetor_title), paramAdapter, R.string.carburetor_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.adc_errors_title), paramAdapter, R.string.adc_errors_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.ckps_title), paramAdapter, R.string.ckps_title)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.ckps_title), paramAdapter, R.string.knock_par_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.miscellaneous_title), paramAdapter, R.string.miscellaneous_title)));
 			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.choke_control_title), paramAdapter, R.string.choke_control_title)));
 			if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.secur_par_title)));
+				if (protocol_version >= SettingsActivity.PROTOCOL_10022015_WINTER_RELEASE) {
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.uniout_par_title)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.injctr_par_title)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.lambda_par_title)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.accel_par_title)));
+				}
 			}
 		}
 	}
@@ -401,7 +436,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	@Override
 	protected void onResume() {
 		super.onResume();	
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.starter_title));
+		startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.starter_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.angles_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.idling_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.functions_title));
@@ -409,12 +444,15 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.carburetor_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.adc_errors_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.ckps_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.knock_par_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.miscellaneous_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.choke_control_title));
-		
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.uniout_par_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.injctr_par_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.lambda_par_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.accel_par_title));
 		
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.op_comp_nc_title));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.choke_control_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.secur_par_title).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR, Secu3Packet.OUTPUT_TYPE));
 		dialog = (CustomNumberPickerDialog)getLastCustomNonConfigurationInstance();
 		if (dialog != null) {

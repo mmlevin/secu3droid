@@ -395,12 +395,21 @@ public class Secu3Manager {
 						((ProtoFieldString) ChangeMode
 								.findField(R.string.change_mode_data_title))
 								.setValue(appContext
+										.getString(R.string.packet_type_knock_par));
+						writer.write(ChangeMode.pack());
+						writer.flush();
+						break;
+					case R.string.packet_type_knock_par:
+						updateProgress(10 + subprogress);
+						((ProtoFieldString) ChangeMode
+								.findField(R.string.change_mode_data_title))
+								.setValue(appContext
 										.getString(R.string.packet_type_miscel_par));
 						writer.write(ChangeMode.pack());
 						writer.flush();
 						break;
 					case R.string.packet_type_miscel_par:
-						updateProgress(10 + subprogress);
+						updateProgress(11 + subprogress);
 						((ProtoFieldString) ChangeMode
 								.findField(R.string.change_mode_data_title))
 								.setValue(appContext
@@ -409,8 +418,8 @@ public class Secu3Manager {
 						writer.flush();
 						break;
 					case R.string.packet_type_choke_par:
-						updateProgress(11 + subprogress);
-						if (protocol_version == SettingsActivity.PROTOCOL_12042013_SPRING_RELEASE) {
+						updateProgress(12 + subprogress);
+						if (protocol_version < SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
 							updateTask();
 						} else {
 							((ProtoFieldString) ChangeMode
@@ -422,7 +431,47 @@ public class Secu3Manager {
 						}
 						break;
 					case R.string.packet_type_secur_par:
-						updateProgress(12 + subprogress);
+						updateProgress(13 + subprogress);
+						if (protocol_version < SettingsActivity.PROTOCOL_10022015_WINTER_RELEASE) {
+							updateTask();
+						} else {
+							((ProtoFieldString) ChangeMode
+									.findField(R.string.change_mode_data_title))
+									.setValue(appContext
+											.getString(R.string.packet_type_uniout_par));
+							writer.write(ChangeMode.pack());
+							writer.flush();
+						}
+						break;
+					case R.string.packet_type_uniout_par:
+						updateProgress(14 + subprogress);
+						((ProtoFieldString) ChangeMode
+								.findField(R.string.change_mode_data_title))
+								.setValue(appContext
+										.getString(R.string.packet_type_injctr_par));
+						writer.write(ChangeMode.pack());
+						writer.flush();
+						break;
+					case R.string.packet_type_injctr_par:
+						updateProgress(15 + subprogress);
+						((ProtoFieldString) ChangeMode
+								.findField(R.string.change_mode_data_title))
+								.setValue(appContext
+										.getString(R.string.packet_type_lambda_par));
+						writer.write(ChangeMode.pack());
+						writer.flush();
+						break;
+					case R.string.packet_type_lambda_par:
+						updateProgress(16 + subprogress);
+						((ProtoFieldString) ChangeMode
+								.findField(R.string.change_mode_data_title))
+								.setValue(appContext
+										.getString(R.string.packet_type_accel_par));
+						writer.write(ChangeMode.pack());
+						writer.flush();
+						break;
+					case R.string.packet_type_accel_par:
+						updateProgress(17 + subprogress);
 						updateTask();
 						break;
 					}

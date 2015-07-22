@@ -134,7 +134,7 @@
         app:max_value="5500"/>
     
     <GaugeAnalog
-        app:id="@id/GaugeTermometer"       
+        app:id="@id/GaugeThermometer"
         app:scale_texture="gfx/landscape/temperature_scale_landscape.png"
         app:labels_texture="gfx/landscape/temperature_labels_landscape.png"
 		app:arrow_texture="gfx/landscape/little_arrow_landscape.png"
