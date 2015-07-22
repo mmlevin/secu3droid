@@ -38,7 +38,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 
 public class SpriteGauge extends BaseGauge {
-	private String textureName;
+	private final String textureName;
 	private ITextureRegion textureRegion;
 	
 	public SpriteGauge (int Id, String textureName, float xPos, float yPos) {

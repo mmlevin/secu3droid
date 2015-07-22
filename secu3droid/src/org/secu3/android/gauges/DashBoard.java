@@ -44,7 +44,7 @@ public class DashBoard extends BaseGauge {
 	
 	private float width;
 	private float height;
-	String textureName;
+	private final String textureName;
 	private ITextureRegion textureRegion;
 	private int color;
 	
@@ -54,6 +54,7 @@ public class DashBoard extends BaseGauge {
 		this.textureName = texture;
 		this.width = width;
 		this.height = height;
+		this.color = color;
 	}
 
 	@Override

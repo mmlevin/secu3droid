@@ -36,7 +36,7 @@ import android.widget.TextView;
 public class ParamItemButton extends BaseParamItem {
 	
 	class CustomClickListener implements OnClickListener {
-		ParamItemButton item;
+		final ParamItemButton item;
 		
 		public CustomClickListener(ParamItemButton item) {
 			this.item = item;

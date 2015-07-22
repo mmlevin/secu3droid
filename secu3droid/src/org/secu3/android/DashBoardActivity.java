@@ -63,33 +63,32 @@ import android.view.WindowManager;
 
 public class DashBoardActivity extends SimpleBaseGameActivity {	
 	private DashBoard dashBoard = null;
-		
-	protected int odometer;
+
 	private boolean isOnline;
 	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
 	private PowerManager.WakeLock wakelock = null;
-	ReceiveMessages receiver = null;
+	private ReceiveMessages receiver = null;
 	private PacketUtils packetUtils = null;
-	long time = 0;
-	float delta = 0;
+	private long time = 0;
+	private float delta = 0;
 	
-	float speedData = 0;
-	float odometerData = 0;
-	float pressureData = 0;
-	float tempData = 0;
-	float voltageData = 8;
-	float rpmData = 0;
-	float onlineData = 0;
-	float checkEngineData = 0;
-	float gasolineData = 0;
-	float ecoData = 0;
-	float powerData = 0;
-	float chokeData = 0;
-	float fanData = 0;
+	private float speedData = 0;
+	private float odometerData = 0;
+	private float pressureData = 0;
+	private float tempData = 0;
+	private float voltageData = 8;
+	private float rpmData = 0;
+	private float onlineData = 0;
+	private float checkEngineData = 0;
+	private float gasolineData = 0;
+	private float ecoData = 0;
+	private float powerData = 0;
+	private float chokeData = 0;
+	private float fanData = 0;
 	
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
-		public IntentFilter intentFilter;
+		public final IntentFilter intentFilter;
 		
 		public ReceiveMessages() {
 			intentFilter = new IntentFilter();
@@ -357,7 +356,6 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 
 	@Override
 	protected Scene onCreateScene() {
-		odometer = 0;
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 		final Scene scene = new Scene();				
 		dashBoard.attach(scene, this.getVertexBufferObjectManager());
@@ -423,7 +421,7 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 		super.onPause();		
 	}
 	
-	void update(Intent intent) {
+	private void update(Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {				
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			onlineData = isOnline?1:0;

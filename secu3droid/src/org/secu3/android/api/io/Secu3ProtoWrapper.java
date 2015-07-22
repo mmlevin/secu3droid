@@ -81,10 +81,10 @@ public class Secu3ProtoWrapper {
 		String name;
 		
 		Secu3Packet packet = null;
-		BaseProtoField field = null;
+		BaseProtoField field;
 				
-		String attr = null;
-		String attrValue = null;
+		String attr;
+		String attrValue;
 		
 		NumberFormat format = NumberFormat.getInstance(Locale.US);
 		
@@ -223,7 +223,6 @@ public class Secu3ProtoWrapper {
 								if ((protocolVersion >= minVersion) && (protocolVersion <= maxVersion)) {
 									packet.addField(field);
 								}
-								field = null;
 							}							
 						}											
 					}
@@ -261,7 +260,7 @@ public class Secu3ProtoWrapper {
 		if (inputPackets != null) {
 			
 			boolean result = false;
-			Secu3Packet packet = null;
+			Secu3Packet packet;
 			for (int i = 0; i != inputPackets.size(); i++) {
 				try {
 					packet = inputPackets.valueAt(i);
@@ -288,8 +287,8 @@ public class Secu3ProtoWrapper {
 	}
 
 	public synchronized Secu3Packet obtainPacketSkeleton (int packetNameId, int prefferedDir) {
-		SparseArray<Secu3Packet> prefferedPackets = null;
-		SparseArray<Secu3Packet> reservePackets = null;
+		SparseArray<Secu3Packet> prefferedPackets;
+		SparseArray<Secu3Packet> reservePackets;
 		if ((prefferedDir == 0) || (prefferedDir == R.string.packet_dir_input)) {
 			prefferedPackets = inputPackets;
 			reservePackets = outputPackets;

@@ -155,7 +155,7 @@ public class Secu3Packet implements Parcelable {
 	private final static int TFIOEND = 0x83; // Transposed FIOEND
 	private final static int TFESC = 0x84; // Transposed FESC
 
-	public String EscTxPacket(String packetBuffer) {
+	private String EscTxPacket(String packetBuffer) {
 		ArrayList<Integer> buf = new ArrayList<>(
 				packetBuffer.length() - 3);
 		for (int i = 0; i != packetBuffer.length(); i++) {
@@ -250,7 +250,7 @@ public class Secu3Packet implements Parcelable {
 	};
 	public static final int MAX_PACKET_SIZE = 128;
 
-	public Secu3Packet(Parcel in) {
+	private Secu3Packet(Parcel in) {
 		this.name = in.readString();
 		this.packetId = in.readString();
 		this.packetIdResId = in.readInt();
@@ -354,7 +354,7 @@ public class Secu3Packet implements Parcelable {
 			this.fields = null;
 			if (packet.fields != null) {
 				this.fields = new ArrayList<>();
-				BaseProtoField field = null;
+				BaseProtoField field;
 				for (int i = 0; i != packet.fields.size(); ++i) {
 					field = packet.fields.get(i);
 					if (field instanceof ProtoFieldString)
@@ -425,7 +425,7 @@ public class Secu3Packet implements Parcelable {
 				throw new IllegalArgumentException("Wrong packet type");
 			setData(data);
 			int position = 2; // Skip first 2 chars
-			int delta = 0;
+			int delta;
 			for (int i = 0; i != fields.size(); i++) {
 				field = fields.get(i);
 				delta = field.getLength();

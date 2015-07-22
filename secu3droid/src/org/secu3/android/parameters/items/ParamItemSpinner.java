@@ -42,10 +42,10 @@ import android.widget.TextView;
 public class ParamItemSpinner extends BaseParamItem {
 	private String value = null;
 	private int index = 0;
-	Spinner paramSpinner = null;
+	private Spinner paramSpinner = null;
 	
 	class CustomOnItemSelectedListener implements OnItemSelectedListener {
-		ParamItemSpinner item;
+		final ParamItemSpinner item;
 		
 		public CustomOnItemSelectedListener(ParamItemSpinner item) {
 			this.item = item;

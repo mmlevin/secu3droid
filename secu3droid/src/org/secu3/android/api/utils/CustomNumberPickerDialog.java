@@ -34,6 +34,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,9 +45,9 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 			void onNumberPickerDialogAccept (int itemId);
 		}		
 		
-		protected NumberPicker numberPickerSign = null;
-		protected NumberPicker numberPickerMain = null;
-		protected NumberPicker numberPickerAdditional = null;
+		NumberPicker numberPickerSign = null;
+		NumberPicker numberPickerMain = null;
+		NumberPicker numberPickerAdditional = null;
 		private int numberPickerIndexSign = Integer.MAX_VALUE;
 		private int numberPickerIndexMain = Integer.MAX_VALUE;
 		private int numberPickerIndexAdditional = Integer.MAX_VALUE;
@@ -60,6 +61,7 @@ public abstract class CustomNumberPickerDialog extends DialogFragment {
 			return this;
 		}
 		
+		@NonNull
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			setRetainInstance(true);

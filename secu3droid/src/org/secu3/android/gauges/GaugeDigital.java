@@ -43,12 +43,12 @@ public class GaugeDigital extends BaseGauge {
 	private float value;
 	
 	private Font font;
-	private String fontName;
-	private float fontSize;
+	private final String fontName;
+	private final float fontSize;
 	private Text text;
-	private int color;
+	private final int color;
 	
-	private String format;
+	private final String format;
 	
 	public GaugeDigital (int Id, float x, float y, String font, float Size, String format, int Color) {
 		setId (Id);

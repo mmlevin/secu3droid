@@ -47,6 +47,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,16 +74,16 @@ public class MainActivity extends Activity {
 	
 	private PacketUtils packetUtils = null;
 	
-	ReceiveMessages receiver = null;
-	TextView textViewData = null;
-	TextView textViewDataExt = null;
-	TextView textViewStatus = null;
-	TextView textFWInfo = null;	
-	int fwOptions = Integer.MIN_VALUE;
+	private ReceiveMessages receiver = null;
+	private TextView textViewData = null;
+	private TextView textViewDataExt = null;
+	private TextView textViewStatus = null;
+	private TextView textFWInfo = null;
+	private int fwOptions = Integer.MIN_VALUE;
 	
 	public class ReceiveMessages extends BroadcastReceiver 
 	{
-		public IntentFilter intentFilter;
+		public final IntentFilter intentFilter;
 		
 		public ReceiveMessages() {
 			intentFilter = new IntentFilter();
@@ -168,7 +169,7 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {						
+	protected void onSaveInstanceState(@NonNull Bundle outState) {
 		outState.putString(DATA, textViewData.getText().toString());
 		outState.putString(STATUS, textViewStatus.getText().toString());
 		outState.putBoolean(RAW_SENSORS, rawSensors);
@@ -279,7 +280,7 @@ public class MainActivity extends Activity {
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));
 	}	
 	
-	void update(Intent intent) {
+	private void update(Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {			
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false); 
 			String s = isOnline?getString(R.string.status_online):getString(R.string.status_offline);

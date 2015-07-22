@@ -87,6 +87,7 @@
     </ScrollView>
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:id="@+id/mainLogButtonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,18 +97,21 @@
         android:layout_above="@id/mainTextFWInfo">
 
         <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/mainLogButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/log_marker_1" />
 
         <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/mainLogButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/log_marker_2" />
 
         <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/mainLogButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

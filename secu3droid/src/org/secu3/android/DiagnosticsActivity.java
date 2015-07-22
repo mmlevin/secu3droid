@@ -93,7 +93,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		
 	private class DiagnosticsPagerAdapter extends FragmentPagerAdapter{
 		private List<Fragment> fragments = null;
-		private String titles[];
+		private final String titles[];
 		
 		public DiagnosticsPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
 			super(fm);
@@ -277,7 +277,7 @@ public class DiagnosticsActivity extends FragmentActivity implements OnItemClick
 		return false;		
 	}
 
-	void update (Intent intent) {
+	private void update (Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {

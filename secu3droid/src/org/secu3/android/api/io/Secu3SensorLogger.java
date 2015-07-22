@@ -25,6 +25,8 @@
 
 package org.secu3.android.api.io;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import org.secu3.android.R;
@@ -37,9 +39,8 @@ public class Secu3SensorLogger extends Secu3Logger {
 	private PacketUtils packetUtils = null;
 
 	private static char CSV_DELIMETER = ';';
-	private static final String cCSVTimeTemplateString = "%H:%M:%S";
-	private static final String cCSVFileNameTemplateString = "%Y.%m.%d_%H.%M.%S.csv";
-	private static final String CSVMillisTemplateString = "%s.%02d";		 
+	private static final String cCSVTimeTemplateString = "%02d:02%02d.%02d";
+	private static final String cCSVFileNameTemplateString = "%04d.%02d.%02d_%02d.%02d.%02d.csv";
 	
 	private int marker = 0;
 
@@ -120,16 +121,16 @@ public class Secu3SensorLogger extends Secu3Logger {
 	public void OnPacketReceived (Secu3Packet secu3Packet) {
 		if (isStarted() && (secu3Packet != null) && (secu3Packet.getNameId() == R.string.sensor_dat_title)) {				
 			long t = System.currentTimeMillis();
-			getTime().set(t);
-			String time = String.format(Locale.US,CSVMillisTemplateString,this.getTime().format(cCSVTimeTemplateString), (t%1000)/10);
+			getTime().setTimeInMillis(t);
+			String time = String.format(Locale.US,cCSVTimeTemplateString, getTime().get(Calendar.HOUR_OF_DAY),getTime().get(Calendar.MINUTE),getTime().get(Calendar.SECOND),getTime().get (Calendar.MILLISECOND)/10);
 			String out = logString(secu3Packet);
 			log (time+out);
 		}
 	}
 	
-	public boolean beginLogging (int protocol_version, Context context) {		
+	public void beginLogging (int protocol_version, Context context) {
 		this.packetUtils = new PacketUtils(context);
-		return super.beginLogging(protocol_version);		
+		super.beginLogging(protocol_version);
 	}	
 	
 	public void setMarker (int marker) {
@@ -138,8 +139,8 @@ public class Secu3SensorLogger extends Secu3Logger {
 
 	@Override
 	public String getFileName() {
-		getTime().setToNow();
-		return getTime().format(cCSVFileNameTemplateString);
+		getTime().setTime(new Date());
+		return String.format(Locale.US, cCSVFileNameTemplateString, getTime().get(Calendar.YEAR), getTime().get(Calendar.MONTH),getTime().get(Calendar.DAY_OF_MONTH),getTime().get(Calendar.HOUR_OF_DAY),getTime().get(Calendar.MINUTE),getTime().get(Calendar.SECOND));
 	}
 	
 	public void setCsvDelimeter (String delimeter) {

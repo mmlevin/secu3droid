@@ -39,7 +39,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 
 public class LedGauge extends BaseGauge {
-	private String textureName;
+	private final String textureName;
 	private ITextureRegion textureRegion;
 	private Sprite sprite;
 	private AlphaModifier modifier;

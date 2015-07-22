@@ -39,29 +39,29 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseGameActivity;
 
 public class GaugeAnalog extends BaseGauge {	
-	private float degreesPerUnit;
-	private float beginAngle;
-	private float minValue;
-	private float maxValue;
+	private final float degreesPerUnit;
+	private final float beginAngle;
+	private final float minValue;
+	private final float maxValue;
 	private float value;
 	
-	private String scaleTextureName;
+	private final String scaleTextureName;
 	private ITextureRegion scaleTextureRegion;
-	private float scaleX;
-	private float scaleY;
+	private final float scaleX;
+	private final float scaleY;
 	
-	private String labelsTextureName;
+	private final String labelsTextureName;
 	private ITextureRegion labelsTextureRegion;
-	private float labelsX;
-	private float labelsY;
+	private final float labelsX;
+	private final float labelsY;
 	
-	private String arrowTextureName;
+	private final String arrowTextureName;
 	private ITextureRegion arrowTextureRegion;
 	private Sprite arrowSprite;
-	private float arrowX;
-	private float arrowY;
-	private float arrowAnchorX;
-	private float arrowAnchorY;
+	private final float arrowX;
+	private final float arrowY;
+	private final float arrowAnchorX;
+	private final float arrowAnchorY;
 	private RotationModifier modifier = null;
 
 	public GaugeAnalog (int Id, float degreesPerUnit, float beginAngle, float minValue, float maxValue,

@@ -48,7 +48,7 @@ import java.util.Set;
 import org.secu3.android.api.io.Secu3Logger;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
-	public final static String LOG_TAG = "SettingsActivity";
+	private final static String LOG_TAG = "SettingsActivity";
 
 	public final static int PROTOCOL_UNKNOWN = 0;
 	public final static int PROTOCOL_12042013_SPRING_RELEASE = 1;
@@ -60,8 +60,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 	private SharedPreferences sharedPref ;
 	private BluetoothAdapter bluetoothAdapter = null;
-	String versions[] = null;
-	String CSVDelimeters[] = null;
+	private String versions[] = null;
+	private String CSVDelimeters[] = null;
 	
 	public static int getProtocolVersion(Context ctx) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -81,8 +81,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public static String getCSVDelimeter(Context ctx) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
 		String delimeter = sharedPreferences.getString(ctx.getString(R.string.pref_log_csv_delimeter_key), ctx.getString(R.string.defaultCsvDelimeter));
-        int idx = delimeter.indexOf("\"");
-        return 	delimeter.substring(idx+1,idx+2);
+		try {
+			int idx = delimeter.indexOf("\"");
+			return 	delimeter.substring(idx+1,idx+2);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return ";";
 	}
 	
 	public static boolean isKeepScreenAliveActive (Context ctx) {

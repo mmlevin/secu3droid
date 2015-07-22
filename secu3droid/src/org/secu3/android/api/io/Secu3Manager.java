@@ -96,8 +96,8 @@ public class Secu3Manager {
 	private ScheduledExecutorService connectionAndReadingPool = null;
 	private ConnectedSecu3 connectedSecu3 = null;
 	private Context appContext = null;
-	private Secu3SensorLogger sensorLogger = new Secu3SensorLogger();
-	private Secu3RawLogger rawLogger = new Secu3RawLogger();
+	private final Secu3SensorLogger sensorLogger = new Secu3SensorLogger();
+	private final Secu3RawLogger rawLogger = new Secu3RawLogger();
 
 	private Secu3ProtoWrapper wrapper = null;
 
@@ -109,17 +109,17 @@ public class Secu3Manager {
 		public static final int STATUS_TIMEOUT = 10;
 
 		public Queue<Secu3Packet> sendPackets = new LinkedList<>();
-		public Queue<SECU3_TASK> tasks = new LinkedList<>();
+		public final Queue<SECU3_TASK> tasks = new LinkedList<>();
 
 		private final BluetoothSocket socket;
 		private final InputStream in;
 		private final OutputStream out;
-		private Timer timer = new Timer();
+		private final Timer timer = new Timer();
 
-		SECU3_STATE secu3State = SECU3_STATE.SECU3_NORMAL;
+		final SECU3_STATE secu3State = SECU3_STATE.SECU3_NORMAL;
 
 		SECU3_PACKET_SEARCH secu3packetSearch = SECU3_PACKET_SEARCH.SEARCH_START;
-		OnlineTask onlineTask = new OnlineTask();
+		final OnlineTask onlineTask = new OnlineTask();
 
 		private boolean ready = false;
 
@@ -673,111 +673,106 @@ public class Secu3Manager {
 			} else {
 				final BluetoothDevice secu3Device = bluetoothAdapter
 						.getRemoteDevice(deviceAddress);
-				if (secu3Device == null) {
-					Log.e(LOG_TAG, "Secu3 device not found");
+				Log.e(LOG_TAG, "current device: " + secu3Device.getName()
+						+ " -- " + secu3Device.getAddress());
+				try {
+					secu3Socket = secu3Device
+							.createRfcommSocketToServiceRecord(UUID
+									.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+				} catch (IOException e) {
+					Log.e(LOG_TAG, "Error during connection", e);
+					secu3Socket = null;
+				}
+				if (secu3Socket == null) {
+					Log.e(LOG_TAG,
+							"Error while establishing connection: no socket");
 					disable(R.string.msg_bluetooth_secu3_unavaible);
 				} else {
-					Log.e(LOG_TAG, "current device: " + secu3Device.getName()
-							+ " -- " + secu3Device.getAddress());
-					try {
-						secu3Socket = secu3Device
-								.createRfcommSocketToServiceRecord(UUID
-										.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-					} catch (IOException e) {
-						Log.e(LOG_TAG, "Error during connection", e);
-						secu3Socket = null;
-					}
-					if (secu3Socket == null) {
-						Log.e(LOG_TAG,
-								"Error while establishing connection: no socket");
-						disable(R.string.msg_bluetooth_secu3_unavaible);
-					} else {
-						Runnable connectThread = new Runnable() {
-							@Override
-							public void run() {
-								try {
-									connected = false;
-									Log.v(LOG_TAG, "current device: "
-											+ secu3Device.getName() + " -- "
-											+ secu3Device.getAddress());
-									if ((bluetoothAdapter.isEnabled())
-											&& (nbRetriesRemaining > 0)) {
-										try {
-											if (connectedSecu3 != null) {
-												connectedSecu3.close();
-											}
-											if ((secu3Socket != null)
-													&& ((connectedSecu3 == null) || (connectedSecu3.socket != secu3Socket))) {
-												Log.d(LOG_TAG,
-														"trying to close old socket");
-												secu3Socket.close();
-											}
-										} catch (IOException e) {
-											Log.e(LOG_TAG,
-													"Error during disconnection",
-													e);
+					Runnable connectThread = new Runnable() {
+						@Override
+						public void run() {
+							try {
+								connected = false;
+								Log.v(LOG_TAG, "current device: "
+										+ secu3Device.getName() + " -- "
+										+ secu3Device.getAddress());
+								if ((bluetoothAdapter.isEnabled())
+										&& (nbRetriesRemaining > 0)) {
+									try {
+										if (connectedSecu3 != null) {
+											connectedSecu3.close();
 										}
-										try {
-											secu3Socket = secu3Device
-													.createRfcommSocketToServiceRecord(UUID
-															.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-										} catch (IOException e) {
-											Log.e(LOG_TAG,
-													"Error during connection",
-													e);
-											secu3Socket = null;
-										}
-										if (secu3Socket == null) {
-											Log.e(LOG_TAG,
-													"Error while establishing connection: no socket");
-											disable(R.string.msg_bluetooth_secu3_unavaible);
-										} else {
-											Log.v(LOG_TAG,
-													"connecting to socket");
-											secu3Socket.connect();
+										if ((secu3Socket != null)
+												&& ((connectedSecu3 == null) || (connectedSecu3.socket != secu3Socket))) {
 											Log.d(LOG_TAG,
-													"connected to socket");
-											connected = true;
-											nbRetriesRemaining = 1 + maxConnectionRetries;
-											Secu3Service.secu3Notification.notificationManager
-													.cancel(R.string.connection_problem_notification_title);
-											Log.v(LOG_TAG,
-													"starting socket reading task");
-											connectedSecu3 = new ConnectedSecu3(
-													secu3Socket);
-											connectionAndReadingPool
-													.execute(connectedSecu3);
-											Log.v(LOG_TAG,
-													"socket reading thread started");
+													"trying to close old socket");
+											secu3Socket.close();
 										}
-									} else if (!bluetoothAdapter.isEnabled()) {
-										setDisableReason(R.string.msg_bluetooth_disabled);
+									} catch (IOException e) {
+										Log.e(LOG_TAG,
+												"Error during disconnection",
+												e);
 									}
-								} catch (IOException connectException) {
-									Log.e(LOG_TAG,
-											"error while connecting to socket",
-											connectException);
-									disable(R.string.msg_bluetooth_secu3_unavaible);
-								} finally {
-									nbRetriesRemaining--;
-									if (!connected) {
-										disableIfNeeded();
+									try {
+										secu3Socket = secu3Device
+												.createRfcommSocketToServiceRecord(UUID
+														.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+									} catch (IOException e) {
+										Log.e(LOG_TAG,
+												"Error during connection",
+												e);
+										secu3Socket = null;
 									}
+									if (secu3Socket == null) {
+										Log.e(LOG_TAG,
+												"Error while establishing connection: no socket");
+										disable(R.string.msg_bluetooth_secu3_unavaible);
+									} else {
+										Log.v(LOG_TAG,
+												"connecting to socket");
+										secu3Socket.connect();
+										Log.d(LOG_TAG,
+												"connected to socket");
+										connected = true;
+										nbRetriesRemaining = 1 + maxConnectionRetries;
+										Secu3Service.secu3Notification.notificationManager
+												.cancel(R.string.connection_problem_notification_title);
+										Log.v(LOG_TAG,
+												"starting socket reading task");
+										connectedSecu3 = new ConnectedSecu3(
+												secu3Socket);
+										connectionAndReadingPool
+												.execute(connectedSecu3);
+										Log.v(LOG_TAG,
+												"socket reading thread started");
+									}
+								} else if (!bluetoothAdapter.isEnabled()) {
+									setDisableReason(R.string.msg_bluetooth_disabled);
+								}
+							} catch (IOException connectException) {
+								Log.e(LOG_TAG,
+										"error while connecting to socket",
+										connectException);
+								disable(R.string.msg_bluetooth_secu3_unavaible);
+							} finally {
+								nbRetriesRemaining--;
+								if (!connected) {
+									disableIfNeeded();
 								}
 							}
-						};
-						this.enabled = true;
-						Log.d(LOG_TAG, "Bluetooth Secu3 manager enabled");
-						Log.v(LOG_TAG, "starting notification thread");
-						notificationPool = Executors.newSingleThreadExecutor();
-						Log.v(LOG_TAG, "starting connection and reading thread");
-						connectionAndReadingPool = Executors
-								.newSingleThreadScheduledExecutor();
-						Log.v(LOG_TAG, "starting connection to socket task");
-						connectionAndReadingPool.scheduleWithFixedDelay(
-								connectThread, 5000, 60000,
-								TimeUnit.MILLISECONDS);
-					}
+						}
+					};
+					this.enabled = true;
+					Log.d(LOG_TAG, "Bluetooth Secu3 manager enabled");
+					Log.v(LOG_TAG, "starting notification thread");
+					notificationPool = Executors.newSingleThreadExecutor();
+					Log.v(LOG_TAG, "starting connection and reading thread");
+					connectionAndReadingPool = Executors
+							.newSingleThreadScheduledExecutor();
+					Log.v(LOG_TAG, "starting connection to socket task");
+					connectionAndReadingPool.scheduleWithFixedDelay(
+							connectThread, 5000, 60000,
+							TimeUnit.MILLISECONDS);
 				}
 			}
 		}
@@ -796,7 +791,7 @@ public class Secu3Manager {
 		}
 	}
 
-	public synchronized void disable(int reasonId) {
+	private synchronized void disable(int reasonId) {
 		Log.d(LOG_TAG, "disabling Secu3 bluetooth manager reason: "
 				+ callingService.getString(reasonId));
 		setDisableReason(reasonId);

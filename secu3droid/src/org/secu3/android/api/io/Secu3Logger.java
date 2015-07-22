@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.GregorianCalendar;
 import android.os.Environment;
 import android.text.format.Time;
 import android.util.Log;
@@ -37,13 +38,13 @@ import android.util.Log;
 public abstract class Secu3Logger {
 	private static final String LOG_TAG = "Secu3Logger";
 
-	private Time time = null;	
+	private GregorianCalendar time = null;
 	private BufferedWriter logWriter = null;	
 	private boolean started = false;
 	private String path = null;
-	protected int protocol_version;
+	int protocol_version;
 	
-	public void log (String log) {
+	void log (String log) {
 		try {
 			logWriter.write(log);
 			logWriter.flush();
@@ -52,34 +53,32 @@ public abstract class Secu3Logger {
 		}		
 	}
 		
-	public Secu3Logger() {
-		time = new Time();
+	Secu3Logger() {
+		time = new GregorianCalendar();
 	}
-	public abstract String getFileName();
+	protected abstract String getFileName();
 	
-	public boolean beginLogging (int protocol_version) {
+	public void beginLogging (int protocol_version) {
 		this.protocol_version = protocol_version;
-		if (isStarted()) return true; 
+		if (isStarted()) return;
 		else {
 			try {
 				logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path+File.separator+getFileName()),"ISO-8859-1"));
 				started = true;
-				return true;
 			} catch (IOException e) {	
-				return false;
+				e.printStackTrace();
 			}
 		}
 	}
 	
-	public boolean endLogging() {
-		if (!isStarted()) return true;
+	public void endLogging() {
+		if (!isStarted()) return;
 		try {
 			logWriter.flush();
 			logWriter.close();
 			started = false;
-			return true;
 		} catch (IOException e) {
-			return false;
+			e.printStackTrace();
 		}
 	}
 
@@ -96,15 +95,15 @@ public abstract class Secu3Logger {
 		return Environment.getExternalStorageDirectory().getPath();
 	}
 
-	public boolean isStarted() {
+	boolean isStarted() {
 		return started;
 	}
 
-	public Time getTime() {
+	GregorianCalendar getTime() {
 		return time;
 	}
 
-	public void setTime(Time time) {
+	public void setTime(GregorianCalendar time) {
 		this.time = time;
 	}
 }

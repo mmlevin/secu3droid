@@ -35,6 +35,7 @@ import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.items.BaseParamItem;
 import org.secu3.android.parameters.items.ParamItemBoolean;
 
+import android.support.annotation.NonNull;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -59,19 +60,19 @@ public class ErrorsActivity extends Activity {
 	private static final String INERTNESS = "inertness";
 	private static final String REALTIME = "realtime";
 	private static final String ERRORS = "errors";
-	public final int INERTNESS_COUNT = 10;
+	private final int INERTNESS_COUNT = 10;
 	
 	private Secu3Packet CeSavedError = null;
 	private Secu3Packet OpCompNc = null;
 	
-	boolean isOnline = false;
+	private boolean isOnline = false;
 	boolean realtime;
 	private boolean inertness;
 	
-	ParamItemsAdapter adapter;
-	TextView errorsTextViewStatus = null;	
-	CheckBox RealtimeError = null;
-	CheckBox ReadingInertion = null;
+	private ParamItemsAdapter adapter;
+	private TextView errorsTextViewStatus = null;
+	private CheckBox RealtimeError = null;
+	private CheckBox ReadingInertion = null;
 		
 	private ArrayList<BaseParamItem> errors = null;
 	private int errorsInertness[] = null;
@@ -114,7 +115,7 @@ public class ErrorsActivity extends Activity {
 		}
 	}
 	
-	ReceiveMessages receiver;
+	private ReceiveMessages receiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +182,7 @@ public class ErrorsActivity extends Activity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(@NonNull Bundle outState) {
 		outState.putInt(ERRORS, getErrors());
 		outState.putBoolean(REALTIME, RealtimeError.isChecked());
 		outState.putBoolean(INERTNESS, ReadingInertion.isChecked());
@@ -235,7 +236,7 @@ public class ErrorsActivity extends Activity {
 		super.onPause();			
 	}
 	
-	void updateFlags (int flags) {
+	private void updateFlags (int flags) {
 		for (int i = 0; i != INERTNESS_COUNT-1; i++) {
 			errorsInertness[i] = errorsInertness[i+1];
 		}
@@ -270,7 +271,7 @@ public class ErrorsActivity extends Activity {
 		}		
 	}
 	
-	void update (Intent intent) {		
+	private void update (Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {

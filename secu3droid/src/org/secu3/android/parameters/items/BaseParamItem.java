@@ -46,8 +46,6 @@ public abstract class BaseParamItem {
 	
 	protected OnParamItemChangeListener listener;
 	
-	protected LayoutInflater inflater;
-	
 	protected View getView(int resourceID) {
 		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(resourceID, null);

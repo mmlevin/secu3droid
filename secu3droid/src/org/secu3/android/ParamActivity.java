@@ -99,7 +99,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private CustomNumberPickerDialog dialog = null;	
 	private ReceiveMessages receiver = null;
 	
-	SparseArray<Secu3Packet> Skeletons = null;	
+	private SparseArray<Secu3Packet> Skeletons = null;
 	private PacketUtils packetUtils = null;
 	
 	private int protocol_version = SettingsActivity.PROTOCOL_UNKNOWN;
@@ -135,11 +135,11 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		return dialog;
 	}	
 	
-	public void createFormFromXml (int xmlId, int protocolVersion){
+	private void createFormFromXml (int xmlId, int protocolVersion){
 		ParamsPage page = null;
-		BaseParamItem item = null;
-		String attr = null;
-		String attrValue = null;		
+		BaseParamItem item;
+		String attr;
+		String attrValue;
 		
 		this.protocol_version = protocolVersion;
 		
@@ -201,8 +201,6 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							String parameterIndex = null;
 							String parameterMasFormat = null;
 							if (count > 0) {
-								int minVersion = protocolVersion;
-								int maxVersion = protocolVersion;
 								for (int i = 0; i != count; i++) {
 									attr = xpp.getAttributeName(i);
 									attrValue = xpp.getAttributeValue(i);
@@ -305,7 +303,6 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 										item.setPageId(page.getNameId());
 										item.setOnParamItemChangeListener(this);
 										page.addParamItem(item);
-										item = null;
 									}
 								}
 							}
@@ -404,24 +401,24 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			}
 
 			startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PROGRESS, paramsNumber));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.starter_title),paramAdapter, R.string.starter_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.angles_title), paramAdapter, R.string.angles_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.idling_title), paramAdapter, R.string.idling_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.functions_title), paramAdapter, R.string.functions_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.temperature_title), paramAdapter, R.string.temperature_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.carburetor_title), paramAdapter, R.string.carburetor_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.adc_errors_title), paramAdapter, R.string.adc_errors_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.ckps_title), paramAdapter, R.string.ckps_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.ckps_title), paramAdapter, R.string.knock_par_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.miscellaneous_title), paramAdapter, R.string.miscellaneous_title)));
-			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.choke_control_title), paramAdapter, R.string.choke_control_title)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.starter_title),paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.angles_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.idling_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.functions_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.temperature_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.carburetor_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.adc_errors_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.ckps_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.ckps_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.miscellaneous_title), paramAdapter)));
+			startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.choke_control_title), paramAdapter)));
 			if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.secur_par_title)));
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
 				if (protocol_version >= SettingsActivity.PROTOCOL_10022015_WINTER_RELEASE) {
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.uniout_par_title)));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.injctr_par_title)));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.lambda_par_title)));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.accel_par_title)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
 				}
 			}
 		}
@@ -527,8 +524,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		onItemChange(itemId);
 	}
 
-	public void onItemChange(int itemId) {
-		Secu3Packet packet = null;		
+	private void onItemChange(int itemId) {
+		Secu3Packet packet;
 		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
 		if (item != null) {
 			if (item.getPageId() == R.string.choke_control_title) {
@@ -548,7 +545,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 				}		
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 			} else if (item.getNameId() == R.string.secur_par_apply_bluetooth_title) {
-				Secu3Packet sourcePacket = packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter, R.string.secur_par_title);
+				Secu3Packet sourcePacket = packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter);
 				if (sourcePacket != null) {
 					int flags = ((ProtoFieldInteger) sourcePacket.findField(R.string.secur_par_flags_title)).getValue();
 					packet = new Secu3Packet(Skeletons.get(R.string.secur_par_title));				
@@ -572,7 +569,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 				adapter.notifyDataSetChanged();
 			}
 			else if (uploadImmediatelly) {
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter, item.getPageId())));
+				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
 			}						
 		} 
 	}
@@ -582,7 +579,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		if (item != null) onItemChange(item.getNameId());		
 	}	
 			
-	void update (Intent intent) {
+	private void update (Intent intent) {
 		if (Secu3Service.EVENT_SECU3_SERVICE_STATUS_ONLINE.equals(intent.getAction())) {
 			boolean isOnline = intent.getBooleanExtra(Secu3Service.EVENT_SECU3_SERVICE_STATUS,false);
 			if (isOnline && !this.isOnline) {

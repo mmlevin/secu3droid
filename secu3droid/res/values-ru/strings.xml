@@ -22,7 +22,8 @@
  
   contacts:
              http://secu-3.org
-             email: mmlevin@mail.ru
+             email: mmlevin@mail.ru
+
 -->
 
 <resources>
@@ -37,7 +38,7 @@
     <string name="connection_problem_notification_title">Secu3: проблемы с соединением</string>
 
     <plurals name="connection_problem_notification">
-        <item quantity="one">Будет сделана еще одна попытка</item>
+        <item quantity="one">Будет сделана еще %d попытка</item>
         <item quantity="few">Будет сделано еще %d попытки</item>
         <item quantity="many">Будет сделано еще %d попыток</item>
     </plurals>

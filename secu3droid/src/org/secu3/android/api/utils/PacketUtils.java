@@ -41,7 +41,7 @@ import android.preference.PreferenceManager;
 
 public class PacketUtils {
 	
-	float m_period_distance = 0f;
+	private float m_period_distance = 0f;
 	
 	public PacketUtils(Context context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -49,9 +49,9 @@ public class PacketUtils {
 		m_period_distance = 1000.0f / (float)Integer.parseInt(pulses);
 	}
 	
-	public Secu3Packet buildPacket (Secu3Packet packetSkeleton, ParamPagerAdapter paramAdapter, int packetId) {
+	public Secu3Packet buildPacket (Secu3Packet packetSkeleton, ParamPagerAdapter paramAdapter) {
 		if ((packetSkeleton != null) && (packetSkeleton.getFields() != null) && (packetSkeleton.getFields().size() > 0)) {
-			BaseProtoField field = null;
+			BaseProtoField field;
 			for (int i = 0; i != packetSkeleton.getFields().size(); i++) {
 				field = packetSkeleton.getFields().get(i);
 				if (field.getNameId() == R.string.secur_par_flags_title) {
@@ -135,7 +135,7 @@ public class PacketUtils {
 	public void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Packet packet)
 	{
 		if ((packet != null) && (packet.getFields() != null) && (packet.getFields().size() > 0)) {
-			BaseProtoField field = null;
+			BaseProtoField field;
 			for (int i = 0; i != packet.getFields().size(); i++) {
 				field = packet.getFields().get(i);
 				if (field.getNameId() == R.string.secur_par_flags_title) {

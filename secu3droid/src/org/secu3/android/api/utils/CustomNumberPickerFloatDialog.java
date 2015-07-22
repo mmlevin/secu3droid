@@ -80,7 +80,7 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 				int stepsCount = Math.round(Math.max(Math.abs(maxValue),Math.abs(minValue)));
 				int index = Math.round(Math.abs(value));
 				
-				int mMinValue = 0;		
+				int mMinValue;
 				boolean signFlag = false;
 				
 				if ((minValue < 0) && (maxValue > 0)) {

@@ -37,7 +37,7 @@ public class ParamItemToggleButton extends BaseParamItem {
 	private boolean value = false;
 	
 	class CustomOnCheckChangeListener implements CompoundButton.OnCheckedChangeListener {
-		ParamItemToggleButton item;
+		final ParamItemToggleButton item;
 		
 		public CustomOnCheckChangeListener(ParamItemToggleButton item) {
 			this.item = item;

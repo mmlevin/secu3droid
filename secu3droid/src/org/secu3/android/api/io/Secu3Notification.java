@@ -37,10 +37,10 @@ import android.os.Build;
 import android.widget.Toast;
 
 public class Secu3Notification {
-	public Notification secu3Notification;
-	public Notification connectionProblemNotification;
-	public Notification serviceStoppedNotification;
-	public NotificationManager notificationManager;
+	public final Notification secu3Notification;
+	private Notification connectionProblemNotification;
+	private Notification serviceStoppedNotification;
+	public final NotificationManager notificationManager;
 	
 	private Context ctx = null;
 
