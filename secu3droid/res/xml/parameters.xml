@@ -300,9 +300,9 @@
             app:type="@id/parameter_type_integer"
             app:minVersion="5"
             app:units="@string/units_hertz"
+            stepValue="1"
             minValue="10"
-            maxValue="5000"
-            stepValue="1"/>
+            maxValue="5000"/>
 	</Page>
 	
 	<Page
@@ -379,7 +379,7 @@
         <Parameter
             app:name="@string/carbur_fuelcut_temp_threshold_title"
             app:summary="@string/carbur_fuelcut_temp_threshold_summary"
-            app:type="@id/parameter_type_integer"
+            app:type="@id/parameter_type_float"
             app:minVersion="5"
             app:units="@string/units_degrees_celcius"
             minValue="-30"
@@ -983,6 +983,7 @@
             app:summary="@string/injctr_par_enjine_displacement_summary"
             app:type="@id/parameter_type_float"
             app:units="@string/units_liter"
+            format="%.3f"
             minValue="0.05"
             maxValue="3"
             stepValue="0.001"/>

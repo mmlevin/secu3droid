@@ -38,10 +38,12 @@ import org.secu3.android.parameters.items.*;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class PacketUtils {
 	
 	private float m_period_distance = 0f;
+	private float engine_displacement = 1.0f;
 	
 	public PacketUtils(Context context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -78,6 +80,9 @@ public class PacketUtils {
 							case R.string.adccor_addi2_sensor_correction_title:
 							buildCorrection(paramAdapter, item);
 								((ProtoFieldFloat) field).setValue (buildCorrection(paramAdapter, item));
+								break;
+							case R.string.temper_fan_pwm_freq_title:
+								((ProtoFieldInteger) field).setValue((int) Math.round(524288.0/((ParamItemInteger)item).getValue()));
 								break;
 							default:
 								if (item instanceof ParamItemInteger) ((ProtoFieldInteger) field).setValue (((ParamItemInteger) item).getValue());
@@ -138,36 +143,52 @@ public class PacketUtils {
 			BaseProtoField field;
 			for (int i = 0; i != packet.getFields().size(); i++) {
 				field = packet.getFields().get(i);
-				if (field.getNameId() == R.string.secur_par_flags_title) {
-					int flags = ((ProtoFieldInteger)field).getValue();
-					((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title)).setValue((flags & Secu3Packet.SECUR_USE_BT_FLAG) != 0);
-					((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title)).setValue((flags & Secu3Packet.SECUR_USE_IMMO_FLAG) != 0);
-				} else {
-					BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId());					
-					if (item != null) {
-						switch (item.getNameId()) {
-							case R.string.miscel_baudrate_title:
-								int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
-								((ParamItemSpinner) item).setIndex(baud_rate_index);
-								break;
-							case R.string.adccor_map_sensor_correction_title:
-							case R.string.adccor_voltage_sensor_correction_title:
-							case R.string.adccor_temper_sensor_correction_title:
-							case R.string.adccor_tps_sensor_correction_title:
-							case R.string.adccor_addi1_sensor_correction_title:
-							case R.string.adccor_addi2_sensor_correction_title:
-								((ParamItemFloat) item).setValue (calculateFactor(packet, field));
-								break;
-							default:
-								if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
-								else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
-								else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue(((ProtoFieldInteger) field).getValue()==1);
-								else if (item instanceof ParamItemSpinner) ((ParamItemSpinner) item).setIndex(((ProtoFieldInteger)field).getValue());
-								break;
+				switch (field.getNameId()) {
+					case R.string.secur_par_flags_title:
+						int flags = ((ProtoFieldInteger)field).getValue();
+						((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title)).setValue((flags & Secu3Packet.SECUR_USE_BT_FLAG) != 0);
+						((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title)).setValue((flags & Secu3Packet.SECUR_USE_IMMO_FLAG) != 0);
+						break;
+					case R.string.injctr_par_injector_config_title:
+						int config = ((ProtoFieldInteger)field).getValue();
+						((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.injctr_par_injector_config_title)).setIndex (config >> 4);
+						((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).setIndex(
+								Secu3Packet.indexOf(Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE,config & 0x0F));
+						break;
+					case R.string.injctr_par_injector_cyl_disp_title:
+						engine_displacement = ((ProtoFieldFloat)field).getValue();
+						break;
+					case R.string.injctr_par_cyl_num_title:
+						engine_displacement *= ((ProtoFieldInteger)field).getValue();
+						((ParamItemFloat)paramAdapter.findItemByNameId(R.string.injctr_par_enjine_displacement_title)).setValue(engine_displacement);
+						break;
+					case R.string.miscel_baudrate_title:
+						int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
+						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.miscel_baudrate_title)).setIndex(baud_rate_index);
+						break;
+					case R.string.temper_fan_pwm_freq_title:
+						((ParamItemInteger) paramAdapter.findItemByNameId(R.string.temper_fan_pwm_freq_title)).setValue((int) Math.round(524288.0 / ((ProtoFieldInteger) field).getValue()));
+						break;
+					case R.string.adccor_map_sensor_correction_title:
+					case R.string.adccor_voltage_sensor_correction_title:
+					case R.string.adccor_temper_sensor_correction_title:
+					case R.string.adccor_tps_sensor_correction_title:
+					case R.string.adccor_addi1_sensor_correction_title:
+					case R.string.adccor_addi2_sensor_correction_title:
+						((ParamItemFloat) paramAdapter.findItemByNameId(field.getNameId())).setValue (calculateFactor(packet, field));
+						break;
+					default:
+						BaseParamItem item;
+						if ((item = paramAdapter.findItemByNameId(field.getNameId())) != null) {
+									if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
+									else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
+									else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue(((ProtoFieldInteger) field).getValue()==1);
+									else if (item instanceof ParamItemSpinner) ((ParamItemSpinner) item).setIndex(((ProtoFieldInteger)field).getValue());
+									break;
 						}
-					}		
+						break;
 				}
-			}						
+			}
 		}
 	}
 

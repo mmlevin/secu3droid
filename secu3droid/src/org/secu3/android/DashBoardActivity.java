@@ -113,129 +113,134 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 				switch (xpp.getEventType()){
 				case XmlPullParser.START_TAG:
 					String name = xpp.getName();
-					if (name.equals("DashBoard")) {
-						String textureName = null;
-						String width = null;
-						String height = null;
-						int color = 0;
-						
-						int count = xpp.getAttributeCount();
-						for (int i = 0; i != count; i++) {
-							attr = xpp.getAttributeName(i);
-							attrValue = xpp.getAttributeValue(i);
-							switch (attr) {
-								case "width":
-									width = attrValue;
-									break;
-								case "height":
-									height = attrValue;
-									break;
-								case "texture":
-									textureName = attrValue;
-									break;
-								case "color":
-									if (attrValue.startsWith("#")) {
-										color = Color.parseColor(attrValue);
-									} else {
-										color = Integer.parseInt(attrValue);
-									}
-									break;
+					int count;
+					int color;
+					int id;
+					float x,y;
+					String textureName;
+					switch (name) {
+						case "DashBoard":
+							String width = null;
+							String height = null;
+							textureName = null;
+							color = 0;
+
+							count = xpp.getAttributeCount();
+							for (int i = 0; i != count; i++) {
+								attr = xpp.getAttributeName(i);
+								attrValue = xpp.getAttributeValue(i);
+								switch (attr) {
+									case "width":
+										width = attrValue;
+										break;
+									case "height":
+										height = attrValue;
+										break;
+									case "texture":
+										textureName = attrValue;
+										break;
+									case "color":
+										if (attrValue.startsWith("#")) {
+											color = Color.parseColor(attrValue);
+										} else {
+											color = Integer.parseInt(attrValue);
+										}
+										break;
 								}
-						}
-						dashBoard = new DashBoard(Float.parseFloat(width), Float.parseFloat(height), textureName,color);
-					} else
-					if (name.equals("GaugeAnalog")) {
-						String scaleTexture = null;
-						String labelsTexture = null;
-						String arrowTexture = null;
-						String degreesPerUnit = null;
-						String beginAngle = null;
-						String scaleX = null;
-						String scaleY = null;
-						String labelsX = null;
-						String labelsY = null;
-						String arrowX = null;
-						String arrowY = null;
-						String arrowAnchorX = null;
-						String arrowAnchorY = null;
-						String minValue = null;
-						String maxValue = null;
-						
-						int id = 0;
-						
-						int count = xpp.getAttributeCount();
-						for (int i = 0; i != count; i++) {
-							attr = xpp.getAttributeName(i);
-							attrValue = xpp.getAttributeValue(i);
-							switch (attr) {
-								case "id":
-									if (ResourcesUtils.isResource(attrValue))
-										id = ResourcesUtils.referenceToInt(attrValue);
-									break;
-								case "scale_texture":
-									scaleTexture = attrValue;
-									break;
-								case "labels_texture":
-									labelsTexture = attrValue;
-									break;
-								case "arrow_texture":
-									arrowTexture = attrValue;
-									break;
-								case "degrees_per_unit":
-									degreesPerUnit = attrValue;
-									break;
-								case "begin_angle":
-									beginAngle = attrValue;
-									break;
-								case "scale_x":
-									scaleX = attrValue;
-									break;
-								case "scale_y":
-									scaleY = attrValue;
-									break;
-								case "labels_x":
-									labelsX = attrValue;
-									break;
-								case "labels_y":
-									labelsY = attrValue;
-									break;
-								case "arrow_x":
-									arrowX = attrValue;
-									break;
-								case "arrow_y":
-									arrowY = attrValue;
-									break;
-								case "arrow_anchor_x":
-									arrowAnchorX = attrValue;
-									break;
-								case "arrow_anchor_y":
-									arrowAnchorY = attrValue;
-									break;
-								case "min_value":
-									minValue = attrValue;
-									break;
-								case "max_value":
-									maxValue = attrValue;
-									break;
+							}
+							dashBoard = new DashBoard(Float.parseFloat(width), Float.parseFloat(height), textureName, color);
+							break;
+						case "GaugeAnalog":
+							String scaleTexture = null;
+							String labelsTexture = null;
+							String arrowTexture = null;
+							String degreesPerUnit = null;
+							String beginAngle = null;
+							String scaleX = null;
+							String scaleY = null;
+							String labelsX = null;
+							String labelsY = null;
+							String arrowX = null;
+							String arrowY = null;
+							String arrowAnchorX = null;
+							String arrowAnchorY = null;
+							String minValue = null;
+							String maxValue = null;
+
+							id = 0;
+
+							count = xpp.getAttributeCount();
+							for (int i = 0; i != count; i++) {
+								attr = xpp.getAttributeName(i);
+								attrValue = xpp.getAttributeValue(i);
+								switch (attr) {
+									case "id":
+										if (ResourcesUtils.isResource(attrValue))
+											id = ResourcesUtils.referenceToInt(attrValue);
+										break;
+									case "scale_texture":
+										scaleTexture = attrValue;
+										break;
+									case "labels_texture":
+										labelsTexture = attrValue;
+										break;
+									case "arrow_texture":
+										arrowTexture = attrValue;
+										break;
+									case "degrees_per_unit":
+										degreesPerUnit = attrValue;
+										break;
+									case "begin_angle":
+										beginAngle = attrValue;
+										break;
+									case "scale_x":
+										scaleX = attrValue;
+										break;
+									case "scale_y":
+										scaleY = attrValue;
+										break;
+									case "labels_x":
+										labelsX = attrValue;
+										break;
+									case "labels_y":
+										labelsY = attrValue;
+										break;
+									case "arrow_x":
+										arrowX = attrValue;
+										break;
+									case "arrow_y":
+										arrowY = attrValue;
+										break;
+									case "arrow_anchor_x":
+										arrowAnchorX = attrValue;
+										break;
+									case "arrow_anchor_y":
+										arrowAnchorY = attrValue;
+										break;
+									case "min_value":
+										minValue = attrValue;
+										break;
+									case "max_value":
+										maxValue = attrValue;
+										break;
 								}
-						}
-						dashBoard.addGauge(
-								new GaugeAnalog(id, Float.parseFloat(degreesPerUnit), Float.parseFloat(beginAngle), Float.parseFloat(minValue), Float.parseFloat(maxValue),
-										scaleTexture, labelsTexture, arrowTexture,
-										Float.parseFloat(scaleX), Float.parseFloat(scaleY), Float.parseFloat(labelsX), Float.parseFloat(labelsY), Float.parseFloat(arrowX), Float.parseFloat(arrowY), Float.parseFloat(arrowAnchorX), Float.parseFloat(arrowAnchorY))
-								);
-					} else
-						if (name.equals("GaugeDigital")) {
+							}
+							dashBoard.addGauge(
+									new GaugeAnalog(id, Float.parseFloat(degreesPerUnit), Float.parseFloat(beginAngle), Float.parseFloat(minValue), Float.parseFloat(maxValue),
+											scaleTexture, labelsTexture, arrowTexture,
+											Float.parseFloat(scaleX), Float.parseFloat(scaleY), Float.parseFloat(labelsX), Float.parseFloat(labelsY), Float.parseFloat(arrowX), Float.parseFloat(arrowY), Float.parseFloat(arrowAnchorX), Float.parseFloat(arrowAnchorY))
+							);
+							break;
+						case "GaugeDigital":
 							String font = null;
 							String format = null;
-							String color = null;
 							String size = null;
-							String x = null;
-							String y = null;
+							x = y = 0;
+							color = 0;
 
-							int id = 0;
-							
-							int count = xpp.getAttributeCount();
+							id = 0;
+
+							count = xpp.getAttributeCount();
 							for (int i = 0; i != count; i++) {
 								attr = xpp.getAttributeName(i);
 								attrValue = xpp.getAttributeValue(i);
@@ -245,16 +250,20 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 											id = ResourcesUtils.referenceToInt(attrValue);
 										break;
 									case "x":
-										x = attrValue;
+										x = Float.parseFloat(attrValue);
 										break;
 									case "y":
-										y = attrValue;
+										y = Float.parseFloat(attrValue);
 										break;
 									case "size":
 										size = attrValue;
 										break;
 									case "color":
-										color = attrValue;
+										if (attrValue.startsWith("#")) {
+											color = Color.parseColor(attrValue);
+										} else {
+											color = Integer.parseInt(attrValue);
+										}
 										break;
 									case "font":
 										font = attrValue;
@@ -262,68 +271,67 @@ public class DashBoardActivity extends SimpleBaseGameActivity {
 									case "format":
 										format = attrValue;
 										break;
-									}
+								}
 							}
 							dashBoard.addGauge(
-									new GaugeDigital(id, Float.parseFloat(x), Float.parseFloat(y), font, Float.parseFloat(size), format, Integer.parseInt(color))
-									);
-					} else
-					if (name.equals("Sprite")) {
-						String textureName = null;
-						String x = null;
-						String y = null;
-						int id = 0;
-						
-						int count = xpp.getAttributeCount();
-						for (int i = 0; i != count; i++) {
-							attr = xpp.getAttributeName(i);
-							attrValue = xpp.getAttributeValue(i);
-							switch (attr) {
-								case "id":
-									if (ResourcesUtils.isResource(attrValue))
-										id = ResourcesUtils.referenceToInt(attrValue);
-									break;
-								case "texture":
-									textureName = attrValue;
-									break;
-								case "x":
-									x = attrValue;
-									break;
-								case "y":
-									y = attrValue;
-									break;
+									new GaugeDigital(id, x, y, font, Float.parseFloat(size), format, color)
+							);
+							break;
+						case "Sprite":
+							textureName = null;
+							x = y = 0;
+							id = 0;
+
+							count = xpp.getAttributeCount();
+							for (int i = 0; i != count; i++) {
+								attr = xpp.getAttributeName(i);
+								attrValue = xpp.getAttributeValue(i);
+								switch (attr) {
+									case "id":
+										if (ResourcesUtils.isResource(attrValue))
+											id = ResourcesUtils.referenceToInt(attrValue);
+										break;
+									case "texture":
+										textureName = attrValue;
+										break;
+									case "x":
+										x = Float.parseFloat(attrValue);
+										break;
+									case "y":
+										y = Float.parseFloat(attrValue);
+										break;
 								}
-						}						
-						dashBoard.addGauge(new SpriteGauge(id, textureName, Float.parseFloat(x), Float.parseFloat(y)));
-					} else
-					if (name.equals("Led")) {
-						String textureName = null;
-						String x = null;
-						String y = null;
-						int id = 0;
-						
-						int count = xpp.getAttributeCount();
-						for (int i = 0; i != count; i++) {
-							attr = xpp.getAttributeName(i);
-							attrValue = xpp.getAttributeValue(i);
-							switch (attr) {
-								case "id":
-									if (ResourcesUtils.isResource(attrValue))
-										id = ResourcesUtils.referenceToInt(attrValue);
-									break;
-								case "texture":
-									textureName = attrValue;
-									break;
-								case "x":
-									x = attrValue;
-									break;
-								case "y":
-									y = attrValue;
-									break;
+							}
+							dashBoard.addGauge(new SpriteGauge(id, textureName, x, y));
+							break;
+						case "Led":
+							textureName = null;
+							x = y = 0;
+							id = 0;
+
+							count = xpp.getAttributeCount();
+							for (int i = 0; i != count; i++) {
+								attr = xpp.getAttributeName(i);
+								attrValue = xpp.getAttributeValue(i);
+								switch (attr) {
+									case "id":
+										if (ResourcesUtils.isResource(attrValue))
+											id = ResourcesUtils.referenceToInt(attrValue);
+										break;
+									case "texture":
+										textureName = attrValue;
+										break;
+									case "x":
+										x = Float.parseFloat(attrValue);
+										break;
+									case "y":
+										y = Float.parseFloat(attrValue);
+										break;
 								}
-						}						
-						dashBoard.addGauge(new LedGauge(id, textureName, Float.parseFloat(x), Float.parseFloat(y)));						
-					}
+							}
+							dashBoard.addGauge(new LedGauge(id, textureName, x, y));
+							break;
+						}
 				}
 				xpp.next();				
 			}

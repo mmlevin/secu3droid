@@ -29,7 +29,8 @@ import java.util.Locale;
 
 import net.simonvt.numberpicker.NumberPicker;
 
-public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {		
+public class CustomNumberPickerIntegerDialog extends CustomNumberPickerDialog {
+	//TODO Add style with two separate parts for many values
 	private int value = 0;
 	private int minValue = 0;
 	private int maxValue = 0;

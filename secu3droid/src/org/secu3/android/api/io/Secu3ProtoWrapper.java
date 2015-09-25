@@ -264,7 +264,7 @@ public class Secu3ProtoWrapper {
 			for (int i = 0; i != inputPackets.size(); i++) {
 				try {
 					packet = inputPackets.valueAt(i);
-					packet.parse(data);
+					if (!packet.parse(data)) continue;
 					lastPacket = packet;
 					result = true;
 					if (packet.getNameId() == R.string.fnname_dat_title) {

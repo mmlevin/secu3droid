@@ -44,8 +44,7 @@
             app:signed="true"/>
         <Field app:name="@string/temper_fan_pwm_freq_title"
             app:minVersion="5"
-            app:type="@id/field_type_float16"
-            app:divider="524288"/>
+            app:type="@id/field_type_int16"/>
     </Packet>
 
     <Packet app:name="@string/carburetor_title"
@@ -563,13 +562,13 @@
         <Field app:name="@string/unioutput1_condition_2_title"
             app:type="@id/field_type_int8"/>
         <Field app:name="@string/unioutput1_condition1_on_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput1_condition1_off_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput1_condition2_on_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput1_condition2_off_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/uniout_par_unioutput_2_flags_title"
             app:type="@id/field_type_int8"/>
         <Field app:name="@string/unioutput2_condition_1_title"
@@ -577,13 +576,13 @@
         <Field app:name="@string/unioutput2_condition_2_title"
             app:type="@id/field_type_int8"/>
         <Field app:name="@string/unioutput2_condition1_on_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput2_condition1_off_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput2_condition2_on_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput2_condition2_off_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/uniout_par_unioutput_3_flags_title"
             app:type="@id/field_type_int8"/>
         <Field app:name="@string/unioutput3_condition_1_title"
@@ -591,13 +590,13 @@
         <Field app:name="@string/unioutput3_condition_2_title"
             app:type="@id/field_type_int8"/>
         <Field app:name="@string/unioutput3_condition1_on_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput3_condition1_off_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput3_condition2_on_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/unioutput3_condition2_off_value_title"
-            app:type="@id/field_type_int16"/>
+            app:type="@id/field_type_float16"/>
         <Field app:name="@string/uniout_par_logic_function_1_2_title"
             app:type="@id/field_type_int4"/>
     </Packet>
@@ -631,7 +630,7 @@
             app:multiplier="100"
             app:divider="512"/>
         <Field app:name="@string/lambda_par_correction_limit_title"
-            app:type="@id/field_type_float8"
+            app:type="@id/field_type_float16"
             app:multiplier="100"
             app:divider="512"/>
         <Field app:name="@string/lambda_par_switch_point_title"

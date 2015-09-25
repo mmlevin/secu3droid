@@ -125,6 +125,7 @@ public class Secu3Packet implements Parcelable {
 			28800, 38400, 57600 };
 	public final static int BAUD_RATE_INDEX[] = { 0x340, 0x1A0, 0xCF, 0x8A,
 			0x67, 0x44, 0x33, 0x22 };
+	public final static int INJECTOR_SQIRTS_PER_CYCLE[] = {1,2,4};
 
 	/** Вычисляет индекс элемента в масиве **/
 	public static int indexOf(int array[], int search) {
@@ -413,7 +414,7 @@ public class Secu3Packet implements Parcelable {
 		this.data = data;
 	}
 
-	public void parse(String data) {
+	public boolean parse(String data) {
 		if ((data != null) && (fields != null)) {
 			BaseProtoField field;
 
@@ -422,17 +423,21 @@ public class Secu3Packet implements Parcelable {
 				throw new IllegalArgumentException("Not an input packet");
 			char ch = data.charAt(PACKET_ID_POS);
 			if (ch != packetId.charAt(0))
-				throw new IllegalArgumentException("Wrong packet type");
+				return false; // Wrong packet type to analyze
 			setData(data);
 			int position = 2; // Skip first 2 chars
 			int delta;
+			int length = data.length();
 			for (int i = 0; i != fields.size(); i++) {
 				field = fields.get(i);
 				delta = field.getLength();
+				if (position + delta > length) throw new IllegalArgumentException("Packet too short");
 				String subdata = data.substring(position, position += delta);
 				field.setData(subdata);
 			}
+			return true;
 		}
+		return false;
 	}
 
 	public boolean isBinary() {

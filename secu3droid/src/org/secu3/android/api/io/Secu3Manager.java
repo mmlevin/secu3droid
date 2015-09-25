@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -150,6 +151,7 @@ public class Secu3Manager {
 			}
 
 			public void run() {
+				//TODO Add extented status - connecting, error etc...
 				if (offline++ >= STATUS_TIMEOUT) {
 					offline = STATUS_TIMEOUT;
 					appContext.sendBroadcast(new Intent(
@@ -181,7 +183,7 @@ public class Secu3Manager {
 
 		void updateTask() {
 			if (!tasks.isEmpty()) {
-				prevSecu3Task = SECU3_TASK.SECU3_NONE;
+				//prevSecu3Task = SECU3_TASK.SECU3_NONE;
 				secu3Task = tasks.poll();
 			}
 		}
@@ -505,7 +507,7 @@ public class Secu3Manager {
 					}
 					break;
 				}
-				Log.d(LOG_TAG, getProtoWrapper().getLogString());
+				//Log.d(LOG_TAG, getProtoWrapper().getLogString());
 				break;
 			default:
 				break;
@@ -560,7 +562,7 @@ public class Secu3Manager {
 									packetBuffer = Secu3Packet
 											.EscRxPacket(packetBuffer);
 								line = new String(packetBuffer, 0, idx - 1);
-								Log.d(LOG_TAG, "Recieved: " + line);
+								//Log.d(LOG_TAG, "Received: " + line);
 								parsePacket(line, reader, writer);
 								onlineTask.reset();
 								appContext
@@ -572,8 +574,7 @@ public class Secu3Manager {
 							}
 						}
 					} else {
-						Log.d(LOG_TAG,
-								"Data: not ready " + System.currentTimeMillis());
+						//Log.d(LOG_TAG,"Data: not ready " + System.currentTimeMillis());
 						SystemClock.sleep(100);
 					}
 				}
@@ -730,6 +731,8 @@ public class Secu3Manager {
 									} else {
 										Log.v(LOG_TAG,
 												"connecting to socket");
+										//TODO Do something with problem "Service discovery failed"
+										Thread.sleep(5000,0);
 										secu3Socket.connect();
 										Log.d(LOG_TAG,
 												"connected to socket");
@@ -754,6 +757,8 @@ public class Secu3Manager {
 										"error while connecting to socket",
 										connectException);
 								disable(R.string.msg_bluetooth_secu3_unavaible);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
 							} finally {
 								nbRetriesRemaining--;
 								if (!connected) {

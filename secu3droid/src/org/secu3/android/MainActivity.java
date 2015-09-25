@@ -303,6 +303,7 @@ public class MainActivity extends Activity {
 					}
 					if (!rawSensors) {
 						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
+						//TODO Make dynamic string making instead of format
 						textViewData.setText(String.format(Locale.US,sensorsFormat,
 								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue(),
@@ -333,6 +334,7 @@ public class MainActivity extends Activity {
 				case R.string.packet_type_adcraw_dat:
 					if (rawSensors) {
 						textViewDataExt.setText(null);
+						//TODO Make dynamic string making instead of format
 						textViewData.setText(String.format(Locale.US,sensorsRawFormat,
 								((ProtoFieldFloat) packet.getField(R.string.adcraw_map_title)).getValue(),
 								((ProtoFieldFloat) packet.getField(R.string.adcraw_voltage_title)).getValue(),
@@ -348,6 +350,7 @@ public class MainActivity extends Activity {
 					fwOptions = ((ProtoFieldInteger) packet.findField(R.string.fwinfo_dat_options_title)).getValue();
 					break;
 				default:
+					setRawMode(rawSensors);
 					break;
 				}
 			}

@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.GregorianCalendar;
 import android.os.Environment;
-import android.text.format.Time;
 import android.util.Log;
 
 public abstract class Secu3Logger {
@@ -60,20 +59,16 @@ public abstract class Secu3Logger {
 	
 	public void beginLogging (int protocol_version) {
 		this.protocol_version = protocol_version;
-		if (isStarted()) return;
-		else {
-			try {
-				logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path+File.separator+getFileName()),"ISO-8859-1"));
-				started = true;
-			} catch (IOException e) {	
-				e.printStackTrace();
-			}
+		if (!isStarted()) try {
+			logWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path+File.separator+getFileName()),"ISO-8859-1"));
+			started = true;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public void endLogging() {
-		if (!isStarted()) return;
-		try {
+		if (isStarted()) try {
 			logWriter.flush();
 			logWriter.close();
 			started = false;
