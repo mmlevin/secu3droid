@@ -77,7 +77,8 @@
     <string name="about_app_desc">Secu3Droid це додаток для налаштування системи управління двигуном Secu-3. Secu-3 це безкоштовна система управління двигуном з відкритими вихідними кодами<a href="http://secu-3.org"><b>http://secu-3.org</b></a>"</string>
     <string name="about_license">Це програмне забезпечення з відкритим вихідним кодом розповсюджується безкоштовно у відповідності з умовами<a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
     <string name="about_sources">Вихідний код доступний з Git-репозиторію на вебсайті проекту https://github.com/mmlevin/secu3droid</string>
-    <string name="about_acknowledgements">Подяки: \nУкраїнська локалізація - V.\nСтиль приладовій панелі NFS - alvikagal</string>    
+    <string name="about_acknowledgements">Подяки: \nУкраїнська локалізація - V.\nСтиль приладовій панелі NFS - alvikagal</string>
+    <string name="injector_overflow_message">При розрахунку константи рівняння ідеального газу отримано переповнення! Змініть конфігурацію уприскування.</string>
    
     <string-array name="diagnostics_fragments_title">
         <item>Входи</item>

@@ -42,7 +42,8 @@ public class CustomNumberPickerFloatDialog extends CustomNumberPickerDialog {
 	private float stepValue = 0;
 	private String format = "%.02f";
 
-//TODO Sometimes edited value is not exact as initial
+//FIXME Sometimes edited value is not exact as initial
+//FIXME No need sign for single-polarity values
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

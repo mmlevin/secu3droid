@@ -22,7 +22,8 @@
  
   contacts:
              http://secu-3.org
-             email: mmlevin@mail.ru
+             email: mmlevin@mail.ru
+
 -->
 
 <resources>
@@ -76,6 +77,7 @@
     <string name="about_license">It is open source software distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
     <string name="about_sources">The source code is available from Git repository on the project website: https://github.com/mmlevin/secu3droid</string>
     <string name="about_acknowledgements">Acknowledgements: \nUkrainian localization - V.\nNFS dashboard skin - alvikagal</string>
+    <string name="injector_overflow_message">Overflow detected while calculating constant for the ideal gas law equation! Change configuration to eliminate this error.</string>
    
     <string-array name="diagnostics_fragments_title">
         <item>Inputs</item>

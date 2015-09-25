@@ -53,6 +53,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,6 +65,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+//FIXME Displays old parameter if changed outside, needs refresh
 public class ParamActivity extends FragmentActivity implements OnItemClickListener,OnNumberPickerDialogAcceptListener,OnParamItemChangeListener {
 	private static final String MAX_VERSION = "maxVersion";
 	private static final String MIN_VERSION = "minVersion";
@@ -339,7 +341,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		packetUtils = new PacketUtils(this);
 		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),this,pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
-		// TODO Move to onResume or do after receive last skeleton
+		//FIXME Move to onResume or do after receive last skeleton
 		paramsRead();
 				
 		receiver = new ReceiveMessages();
@@ -416,10 +418,10 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 			if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
 				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
 				if (protocol_version >= SettingsActivity.PROTOCOL_10022015_WINTER_RELEASE) {
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
-					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.uniout_par_title), paramAdapter)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.injctr_par_title), paramAdapter)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.lambda_par_title), paramAdapter)));
+					startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(R.string.accel_par_title), paramAdapter)));
 				}
 			}
 		}
@@ -528,49 +530,70 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		Secu3Packet packet;
 		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
 		if (item != null) {
-			if (item.getPageId() == R.string.choke_control_title) {
-				packet = new Secu3Packet (Skeletons.get(R.string.choke_control_title)); 
-				switch (itemId) {
+			switch (item.getNameId()) {
 				case R.string.choke_manual_step_down_title:
+					packet = new Secu3Packet (Skeletons.get(R.string.choke_control_title));
 					((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (-127);
+					startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 					break;
 				case R.string.choke_manual_step_up_title:
+					packet = new Secu3Packet (Skeletons.get(R.string.choke_control_title));
 					((ProtoFieldInteger) packet.findField(R.string.choke_steps_title)).setValue (127);
+					startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 					break;
 				case R.string.choke_testing_title:
+					packet = new Secu3Packet (Skeletons.get(R.string.choke_control_title));
 					((ProtoFieldInteger) packet.findField(R.string.choke_testing_title)).setValue (((ParamItemToggleButton) item).getValue()?1:0);
-					break;				
-				default:
+					startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
 					break;
-				}		
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
-			} else if (item.getNameId() == R.string.secur_par_apply_bluetooth_title) {
-				Secu3Packet sourcePacket = packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter);
-				if (sourcePacket != null) {
-					int flags = ((ProtoFieldInteger) sourcePacket.findField(R.string.secur_par_flags_title)).getValue();
-					packet = new Secu3Packet(Skeletons.get(R.string.secur_par_title));				
-					flags |= Secu3Packet.SECUR_SET_BTBR_FLAG;
-					((ProtoFieldInteger) packet.findField(R.string.secur_par_flags_title)).setValue (flags);		
+				case R.string.injctr_par_enjine_displacement_title:
+				case R.string.injctr_par_injector_flags_title:
+				case R.string.injctr_par_injector_config_title:
+				case R.string.injctr_par_number_of_squirts_per_cycle_title:
+					int fuel_const = PacketUtils.calcInjectorConstant(
+							((ParamItemFloat) paramAdapter.findItemByNameId(R.string.injctr_par_enjine_displacement_title)).getValue() / ((ProtoFieldInteger) Skeletons.get(R.string.injctr_par_title).findField(R.string.injctr_par_cyl_num_title)).getValue(),
+							((ProtoFieldInteger) Skeletons.get(R.string.injctr_par_title).findField(R.string.injctr_par_cyl_num_title)).getValue(),
+							((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_injector_config_title)).getIndex(),
+							Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE[((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).getIndex()],
+							((ParamItemFloat) paramAdapter.findItemByNameId(R.string.injctr_par_injector_flow_rate_title)).getValue()
+					);
+					//Log.d("secu3", String.format("Calc fuel constant %d", fuel_const));
+					if (fuel_const > PacketUtils.MAX_FUEL_CONSTANT) {
+						fuel_const = PacketUtils.MAX_FUEL_CONSTANT;
+						Toast.makeText(this,R.string.injector_overflow_message,Toast.LENGTH_LONG).show();
+					}
+					((ProtoFieldInteger)Skeletons.get(R.string.injctr_par_title).findField(R.string.injctr_par_injector_sd_igl_const_title)).setValue(fuel_const);
+					break;
+				case R.string.secur_par_apply_bluetooth_title:
+					Secu3Packet sourcePacket = packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter);
+					if (sourcePacket != null) {
+						int flags = ((ProtoFieldInteger) sourcePacket.findField(R.string.secur_par_flags_title)).getValue();
+						packet = new Secu3Packet(Skeletons.get(R.string.secur_par_title));
+						flags |= Secu3Packet.SECUR_SET_BTBR_FLAG;
+						((ProtoFieldInteger) packet.findField(R.string.secur_par_flags_title)).setValue (flags);
+						String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
+						String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
+						if ((name != null) && (pass != null)) {
+							((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length_title)).setValue (name.length());
+							((ProtoFieldString) packet.findField(R.string.secur_par_bluetooth_name_title)).setValue (name);
+							((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length_title)).setValue (pass.length());
+							((ProtoFieldString) packet.findField(R.string.secur_par_bluetooth_pass_title)).setValue (pass);
+							startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
+						}
+					}
+					break;
+				case R.string.secur_par_bluetooth_name_title:
+				case R.string.secur_par_bluetooth_pass_title:
+					paramAdapter.setStringItem(bluetoothSecurityFlags, bluetoothSecurityValue);
 					String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
 					String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
-					if ((name != null) && (pass != null)) {
-						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length_title)).setValue (name.length());
-						((ProtoFieldString) packet.findField(R.string.secur_par_bluetooth_name_title)).setValue (name);
-						((ProtoFieldInteger) packet.findField(R.string.secur_par_name_length_title)).setValue (pass.length());
-						((ProtoFieldString) packet.findField(R.string.secur_par_bluetooth_pass_title)).setValue (pass);
-						startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packet));
-					}
-				}
-			} else if ((item.getNameId() == R.string.secur_par_bluetooth_name_title) || (item.getNameId() == R.string.secur_par_bluetooth_pass_title)) {
-				paramAdapter.setStringItem(bluetoothSecurityFlags, bluetoothSecurityValue);				
-				String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
-				String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
-				paramAdapter.findItemByNameId(R.string.secur_par_apply_bluetooth_title).setEnabled((name != null) && (pass != null) && (!TextUtils.isEmpty(name)) && (!TextUtils.isEmpty(pass)));
-				adapter.notifyDataSetChanged();
+					paramAdapter.findItemByNameId(R.string.secur_par_apply_bluetooth_title).setEnabled((name != null) && (pass != null) && (!TextUtils.isEmpty(name)) && (!TextUtils.isEmpty(pass)));
+					adapter.notifyDataSetChanged();
+					break;
+				default:
+					break;
 			}
-			else if (uploadImmediatelly) {
-				startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
-			}						
+			if (uploadImmediatelly) startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
 		} 
 	}
 	
@@ -603,8 +626,10 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 						break;
 					case R.string.uniout_par_title:
 						//TODO Universal out implementation
-//					case R.string.injctr_par_title:
-						//TODO Injector parameter implementation
+						break;
+					case R.string.injctr_par_title:
+						((ProtoFieldInteger)Skeletons.get(R.string.injctr_par_title).findField(R.string.injctr_par_cyl_num_title)).setValue(((ProtoFieldInteger) packet.findField(R.string.injctr_par_cyl_num_title)).getValue());
+						packetUtils.setParamFromPacket(paramAdapter, packet);
 						break;
 					default:
 						packetUtils.setParamFromPacket(paramAdapter, packet);

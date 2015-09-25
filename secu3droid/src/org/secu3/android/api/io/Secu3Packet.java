@@ -127,6 +127,11 @@ public class Secu3Packet implements Parcelable {
 			0x67, 0x44, 0x33, 0x22 };
 	public final static int INJECTOR_SQIRTS_PER_CYCLE[] = {1,2,4};
 
+	public final static int INJCFG_TROTTLEBODY = 0;
+	public final static int INJCFG_SIMULTANEOUS = 1;
+	public final static int INJCFG_SEMISEQUENTIAL = 2;
+	public final static int INJCFG_FULLSEQUENTIAL = 3;
+
 	/** Вычисляет индекс элемента в масиве **/
 	public static int indexOf(int array[], int search) {
 		for (int i = 0; i != array.length; i++)

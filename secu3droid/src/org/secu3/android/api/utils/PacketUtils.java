@@ -44,6 +44,9 @@ public class PacketUtils {
 	
 	private float m_period_distance = 0f;
 	private float engine_displacement = 1.0f;
+
+	public static final float FUEL_DENSITY = 0.71f;
+	public static final int MAX_FUEL_CONSTANT = 131072;
 	
 	public PacketUtils(Context context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -56,49 +59,63 @@ public class PacketUtils {
 			BaseProtoField field;
 			for (int i = 0; i != packetSkeleton.getFields().size(); i++) {
 				field = packetSkeleton.getFields().get(i);
-				if (field.getNameId() == R.string.secur_par_flags_title) {
-					int flags = 0;					
-					ParamItemBoolean item = (ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title);
-					if (item.getValue()) flags |= Secu3Packet.SECUR_USE_IMMO_FLAG;
-					item = (ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title);
-					if (item.getValue()) flags |= Secu3Packet.SECUR_USE_BT_FLAG;
-					((ProtoFieldInteger) field).setValue (flags);
-				}
-				else {
-					BaseParamItem item = paramAdapter.findItemByNameId(field.getNameId()); 
-					if (item != null) {
-						switch (item.getNameId()) {
-							case R.string.miscel_baudrate_title:
-								int baud_rate = Secu3Packet.BAUD_RATE_INDEX[((ParamItemSpinner) item).getIndex()];
-								((ProtoFieldInteger) field).setValue (baud_rate);
-								break;
-							case R.string.adccor_map_sensor_correction_title:
-							case R.string.adccor_voltage_sensor_correction_title:
-							case R.string.adccor_temper_sensor_correction_title:
-							case R.string.adccor_tps_sensor_correction_title:
-							case R.string.adccor_addi1_sensor_correction_title:
-							case R.string.adccor_addi2_sensor_correction_title:
-							buildCorrection(paramAdapter, item);
-								((ProtoFieldFloat) field).setValue (buildCorrection(paramAdapter, item));
-								break;
-							case R.string.temper_fan_pwm_freq_title:
-								((ProtoFieldInteger) field).setValue((int) Math.round(524288.0/((ParamItemInteger)item).getValue()));
-								break;
-							default:
-								if (item instanceof ParamItemInteger) ((ProtoFieldInteger) field).setValue (((ParamItemInteger) item).getValue());
-								else if (item instanceof ParamItemFloat) ((ProtoFieldFloat) field).setValue (((ParamItemFloat) item).getValue());
-								else if (item instanceof ParamItemString) {
-									String value = ((ParamItemString) item).getValue();
-									if (value == null) value = "";
-									((ProtoFieldString) field).setValue (value);
-								}
-								else if (item instanceof ParamItemBoolean) ((ProtoFieldInteger) field).setValue (((ParamItemBoolean) item).getValue()?1:0);
-								else if (item instanceof ParamItemSpinner) ((ProtoFieldInteger) field).setValue (((ParamItemSpinner) item).getIndex());
-								break;
+				switch (field.getNameId()) {
+					case R.string.secur_par_flags_title:
+						int flags = 0;
+						ParamItemBoolean item_secur = (ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title);
+						if (item_secur.getValue()) flags |= Secu3Packet.SECUR_USE_IMMO_FLAG;
+						item_secur = (ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title);
+						if (item_secur.getValue()) flags |= Secu3Packet.SECUR_USE_BT_FLAG;
+						((ProtoFieldInteger) field).setValue (flags);
+						break;
+					case R.string.miscel_baudrate_title:
+						int baud_rate = Secu3Packet.BAUD_RATE_INDEX[((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.miscel_baudrate_title)).getIndex()];
+						((ProtoFieldInteger) field).setValue (baud_rate);
+						break;
+					case R.string.injctr_par_injector_config_title:
+						int config = ((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.injctr_par_injector_config_title)).getIndex() << 4;
+						config |= Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE[((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).getIndex()];
+						((ProtoFieldInteger)field).setValue(config);
+						break;
+					case R.string.injctr_par_injector_cyl_disp_title:
+						int engine_cylinders = ((ProtoFieldInteger)packetSkeleton.findField(R.string.injctr_par_cyl_num_title)).getValue();
+						if (engine_cylinders != 0) {
+							engine_displacement = ((ParamItemFloat) paramAdapter.findItemByNameId(R.string.injctr_par_enjine_displacement_title)).getValue();
+							engine_displacement /= engine_cylinders;
 						}
-					}
+						((ProtoFieldFloat) field).setValue(engine_displacement);
+						break;
+					case R.string.adccor_map_sensor_correction_title:
+					case R.string.adccor_voltage_sensor_correction_title:
+					case R.string.adccor_temper_sensor_correction_title:
+					case R.string.adccor_tps_sensor_correction_title:
+					case R.string.adccor_addi1_sensor_correction_title:
+					case R.string.adccor_addi2_sensor_correction_title:
+						buildCorrection(paramAdapter, paramAdapter.findItemByNameId(field.getNameId()));
+						((ProtoFieldFloat) field).setValue (buildCorrection(paramAdapter, paramAdapter.findItemByNameId(field.getNameId())));
+						break;
+					case R.string.temper_fan_pwm_freq_title:
+						((ProtoFieldInteger) field).setValue((int) Math.round(524288.0/((ParamItemInteger)paramAdapter.findItemByNameId(R.string.temper_fan_pwm_freq_title)).getValue()));
+						break;
+					default:
+						BaseParamItem item;
+						if ((item = paramAdapter.findItemByNameId(field.getNameId())) != null){
+							if (item instanceof ParamItemInteger)
+								((ProtoFieldInteger) field).setValue(((ParamItemInteger) item).getValue());
+							else if (item instanceof ParamItemFloat)
+								((ProtoFieldFloat) field).setValue(((ParamItemFloat) item).getValue());
+							else if (item instanceof ParamItemString) {
+								String value = ((ParamItemString) item).getValue();
+								if (value == null) value = "";
+								((ProtoFieldString) field).setValue(value);
+							} else if (item instanceof ParamItemBoolean)
+								((ProtoFieldInteger) field).setValue(((ParamItemBoolean) item).getValue() ? 1 : 0);
+							else if (item instanceof ParamItemSpinner)
+								((ProtoFieldInteger) field).setValue(((ParamItemSpinner) item).getIndex());
+						}
+						break;
 				}
-			} 
+			}
 			return packetSkeleton;
 		}
 		return null;
@@ -159,8 +176,13 @@ public class PacketUtils {
 						engine_displacement = ((ProtoFieldFloat)field).getValue();
 						break;
 					case R.string.injctr_par_cyl_num_title:
-						engine_displacement *= ((ProtoFieldInteger)field).getValue();
+						int engine_cylinders = ((ProtoFieldInteger)field).getValue();
+						engine_displacement *= engine_cylinders;
 						((ParamItemFloat)paramAdapter.findItemByNameId(R.string.injctr_par_enjine_displacement_title)).setValue(engine_displacement);
+						break;
+					case R.string.injctr_par_injector_sd_igl_const_title:
+						int fuel_const = ((ProtoFieldInteger)field).getValue();
+						Log.d("secu3", String.format("Get fuel constant %d", fuel_const));
 						break;
 					case R.string.miscel_baudrate_title:
 						int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
@@ -281,5 +303,36 @@ public class PacketUtils {
 		float distance = m_period_distance * rawDistance / 1000.0f;
 		if (distance > 9999.99f) distance = 9999.99f;
 		return distance;
+	}
+
+	public static int calcInjectorConstant (float cylynder_displacement, int engine_cylinders, int injector_config, int injector_squirt_num, float injector_flow_rate)
+	{
+		//Log.d("secu3", String.format("Cylinder displacement %f", cylynder_displacement));
+		//Log.d("secu3", String.format("Engine cylynders %d", engine_cylinders));
+		//Log.d("secu3", String.format("Injector config %d", injector_config));
+		//Log.d("secu3", String.format("Squirt number %d", injector_squirt_num));
+		//Log.d("secu3", String.format("Flow rate %f", injector_flow_rate));
+		int inj_num, bnk_num;
+		switch (injector_config) {
+			case Secu3Packet.INJCFG_TROTTLEBODY:
+				inj_num = 1;
+				bnk_num = 1;
+				break;
+			case Secu3Packet.INJCFG_SIMULTANEOUS:
+				inj_num = engine_cylinders;
+				bnk_num = 1;
+				break;
+			case Secu3Packet.INJCFG_SEMISEQUENTIAL:
+				inj_num = engine_cylinders;
+				bnk_num = engine_cylinders / 2;
+				break;
+			case Secu3Packet.INJCFG_FULLSEQUENTIAL:
+			default:
+				inj_num = engine_cylinders;
+				bnk_num = engine_cylinders;
+				break;
+		}
+		float mifr = injector_flow_rate * FUEL_DENSITY;
+		return Math.round(((cylynder_displacement * 3.482f * 18750000.0f) / mifr) * ((float)bnk_num * (float) engine_cylinders) / ((float)inj_num * (float)injector_squirt_num));
 	}
 }

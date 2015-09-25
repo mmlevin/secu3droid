@@ -531,12 +531,12 @@ public class Secu3Manager {
 						String p = packet.pack();
 						rawLogger.log(p + "\r\n");
 						writer.append(p);
-						Log.d(LOG_TAG, "Send packet:" + p);
+						//Log.d(LOG_TAG, "Send packet:" + p);
 						updateProgress(++progressCurrent);
 						try {
 							Thread.sleep(20);
 						} catch (InterruptedException e) {
-							Log.e (LOG_TAG, e.getMessage());
+							//Log.e (LOG_TAG, e.getMessage());
 						}
 						writer.flush();
 					}
@@ -658,7 +658,7 @@ public class Secu3Manager {
 		Secu3Service.secu3Notification.notificationManager
 				.cancel(R.string.service_closed_because_connection_problem_notification_title);
 		if (!enabled) {
-			Log.d(LOG_TAG, "enabling Secu3 bluetooth manager");
+			Log.d(LOG_TAG, "Enabling Secu3 bluetooth manager");
 			final BluetoothAdapter bluetoothAdapter = BluetoothAdapter
 					.getDefaultAdapter();
 			if (bluetoothAdapter == null) {
@@ -731,7 +731,7 @@ public class Secu3Manager {
 									} else {
 										Log.v(LOG_TAG,
 												"connecting to socket");
-										//TODO Do something with problem "Service discovery failed"
+										//FIXME Do something with problem "Service discovery failed"
 										Thread.sleep(5000,0);
 										secu3Socket.connect();
 										Log.d(LOG_TAG,
