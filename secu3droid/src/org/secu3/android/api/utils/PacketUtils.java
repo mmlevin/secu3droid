@@ -26,6 +26,7 @@
 package org.secu3.android.api.utils;
 
 import org.secu3.android.R;
+import org.secu3.android.SettingsActivity;
 import org.secu3.android.api.io.BaseProtoField;
 import org.secu3.android.api.io.ProtoFieldFloat;
 import org.secu3.android.api.io.ProtoFieldInteger;
@@ -40,6 +41,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.util.Locale;
+
 public class PacketUtils {
 	
 	private float m_period_distance = 0f;
@@ -47,8 +50,11 @@ public class PacketUtils {
 
 	public static final float FUEL_DENSITY = 0.71f;
 	public static final int MAX_FUEL_CONSTANT = 131072;
+
+	private Context context;
 	
 	public PacketUtils(Context context) {
+		this.context = context;
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String pulses = sharedPreferences.getString(context.getString(R.string.pref_speed_pulse_key), context.getString(R.string.defaultSpeedPulse));
 		m_period_distance = 1000.0f / (float)Integer.parseInt(pulses);
@@ -334,5 +340,47 @@ public class PacketUtils {
 		}
 		float mifr = injector_flow_rate * FUEL_DENSITY;
 		return Math.round(((cylynder_displacement * 3.482f * 18750000.0f) / mifr) * ((float)bnk_num * (float) engine_cylinders) / ((float)inj_num * (float)injector_squirt_num));
+	}
+
+	public String getSensorString(int protocol_version, Secu3Packet packet) {
+		String result = "";
+		result += (String.format(Locale.US, context.getString(R.string.status_rpm_title), ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_map_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_voltage_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_voltage_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_temperature_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_temperature_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_angle_correction_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_knock_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_knock_retard_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_air_flow_title),((ProtoFieldInteger) packet.getField(R.string.sensor_dat_air_flow_title)).getValue()));
+		int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
+		result += (String.format(Locale.US,context.getString(R.string.status_fi_valve_title),Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE)));
+		result += (String.format(Locale.US,context.getString(R.string.status_carb_status_title),Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB)));
+		result += (String.format(Locale.US,context.getString(R.string.status_gas_valve_title),Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_GAS)));
+		result += (String.format(Locale.US,context.getString(R.string.status_power_valve_title),Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE)));
+		result += (String.format(Locale.US,context.getString(R.string.status_ecf_title),Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN)));
+		result += (String.format(Locale.US,context.getString(R.string.status_starter_block_title),Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK)));
+		result += (String.format(Locale.US,context.getString(R.string.status_addi1_voltage_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_addi2_voltage_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_tps_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.status_choke_position_title),((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));
+
+		if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
+			result += (String.format(Locale.US,context.getString(R.string.status_speed_title),calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue())));
+			result += (String.format(Locale.US,context.getString(R.string.status_distance_title),calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));
+		}
+
+		return result;
+	}
+
+	public String getRawSensorString (int protocol_version, Secu3Packet packet) {
+		String result = "";
+		result += (String.format(Locale.US,context.getString(R.string.raw_status_map_title),((ProtoFieldFloat) packet.getField(R.string.adcraw_map_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.raw_status_voltage_title),((ProtoFieldFloat) packet.getField(R.string.adcraw_voltage_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.raw_status_temperature_title),((ProtoFieldFloat) packet.getField(R.string.adcraw_temperature_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.raw_status_knock_title),((ProtoFieldFloat) packet.getField(R.string.adcraw_knock_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.raw_status_tps_title),((ProtoFieldFloat) packet.getField(R.string.adcraw_tps_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.raw_status_addi1_title),((ProtoFieldFloat) packet.getField(R.string.adcraw_addi1_title)).getValue()));
+		result += (String.format(Locale.US,context.getString(R.string.raw_status_addi2_title),((ProtoFieldFloat) packet.getField(R.string.adcraw_addi2_title)).getValue()));
+		return result;
 	}
 }

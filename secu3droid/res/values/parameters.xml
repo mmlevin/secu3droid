@@ -371,4 +371,44 @@
     <string name="units_percents">%</string>
     <string name="units_percent_per_volts">%/V</string>
     <string name="units_percent_per_second">%/sec</string>
+
+    <string name="status_rpm_title">RPM: %d min-1\r\n</string>
+    <string name="status_map_title">Pressure: %.2f kPa\r\n</string>
+    <string name="status_voltage_title">Voltage: %.2f V\r\n</string>
+    <string name="status_temperature_title">Temperature: %.2f °C\r\n</string>
+    <string name="status_angle_correction_title">Advance angle: %+.2f °\r\n</string>
+    <string name="status_knock_title">Knock level: %.2f V\r\n</string>
+    <string name="status_knock_retard_title">Knock retard: %+.2f °\r\n</string>
+    <string name="status_air_flow_title">Air flow: %d\r\n</string>
+    <string name="status_fi_valve_title">FI valve: %d\r\n</string>
+    <string name="status_carb_status_title">Throttle sensor: %d\r\n</string>
+    <string name="status_gas_valve_title">Gas valve: %d\r\n</string>
+    <string name="status_power_valve_title">Power Valve: %d\r\n</string>
+    <string name="status_ecf_title">Cooling fan: %d\r\n</string>
+    <string name="status_starter_block_title">Starter blocked: %d\r\n</string>
+    <string name="status_tps_title">Throttle Position Sensor:%.2f\r\n</string>
+    <string name="status_addi1_voltage_title">ADD_I1: %.2f V\r\n</string>
+    <string name="status_addi2_voltage_title">ADD_I2: %.2f V\r\n</string>
+    <string name="status_choke_position_title">Choke position: %.2f\r\n</string>
+    <string name="status_speed_title">Speed: %.1f kph\r\n</string>
+    <string name="status_distance_title">Distance: %.2f km\r\n</string>
+    <string name="status_gasdose_position_title">Gas dose position: %.2f\r\n</string>
+    <string name="status_air_temperature_title">Intake air temperature: %.2f\r\n</string>
+    <string name="status_advance_angle_start_map_title">Start map advance angle: %+.2f °\r\n</string>
+    <string name="status_advance_angle_idle_map_title">Idle map advance angle: %+.2f °\r\n</string>
+    <string name="status_advance_angle_work_map_title">Work map advance angle: %+.2f °\r\n</string>
+    <string name="status_advance_angle_cool_temp_map_title">Coolant temperature advance angle: %+.2f °\r\n</string>
+    <string name="status_advance_air_temp_map_title">Air temperature advance angle: %+.2f °\r\n</string>
+    <string name="status_advance_idling_regulator_title">Idling regulator advance angle: %+.2f °\r\n</string>
+    <string name="status_advance_octane_correction_title">Octane correction advance angle: %+.2f °\r\n</string>
+    <string name="status_lambda_correction_title">Lambda correction: %.2f\r\n</string>
+    <string name="status_injection_pulse_title">Injector pulse width: %.2f\r\n</string>
+
+    <string name="raw_status_map_title">MAP Sensor data: %.2f V\r\n</string>
+    <string name="raw_status_voltage_title">Voltage Sensor data: %.2f V\r\n</string>
+    <string name="raw_status_temperature_title">Temperature Sensor data: %.2f V\r\n</string>
+    <string name="raw_status_knock_title">Knock Sensor data: %.2f V\r\n</string>
+    <string name="raw_status_tps_title">TPS Sensor data: %.2f V\r\n</string>
+    <string name="raw_status_addi1_title">ADD_IO1: %.2f V\r\n</string>
+    <string name="raw_status_addi2_title">ADD_IO2: %.2f V\r\n</string>
 </resources>

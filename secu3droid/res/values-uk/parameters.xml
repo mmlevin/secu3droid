@@ -374,4 +374,44 @@
     <string name="units_percents">%</string>
     <string name="units_percent_per_volts">%/В</string>
     <string name="units_percent_per_second">%/сек</string>
+
+    <string name="status_rpm_title">Оберти: %d хв-1\r\n</string>
+    <string name="status_map_title">Абсолютний тиск: %.2f кПа\r\n</string>
+    <string name="status_voltage_title">Напруга: %.2f В\r\n</string>
+    <string name="status_temperature_title">Температура: %.2f °C\r\n</string>
+    <string name="status_angle_correction_title">Кут випередження: %+.2f °\r\n</string>
+    <string name="status_knock_title">Сигнал детонації: %.2f В\r\n</string>
+    <string name="status_knock_retard_title">Поправка на детонацію: %+.2f °\r\n</string>
+    <string name="status_air_flow_title">Витрата повітря: %d\r\n</string>
+    <string name="status_fi_valve_title">Клапан ЕПХХ: %d\r\n</string>
+    <string name="status_carb_status_title">Дросельна заслонка: %d\r\n</string>
+    <string name="status_gas_valve_title">Газовий клапан: %d\r\n</string>
+    <string name="status_power_valve_title">Клапан ЕМР: %d\r\n</string>
+    <string name="status_ecf_title">Вентилятор: %d\r\n</string>
+    <string name="status_starter_block_title">Стартер заблокований: %d\r\n</string>
+    <string name="status_tps_title">ДПДЗ:%.2f\r\n</string>
+    <string name="status_addi1_voltage_title">ADD_I1: %.2f В\r\n</string>
+    <string name="status_addi2_voltage_title">ADD_I2: %.2f В\r\n</string>
+    <string name="status_choke_position_title">Повітряна заслонка: %.2f\r\n</string>
+    <string name="status_speed_title">Швидкість: %.1f км/ч\r\n</string>
+    <string name="status_distance_title">Пробіг: %.2f км\r\n</string>
+    <string name="status_gasdose_position_title">Газовий дозатор: %.2f\r\n</string>
+    <string name="status_air_temperature_title">Температура повітря на впуску: %.2f\r\n</string>
+    <string name="status_advance_angle_start_map_title">КВЗ по пусковій мапі: %+.2f °\r\n</string>
+    <string name="status_advance_angle_idle_map_title">КВЗпо карті ХХ: %+.2f °\r\n</string>
+    <string name="status_advance_angle_work_map_title">КВЗ по робочій карті: %+.2f °\r\n</string>
+    <string name="status_advance_angle_cool_temp_map_title">КВЗ по ДТОР: %+.2f °\r\n</string>
+    <string name="status_advance_air_temp_map_title">КВЗ по ДТП: %+.2f °\r\n</string>
+    <string name="status_advance_idling_regulator_title">КВЗ по регулятору ХХ: %+.2f °\r\n</string>
+    <string name="status_advance_octane_correction_title">КВЗ по октан-корректора: %+.2f °\r\n</string>
+    <string name="status_lambda_correction_title">Лямбда-корекція: %.2f\r\n</string>
+    <string name="status_injection_pulse_title">Тривалість імпульсу впорскування: %.2f мс\r\n</string>
+
+    <string name="raw_status_map_title">Датчик абсолютного тиску: %.2f В\r\n</string>
+    <string name="raw_status_voltage_title">Напруга бортової мережі: %.2f В\r\n</string>
+    <string name="raw_status_temperature_title">Датчик температури: %.2f В\r\n</string>
+    <string name="raw_status_knock_title">Датчик детонації: %.2f В\r\n</string>
+    <string name="raw_status_tps_title">ДПДЗ: %.2f В\r\n</string>
+    <string name="raw_status_addi1_title">ADD_IO1: %.2f В\r\n</string>
+    <string name="raw_status_addi2_title">ADD_IO2: %.2f В</string>
 </resources>

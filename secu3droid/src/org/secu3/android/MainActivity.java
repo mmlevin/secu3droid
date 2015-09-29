@@ -25,10 +25,7 @@
 
 package org.secu3.android;
 
-import java.util.Locale;
-
 import org.andengine.AndEngine;
-import org.secu3.android.api.io.ProtoFieldFloat;
 import org.secu3.android.api.io.ProtoFieldInteger;
 import org.secu3.android.api.io.ProtoFieldString;
 import org.secu3.android.api.io.Secu3Manager.SECU3_TASK;
@@ -62,9 +59,6 @@ public class MainActivity extends Activity {
 	private static final String STATUS = "status";
 	private static final String DATA = "data";	
 
-	private String sensorsFormat = "";
-	private String speedFormat = "";
-	private String sensorsRawFormat = "";
 	private boolean isOnline;
 	private boolean errors = false;
 	private boolean rawSensors = false;
@@ -76,7 +70,6 @@ public class MainActivity extends Activity {
 	
 	private ReceiveMessages receiver = null;
 	private TextView textViewData = null;
-	private TextView textViewDataExt = null;
 	private TextView textViewStatus = null;
 	private TextView textFWInfo = null;
 	private int fwOptions = Integer.MIN_VALUE;
@@ -107,11 +100,7 @@ public class MainActivity extends Activity {
 
 		packetUtils = new PacketUtils(this);
 		
-		sensorsFormat = getString(R.string.sensors_format);
-		speedFormat = getString(R.string.speed_format);
-		sensorsRawFormat = getString(R.string.sensors_raw_format);
 		textViewData = (TextView)findViewById(R.id.textViewData);
-		textViewDataExt = (TextView)findViewById(R.id.textViewDataExt);
 		textViewStatus = (TextView)findViewById(R.id.mainTextViewStatus);
 		textFWInfo = (TextView)findViewById(R.id.mainTextFWInfo);
 		
@@ -302,47 +291,14 @@ public class MainActivity extends Activity {
 						invalidateOptionsMenu();
 					}
 					if (!rawSensors) {
-						int bitfield = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_bitfield_title)).getValue();
-						//TODO Make dynamic string making instead of format
-						textViewData.setText(String.format(Locale.US,sensorsFormat,
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_rpm_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_map_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_voltage_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_temperature_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_angle_correction_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_knock_retard_title)).getValue(),
-								((ProtoFieldInteger) packet.getField(R.string.sensor_dat_air_flow_title)).getValue(),
-								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPHH_VALVE),
-								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_CARB),
-								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_GAS),
-								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_EPM_VALVE),
-								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_COOL_FAN),
-								Secu3Packet.bitTest(bitfield, Secu3Packet.BITNUMBER_ST_BLOCK),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi1_voltage_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_addi2_voltage_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_tps_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.sensor_dat_choke_position_title)).getValue()));						
-						
-						if (protocol_version >= SettingsActivity.PROTOCOL_28082013_SUMMER_RELEASE) {
-							textViewDataExt.setText(String.format(Locale.US,speedFormat,
-									packetUtils.calcSpeed(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_speed_title)).getValue()),
-									packetUtils.calcDistance(((ProtoFieldInteger) packet.getField(R.string.sensor_dat_distance_title)).getValue())));
-						}
-					}			
+						//TODO Make field set depends on compile options
+						textViewData.setText(packetUtils.getSensorString(protocol_version, packet));
+					}
 					break;
 				case R.string.packet_type_adcraw_dat:
 					if (rawSensors) {
-						textViewDataExt.setText(null);
-						//TODO Make dynamic string making instead of format
-						textViewData.setText(String.format(Locale.US,sensorsRawFormat,
-								((ProtoFieldFloat) packet.getField(R.string.adcraw_map_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.adcraw_voltage_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.adcraw_temperature_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.adcraw_knock_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.adcraw_tps_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.adcraw_addi1_title)).getValue(),
-								((ProtoFieldFloat) packet.getField(R.string.adcraw_addi2_title)).getValue()));
+						textViewData.setText(null);
+						textViewData.setText(packetUtils.getRawSensorString(protocol_version, packet));
 					}
 					break;
 				case R.string.packet_type_fwinfo_dat:
