@@ -802,7 +802,7 @@
             app:name="@string/unioutput1_condition_1_title"
             app:summary="@string/unioutput1_condition_1_summary"
             app:type="@id/parameter_type_spinner"
-            app:str_value="@string/uniout_par_conditions"/>
+            app:str_value="@string/uniout_par_conditions_1"/>
         <Parameter
             app:name="@string/unioutput1_condition_1_inverse_title"
             app:summary="@string/unioutput1_condition_1_inverse_summary"
@@ -830,7 +830,7 @@
             app:name="@string/unioutput1_condition_2_title"
             app:summary="@string/unioutput1_condition_2_summary"
             app:type="@id/parameter_type_spinner"
-            app:str_value="@string/uniout_par_conditions"/>
+            app:str_value="@string/uniout_par_conditions_2"/>
         <Parameter
             app:name="@string/unioutput1_condition_2_inverse_title"
             app:summary="@string/unioutput1_condition_2_inverse_summary"
@@ -868,7 +868,7 @@
             app:name="@string/unioutput2_condition_1_title"
             app:summary="@string/unioutput2_condition_1_summary"
             app:type="@id/parameter_type_spinner"
-            app:str_value="@string/uniout_par_conditions"/>
+            app:str_value="@string/uniout_par_conditions_1"/>
         <Parameter
             app:name="@string/unioutput2_condition_1_inverse_title"
             app:summary="@string/unioutput2_condition_1_inverse_summary"
@@ -896,7 +896,7 @@
             app:name="@string/unioutput2_condition_2_title"
             app:summary="@string/unioutput2_condition_2_summary"
             app:type="@id/parameter_type_spinner"
-            app:str_value="@string/uniout_par_conditions"/>
+            app:str_value="@string/uniout_par_conditions_2"/>
         <Parameter
             app:name="@string/unioutput2_condition_2_inverse_title"
             app:summary="@string/unioutput2_condition_2_inverse_summary"
@@ -926,7 +926,7 @@
             app:name="@string/unioutput3_condition_1_title"
             app:summary="@string/unioutput3_condition_1_summary"
             app:type="@id/parameter_type_spinner"
-            app:str_value="@string/uniout_par_conditions"/>
+            app:str_value="@string/uniout_par_conditions_1"/>
         <Parameter
             app:name="@string/unioutput3_condition_1_inverse_title"
             app:summary="@string/unioutput3_condition_1_inverse_summary"
@@ -954,7 +954,7 @@
             app:name="@string/unioutput3_condition_2_title"
             app:summary="@string/unioutput3_condition_2_summary"
             app:type="@id/parameter_type_spinner"
-            app:str_value="@string/uniout_par_conditions"/>
+            app:str_value="@string/uniout_par_conditions_2"/>
         <Parameter
             app:name="@string/unioutput3_condition_2_inverse_title"
             app:summary="@string/unioutput3_condition_2_inverse_summary"

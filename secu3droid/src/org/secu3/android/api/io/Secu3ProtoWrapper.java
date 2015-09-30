@@ -42,6 +42,15 @@ import android.util.Log;
 import android.util.SparseArray;
 
 public class Secu3ProtoWrapper {
+	public static final int ADC_MULTIPLIER = 400;
+	public static final int ANGLE_MULTIPLIER = 32;
+	public static final int MAP_PHYSICAL_MAGNITUDE_MULTIPLIER = 64;
+	public static final int UBAT_PHYSICAL_MAGNITUDE_MULTIPLIER = 400;
+	public static final int TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER = 4;
+	public static final int TPS_PHYSICAL_MAGNITUDE_MULTIPLIER = 2;
+	public static final int CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER = 2;
+
+
 	private static final String LOG_TAG = "Secu3ProtoWrapper";
 
 	private static final String SIGNED = "signed";

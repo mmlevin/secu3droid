@@ -315,6 +315,7 @@ public class Secu3Manager {
 					break;
 
 				case SECU3_READ_PARAMS:
+					//FIXME Add reinit if recieved parameter that we do not wait
 					switch (getProtoWrapper().getLastPacket()
 							.getPacketIdResId()) {
 					case R.string.packet_type_startr_par:

@@ -137,7 +137,7 @@
     <integer name="protocol_tps_physical_magnitude_divider">4096</integer>
     <integer name="protocol_tps_physical_magnitude_multiplier">100</integer>
     <integer name="protocol_voltage_physical_magnitude_divider">400</integer>
-    <integer name="protocol_adc_discrete_title">400</integer>
+    <integer name="protocol_adc_divider_title">400</integer>
     <integer name="protocol_adccor_factor_divider">16384</integer>
     <integer name="protocol_adccor_correction_divider">16384</integer>
     <integer name="protocol_adccor_correction_offset">-8192</integer>

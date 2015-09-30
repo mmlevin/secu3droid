@@ -32,6 +32,7 @@ import java.util.Locale;
 import org.secu3.android.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 

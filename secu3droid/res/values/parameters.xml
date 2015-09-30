@@ -295,7 +295,8 @@
     <string name="unioutput3_condition2_on_value_summary">Value when condition will became 1</string>
     <string name="unioutput3_condition2_off_value_title">OFF value</string>
     <string name="unioutput3_condition2_off_value_summary">Value when condition will became 0</string>
-    <string name="uniout_par_conditions">Coolant temperature (°C)|RPM (min-1)|MAP (kPa)|Board voltage (V)|Carburetor limit switch (logic)|Vehicle speed (Km/h)|Air flow (0..16)|Timer (sec)|Timer on ignition turn on (sec)|Timer on engine turn on (sec)|Choke/IAC position (\%%)|OIC (°CS)|Knock signal (V)|TPS (\%%)|Intake ATS (°C)|Analog input #1 (V)|Analog input #2 (V)|Gas valve input (logic)|Injector PW (ms)|CE state|Timer on/off 1 cond. (sec)</string>
+    <string name="uniout_par_conditions_1">Coolant temperature (°C)|RPM (min-1)|MAP (kPa)|Board voltage (V)|Carburetor limit switch (logic)|Vehicle speed (Km/h)|Air flow (0..16)|Timer (sec)|Timer on ignition turn on (sec)|Timer on engine turn on (sec)|Choke/IAC position (\%%)|OIC (°CS)|Knock signal (V)|TPS (\%%)|Intake ATS (°C)|Analog input #1 (V)|Analog input #2 (V)|Gas valve input (logic)|Injector PW (ms)|CE state|Timer on/off 1 cond. (sec)</string>
+    <string name="uniout_par_conditions_2">Coolant temperature (°C)|RPM (min-1)|MAP (kPa)|Board voltage (V)|Carburetor limit switch (logic)|Vehicle speed (Km/h)|Air flow (0..16)|Timer (sec)|Timer on first condition (sec)|Timer on ignition turn on (sec)|Timer on engine turn on (sec)|Choke/IAC position (\%%)|OIC (°CS)|Knock signal (V)|TPS (\%%)|Intake ATS (°C)|Analog input #1 (V)|Analog input #2 (V)|Gas valve input (logic)|Injector PW (ms)|CE state|Timer on/off 1 cond. (sec)</string>
     <string name="uniout_par_logical_functions">OR|AND|XOR|2nd condition|NONE</string>
     <string name="uniout_par_logic_function_1_2_title">Logical function between outputs 1 &amp; 2</string>
     <string name="uniout_par_logic_function_1_2_summary">Logical operation between outputs 1 &amp; 2</string>
@@ -371,6 +372,7 @@
     <string name="units_percents">%</string>
     <string name="units_percent_per_volts">%/V</string>
     <string name="units_percent_per_second">%/sec</string>
+    <string name="units_kilometer_per_hour">Kph</string>
 
     <string name="status_rpm_title">RPM: %d min-1\r\n</string>
     <string name="status_map_title">Pressure: %.2f kPa\r\n</string>

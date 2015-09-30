@@ -624,9 +624,9 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
 						}
 						break;
-					case R.string.uniout_par_title:
+					//case R.string.uniout_par_title:
 						//TODO Universal out implementation
-						break;
+					//	break;
 					case R.string.injctr_par_title:
 						((ProtoFieldInteger)Skeletons.get(R.string.injctr_par_title).findField(R.string.injctr_par_cyl_num_title)).setValue(((ProtoFieldInteger) packet.findField(R.string.injctr_par_cyl_num_title)).getValue());
 						packetUtils.setParamFromPacket(paramAdapter, packet);

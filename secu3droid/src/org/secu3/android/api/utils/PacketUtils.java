@@ -41,6 +41,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.lang.reflect.Field;
 import java.util.Locale;
 
 public class PacketUtils {
@@ -52,12 +53,16 @@ public class PacketUtils {
 	public static final int MAX_FUEL_CONSTANT = 131072;
 
 	private Context context;
+
+	private UnioutUtils uniout;
 	
 	public PacketUtils(Context context) {
 		this.context = context;
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String pulses = sharedPreferences.getString(context.getString(R.string.pref_speed_pulse_key), context.getString(R.string.defaultSpeedPulse));
-		m_period_distance = 1000.0f / (float)Integer.parseInt(pulses);
+		float f_pulses = (float)Integer.parseInt(pulses);
+		m_period_distance = 1000.0f / f_pulses;
+		uniout = new UnioutUtils(context, 20000000,f_pulses);
 	}
 	
 	public Secu3Packet buildPacket (Secu3Packet packetSkeleton, ParamPagerAdapter paramAdapter) {
@@ -128,9 +133,8 @@ public class PacketUtils {
 	}
 
 	private float buildCorrection(ParamPagerAdapter paramAdapter, BaseParamItem item) {
-		int correctionId = item.getNameId();
 		int factorId = 0;
-		switch (correctionId) {
+		switch (item.getNameId()) {
 		case R.string.adccor_map_sensor_correction_title:
 			factorId = R.string.adccor_map_sensor_factor_title;
 			break;
@@ -162,36 +166,41 @@ public class PacketUtils {
 			
 	public void setParamFromPacket (ParamPagerAdapter paramAdapter, Secu3Packet packet)
 	{
+		int uniout_flags,uniout_condition, fieldId;
+		BaseParamItem item;
+
 		if ((packet != null) && (packet.getFields() != null) && (packet.getFields().size() > 0)) {
 			BaseProtoField field;
 			for (int i = 0; i != packet.getFields().size(); i++) {
 				field = packet.getFields().get(i);
-				switch (field.getNameId()) {
-					case R.string.secur_par_flags_title:
-						int flags = ((ProtoFieldInteger)field).getValue();
-						((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title)).setValue((flags & Secu3Packet.SECUR_USE_BT_FLAG) != 0);
-						((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title)).setValue((flags & Secu3Packet.SECUR_USE_IMMO_FLAG) != 0);
-						break;
+				fieldId = field.getNameId();
+				switch (fieldId) {
+					case R.string.secur_par_flags_title: {
+						int flags = ((ProtoFieldInteger) field).getValue();
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title)).setValue((flags & Secu3Packet.SECUR_USE_BT_FLAG) != 0);
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title)).setValue((flags & Secu3Packet.SECUR_USE_IMMO_FLAG) != 0);
+					}
+					break;
 					case R.string.injctr_par_injector_config_title:
-						int config = ((ProtoFieldInteger)field).getValue();
-						((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.injctr_par_injector_config_title)).setIndex (config >> 4);
-						((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).setIndex(
-								Secu3Packet.indexOf(Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE,config & 0x0F));
+						int config = ((ProtoFieldInteger) field).getValue();
+						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_injector_config_title)).setIndex(config >> 4);
+						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).setIndex(
+								Secu3Packet.indexOf(Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE, config & 0x0F));
 						break;
 					case R.string.injctr_par_injector_cyl_disp_title:
-						engine_displacement = ((ProtoFieldFloat)field).getValue();
+						engine_displacement = ((ProtoFieldFloat) field).getValue();
 						break;
 					case R.string.injctr_par_cyl_num_title:
-						int engine_cylinders = ((ProtoFieldInteger)field).getValue();
+						int engine_cylinders = ((ProtoFieldInteger) field).getValue();
 						engine_displacement *= engine_cylinders;
-						((ParamItemFloat)paramAdapter.findItemByNameId(R.string.injctr_par_enjine_displacement_title)).setValue(engine_displacement);
+						((ParamItemFloat) paramAdapter.findItemByNameId(R.string.injctr_par_enjine_displacement_title)).setValue(engine_displacement);
 						break;
 					case R.string.injctr_par_injector_sd_igl_const_title:
-						int fuel_const = ((ProtoFieldInteger)field).getValue();
+						int fuel_const = ((ProtoFieldInteger) field).getValue();
 						Log.d("secu3", String.format("Get fuel constant %d", fuel_const));
 						break;
 					case R.string.miscel_baudrate_title:
-						int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX,((ProtoFieldInteger) field).getValue());
+						int baud_rate_index = Secu3Packet.indexOf(Secu3Packet.BAUD_RATE_INDEX, ((ProtoFieldInteger) field).getValue());
 						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.miscel_baudrate_title)).setIndex(baud_rate_index);
 						break;
 					case R.string.temper_fan_pwm_freq_title:
@@ -203,11 +212,71 @@ public class PacketUtils {
 					case R.string.adccor_tps_sensor_correction_title:
 					case R.string.adccor_addi1_sensor_correction_title:
 					case R.string.adccor_addi2_sensor_correction_title:
-						((ParamItemFloat) paramAdapter.findItemByNameId(field.getNameId())).setValue (calculateFactor(packet, field));
+						((ParamItemFloat) paramAdapter.findItemByNameId(fieldId)).setValue(calculateFactor(packet, field));
+						break;
+					case R.string.unioutput1_condition_1_title:
+					case R.string.unioutput2_condition_1_title:
+					case R.string.unioutput3_condition_1_title:
+						uniout_condition = ((ProtoFieldInteger)packet.findField(fieldId)).getValue();
+						if (uniout_condition > UnioutUtils.UNIOUT_COND_TMR) uniout_condition--;
+						((ParamItemSpinner) paramAdapter.findItemByNameId(fieldId)).setIndex(uniout_condition);
+						break;
+					case R.string.uniout_par_logic_function_1_2_title:
+						uniout_flags = ((ProtoFieldInteger) field).getValue();
+						if (uniout_flags == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
+						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.uniout_par_logic_function_1_2_title)).setIndex(uniout_flags);
+						break;
+					case R.string.uniout_par_unioutput_1_flags_title:
+						uniout_flags = ((ProtoFieldInteger) field).getValue();
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput1_condition_1_inverse_title)).setValue((uniout_flags & 0x01) != 0);
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_inverse_title)).setValue((uniout_flags & 0x02) != 0);
+						if ((uniout_flags >>= 4) == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_inverse_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition2_on_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition2_off_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+ 						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.unioutput1_logical_functions_title)).setIndex(uniout_flags);
+						break;
+					case R.string.uniout_par_unioutput_2_flags_title:
+						uniout_flags = ((ProtoFieldInteger) field).getValue();
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput2_condition_1_inverse_title)).setValue((uniout_flags & 0x01) != 0);
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_inverse_title)).setValue((uniout_flags & 0x02) != 0);
+						if ((uniout_flags >>= 4) == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_inverse_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition2_on_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition2_off_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
+						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.unioutput2_logical_functions_title)).setIndex(uniout_flags);
+					break;
+					case R.string.uniout_par_unioutput_3_flags_title:
+						uniout_flags = ((ProtoFieldInteger) field).getValue();
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput3_condition_1_inverse_title)).setValue((uniout_flags & 0x01) != 0);
+						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_inverse_title)).setValue((uniout_flags & 0x02) != 0);
+						if ((uniout_flags >>= 4) == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_inverse_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition2_on_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition2_off_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
+						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.unioutput3_logical_functions_title)).setIndex(uniout_flags);
+						break;
+					case R.string.unioutput1_condition1_on_value_title:
+					case R.string.unioutput1_condition1_off_value_title:
+					case R.string.unioutput1_condition2_on_value_title:
+					case R.string.unioutput1_condition2_off_value_title:
+					case R.string.unioutput2_condition1_on_value_title:
+					case R.string.unioutput2_condition1_off_value_title:
+					case R.string.unioutput2_condition2_on_value_title:
+					case R.string.unioutput2_condition2_off_value_title:
+					case R.string.unioutput3_condition1_on_value_title:
+					case R.string.unioutput3_condition1_off_value_title:
+					case R.string.unioutput3_condition2_on_value_title:
+					case R.string.unioutput3_condition2_off_value_title:
+						uniout_condition = ((ProtoFieldInteger)packet.findField(uniout.getConditionFieldIdForValue(fieldId))).getValue();
+						item = paramAdapter.findItemByNameId(fieldId);
+						uniout.setParametersItem(((ProtoFieldInteger) field).getValue(), uniout_condition, (ParamItemFloat) item);
 						break;
 					default:
-						BaseParamItem item;
-						if ((item = paramAdapter.findItemByNameId(field.getNameId())) != null) {
+						if ((item = paramAdapter.findItemByNameId(fieldId)) != null) {
 									if (item instanceof ParamItemInteger) ((ParamItemInteger) item).setValue(((ProtoFieldInteger) field).getValue());
 									else if (item instanceof ParamItemFloat) ((ParamItemFloat) item).setValue(((ProtoFieldFloat) field).getValue());
 									else if (item instanceof ParamItemBoolean) ((ParamItemBoolean) item).setValue(((ProtoFieldInteger) field).getValue()==1);

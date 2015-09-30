@@ -297,7 +297,6 @@ public class MainActivity extends Activity {
 					break;
 				case R.string.packet_type_adcraw_dat:
 					if (rawSensors) {
-						textViewData.setText(null);
 						textViewData.setText(packetUtils.getRawSensorString(protocol_version, packet));
 					}
 					break;
