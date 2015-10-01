@@ -467,55 +467,68 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		if (adapter != null) {
 			this.position = position;
 			BaseParamItem i = (BaseParamItem) adapter.getItem(position);
-			if (i instanceof ParamItemInteger) {
-				dialog = new CustomNumberPickerIntegerDialog();
-				dialog.setValid(isValid);
-		        ((CustomNumberPickerIntegerDialog) dialog
-		        .setId(i.getNameId()))
-		        .setRange(((ParamItemInteger) i).getValue(), ((ParamItemInteger) i).getMinValue(), ((ParamItemInteger) i).getMaxValue(), ((ParamItemInteger) i).getStepValue())
-		        .setOnCustomNumberPickerAcceptListener(this)
-		        .show(getSupportFragmentManager(), i.getName());			        
-			} else if (i instanceof ParamItemFloat) {
-				dialog = new CustomNumberPickerFloatDialog();
-				dialog.setValid(isValid);
-				((CustomNumberPickerFloatDialog) dialog
-				.setId(i.getNameId()))
-				.setRange(((ParamItemFloat) i).getValue(), ((ParamItemFloat) i).getMinValue(), ((ParamItemFloat) i).getMaxValue(), ((ParamItemFloat) i).getStepValue())
-				.setFormat (((ParamItemFloat) i).getFormat())
-				.setOnCustomNumberPickerAcceptListener(this)				
-		        .show(getSupportFragmentManager(), i.getName());				
-			} else if (i instanceof ParamItemBoolean) {
-				adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);
-				onItemChange(i.getNameId());
-			} else if (i instanceof ParamItemString) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(i.getName());
-				final EditText input = new EditText(this);
-				bluetoothSecurityFlags = i.getNameId();
-				input.setText(((ParamItemString) i).getValue());
-				switch (bluetoothSecurityFlags) { 
-				case R.string.secur_par_bluetooth_name_title:
-					input.setInputType(InputType.TYPE_CLASS_TEXT);
-					break;
-				case R.string.secur_par_bluetooth_pass_title:
-					input.setInputType(InputType.TYPE_CLASS_NUMBER);
-					break;
-				}				
-				builder.setView(input);
-				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						bluetoothSecurityValue = input.getText().toString();						
-						onItemChange(bluetoothSecurityFlags);
+			if (i.isEnabled()) {
+				if (i instanceof ParamItemInteger) {
+					dialog = new CustomNumberPickerIntegerDialog();
+					dialog.setValid(isValid);
+					((CustomNumberPickerIntegerDialog) dialog
+							.setId(i.getNameId()))
+							.setRange(((ParamItemInteger) i).getValue(), ((ParamItemInteger) i).getMinValue(), ((ParamItemInteger) i).getMaxValue(), ((ParamItemInteger) i).getStepValue())
+							.setOnCustomNumberPickerAcceptListener(this)
+							.show(getSupportFragmentManager(), i.getName());
+				} else if (i instanceof ParamItemFloat) {
+					Log.d("secu3", String.format("Value %f", ((ParamItemFloat)i).getStepValue()));
+					if (Math.ceil(((ParamItemFloat) i).getStepValue()) == Math.floor(((ParamItemFloat) i).getStepValue())) { // If step is integer
+						dialog = new CustomNumberPickerIntegerDialog();
+						dialog.setValid(isValid);
+						((CustomNumberPickerIntegerDialog) dialog
+								.setId(i.getNameId()))
+								.setRange(Math.round(((ParamItemFloat) i).getValue()), Math.round(((ParamItemFloat) i).getMinValue()), Math.round(((ParamItemFloat) i).getMaxValue()), Math.round(((ParamItemFloat) i).getStepValue()))
+										.setOnCustomNumberPickerAcceptListener(this)
+										.show(getSupportFragmentManager(), i.getName());
+					} else {
+						dialog = new CustomNumberPickerFloatDialog();
+						dialog.setValid(isValid);
+						((CustomNumberPickerFloatDialog) dialog
+								.setId(i.getNameId()))
+								.setRange(((ParamItemFloat) i).getValue(), ((ParamItemFloat) i).getMinValue(), ((ParamItemFloat) i).getMaxValue(), ((ParamItemFloat) i).getStepValue())
+								.setFormat(((ParamItemFloat) i).getFormat())
+								.setOnCustomNumberPickerAcceptListener(this)
+								.show(getSupportFragmentManager(), i.getName());
 					}
-				});
-				builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {				
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
+				} else if (i instanceof ParamItemBoolean) {
+					adapter.setValue(String.valueOf(!((ParamItemBoolean) i).getValue()), position);
+					onItemChange(i.getNameId());
+				} else if (i instanceof ParamItemString) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle(i.getName());
+					final EditText input = new EditText(this);
+					bluetoothSecurityFlags = i.getNameId();
+					input.setText(((ParamItemString) i).getValue());
+					switch (bluetoothSecurityFlags) {
+						case R.string.secur_par_bluetooth_name_title:
+							input.setInputType(InputType.TYPE_CLASS_TEXT);
+							break;
+						case R.string.secur_par_bluetooth_pass_title:
+							input.setInputType(InputType.TYPE_CLASS_NUMBER);
+							break;
 					}
-				});
-				builder.show();
+					builder.setView(input);
+					builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							bluetoothSecurityValue = input.getText().toString();
+							onItemChange(bluetoothSecurityFlags);
+						}
+					});
+					builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
+					builder.show();
+				}
 			}
 		}
 	}	
@@ -529,6 +542,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	private void onItemChange(int itemId) {
 		Secu3Packet packet;
 		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
+		int condition;
 		if (item != null) {
 			switch (item.getNameId()) {
 				case R.string.choke_manual_step_down_title:
@@ -557,12 +571,12 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE[((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).getIndex()],
 							((ParamItemFloat) paramAdapter.findItemByNameId(R.string.injctr_par_injector_flow_rate_title)).getValue()
 					);
-					//Log.d("secu3", String.format("Calc fuel constant %d", fuel_const));
 					if (fuel_const > PacketUtils.MAX_FUEL_CONSTANT) {
 						fuel_const = PacketUtils.MAX_FUEL_CONSTANT;
 						Toast.makeText(this,R.string.injector_overflow_message,Toast.LENGTH_LONG).show();
 					}
 					((ProtoFieldInteger)Skeletons.get(R.string.injctr_par_title).findField(R.string.injctr_par_injector_sd_igl_const_title)).setValue(fuel_const);
+					if (uploadImmediatelly) startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
 					break;
 				case R.string.secur_par_apply_bluetooth_title:
 					Secu3Packet sourcePacket = packetUtils.buildPacket(Skeletons.get(R.string.secur_par_title), paramAdapter);
@@ -588,12 +602,37 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 					String name = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_name_title)).getValue();
 					String pass = ((ParamItemString) paramAdapter.findItemByNameId(R.string.secur_par_bluetooth_pass_title)).getValue();
 					paramAdapter.findItemByNameId(R.string.secur_par_apply_bluetooth_title).setEnabled((name != null) && (pass != null) && (!TextUtils.isEmpty(name)) && (!TextUtils.isEmpty(pass)));
-					adapter.notifyDataSetChanged();
+					break;
+				case R.string.unioutput1_condition_1_title:
+				case R.string.unioutput1_condition_2_title:
+				case R.string.unioutput2_condition_1_title:
+				case R.string.unioutput2_condition_2_title:
+				case R.string.unioutput3_condition_1_title:
+				case R.string.unioutput3_condition_2_title:
+					condition = ((ParamItemSpinner)item).getIndex();
+					packetUtils.uniout.changeCondition(paramAdapter, condition, item.getNameId());
+					paramAdapter.notifyDataSetChanged();
+					if (uploadImmediatelly) startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
+					break;
+				case R.string.unioutput1_logical_functions_title:
+					condition = ((ParamItemSpinner)item).getIndex();
+					(paramAdapter.findItemByNameId(R.string.unioutput1_condition1_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput1_condition1_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					break;
+				case R.string.unioutput2_logical_functions_title:
+					condition = ((ParamItemSpinner)item).getIndex();
+					(paramAdapter.findItemByNameId(R.string.unioutput2_condition1_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					(paramAdapter.findItemByNameId(R.string.unioutput2_condition1_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					break;
+				case R.string.unioutput3_logical_functions_title:
+					condition = ((ParamItemSpinner)item).getIndex();
+					(paramAdapter.findItemByNameId(R.string.unioutput3_condition1_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					(paramAdapter.findItemByNameId(R.string.unioutput3_condition1_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
 					break;
 				default:
+					if (uploadImmediatelly) startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
 					break;
 			}
-			if (uploadImmediatelly) startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
 		} 
 	}
 	
@@ -624,9 +663,6 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							Toast.makeText(this, String.format(getString(R.string.params_saved_error_code), ((ProtoFieldInteger) packet.getField(R.string.op_comp_nc_operation_code_title)).getValue()), Toast.LENGTH_LONG).show();
 						}
 						break;
-					//case R.string.uniout_par_title:
-						//TODO Universal out implementation
-					//	break;
 					case R.string.injctr_par_title:
 						((ProtoFieldInteger)Skeletons.get(R.string.injctr_par_title).findField(R.string.injctr_par_cyl_num_title)).setValue(((ProtoFieldInteger) packet.findField(R.string.injctr_par_cyl_num_title)).getValue());
 						packetUtils.setParamFromPacket(paramAdapter, packet);

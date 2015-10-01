@@ -54,7 +54,7 @@ public class PacketUtils {
 
 	private Context context;
 
-	private UnioutUtils uniout;
+	public UnioutUtils uniout;
 	
 	public PacketUtils(Context context) {
 		this.context = context;
@@ -68,11 +68,14 @@ public class PacketUtils {
 	public Secu3Packet buildPacket (Secu3Packet packetSkeleton, ParamPagerAdapter paramAdapter) {
 		if ((packetSkeleton != null) && (packetSkeleton.getFields() != null) && (packetSkeleton.getFields().size() > 0)) {
 			BaseProtoField field;
+			BaseParamItem item;
+			int fieldId;
+			int flags = 0;
 			for (int i = 0; i != packetSkeleton.getFields().size(); i++) {
 				field = packetSkeleton.getFields().get(i);
-				switch (field.getNameId()) {
+				fieldId = field.getNameId();
+				switch (fieldId) {
 					case R.string.secur_par_flags_title:
-						int flags = 0;
 						ParamItemBoolean item_secur = (ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_immobilizer_title);
 						if (item_secur.getValue()) flags |= Secu3Packet.SECUR_USE_IMMO_FLAG;
 						item_secur = (ParamItemBoolean) paramAdapter.findItemByNameId(R.string.secur_par_use_bluetooth_title);
@@ -108,8 +111,52 @@ public class PacketUtils {
 					case R.string.temper_fan_pwm_freq_title:
 						((ProtoFieldInteger) field).setValue((int) Math.round(524288.0/((ParamItemInteger)paramAdapter.findItemByNameId(R.string.temper_fan_pwm_freq_title)).getValue()));
 						break;
+					case R.string.uniout_par_unioutput_1_flags_title:
+						flags = ((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.unioutput1_logical_functions_title)).getIndex();
+						if (flags >= UnioutUtils.UNIOUT_LF_COUNT -1) flags = UnioutUtils.UNIOUT_LF_NONE;
+						flags <<= 4;
+						flags |= ((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.unioutput1_condition_1_inverse_title)).getValue()?0x01:0x00;
+						flags |= ((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_inverse_title)).getValue()?0x02:0x00;
+						((ProtoFieldInteger)field).setValue(flags);
+						break;
+					case R.string.uniout_par_unioutput_2_flags_title:
+						flags = ((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.unioutput2_logical_functions_title)).getIndex();
+						if (flags >= UnioutUtils.UNIOUT_LF_COUNT -1) flags = UnioutUtils.UNIOUT_LF_NONE;
+						flags <<= 4;
+						flags |= ((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.unioutput2_condition_1_inverse_title)).getValue()?0x01:0x00;
+						flags |= ((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_inverse_title)).getValue()?0x02:0x00;
+						((ProtoFieldInteger)field).setValue(flags);
+						break;
+					case R.string.uniout_par_unioutput_3_flags_title:
+						flags = ((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.unioutput3_logical_functions_title)).getIndex();
+						if (flags >= UnioutUtils.UNIOUT_LF_COUNT -1) flags = UnioutUtils.UNIOUT_LF_NONE;
+						flags <<= 4;
+						flags |= ((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.unioutput3_condition_1_inverse_title)).getValue()?0x01:0x00;
+						flags |= ((ParamItemBoolean)paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_inverse_title)).getValue()?0x02:0x00;
+						((ProtoFieldInteger)field).setValue(flags);
+						break;
+					case R.string.uniout_par_logic_function_1_2_title:
+						flags = ((ParamItemSpinner)paramAdapter.findItemByNameId(R.string.uniout_par_logic_function_1_2_title)).getIndex();
+						if (flags >= UnioutUtils.UNIOUT_LF_COUNT -1) flags = UnioutUtils.UNIOUT_LF_NONE;
+						((ProtoFieldInteger)field).setValue(flags);
+						break;
+					case R.string.unioutput1_condition1_on_value_title:
+					case R.string.unioutput1_condition1_off_value_title:
+					case R.string.unioutput1_condition2_on_value_title:
+					case R.string.unioutput1_condition2_off_value_title:
+					case R.string.unioutput2_condition1_on_value_title:
+					case R.string.unioutput2_condition1_off_value_title:
+					case R.string.unioutput2_condition2_on_value_title:
+					case R.string.unioutput2_condition2_off_value_title:
+					case R.string.unioutput3_condition1_on_value_title:
+					case R.string.unioutput3_condition1_off_value_title:
+					case R.string.unioutput3_condition2_on_value_title:
+					case R.string.unioutput3_condition2_off_value_title:
+						int uniout_condition = ((ProtoFieldInteger)packetSkeleton.findField(uniout.getConditionFieldIdForValue(fieldId))).getValue();
+						 item = paramAdapter.findItemByNameId(fieldId);
+						((ProtoFieldInteger)field).setValue(uniout.unioutEncodeCondVal(((ParamItemFloat) item).getValue(), uniout_condition));
+						break;
 					default:
-						BaseParamItem item;
 						if ((item = paramAdapter.findItemByNameId(field.getNameId())) != null){
 							if (item instanceof ParamItemInteger)
 								((ProtoFieldInteger) field).setValue(((ParamItemInteger) item).getValue());

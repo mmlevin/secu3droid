@@ -95,6 +95,7 @@ public class ParamItemSpinner extends BaseParamItem {
 		TextView paramSummary = (TextView) v.findViewById(R.id.param_summary);
 		paramSpinner = (Spinner) v.findViewById(R.id.param_spinner);
 		paramSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener(this));
+		paramSpinner.setClickable(isEnabled());
         
 		paramName.setText(this.getName());
 		paramSummary.setText(this.getSummary());			

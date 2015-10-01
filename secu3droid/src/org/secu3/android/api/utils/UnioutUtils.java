@@ -8,6 +8,7 @@ import org.secu3.android.api.io.ProtoFieldInteger;
 import org.secu3.android.api.io.Secu3ProtoWrapper;
 import org.secu3.android.parameters.ParamPagerAdapter;
 import org.secu3.android.parameters.items.ParamItemFloat;
+import org.secu3.android.parameters.items.ParamItemSpinner;
 
 /**
  * Created by mmlevin on 29.09.2015.
@@ -205,6 +206,43 @@ public class UnioutUtils {
     public void setParametersItem (int value, int cond, ParamItemFloat item) {
         prepareParametersItem(cond, item);
         item.setValue(unioutDecodeCondVal(value, cond));
+    }
+
+    public void changeCondition (ParamPagerAdapter adapter, int cond, int uniout) {
+        int on_field_id = 0, off_field_id = 0;
+        switch (uniout) {
+            case R.string.unioutput1_condition_1_title:
+                on_field_id = R.string.unioutput1_condition1_on_value_title;
+                off_field_id = R.string.unioutput1_condition1_off_value_title;
+                if (cond >= UNIOUT_COND_TMR) cond++;
+                break;
+            case R.string.unioutput1_condition_2_title:
+                on_field_id = R.string.unioutput1_condition2_on_value_title;
+                off_field_id = R.string.unioutput1_condition2_off_value_title;
+                break;
+            case R.string.unioutput2_condition_1_title:
+                on_field_id = R.string.unioutput2_condition1_on_value_title;
+                off_field_id = R.string.unioutput2_condition1_off_value_title;
+                if (cond >= UNIOUT_COND_TMR) cond++;
+                break;
+            case R.string.unioutput2_condition_2_title:
+                on_field_id = R.string.unioutput2_condition2_on_value_title;
+                off_field_id = R.string.unioutput2_condition2_off_value_title;
+                break;
+            case R.string.unioutput3_condition_1_title:
+                on_field_id = R.string.unioutput3_condition1_on_value_title;
+                off_field_id = R.string.unioutput3_condition1_off_value_title;
+                if (cond >= UNIOUT_COND_TMR) cond++;
+                break;
+            case R.string.unioutput3_condition_2_title:
+                on_field_id = R.string.unioutput3_condition2_on_value_title;
+                off_field_id = R.string.unioutput3_condition2_off_value_title;
+                break;
+        }
+        prepareParametersItem(cond, (ParamItemFloat) adapter.findItemByNameId(on_field_id));
+        prepareParametersItem(cond, (ParamItemFloat) adapter.findItemByNameId(off_field_id));
+        ((ParamItemFloat) adapter.findItemByNameId(on_field_id)).setValue(unifmt.get(cond).on_value);
+        ((ParamItemFloat) adapter.findItemByNameId(off_field_id)).setValue(unifmt.get(cond).off_value);
     }
 
     public int getConditionFieldIdForValue (int valueId) {

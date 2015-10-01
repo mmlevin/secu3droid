@@ -55,8 +55,8 @@ public class ParamPagerAdapter extends FragmentPagerAdapter{
 			}
 		}
 		return null;
-	}	
-			
+	}
+
 	public ParamPagerAdapter(FragmentManager fm, Context context, ArrayList<ParamsPage> pages) {
 		super(fm);		
 		this.pages = pages;
@@ -67,7 +67,12 @@ public class ParamPagerAdapter extends FragmentPagerAdapter{
 	public ParamsPageFragment getItem (int position) {
 		return ParamsPageFragment.newInstance(position);
 	}	
-	
+
+	@Override
+	public int getItemPosition (final Object object) {
+		return POSITION_NONE;
+	}
+
 	@Override
 	public int getCount() {
 		return pages.size();
