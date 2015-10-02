@@ -571,6 +571,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE[((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).getIndex()],
 							((ParamItemFloat) paramAdapter.findItemByNameId(R.string.injctr_par_injector_flow_rate_title)).getValue()
 					);
+					Log.d ("secu3t", String.format("Calc fuel const %d", fuel_const));
 					if (fuel_const > PacketUtils.MAX_FUEL_CONSTANT) {
 						fuel_const = PacketUtils.MAX_FUEL_CONSTANT;
 						Toast.makeText(this,R.string.injector_overflow_message,Toast.LENGTH_LONG).show();
@@ -616,18 +617,28 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 					break;
 				case R.string.unioutput1_logical_functions_title:
 					condition = ((ParamItemSpinner)item).getIndex();
-					(paramAdapter.findItemByNameId(R.string.unioutput1_condition1_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
-					(paramAdapter.findItemByNameId(R.string.unioutput1_condition1_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					Log.d ("secu3", String.format("LF: %d", condition));
+					(paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_inverse_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput1_condition2_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput1_condition2_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					paramAdapter.notifyDataSetChanged();
 					break;
 				case R.string.unioutput2_logical_functions_title:
 					condition = ((ParamItemSpinner)item).getIndex();
-					(paramAdapter.findItemByNameId(R.string.unioutput2_condition1_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
-					(paramAdapter.findItemByNameId(R.string.unioutput2_condition1_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					(paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_inverse_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput2_condition2_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					(paramAdapter.findItemByNameId(R.string.unioutput2_condition2_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					paramAdapter.notifyDataSetChanged();
 					break;
 				case R.string.unioutput3_logical_functions_title:
 					condition = ((ParamItemSpinner)item).getIndex();
-					(paramAdapter.findItemByNameId(R.string.unioutput3_condition1_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
-					(paramAdapter.findItemByNameId(R.string.unioutput3_condition1_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					(paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_inverse_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT - 1);
+					(paramAdapter.findItemByNameId(R.string.unioutput3_condition2_on_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					(paramAdapter.findItemByNameId(R.string.unioutput3_condition2_off_value_title)).setEnabled(condition < UnioutUtils.UNIOUT_LF_COUNT-1);
+					paramAdapter.notifyDataSetChanged();
 					break;
 				default:
 					if (uploadImmediatelly) startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SEND_PACKET_PARAM_PACKET, packetUtils.buildPacket(Skeletons.get(item.getPageId()), paramAdapter)));
