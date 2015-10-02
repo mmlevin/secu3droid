@@ -183,7 +183,7 @@ public class Secu3Manager {
 
 		void updateTask() {
 			if (!tasks.isEmpty()) {
-				//prevSecu3Task = SECU3_TASK.SECU3_NONE;
+				prevSecu3Task = SECU3_TASK.SECU3_NONE;
 				secu3Task = tasks.poll();
 			}
 		}
@@ -475,6 +475,11 @@ public class Secu3Manager {
 						break;
 					case R.string.packet_type_accel_par:
 						updateProgress(17 + subprogress);
+						updateTask();
+						break;
+					default:
+						tasks.add(SECU3_TASK.SECU3_READ_PARAMS);
+						subprogress = 0;
 						updateTask();
 						break;
 					}

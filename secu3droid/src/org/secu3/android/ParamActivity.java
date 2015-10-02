@@ -333,7 +333,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		Skeletons = new SparseArray<>();
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		uploadImmediatelly = sharedPref.getBoolean(getString(R.string.pref_upload_immediately_key), false);
-		setTheme(sharedPref.getBoolean(getString(R.string.pref_night_mode_key), false)?R.style.AppBaseTheme:R.style.AppBaseTheme_Light);
+		setTheme(sharedPref.getBoolean(getString(R.string.pref_night_mode_key), false) ? R.style.AppBaseTheme : R.style.AppBaseTheme_Light);
 		setContentView(R.layout.activity_param);
 		
 		createFormFromXml(R.xml.parameters, SettingsActivity.getProtocolVersion(this));
@@ -341,8 +341,6 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		packetUtils = new PacketUtils(this);
 		paramAdapter = new ParamPagerAdapter(getSupportFragmentManager(),this,pages);
 		progressBar = (ProgressBar)findViewById(R.id.paramsProgressBar);
-		//FIXME Move to onResume or do after receive last skeleton
-		paramsRead();
 				
 		receiver = new ReceiveMessages();
 		textViewStatus = (TextView) findViewById(R.id.paramsTextViewStatus);
@@ -435,7 +433,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		
 	@Override
 	protected void onResume() {
-		super.onResume();	
+		super.onResume();
+		registerReceiver(receiver, receiver.intentFilter);
 		startService(new Intent(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.starter_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.angles_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.idling_title));
@@ -446,7 +445,7 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.ckps_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.knock_par_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.miscellaneous_title));
-		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.choke_control_title));
+		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON, Uri.EMPTY, this, Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.choke_control_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.secur_par_title).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_DIR, Secu3Packet.OUTPUT_TYPE));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.uniout_par_title));
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_OBTAIN_PACKET_SKELETON_PARAM, R.string.injctr_par_title));
@@ -456,8 +455,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 		dialog = (CustomNumberPickerDialog)getLastCustomNonConfigurationInstance();
 		if (dialog != null) {
 			dialog.setOnCustomNumberPickerAcceptListener(this);
-		}							
-		registerReceiver(receiver, receiver.intentFilter);	
+		}
+		paramsRead();
 	}	
 	
 	

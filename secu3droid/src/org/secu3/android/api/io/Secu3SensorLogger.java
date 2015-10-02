@@ -39,7 +39,7 @@ public class Secu3SensorLogger extends Secu3Logger {
 	private PacketUtils packetUtils = null;
 
 	private static char CSV_DELIMETER = ';';
-	private static final String cCSVTimeTemplateString = "%02d:02%02d.%02d";
+	private static final String cCSVTimeTemplateString = "%02d:%02d:%02d.%02d";
 	private static final String cCSVFileNameTemplateString = "%04d.%02d.%02d_%02d.%02d.%02d.csv";
 	
 	private int marker = 0;
@@ -91,16 +91,36 @@ public class Secu3SensorLogger extends Secu3Logger {
 				out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_air_temperature_title)).getValue(), CSV_DELIMETER);
 			}
 			else {
-				out += String.format(Locale.US, "%6.2f%c", 0.0, CSV_DELIMETER);
+				out += String.format(Locale.US, "%6.2f%c", 999.99, CSV_DELIMETER);
 			}
 
-			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_start_map_title)).getValue(), CSV_DELIMETER);
-			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_idle_map_title)).getValue(), CSV_DELIMETER);
-			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_work_map_title)).getValue(), CSV_DELIMETER);
-			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_cool_temp_map_title)).getValue(), CSV_DELIMETER);
-			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_air_temp_map_title)).getValue(), CSV_DELIMETER);
-			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_idling_regulator_title)).getValue(), CSV_DELIMETER);
-			out += String.format(Locale.US, "%6.2f%c", ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_octane_correction_title)).getValue(), CSV_DELIMETER);
+			int temp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_start_map_title)).getIntValue();
+			float val = (temp == 0x7FFF)?0.00f:((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_start_map_title)).getValue();
+			out += String.format(Locale.US, "%6.2f%c", val, CSV_DELIMETER);
+
+			temp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_idle_map_title)).getIntValue();
+			val = (temp == 0x7FFF)?0.00f:((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_idle_map_title)).getValue();
+			out += String.format(Locale.US, "%6.2f%c", val, CSV_DELIMETER);
+
+			temp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_work_map_title)).getIntValue();
+			val = (temp == 0x7FFF)?0.00f:((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_work_map_title)).getValue();
+			out += String.format(Locale.US, "%6.2f%c", val, CSV_DELIMETER);
+
+			temp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_cool_temp_map_title)).getIntValue();
+			val = (temp == 0x7FFF)?0.00f:((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_angle_cool_temp_map_title)).getValue();
+			out += String.format(Locale.US, "%6.2f%c", val, CSV_DELIMETER);
+
+			temp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_air_temp_map_title)).getIntValue();
+			val = (temp == 0x7FFF)?0.00f:((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_air_temp_map_title)).getValue();
+			out += String.format(Locale.US, "%6.2f%c", val, CSV_DELIMETER);
+
+			temp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_idling_regulator_title)).getIntValue();
+			val = (temp == 0x7FFF)?0.00f:((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_idling_regulator_title)).getValue();
+			out += String.format(Locale.US, "%6.2f%c", val, CSV_DELIMETER);
+
+			temp = ((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_octane_correction_title)).getIntValue();
+			val = (temp == 0x7FFF)?0.00f:((ProtoFieldFloat) packet.getField(R.string.sensor_dat_advance_octane_correction_title)).getValue();
+			out += String.format(Locale.US, "%6.2f%c", val, CSV_DELIMETER);
 		}
 
 		if (protocol_version >= SettingsActivity.PROTOCOL_10022015_WINTER_RELEASE) {
@@ -140,7 +160,7 @@ public class Secu3SensorLogger extends Secu3Logger {
 	@Override
 	public String getFileName() {
 		getTime().setTime(new Date());
-		return String.format(Locale.US, cCSVFileNameTemplateString, getTime().get(Calendar.YEAR), getTime().get(Calendar.MONTH),getTime().get(Calendar.DAY_OF_MONTH),getTime().get(Calendar.HOUR_OF_DAY),getTime().get(Calendar.MINUTE),getTime().get(Calendar.SECOND));
+		return String.format(Locale.US, cCSVFileNameTemplateString, getTime().get(Calendar.YEAR), getTime().get(Calendar.MONTH)+1,getTime().get(Calendar.DAY_OF_MONTH),getTime().get(Calendar.HOUR_OF_DAY),getTime().get(Calendar.MINUTE),getTime().get(Calendar.SECOND));
 	}
 	
 	public void setCsvDelimeter (String delimeter) {
