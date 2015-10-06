@@ -34,6 +34,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 public class Secu3Notification {
@@ -48,73 +49,45 @@ public class Secu3Notification {
 		this.ctx = ctx;
 		notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);			
 
-		Notification.Builder secu3NotificationBuilder = new Notification.Builder(ctx)
+		secu3Notification = new NotificationCompat.Builder(ctx)
 			.setContentTitle(ctx.getString(R.string.foreground_service_started_notification_title))
 			.setSmallIcon(R.drawable.ic_launcher)											
 			.setWhen(System.currentTimeMillis())
 			.setOngoing(true)
-			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent (ctx,MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
+			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent (ctx,MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT)).build();
 
-		Notification.Builder connectionProblemNotificationBuilder = new Notification.Builder(ctx)
+		connectionProblemNotification = new NotificationCompat.Builder(ctx)
 			.setSmallIcon(R.drawable.ic_launcher)
-			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
+			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT)).build();
 
-		Notification.Builder serviceStoppedNotificationBuilder = new Notification.Builder(ctx)
+		serviceStoppedNotification = new NotificationCompat.Builder(ctx)
 			.setSmallIcon(R.drawable.ic_launcher)
-			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
-
-		if (Build.VERSION.SDK_INT >= 16) {
-			secu3Notification = secu3NotificationBuilder.build();
-			connectionProblemNotification = connectionProblemNotificationBuilder.build();
-			serviceStoppedNotification = serviceStoppedNotificationBuilder.build();
-		} else {
-			//noinspection deprecation
-			secu3Notification = secu3NotificationBuilder.getNotification();
-			//noinspection deprecation
-			connectionProblemNotification = connectionProblemNotificationBuilder.getNotification();
-			//noinspection deprecation
-			serviceStoppedNotification = serviceStoppedNotificationBuilder.getNotification();
-		}
+			.setContentIntent(PendingIntent.getActivity(ctx, 0, new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT)).build();
 	}
 	
 	public void notifyConnectionProblem (int maxConnectionRetries, int nbRetriesRemaining) {
 		String pbMessage = ctx.getResources().getQuantityString(R.plurals.connection_problem_notification, nbRetriesRemaining, nbRetriesRemaining);
 		
-		Notification.Builder connectionProblemNotificationBuilder = new Notification.Builder (ctx)
+		connectionProblemNotification = new NotificationCompat.Builder (ctx)
 				.setContentTitle(ctx.getString(R.string.connection_problem_notification_title))
 				.setContentText(pbMessage)
 				.setWhen(System.currentTimeMillis())
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setOngoing(true)
 				.setContentIntent(connectionProblemNotification.contentIntent)
-				.setNumber(1 + maxConnectionRetries - nbRetriesRemaining);
-
-		if (Build.VERSION.SDK_INT >= 16) {
-			connectionProblemNotification = connectionProblemNotificationBuilder.build();
-		} else {
-			//noinspection deprecation
-			connectionProblemNotification = connectionProblemNotificationBuilder.getNotification();
-		}
-		notificationManager.notify(R.string.connection_problem_notification_title, connectionProblemNotification);			
+				.setNumber(1 + maxConnectionRetries - nbRetriesRemaining).build();
 	}
 	
 	public void notifyServiceStopped (int disableReason) {
 		String strDisableReason = ctx.getString(disableReason);
-		Notification.Builder serviceStoppedNotificationBuilder = new Notification.Builder(ctx)
+		serviceStoppedNotification = new NotificationCompat.Builder(ctx)
 				.setContentTitle(ctx.getString(R.string.service_closed_because_connection_problem_notification_title))
 				.setContentText(ctx.getString(R.string.service_closed_because_connection_problem_notification, strDisableReason))
 				.setWhen(System.currentTimeMillis())
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setOngoing(true)
-				.setContentIntent(serviceStoppedNotification.contentIntent);
-
-		if (Build.VERSION.SDK_INT >= 16) {
-			serviceStoppedNotification = serviceStoppedNotificationBuilder.build();
-		} else {
-			//noinspection deprecation
-			serviceStoppedNotification = serviceStoppedNotificationBuilder.getNotification();
-		}
-		notificationManager.notify(R.string.service_closed_because_connection_problem_notification_title, serviceStoppedNotification);		
+				.setContentIntent(serviceStoppedNotification.contentIntent).build();
+		notificationManager.notify(R.string.service_closed_because_connection_problem_notification_title, serviceStoppedNotification);
 	}
 	
 	public void toast (String message) {

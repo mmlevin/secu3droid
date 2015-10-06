@@ -45,6 +45,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -251,7 +252,7 @@ public class MainActivity extends Activity {
 		protocol_version = SettingsActivity.getProtocolVersion(getBaseContext());
 		logButtonLayout.setVisibility(((protocol_version < SettingsActivity.PROTOCOL_14012014_WINTER_RELEASE) || (!SettingsActivity.isSensorLoggerEnabled(this)))?View.GONE:View.VISIBLE);
 		setRawMode(rawSensors);
-		invalidateOptionsMenu();
+		ActivityCompat.invalidateOptionsMenu(this);
 		super.onResume();		
 	}
 	
@@ -288,7 +289,7 @@ public class MainActivity extends Activity {
 					boolean errors = ((ProtoFieldInteger) packet.getField(R.string.sensor_dat_errors_title)).getValue() != 0;
 					if (errors != this.errors) {
 						this.errors = errors;
-						invalidateOptionsMenu();
+						ActivityCompat.invalidateOptionsMenu(this);
 					}
 					if (!rawSensors) {
 						//TODO Make field set depends on compile options

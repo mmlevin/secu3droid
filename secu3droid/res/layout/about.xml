@@ -77,6 +77,11 @@
             android:id="@+id/about_sources"
             style="@style/about_text"
             android:text="@string/about_sources" />
+
+        <TextView
+            android:id="@+id/about_opensource"
+            style="@style/about_text"
+            android:text="@string/about_opensource" />
         
         <TextView
             android:id="@+id/about_acknowledgements"

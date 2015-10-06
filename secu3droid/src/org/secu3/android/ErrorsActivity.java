@@ -35,15 +35,16 @@ import org.secu3.android.parameters.ParamItemsAdapter;
 import org.secu3.android.parameters.items.BaseParamItem;
 import org.secu3.android.parameters.items.ParamItemBoolean;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,8 +84,8 @@ public class ErrorsActivity extends Activity {
 			errors.get(i).setEnabled(!realtime);
 		}		
 		adapter.notifyDataSetChanged();
-		ReadingInertion.setEnabled (realtime);
-		invalidateOptionsMenu();
+		ReadingInertion.setEnabled(realtime);
+		ActivityCompat.invalidateOptionsMenu(this);
 		SECU3_TASK task = realtime?SECU3_TASK.SECU3_READ_ERRORS:SECU3_TASK.SECU3_READ_SENSORS;
 		startService(new Intent (Secu3Service.ACTION_SECU3_SERVICE_SET_TASK,Uri.EMPTY,this,Secu3Service.class).putExtra(Secu3Service.ACTION_SECU3_SERVICE_SET_TASK_PARAM, task.ordinal()));	
 	}

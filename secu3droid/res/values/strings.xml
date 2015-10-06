@@ -73,6 +73,7 @@
     <string name="about_app_desc">Secu3Droid is an application for managing Secu-3 ignition system. Secu-3 is an open source, free engine control unit, see <a href="http://secu-3.org"><b>http://secu-3.org</b></a>"</string>
     <string name="about_license">It is open source software distributed free of charge under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><b>GNU General Public License</b></a>.</string>
     <string name="about_sources">The source code is available from Git repository on the project website: https://github.com/mmlevin/secu3droid</string>
+    <string name="about_opensource">Secu3Droid uses next open-source software:\nhttp://www.andengine.org\nhttps://github.com/SimonVT/android-numberpicker</string>
     <string name="about_acknowledgements">Acknowledgements: \nUkrainian localization - V.\nNFS dashboard skin - alvikagal</string>
     <string name="injector_overflow_message">Overflow detected while calculating constant for the ideal gas law equation! Change configuration to eliminate this error.</string>
    

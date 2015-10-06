@@ -476,7 +476,6 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							.setOnCustomNumberPickerAcceptListener(this)
 							.show(getSupportFragmentManager(), i.getName());
 				} else if (i instanceof ParamItemFloat) {
-					Log.d("secu3", String.format("Value %f", ((ParamItemFloat)i).getStepValue()));
 					if (Math.ceil(((ParamItemFloat) i).getStepValue()) == Math.floor(((ParamItemFloat) i).getStepValue())) { // If step is integer
 						dialog = new CustomNumberPickerIntegerDialog();
 						dialog.setValid(isValid);
@@ -539,6 +538,8 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 	}
 
 	private void onItemChange(int itemId) {
+		if (!isValid) return;
+
 		Secu3Packet packet;
 		BaseParamItem item = paramAdapter.findItemByNameId(itemId);
 		int condition;
@@ -570,7 +571,6 @@ public class ParamActivity extends FragmentActivity implements OnItemClickListen
 							Secu3Packet.INJECTOR_SQIRTS_PER_CYCLE[((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.injctr_par_number_of_squirts_per_cycle_title)).getIndex()],
 							((ParamItemFloat) paramAdapter.findItemByNameId(R.string.injctr_par_injector_flow_rate_title)).getValue()
 					);
-					Log.d ("secu3t", String.format("Calc fuel const %d", fuel_const));
 					if (fuel_const > PacketUtils.MAX_FUEL_CONSTANT) {
 						fuel_const = PacketUtils.MAX_FUEL_CONSTANT;
 						Toast.makeText(this,R.string.injector_overflow_message,Toast.LENGTH_LONG).show();

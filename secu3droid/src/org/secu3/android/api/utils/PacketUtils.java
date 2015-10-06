@@ -41,7 +41,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.lang.reflect.Field;
 import java.util.Locale;
 
 public class PacketUtils {
@@ -270,40 +269,40 @@ public class PacketUtils {
 						break;
 					case R.string.uniout_par_logic_function_1_2_title:
 						uniout_flags = ((ProtoFieldInteger) field).getValue();
-						if (uniout_flags == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
+						if (uniout_flags == UnioutUtils.UNIOUT_LF_NONE) uniout_flags = UnioutUtils.UNIOUT_LF_COUNT - 1;
 						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.uniout_par_logic_function_1_2_title)).setIndex(uniout_flags);
 						break;
 					case R.string.uniout_par_unioutput_1_flags_title:
 						uniout_flags = ((ProtoFieldInteger) field).getValue();
 						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput1_condition_1_inverse_title)).setValue((uniout_flags & 0x01) != 0);
 						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_inverse_title)).setValue((uniout_flags & 0x02) != 0);
-						if ((uniout_flags >>= 4) == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
-						paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
-						paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_inverse_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
-						paramAdapter.findItemByNameId(R.string.unioutput1_condition2_on_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
-						paramAdapter.findItemByNameId(R.string.unioutput1_condition2_off_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
+						if ((uniout_flags >>= 4) == UnioutUtils.UNIOUT_LF_NONE) uniout_flags = UnioutUtils.UNIOUT_LF_COUNT - 1;
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition_2_inverse_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition2_on_value_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput1_condition2_off_value_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
  						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.unioutput1_logical_functions_title)).setIndex(uniout_flags);
 						break;
 					case R.string.uniout_par_unioutput_2_flags_title:
 						uniout_flags = ((ProtoFieldInteger) field).getValue();
 						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput2_condition_1_inverse_title)).setValue((uniout_flags & 0x01) != 0);
 						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_inverse_title)).setValue((uniout_flags & 0x02) != 0);
-						if ((uniout_flags >>= 4) == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
-						paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
-						paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_inverse_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
-						paramAdapter.findItemByNameId(R.string.unioutput2_condition2_on_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
-						paramAdapter.findItemByNameId(R.string.unioutput2_condition2_off_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
+						if ((uniout_flags >>= 4) == UnioutUtils.UNIOUT_LF_NONE) uniout_flags = UnioutUtils.UNIOUT_LF_COUNT - 1;
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition_2_inverse_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition2_on_value_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT - 1);
+						paramAdapter.findItemByNameId(R.string.unioutput2_condition2_off_value_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT - 1);
 						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.unioutput2_logical_functions_title)).setIndex(uniout_flags);
 					break;
 					case R.string.uniout_par_unioutput_3_flags_title:
 						uniout_flags = ((ProtoFieldInteger) field).getValue();
 						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput3_condition_1_inverse_title)).setValue((uniout_flags & 0x01) != 0);
 						((ParamItemBoolean) paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_inverse_title)).setValue((uniout_flags & 0x02) != 0);
-						if ((uniout_flags >>= 4) == uniout.UNIOUT_LF_NONE) uniout_flags = uniout.UNIOUT_LF_COUNT - 1;
-						paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
-						paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_inverse_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT -1);
-						paramAdapter.findItemByNameId(R.string.unioutput3_condition2_on_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
-						paramAdapter.findItemByNameId(R.string.unioutput3_condition2_off_value_title).setEnabled(uniout_flags < uniout.UNIOUT_LF_COUNT - 1);
+						if ((uniout_flags >>= 4) == UnioutUtils.UNIOUT_LF_NONE) uniout_flags = UnioutUtils.UNIOUT_LF_COUNT - 1;
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition_2_inverse_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT -1);
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition2_on_value_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT - 1);
+						paramAdapter.findItemByNameId(R.string.unioutput3_condition2_off_value_title).setEnabled(uniout_flags < UnioutUtils.UNIOUT_LF_COUNT - 1);
 						((ParamItemSpinner) paramAdapter.findItemByNameId(R.string.unioutput3_logical_functions_title)).setIndex(uniout_flags);
 						break;
 					case R.string.unioutput1_condition1_on_value_title:
